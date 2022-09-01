@@ -29,7 +29,7 @@ __Wallets:__ Wallets are collections of transactions, by grouping the transactio
 
 __Users:__ Users are the topmost data type, each user is able to create wallets that allow them to manage their finances. This datatype contains all the necessary information to authenticate.
 
-![Data Diagram](./media/data.png)
+![Data Diagram](media/data.png)
 
 ### Application
 The application is divided in parts that communicate together, due to the microservice oriented nature of the project, each part of the application can be separated. 
@@ -46,9 +46,15 @@ The application is divided in parts that communicate together, due to the micros
 
 __Database:__ The application uses a MongoDB database to keep all the information.
 
-![App Diagram](./media/app.png)
+![App Diagram](media/app.png)
 
+### Infrastructure
+Since the application is designed with a microservice approach, the all the components of the application communicate diversely. the API communicates with the outside using HTTP, while communicates with the services using the AMQP protocol.
 
+A deployment of the complete application would looke like this:
+![Infrastructure Diagram](media/infra.png)
+
+The example provided in this documentation deploys a very simple example with only one container per component.
 
 ## Credits
 - Jose Tow [[@Tow96](https://github.com/Tow96)]
