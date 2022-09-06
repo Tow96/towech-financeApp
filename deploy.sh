@@ -18,39 +18,27 @@ echo 'EMAIL_CLIENT_SECRET='$email_client_secret >> ./environments/UserService.en
 read -p 'Email Refresh Token: ' email_refresh_token
 echo 'EMAIL_REFRESH_TOKEN='$email_refresh_token >> ./environments/UserService.env
 
-# # Checks that the amount of arguments is correct
-# if ["$#" -ne 1]; then
-#   echo "Invalid arguments. Correct use: $0 IPAddr" >&2
-#   exit 1
-# fi
+# Deletes the WebClient folder to redownload it
+if [ -d "./WebClient"]; then
+  rm -r ./WebClient
+fi
 
+# Define variables to be used later
+git_path="https://github.com/towech-financeApp/WebClient"
 
+# Fetches the WebClient to build with the correct arguments
+git clone --depth=1 --branch master $git_path ./WebClient
+rc=$?; if [[$rc != 0]]; then exit $rc; fi
 
-# # Command line arguments
-# # $1 IpAddress that will be useed
+# Check if the script was able to pull the code
+if [ ! -d "./WebClient"]; then
+  echo "The script could not get the code from git. Quitting..."
+  exit 1
+fi
 
-# # Deletes the WebClient folder to redownload it
-# if [ -d "./WebClient"]; then
-#   rm -r ./WebClient
-# fi
+# TODO: Docker remove all the previous docker versions
 
-# # Define variables to be used later
-# git_path="https://github.com/towech-financeApp/WebClient"
+echo "Initiating docker compose"
+docker compose up -d -e REACT_APP_WEBAPI=http://$ipAddr:3001
 
-# ipAddr="$1"
-
-# # Fetches the WebClient to build with the correct arguments
-# git clone --depth=1 --branch master $git_path ./WebClient
-# rc=$?; if [[$rc != 0]]; then exit $rc; fi
-
-# # Check if the script was able to pull the code
-# if [ ! -d "./WebClient"]; then
-#   echo "The script could not get the code from git. Quitting..."
-#   exit 1
-# fi
-
-# # TODO add the CORS origin to the api env
-# # TODO pass the ip Address to the docker compose
-
-# echo "Initiating docker compose"
-# docker compose up -d
+# TODO: Add example categories
