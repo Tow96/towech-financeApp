@@ -1,10 +1,23 @@
 version: '3.5'
 
 services:
+  database:
+    container_name: mongodb
+    image: mongo:latest
+
+    networks:
+      - main-network
+
+    ports:
+      - 27017:27017
+
   message-queue:
     container_name: rabbitmq
     image: rabbitmq:3.6-management
     hostname: rabbitmq
+
+    depends_on:
+      - "database"
 
     ports:
       - 15672:15672
