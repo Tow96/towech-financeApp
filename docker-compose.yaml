@@ -23,8 +23,11 @@ services:
       - 15672:15672
       - 5672:5672
 
+    networks:
+      - main-network
+
     healthcheck:
-      test: rabbitmq-diganostics -q ping
+      test: rabbitmqctl node_health_check
       interval: 30s
       timeout: 30s
       retries: 3
@@ -34,10 +37,11 @@ services:
 
   user-worker:
     container_name: user-worker1
-    image: ghcr.io/towech-financeapp/userservice:latest
+    image: ghcr.io/towech-financeapp/userservice:1.2.0
     
     depends_on:
-      - "message-queue"
+      message-queue:
+        condition: service_healthy
 
     volumes:
       - ./logs/UserService:/usr/app/logs
@@ -50,10 +54,11 @@ services:
 
   transaction-worker:
     container_name: transaction-worker1
-    image: ghcr.io/towech-financeapp/transactionservice:latest
+    image: ghcr.io/towech-financeapp/transactionservice:1.10.0
 
     depends_on:
-      - "message-queue"
+      message-queue:
+        condition: service_healthy
 
     volumes:
       - ./logs/TransactionService:/usr/app/logs
@@ -66,10 +71,11 @@ services:
 
   category-worker:
     container_name: category-worker1
-    image: ghcr.io/towech-financeapp/cateogryreportservice:latest
+    image: ghcr.io/towech-financeapp/cateogryreportservice:1.2.0
 
     depends_on:
-      - "message-queue"
+      message-queue:
+        condition: service_healthy
 
     volumes:
       - ./logs/CategoryReportService:/usr/app/logs
@@ -82,10 +88,14 @@ services:
 
   web-api:
     container_name: web-api1
-    image: ghcr.io/towech-financeapp/webapi:latest
+    image: ghcr.io/towech-financeapp/webapi:1.4.0
 
     depends_on:
-      - "message-queue"
+      message-queue:
+        condition: service_healthy
+
+    networks:
+      - main-network
 
     volumes:
       - ./logs/WebApi:/usr/app/logs
@@ -97,20 +107,17 @@ services:
       - "3001:3000"
 
   web-client:
-    container_name: webClient
+    container_name: web-client1
 
     build:
       context: ./WebClient
       target: prod
-      args:
-        REACT_APP_WEBAPI: http://192.168.0.135:3001
 
     networks:
       - main-network
 
     ports:
-      - 3000:3000
+      - 3000:80
 
 networks:
   main-network:
-    driver: bridge

@@ -36,9 +36,13 @@ if [ ! -d "./WebClient"]; then
   exit 1
 fi
 
-# TODO: Docker remove all the previous docker versions
+echo "Cleaning previous containers"
+docker container rm -f mongo rabbitmq user-worker1 transaction-worker1 category-worker1 web-api1 web-client1 2> /dev/null || true
+
+echo "Building docker containers"
+docker compose build --build-arg REACT_APP_WEBAPI=http://$ipAddr:3001
 
 echo "Initiating docker compose"
-docker compose up -d -e REACT_APP_WEBAPI=http://$ipAddr:3001
+docker compose up -d
 
 # TODO: Add example categories
