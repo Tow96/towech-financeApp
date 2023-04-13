@@ -15,10 +15,7 @@
         "main": "apps/webclient/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/webclient/tsconfig.app.json",
-        "assets": [
-          "apps/webclient/src/favicon.ico",
-          "apps/webclient/src/assets"
-        ],
+        "assets": ["apps/webclient/src/favicon.ico", "apps/webclient/src/assets"],
         "styles": ["apps/webclient/src/styles.scss"],
         "scripts": []
       },
@@ -71,10 +68,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/webclient/**/*.ts",
-          "apps/webclient/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/webclient/**/*.ts", "apps/webclient/**/*.html"]
       }
     },
     "test": {

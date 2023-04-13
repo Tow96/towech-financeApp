@@ -1,3 +1,38 @@
+:root {
+  background-color: #1f242e;
+  color: #f2f2f3;
+}
+
+div.container {
+  background-color: #414958;
+  width: 450px;
+  padding: 50px;
+}
+
+button {
+  border: 0;
+  background-color: #fab700;
+  width: 80px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 20px;
+  margin-right: 20px;
+  color: #0d0d0b;
+}
+
+button.success {
+  background-color: #a5dc38;
+}
+
+button.error {
+  background-color: #ed3726;
+  color: #f2f2f3;
+}
+
+button.warning {
+  background-color: #ffc847;
+}
+
 webclient-root {
   z-index: 1;
 }
