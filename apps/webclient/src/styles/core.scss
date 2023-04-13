@@ -1,0 +1,11 @@
+// The theming functions are heavily taken from angular material, but in a lighter way
+// Original code: https://material.angular.io/
+@use 'sass:map';
+
+@function get-palette-hue($palette, $hue) {
+  @return map.get($palette, $hue);
+}
+
+@function get-palette-hue-contrast($palette, $hue) {
+  @return map.get(map.get($palette, contrast), $hue);
+}

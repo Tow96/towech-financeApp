@@ -1,46 +1,58 @@
-$light: #f2f2f3;
-$dark: #0d0d0b;
-$light-gray: #c8c8d0;
-$dark-gray: #414958;
-$black: #1f242e;
-$accent: #fab700;
-$success: #a5dc38;
-$error: #ed3726;
-$warning: #ffc847;
+@use './styles/core.scss' as core;
+@use './styles/themes/gold-night.scss' as theme;
 
 :root {
-  background-color: $black;
-  color: $light;
+  background-color: theme.$background;
+  color: theme.$text-light;
 }
 
 div.container {
-  background-color: $dark-gray;
   width: 450px;
   padding: 50px;
+}
+div.container {
+  background-color: theme.$container;
 }
 
 button {
   border: 0;
-  background-color: $accent;
   width: 80px;
   cursor: pointer;
   padding: 10px;
   border-radius: 20px;
   margin-right: 20px;
-  color: $dark;
+}
+
+button {
+  background-color: core.get-palette-hue(theme.$gold-yellow, 500);
+  color: core.get-palette-hue-contrast(theme.$gold-yellow, 500);
+}
+button:hover {
+  background-color: core.get-palette-hue(theme.$gold-yellow, 400);
 }
 
 button.success {
-  background-color: $success;
+  background-color: core.get-palette-hue(theme.$lime, 500);
+  color: core.get-palette-hue-contrast(theme.$lime, 500);
+}
+button.success:hover {
+  background-color: core.get-palette-hue(theme.$lime, 400);
 }
 
 button.error {
-  background-color: $error;
-  color: #f2f2f3;
+  background-color: core.get-palette-hue(theme.$strawberry, 500);
+  color: core.get-palette-hue-contrast(theme.$strawberry, 500);
+}
+button.error:hover {
+  background-color: core.get-palette-hue(theme.$strawberry, 400);
 }
 
 button.warning {
-  background-color: $warning;
+  background-color: core.get-palette-hue(theme.$cream, 500);
+  color: core.get-palette-hue-contrast(theme.$cream, 500);
+}
+button.warning:hover {
+  background-color: core.get-palette-hue(theme.$cream, 400);
 }
 
 webclient-root {

@@ -1,0 +1,50 @@
+// Tones obtained using: http://mcg.mbitson.com/#!?lime=%23a5dc38&strawberry=%23ed3726&cream=%23ffc847&goldyellow=%23fab700
+
+$text-dark: #0f0f0b;
+$text-light: #f2f2f3;
+$background: #1f242e;
+$container: #414958;
+
+$gold-yellow: (
+  400: #fbc226,
+  500: #fab700,
+  600: #f9b000,
+  contrast: (
+    400: $text-dark,
+    500: $text-dark,
+    600: $text-dark,
+  ),
+);
+
+$lime: (
+  400: #b3e156,
+  500: #a5dc38,
+  600: #9dd832,
+  contrast: (
+    400: $text-dark,
+    500: $text-dark,
+    600: $text-dark,
+  ),
+);
+
+$strawberry: (
+  400: #f05547,
+  500: #ed3726,
+  600: #eb3122,
+  contrast: (
+    400: $text-dark,
+    500: $text-light,
+    600: $text-light,
+  ),
+);
+
+$cream: (
+  400: #ffd063,
+  500: #ffc847,
+  600: #ffc240,
+  contrast: (
+    400: $text-dark,
+    500: $text-dark,
+    600: $text-dark,
+  ),
+);
