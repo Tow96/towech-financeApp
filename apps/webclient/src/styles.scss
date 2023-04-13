@@ -1,36 +1,46 @@
+$light: #f2f2f3;
+$dark: #0d0d0b;
+$light-gray: #c8c8d0;
+$dark-gray: #414958;
+$black: #1f242e;
+$accent: #fab700;
+$success: #a5dc38;
+$error: #ed3726;
+$warning: #ffc847;
+
 :root {
-  background-color: #1f242e;
-  color: #f2f2f3;
+  background-color: $black;
+  color: $light;
 }
 
 div.container {
-  background-color: #414958;
+  background-color: $dark-gray;
   width: 450px;
   padding: 50px;
 }
 
 button {
   border: 0;
-  background-color: #fab700;
+  background-color: $accent;
   width: 80px;
   cursor: pointer;
   padding: 10px;
   border-radius: 20px;
   margin-right: 20px;
-  color: #0d0d0b;
+  color: $dark;
 }
 
 button.success {
-  background-color: #a5dc38;
+  background-color: $success;
 }
 
 button.error {
-  background-color: #ed3726;
+  background-color: $error;
   color: #f2f2f3;
 }
 
 button.warning {
-  background-color: #ffc847;
+  background-color: $warning;
 }
 
 webclient-root {
