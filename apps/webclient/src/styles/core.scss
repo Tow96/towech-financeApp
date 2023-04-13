@@ -9,3 +9,69 @@
 @function get-palette-hue-contrast($palette, $hue) {
   @return map.get(map.get($palette, contrast), $hue);
 }
+
+@function define-theme(
+  $background,
+  $text,
+  $primary,
+  $accent,
+  $success: null,
+  $warning: null,
+  $error: null
+) {
+  @if $background == null or $text == null {
+    @error 'Background and text colors need to be defined';
+  }
+
+  @if $primary == null or $accent == null {
+    @error 'primary and accent colors need to be defined palettes';
+  }
+
+  @if not map.get($primary, contrast) {
+    @error 'Primary is not a palette';
+  }
+
+  @if not map.get($accent, contrast) {
+    @error 'Accent is not a palette';
+  }
+
+  @if $success != null and not map.get($success, contrast) {
+    @error 'Success is not a palette';
+  }
+
+  @if $error != null and not map.get($error, contrast) {
+    @error 'Error is not a palette';
+  }
+
+  @if $warning != null and not map.get($warning, contrast) {
+    @error 'Warning is not a palette';
+  }
+
+  $result: (
+    color: (
+      text: $text,
+      background: $background,
+      primary: $primary,
+      accent: $accent,
+      success: if($success != null, $success, $accent),
+      warning: if($warning != null, $warning, $accent),
+      error: if($error != null, $error, $accent),
+    ),
+  );
+
+  @return $result;
+}
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $primary: map.get($colors, primary);
+
+  :root {
+    background-color: map.get($colors, background);
+    color: map.get($colors, text);
+  }
+
+  div.container {
+    background-color: get-palette-hue($primary, 500);
+  }
+}

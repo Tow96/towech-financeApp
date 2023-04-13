@@ -1,6 +1,6 @@
-@use './styles/core.scss' as core;
-@use './styles/themes/gold-night.scss' as theme;
 @use 'sass:map';
+@use './styles/themes/gold-night/index' as theme;
+@use './styles/core.scss' as core;
 
 @mixin color($theme) {
   $colors: map.get($theme, color);
@@ -8,15 +8,6 @@
   $success: map.get($colors, success);
   $error: map.get($colors, error);
   $warn: map.get($colors, warning);
-
-  :root {
-    background-color: map.get($colors, background);
-    color: map.get($colors, text-light);
-  }
-
-  div.container {
-    background-color: map.get($colors, primary);
-  }
 
   button {
     background-color: core.get-palette-hue($accent, 500);
@@ -51,6 +42,7 @@
   }
 }
 
+@include core.color(theme.$gold-night-theme);
 @include color(theme.$gold-night-theme);
 
 div.container {

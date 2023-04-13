@@ -1,0 +1,13 @@
+// Tones obtained using: http://mcg.mbitson.com/
+@use '../../core.scss' as core;
+@import './colors';
+
+$gold-night-theme: core.define-theme(
+  #1f242e,
+  #f2f2f3,
+  $outer-space,
+  $gold-yellow,
+  $lime,
+  $cream,
+  $strawberry
+);
