@@ -1,17 +1,61 @@
 @use './styles/core.scss' as core;
 @use './styles/themes/gold-night.scss' as theme;
+@use 'sass:map';
 
-:root {
-  background-color: theme.$background;
-  color: theme.$text-light;
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $accent: map.get($colors, accent);
+  $success: map.get($colors, success);
+  $error: map.get($colors, error);
+  $warn: map.get($colors, warning);
+
+  :root {
+    background-color: map.get($colors, background);
+    color: map.get($colors, text-light);
+  }
+
+  div.container {
+    background-color: map.get($colors, primary);
+  }
+
+  button {
+    background-color: core.get-palette-hue($accent, 500);
+    color: core.get-palette-hue-contrast($accent, 500);
+  }
+  button:hover {
+    background-color: core.get-palette-hue($accent, 400);
+  }
+
+  button.success {
+    background-color: core.get-palette-hue($success, 500);
+    color: core.get-palette-hue-contrast($success, 500);
+  }
+  button.success:hover {
+    background-color: core.get-palette-hue($success, 400);
+  }
+
+  button.error {
+    background-color: core.get-palette-hue($error, 500);
+    color: core.get-palette-hue-contrast($error, 500);
+  }
+  button.error:hover {
+    background-color: core.get-palette-hue($error, 400);
+  }
+
+  button.warning {
+    background-color: core.get-palette-hue($warn, 500);
+    color: core.get-palette-hue-contrast($warn, 500);
+  }
+  button.warning:hover {
+    background-color: core.get-palette-hue($warn, 400);
+  }
 }
+
+@include color(theme.$gold-night-theme);
 
 div.container {
   width: 450px;
   padding: 50px;
-}
-div.container {
-  background-color: theme.$container;
 }
 
 button {
@@ -21,38 +65,6 @@ button {
   padding: 10px;
   border-radius: 20px;
   margin-right: 20px;
-}
-
-button {
-  background-color: core.get-palette-hue(theme.$gold-yellow, 500);
-  color: core.get-palette-hue-contrast(theme.$gold-yellow, 500);
-}
-button:hover {
-  background-color: core.get-palette-hue(theme.$gold-yellow, 400);
-}
-
-button.success {
-  background-color: core.get-palette-hue(theme.$lime, 500);
-  color: core.get-palette-hue-contrast(theme.$lime, 500);
-}
-button.success:hover {
-  background-color: core.get-palette-hue(theme.$lime, 400);
-}
-
-button.error {
-  background-color: core.get-palette-hue(theme.$strawberry, 500);
-  color: core.get-palette-hue-contrast(theme.$strawberry, 500);
-}
-button.error:hover {
-  background-color: core.get-palette-hue(theme.$strawberry, 400);
-}
-
-button.warning {
-  background-color: core.get-palette-hue(theme.$cream, 500);
-  color: core.get-palette-hue-contrast(theme.$cream, 500);
-}
-button.warning:hover {
-  background-color: core.get-palette-hue(theme.$cream, 400);
 }
 
 webclient-root {
