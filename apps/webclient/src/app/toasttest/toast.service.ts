@@ -15,6 +15,10 @@ export class ToastService {
   );
   public toastState$: BehaviorSubject<string> = new BehaviorSubject<string>(TOAST_STATE.success);
 
+  constructor() {
+    console.log('q');
+  }
+
   showToast(toastState: string, toastMsg: string): void {
     this.toastState$.next(toastState);
     this.toastMessage$.next(toastMsg);
