@@ -1,5 +1,5 @@
 // Tones obtained using: http://mcg.mbitson.com/
-@use '../../core.scss' as core;
+@use '../../../../../../libs/shared/ui/themes/src' as core;
 @import './colors';
 
 $gold-night-theme: core.define-theme(

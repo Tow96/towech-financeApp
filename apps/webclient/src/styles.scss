@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use './styles/themes/gold-night/index' as theme;
-@use './styles/core.scss' as core;
+@use '../../../libs/shared/ui/themes/src' as core;
 
 @mixin color($theme) {
   $colors: map.get($theme, color);
