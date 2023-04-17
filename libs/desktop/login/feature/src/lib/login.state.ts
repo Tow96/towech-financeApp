@@ -1,28 +1,36 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable, tap } from 'rxjs';
+import {
+  DesktopAuthenticationService,
+  LoginCredentials,
+} from '@towech-finance/desktop/shell/data-access/authentication';
+import { EMPTY, Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 
 export interface LoginState {
   loading: boolean;
 }
 
-interface LoginCredentials {
-  username?: string | null;
-  password?: string | null;
-}
-
 @Injectable()
 export class LoginStore extends ComponentStore<LoginState> {
+  constructor(private readonly authService: DesktopAuthenticationService) {
+    super({ loading: false });
+  }
+
   // Selectors
   public loading$ = this.select(state => state.loading);
 
   // Effects
   login = this.effect((credentials$: Observable<LoginCredentials>) =>
     credentials$.pipe(
-      tap(() => {
-        console.log('Logging Effect');
-      })
+      switchMap(credentials =>
+        this.authService.login(credentials).pipe(
+          map(res => {
+            console.log(res);
+          }),
+          catchError(err => of(console.log(err)))
+        )
+      ),
+      catchError(() => EMPTY)
     )
   );
 }

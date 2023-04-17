@@ -17,6 +17,9 @@
     "paths": {
       "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src/index.ts"],
       "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src/index.ts"],
+      "@towech-finance/desktop/shell/data-access/authentication": [
+        "libs/desktop/shell/data-access/authentication/src/index.ts"
+      ],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
       "@towech-finance/desktop/toaster/feature": ["libs/desktop/toaster/feature/src/index.ts"],
