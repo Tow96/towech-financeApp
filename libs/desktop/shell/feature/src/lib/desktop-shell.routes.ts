@@ -1,6 +1,4 @@
 import { Route } from '@angular/router';
-import { DesktopDashboardComponent } from '@towech-finance/desktop/dashboard/feature';
-import { DesktopLoginComponent } from '@towech-finance/desktop/login/feature';
 import { LayoutComponent } from '@towech-finance/desktop/shell/ui/layout';
 
 export const desktopShellRoutes: Route[] = [
@@ -10,11 +8,13 @@ export const desktopShellRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: DesktopDashboardComponent,
+        loadComponent: async () =>
+          (await import('@towech-finance/desktop/dashboard/feature')).DesktopDashboardComponent,
       },
       {
         path: 'login',
-        component: DesktopLoginComponent,
+        loadComponent: async () =>
+          (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
       },
     ],
   },
