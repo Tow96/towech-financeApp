@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { DesktopToasterService } from '@towech-finance/desktop/toaster/feature';
+import { desktopShellRoutes } from './desktop-shell.routes';
+import { LayoutComponent } from '@towech-finance/desktop/shell/ui/layout';
 import { CommonModule } from '@angular/common';
-import {
-  DesktopToasterComponent,
-  DesktopToasterService,
-} from '@towech-finance/desktop/toaster/feature';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, DesktopToasterComponent],
   providers: [DesktopToasterService],
-  exports: [DesktopToasterComponent],
+  imports: [CommonModule, RouterModule.forRoot(desktopShellRoutes)],
+  exports: [RouterModule],
 })
 export class DesktopShellModule {}

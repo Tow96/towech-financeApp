@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
+      "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
       "@towech-finance/desktop/toaster/feature": ["libs/desktop/toaster/feature/src/index.ts"],
       "@towech-finance/shared/ui/themes/themes": ["libs/shared/ui/themes/themes/src/index.ts"]
     }
