@@ -10,6 +10,7 @@ import { AppModule } from './app/app.module';
 import { WinstonModule } from 'nest-winston';
 // Services
 import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
+import { ConfigService } from '@nestjs/config';
 // Pipes
 
 async function bootstrap() {
@@ -18,10 +19,14 @@ async function bootstrap() {
       transports: PidWinstonLogger.transports(),
     }),
   });
-  // const configService = app.get(ConfigService);
+  const configService = app.get(ConfigService);
 
-  await app.listen(5000);
-  Logger.log(`App running on port ${5000}`);
+  // TODO: CORS
+
+  // TODO: Swagger
+
+  await app.listen(configService.get('PORT'));
+  Logger.log(`App running on port ${configService.get('PORT')}`);
 }
 
 bootstrap();

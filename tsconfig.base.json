@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@towech-finance/authentication/shell/feature": [
+        "libs/authentication/shell/feature/src/index.ts"
+      ],
       "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src/index.ts"],
       "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src/index.ts"],
       "@towech-finance/desktop/shell/data-access/authentication": [
