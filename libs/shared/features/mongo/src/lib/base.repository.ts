@@ -6,7 +6,7 @@
 import { FilterQuery, Model, Types, SaveOptions, UpdateQuery } from 'mongoose';
 import { BaseSchema } from './base.schema';
 
-export abstract class AbstractRepository<TDocument extends BaseSchema> {
+export abstract class BaseRepository<TDocument extends BaseSchema> {
   // Hides the model so it cannot be used without parameters
   constructor(protected readonly model: Model<TDocument>) {}
 

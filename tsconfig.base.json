@@ -18,6 +18,7 @@
       "@towech-finance/authentication/http/signage": [
         "libs/authentication/http/signage/src/index.ts"
       ],
+      "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src/index.ts"],
       "@towech-finance/authentication/shell/feature": [
         "libs/authentication/shell/feature/src/index.ts"
       ],
