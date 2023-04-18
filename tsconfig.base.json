@@ -30,6 +30,7 @@
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
       "@towech-finance/desktop/toaster/feature": ["libs/desktop/toaster/feature/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
+      "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
       "@towech-finance/shared/ui/themes/themes": ["libs/shared/ui/themes/themes/src/index.ts"],
       "@towech-finance/shared/utils/pipes": ["libs/shared/utils/pipes/src/index.ts"]
     }
