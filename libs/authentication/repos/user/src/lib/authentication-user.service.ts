@@ -10,7 +10,7 @@ export class UserDocument extends BaseSchema {
   name: string;
 
   @Prop({ type: String, required: true })
-  username: string;
+  mail: string;
 
   @Prop({ type: String, required: true })
   password: string;
@@ -46,7 +46,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       refreshToken: [],
       accountConfirmed: false,
       role: 'admin',
-      username: 'jose.towe@gmail.com',
+      mail: 'jose.towe@gmail.com',
     });
   }
 
