@@ -3,7 +3,7 @@
  *
  * Pipe that trims all the strings that pass through it
  */
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 import { Injectable, PipeTransform, ArgumentMetadata } from '@nestjs/common';
 
 @Injectable()
@@ -13,25 +13,26 @@ export class TrimPipe implements PipeTransform {
   }
 
   private trim(values: any) {
-    Object.keys(values).forEach((key) => {
-      if (key !== 'password') {
-        if (this.isObj(values[key])) {
-          values[key] = this.trim(values[key]);
-        } else {
-          if (typeof values[key] === 'string') {
-            values[key] = values[key].trim();
-          }
-        }
+    const keys = Object.keys(values);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (key === 'password') continue;
+
+      if (this.isObj(values[key])) {
+        values[key] = this.trim(values[key]);
+        continue;
       }
-    });
+
+      if (typeof values[key] === 'string') {
+        values[key] = values[key].trim();
+      }
+    }
     return values;
   }
 
   transform(values: any, { type }: ArgumentMetadata) {
-    if (this.isObj(values) && type === 'body') {
-      return this.trim(values);
-    } else {
-      return values;
-    }
+    if (!(this.isObj(values) && type === 'body')) return values;
+
+    return this.trim(values);
   }
 }

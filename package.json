@@ -20,6 +20,8 @@
     "@ngrx/component-store": "^15.4.0",
     "@nrwl/angular": "15.9.2",
     "axios": "^1.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "joi": "^17.9.1",
     "nest-winston": "^1.9.1",
     "reflect-metadata": "^0.1.13",
