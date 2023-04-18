@@ -12,6 +12,8 @@ import { WinstonModule } from 'nest-winston';
 import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
+import { ValidationPipe } from '@nestjs/common';
+import { TrimPipe } from '@towech-finance/shared/utils/pipes';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -20,6 +22,12 @@ async function bootstrap() {
     }),
   });
   const configService = app.get(ConfigService);
+
+  // Adds the body trimming pipe
+  app.useGlobalPipes(new TrimPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  // TODO: i18n
 
   // TODO: CORS
 
