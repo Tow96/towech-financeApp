@@ -39,14 +39,19 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     super(model);
   }
 
-  async register(): Promise<UserDocument> {
+  async register(
+    name: string,
+    password: string,
+    mail: string,
+    role: 'admin' | 'user' = 'user'
+  ): Promise<UserDocument> {
     return this.create({
-      name: 'Tow',
-      password: 'ENCRYPTME',
-      refreshToken: [],
       accountConfirmed: false,
-      role: 'admin',
-      mail: 'jose.towe@gmail.com',
+      mail,
+      name,
+      password,
+      role,
+      refreshToken: [],
     });
   }
 
