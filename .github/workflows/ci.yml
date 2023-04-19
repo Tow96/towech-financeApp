@@ -32,7 +32,8 @@ jobs:
           fetch-depth: 0
       - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
         uses: nrwl/nx-set-shas@v3
-        main-branch-name: master
+        with:
+          main-branch-name: master
 
       - name: Set up dependencies
         uses: ./.github/actions/setup-dependencies
