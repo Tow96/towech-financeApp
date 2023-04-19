@@ -4,9 +4,11 @@
   "license": "MIT",
   "scripts": {
     "affected:build": "nx affected:build --configuration=production",
+    "affected:e2e": "nx affected:e2e",
     "affected:lint": "nx affected:lint --max-warnings=0",
     "affected:test": "nx affected:test",
     "build": "nx run-many --target=build --configuration=production",
+    "e2e": "nx e2e run-many --target=e2e",
     "lint": "nx run-many --target=lint --all --max-warnings=0",
     "test": "nx run-many --target=test --all"
   },

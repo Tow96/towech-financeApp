@@ -1,3 +1,4 @@
+# Based on https://github.com/LayZeeDK/energy-insights/blob/main/.github/workflows/ci.yml
 name: CI
 
 env:
@@ -97,3 +98,29 @@ jobs:
       - name: 'Merge: Test workspace and all projects'
         if: env.is-merge == 'true'
         run: npm run test
+
+  # e2e currently disabled
+  # e2e:
+  #   name: End to end test
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Check out source code
+  #       uses: actions/checkout@v3
+  #       with:
+  #         # Required by nrwl/nx-set-shas
+  #         fetch-depth: 0
+  #     - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+  #       uses: nrwl/nx-set-shas@v3
+  #       with:
+  #         main-branch-name: ${{ env.compare-branch }}
+
+  #     - name: Set up dependencies
+  #       uses: ./.github/actions/setup-dependencies
+
+  #     - name: 'PR: e2e workspace and affected projects'
+  #       if: env.is-pull-request == 'true'
+  #       run: npm run affected:e2e --configuration=ci-production
+  #     - name: 'Merge: Test workspace and all projects'
+  #       if: env.is-merge == 'true'
+  #       run: npm run e2e --configuration=ci-production
