@@ -1,6 +1,7 @@
 name: CI
 
 env:
+  compare-branch: development
   # Branching
   is-merge: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
   is-pull-request: ${{ github.event_name == 'pull_request' }}
@@ -33,7 +34,7 @@ jobs:
       - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
         uses: nrwl/nx-set-shas@v3
         with:
-          main-branch-name: master
+          main-branch-name: ${{ env.compare-branch }}
 
       - name: Set up dependencies
         uses: ./.github/actions/setup-dependencies
@@ -58,7 +59,7 @@ jobs:
       - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
         uses: nrwl/nx-set-shas@v3
         with:
-          main-branch-name: master
+          main-branch-name: ${{ env.compare-branch }}
 
       - name: Set up dependencies
         uses: ./.github/actions/setup-dependencies
