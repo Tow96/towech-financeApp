@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'shared-ui-themes-themes',
-  preset: '../../../../../jest.preset.js',
+  // preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../../../coverage/libs/shared/ui/themes/themes',
   transform: {
