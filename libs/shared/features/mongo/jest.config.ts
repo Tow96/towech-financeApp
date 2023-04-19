@@ -8,4 +8,6 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../../coverage/libs/shared/features/mongo',
+  collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov'],
 };
