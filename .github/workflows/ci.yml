@@ -1,0 +1,44 @@
+version: 1
+name: CI
+
+env:
+  # Branching
+  is-merge: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
+  is-pull-request: ${{ github.event_name == 'pull_request' }}
+
+  # Node.js
+  NODE_OPTIONS: --max-old-space-size=6144
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+permissions:
+  # Required by nrwl/nx-set-shas
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          # Required by nrwl/nx-set-shas
+          fetch-depth: 0
+      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+        uses: nrwl/nx-set-shas@v2
+      - name: Set up dependencies
+        uses: ./.github/actions/setup-dependencies
+
+      - name: 'PR: Build application if affected by changes in feature branch'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:build
+      - name: 'Merge: Build application'
+        if: env.is-merge == 'true'
+        run: npm run build

@@ -2,7 +2,10 @@
   "name": "towech-finance",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "affected:build": "nx affected:build --configuration=production",
+    "build": "nx run-many --target=build --configuration=production"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~15.2.0",
