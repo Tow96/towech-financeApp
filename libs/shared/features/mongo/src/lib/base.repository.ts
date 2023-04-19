@@ -43,6 +43,30 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
     return this.model.findById(id);
   }
 
+  protected async findByIdAndUpdate(
+    id: Types.ObjectId | string,
+    update: UpdateQuery<TDocument | null>
+  ) {
+    const document = await this.model.findByIdAndUpdate(id, update, {
+      lean: true,
+      upsert: true,
+      new: true,
+    });
+
+    if (!document) return null;
+    return document;
+  }
+
+  protected async findByIdAndDelete(
+    id: Types.ObjectId | string,
+    options?: FilterQuery<TDocument>
+  ): Promise<TDocument | null> {
+    const document = await this.model.findByIdAndDelete(id, options);
+
+    if (!document) return null;
+    return document;
+  }
+
   /** findOne
    * Searches the database for the first document that matches, will return null if not found
    * @param filterQuery The filter to match
@@ -71,30 +95,6 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
       upsert: true,
       new: true,
     });
-
-    if (!document) return null;
-    return document;
-  }
-
-  protected async findByIdAndUpdate(
-    filterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument | null>
-  ) {
-    const document = await this.model.findByIdAndUpdate(filterQuery, update, {
-      lean: true,
-      upsert: true,
-      new: true,
-    });
-
-    if (!document) return null;
-    return document;
-  }
-
-  protected async findByIdAndDelete(
-    id: Types.ObjectId | string,
-    options?: FilterQuery<TDocument>
-  ): Promise<TDocument | null> {
-    const document = await this.model.findByIdAndDelete(id, options);
 
     if (!document) return null;
     return document;
