@@ -72,3 +72,28 @@ jobs:
       - name: 'Merge: Lint workspace and all projects'
         if: env.is-merge == 'true'
         run: npm run lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          # Required by nrwl/nx-set-shas
+          fetch-depth: 0
+      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{ env.compare-branch }}
+
+      - name: Set up dependencies
+        uses: ./.github/actions/setup-dependencies
+
+      - name: 'PR: Test workspace and affected projects'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:test
+      - name: 'Merge: Test workspace and all projects'
+        if: env.is-merge == 'true'
+        run: npm run test
