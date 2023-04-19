@@ -50,7 +50,8 @@
       },
       "rules": {
         "max-depth": "off",
-        "max-nested-callbacks": "off"
+        "max-nested-callbacks": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]
