@@ -1,0 +1,131 @@
+# Based on https://github.com/LayZeeDK/energy-insights/blob/main/.github/workflows/ci.yml
+name: CI
+
+env:
+  compare-branch: development
+  # Branching
+  is-merge: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
+  is-pull-request: ${{ github.event_name == 'pull_request' }}
+
+  # Node.js
+  NODE_OPTIONS: --max-old-space-size=6144
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+permissions:
+  # Required by nrwl/nx-set-shas
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          # Required by nrwl/nx-set-shas
+          fetch-depth: 0
+      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{ env.compare-branch }}
+
+      - name: Set up dependencies
+        uses: ./.github/actions/setup-dependencies
+
+      - name: 'PR: Build application if affected by changes in feature branch'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:build
+      - name: 'Merge: Build application'
+        if: env.is-merge == 'true'
+        run: npm run build
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          # Required by nrwl/nx-set-shas
+          fetch-depth: 0
+      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{ env.compare-branch }}
+
+      - name: Set up dependencies
+        uses: ./.github/actions/setup-dependencies
+
+      - name: Lint Nx workspace
+        run: yarn nx workspace-lint
+      - name: 'PR: Lint workspace and affected projects'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:lint
+      - name: 'Merge: Lint workspace and all projects'
+        if: env.is-merge == 'true'
+        run: npm run lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          # Required by nrwl/nx-set-shas
+          fetch-depth: 0
+      - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{ env.compare-branch }}
+
+      - name: Set up dependencies
+        uses: ./.github/actions/setup-dependencies
+
+      - name: 'PR: Test workspace and affected projects'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:test
+      - name: 'Merge: Test workspace and all projects'
+        if: env.is-merge == 'true'
+        run: npm run test
+
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ../../coverage/libs/desktop/shell/feature/cobertura-coverage.xml
+
+  # e2e currently disabled
+  # e2e:
+  #   name: End to end test
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Check out source code
+  #       uses: actions/checkout@v3
+  #       with:
+  #         # Required by nrwl/nx-set-shas
+  #         fetch-depth: 0
+  #     - name: 'Derive appropriate SHAs for base and head for `nx affected` commands'
+  #       uses: nrwl/nx-set-shas@v3
+  #       with:
+  #         main-branch-name: ${{ env.compare-branch }}
+
+  #     - name: Set up dependencies
+  #       uses: ./.github/actions/setup-dependencies
+
+  #     - name: 'PR: e2e workspace and affected projects'
+  #       if: env.is-pull-request == 'true'
+  #       run: npm run affected:e2e --configuration=ci-production
+  #     - name: 'Merge: Test workspace and all projects'
+  #       if: env.is-merge == 'true'
+  #       run: npm run e2e --configuration=ci-production

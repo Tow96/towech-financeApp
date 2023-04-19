@@ -2,7 +2,16 @@
   "name": "towech-finance",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "affected:build": "nx affected:build --configuration=production",
+    "affected:e2e": "nx affected:e2e",
+    "affected:lint": "nx affected:lint --max-warnings=0",
+    "affected:test": "nx affected:test --coverage",
+    "build": "nx run-many --target=build --configuration=production",
+    "e2e": "nx e2e run-many --target=e2e",
+    "lint": "nx run-many --target=lint --all --max-warnings=0",
+    "test": "nx run-many --target=test --all --coverage"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~15.2.0",
