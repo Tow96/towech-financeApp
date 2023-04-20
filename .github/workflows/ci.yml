@@ -99,10 +99,14 @@ jobs:
         if: env.is-merge == 'true'
         run: npm run test
 
-      # - name: Code Coverage Summary Report
-      #   uses: irongut/CodeCoverageSummary@v1.3.0
-      #   with:
-      #     filename: ../../coverage/libs/desktop/shell/feature/cobertura-coverage.xml
+      - name: Merge coverage reports
+        run: npm run mergecov
+
+      - name: Post coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/workspace/lcov.info
+          github-token: ${{ secrets.TOKEN }}
 
   # e2e currently disabled
   # e2e:

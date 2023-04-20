@@ -8,5 +8,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../coverage/libs/authentication/dto',
-  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
 };
