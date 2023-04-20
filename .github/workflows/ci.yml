@@ -92,12 +92,18 @@ jobs:
       - name: Set up dependencies
         uses: ./.github/actions/setup-dependencies
 
-      - name: 'PR: Test workspace and affected projects'
-        if: env.is-pull-request == 'true'
-        run: npm run affected:test
+      # - name: 'PR: Test workspace and affected projects'
+      #   if: env.is-pull-request == 'true'
+      #   run: npm run affected:test
       - name: 'Merge: Test workspace and all projects'
-        if: env.is-merge == 'true'
+        # if: env.is-merge == 'true'
         run: npm run test
+
+      - name: Create coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/libs/shared/features/mongo/lcov.info
+          github-token: ${{ secrets.TOKEN }}
 
       # - name: Code Coverage Summary Report
       #   uses: irongut/CodeCoverageSummary@v1.3.0
