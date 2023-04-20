@@ -17,7 +17,10 @@ export abstract class MockModel<T extends BaseSchema> {
   }
 
   async find(filter: FilterQuery<T>): Promise<T[]> {
-    if (filter._id.toString() === this.entityStub._id.toString()) return [this.entityStub];
+    if (Object.keys(filter).length === 0) return [this.entityStub];
+
+    if (filter._id && filter._id.toString() === this.entityStub._id.toString())
+      return [this.entityStub];
     return [];
   }
 
@@ -37,7 +40,8 @@ export abstract class MockModel<T extends BaseSchema> {
   }
 
   async findOneAndUpdate(filter: FilterQuery<T>): Promise<T> {
-    if (filter._id.toString() === this.entityStub._id.toString()) return this.entityStub;
+    if (filter._id && filter._id.toString() === this.entityStub._id.toString())
+      return this.entityStub;
     return null;
   }
 

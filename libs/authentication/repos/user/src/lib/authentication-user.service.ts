@@ -16,7 +16,7 @@ export class UserDocument extends BaseSchema {
   password: string;
 
   @Prop({ type: String, required: true })
-  role: string;
+  role: 'admin' | 'user';
 
   @Prop({ type: Boolean, default: false })
   accountConfirmed: boolean;
@@ -45,6 +45,12 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     mail: string,
     role: 'admin' | 'user' = 'user'
   ): Promise<UserDocument> {
+    // TODO: Ensure that the user doesn't already exist
+
+    // TODO: Encrypt password
+
+    // TODO: Send mail
+
     return this.create({
       accountConfirmed: false,
       mail,
