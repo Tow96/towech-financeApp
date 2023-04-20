@@ -33,13 +33,18 @@ export class PidWinstonLogger extends Logger {
   private static format(): winston.Logform.Format {
     return winston.format.combine(
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
-      winston.format.printf(
-        info =>
-          `${info.timestamp}${info.pid ? ' {pid: ' + info.pid + '}' : ''} [${
-            process.env.NAME || 'UNNAMED APP'
-          }] ${info.level}: ${info.message}`
-      )
+      winston.format.printf(info => PidWinstonLogger.getFormattedOutput(info))
     );
+  }
+
+  public static getFormattedOutput(info: winston.Logform.TransformableInfo): string {
+    const timestamp = info.timestamp;
+    const pid = `${info.pid ? ' {pid: ' + info.pid + '}' : ''}`;
+    const name = `[${process.env.NAME || 'UNNAMED APP'}]`;
+    const level = info.level;
+    const msg = info.message;
+
+    return `${timestamp}${pid} ${name} ${level}: ${msg}`;
   }
 
   static transports(): winston.transport[] {
