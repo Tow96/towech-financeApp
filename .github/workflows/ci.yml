@@ -92,34 +92,21 @@ jobs:
       - name: Set up dependencies
         uses: ./.github/actions/setup-dependencies
 
-      # - name: 'PR: Test workspace and affected projects'
-      #   if: env.is-pull-request == 'true'
-      #   run: npm run affected:test
+      - name: 'PR: Test workspace and affected projects'
+        if: env.is-pull-request == 'true'
+        run: npm run affected:test
       - name: 'Merge: Test workspace and all projects'
-        # if: env.is-merge == 'true'
+        if: env.is-merge == 'true'
         run: npm run test
 
       - name: Merge coverage reports
         run: npm run mergecov
 
-      # - name: Post coverage report
-      #   uses: romeovs/lcov-reporter-action@v0.2.16
-      #   with:
-      #     lcov-file: ./coverage/workspace/lcov.info
-      #     github-token: ${{ secrets.TOKEN }}
-
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: Post coverage report
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          filename: coverage/workspace/coverage-cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '70 90'
+          lcov-file: ./coverage/workspace/lcov.info
+          github-token: ${{ secrets.TOKEN }}
 
   # e2e currently disabled
   # e2e:
