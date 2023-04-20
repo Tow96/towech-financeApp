@@ -8,4 +8,6 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../../../coverage/libs/shared/utils/models',
+  collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov'],
 };
