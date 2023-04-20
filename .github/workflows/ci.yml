@@ -99,10 +99,13 @@ jobs:
         # if: env.is-merge == 'true'
         run: npm run test
 
-      - name: Create coverage report
+      - name: Merge coverage reports
+        run: ./node_modules/.bin/lcov-result-merger '**/lcov.info' ./coverage/lcov.info
+
+      - name: Post coverage report
         uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          lcov-file: ./coverage/libs/shared/features/mongo/lcov.info
+          lcov-file: ./coverage/lcov.info
           github-token: ${{ secrets.TOKEN }}
 
       # - name: Code Coverage Summary Report
