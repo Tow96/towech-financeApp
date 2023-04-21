@@ -51,7 +51,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   // TODO: i18n
-  async register(
+  public async register(
     name: string,
     password: string,
     mail: string,
@@ -61,8 +61,6 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     if (userExists !== null) throw new Error('Mail already registered');
 
     // TODO: Encrypt password
-
-    // TODO: Send mail
 
     const newUser = await this.create({
       accountConfirmed: false,

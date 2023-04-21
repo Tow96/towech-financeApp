@@ -35,26 +35,28 @@ beforeAll(async () => {
   userRepo = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
 });
 
-describe('When register is called for a user that already exists', () => {
-  it('Should throw an error', async () => {
-    await expect(
-      userRepo.register(userStub().name, userStub().password, userStub().mail)
-    ).rejects.toThrow();
-  });
-});
-
-describe('When register is called without a role', () => {
-  beforeEach(async () => {
-    jest.clearAllMocks();
-    responseUser = await userRepo.register(
-      userStub().name,
-      userStub().password,
-      'anotheraddress@mail.com'
-    );
+describe('register', () => {
+  describe('When register is called for a user that already exists', () => {
+    it('Should throw an error', async () => {
+      await expect(
+        userRepo.register(userStub().name, userStub().password, userStub().mail)
+      ).rejects.toThrow();
+    });
   });
 
-  it('Should return a generic type user', () => {
-    expect(responseUser).toBeInstanceOf(UserModel);
+  describe('When register is called without a role', () => {
+    beforeAll(async () => {
+      jest.clearAllMocks();
+      responseUser = await userRepo.register(
+        userStub().name,
+        userStub().password,
+        'anotheraddress@mail.com'
+      );
+    });
+
+    it('Should return a generic type user', () => {
+      expect(responseUser).toBeInstanceOf(UserModel);
+    });
   });
 });
 
