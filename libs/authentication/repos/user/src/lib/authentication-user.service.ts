@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
 import { Model } from 'mongoose';
-import { UserRoles } from '@towech-finance/shared/utils/models';
+import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
 @Schema({ versionKey: false, collection: 'users' })
@@ -40,19 +40,29 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     super(model);
   }
 
+  private ConvertUserDocToUser(input: UserDocument): UserModel {
+    const output: UserModel = new UserModel(
+      input.name,
+      input.mail,
+      input.role,
+      input.accountConfirmed
+    );
+    return output;
+  }
+
   async register(
     name: string,
     password: string,
     mail: string,
     role: UserRoles = UserRoles.USER
-  ): Promise<UserDocument> {
+  ): Promise<UserModel> {
     // TODO: Ensure that the user doesn't already exist
 
     // TODO: Encrypt password
 
     // TODO: Send mail
 
-    return this.create({
+    const newUser = await this.create({
       accountConfirmed: false,
       mail,
       name,
@@ -60,6 +70,8 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       role,
       refreshToken: [],
     });
+
+    return this.ConvertUserDocToUser(newUser);
   }
 
   async getAll(): Promise<UserDocument[]> {

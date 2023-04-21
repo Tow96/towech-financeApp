@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import { AuthenticationUserService } from './authentication-user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { describe } from 'node:test';
-import { UserRoles } from '@towech-finance/shared/utils/models';
+import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
 
 const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
@@ -24,7 +24,7 @@ class MockUserModel extends MockModel<UserDocument> {
 
 let userRepoValue: AuthenticationUserService;
 let userRepoClass: AuthenticationUserService;
-let responseUser: UserDocument;
+let responseUser: UserModel;
 
 describe('"useValue" functions', () => {
   beforeAll(async () => {
@@ -47,8 +47,8 @@ describe('"useValue" functions', () => {
       );
     });
 
-    it('Should return the new user', () => {
-      expect(responseUser).toEqual({ ...userStub(), role: 'user' });
+    it('Should return a generic type user', () => {
+      expect(responseUser).toBeInstanceOf(UserModel);
     });
   });
 });
