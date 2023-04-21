@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
@@ -60,13 +61,13 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     const userExists = await this.findOne({ mail });
     if (userExists !== null) throw new Error('Mail already registered');
 
-    // TODO: Encrypt password
+    const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
 
     const newUser = await this.create({
       accountConfirmed: false,
       mail,
       name,
-      password,
+      password: hashedPassword,
       role,
       refreshToken: [],
     });

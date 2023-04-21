@@ -68,6 +68,7 @@
     "@nrwl/webpack": "15.9.2",
     "@nrwl/workspace": "15.9.2",
     "@schematics/angular": "~15.2.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.4.0",
     "@types/node": "~18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
