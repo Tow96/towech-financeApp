@@ -11,17 +11,15 @@ export abstract class MockModel<T extends BaseSchema> {
 
   constructorSpy(_createEntityData: T): void {}
 
-  async findOne(filter: FilterQuery<T>): Promise<T | null> {
-    if (filter._id === this.entityStub._id.toString()) return this.entityStub;
-    return null;
-  }
-
   async find(filter: FilterQuery<T>): Promise<T[]> {
     if (Object.keys(filter).length === 0) return [this.entityStub];
 
-    if (filter._id && filter._id.toString() === this.entityStub._id.toString())
-      return [this.entityStub];
-    return [];
+    let matched = false;
+    Object.keys(filter).forEach(key => {
+      if (filter[key].toString() === this.entityStub[key].toString()) matched = true;
+    });
+
+    return matched ? [this.entityStub] : [];
   }
 
   async findById(id: Types.ObjectId | string): Promise<T | null> {
@@ -39,10 +37,20 @@ export abstract class MockModel<T extends BaseSchema> {
     return null;
   }
 
+  async findOne(filter: FilterQuery<T>): Promise<T | null> {
+    let matched = false;
+    Object.keys(filter).forEach(key => {
+      if (filter[key].toString() === this.entityStub[key].toString()) matched = true;
+    });
+    return matched ? this.entityStub : null;
+  }
+
   async findOneAndUpdate(filter: FilterQuery<T>): Promise<T> {
-    if (filter._id && filter._id.toString() === this.entityStub._id.toString())
-      return this.entityStub;
-    return null;
+    let matched = false;
+    Object.keys(filter).forEach(key => {
+      if (filter[key].toString() === this.entityStub[key].toString()) matched = true;
+    });
+    return matched ? this.entityStub : null;
   }
 
   // async findOneAndDelete(filter: FilterQuery<T>): Promise<T> {
@@ -50,7 +58,7 @@ export abstract class MockModel<T extends BaseSchema> {
   //   return null;
   // }
 
-  async save(): Promise<T> {
+  async create(): Promise<T> {
     return this.entityStub;
   }
 }

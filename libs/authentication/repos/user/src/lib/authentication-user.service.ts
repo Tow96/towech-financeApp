@@ -50,13 +50,15 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return output;
   }
 
+  // TODO: i18n
   async register(
     name: string,
     password: string,
     mail: string,
     role: UserRoles = UserRoles.USER
   ): Promise<UserModel> {
-    // TODO: Ensure that the user doesn't already exist
+    const userExists = await this.findOne({ mail });
+    if (userExists !== null) throw new Error('Mail already registered');
 
     // TODO: Encrypt password
 

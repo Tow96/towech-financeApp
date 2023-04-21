@@ -22,66 +22,49 @@ class MockUserModel extends MockModel<UserDocument> {
   protected entityStub = userStub();
 }
 
-let userRepoValue: AuthenticationUserService;
-let userRepoClass: AuthenticationUserService;
+let userRepo: AuthenticationUserService;
 let responseUser: UserModel;
 
-describe('"useValue" functions', () => {
-  beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      providers: [
-        AuthenticationUserService,
-        { provide: getModelToken(UserDocument.name), useValue: MockUserModel },
-      ],
-    }).compile();
-    userRepoValue = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
-  });
+beforeAll(async () => {
+  const moduleRef = await Test.createTestingModule({
+    providers: [
+      AuthenticationUserService,
+      { provide: getModelToken(UserDocument.name), useClass: MockUserModel },
+    ],
+  }).compile();
+  userRepo = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
+});
 
-  describe('When register is called for a user that already exists', () => {
-    it('Should throw an error', () => {
-      const test = async () => {
-        await userRepoValue.register(userStub().name, userStub().password, userStub().mail);
-      };
-
-      expect(test).toThrow();
-    });
-  });
-
-  describe('When register is called without a role', () => {
-    beforeEach(async () => {
-      jest.clearAllMocks();
-      responseUser = await userRepoValue.register(
-        userStub().name,
-        userStub().password,
-        'anotheraddress@mail.com'
-      );
-    });
-
-    it('Should return a generic type user', () => {
-      expect(responseUser).toBeInstanceOf(UserModel);
-    });
+describe('When register is called for a user that already exists', () => {
+  it('Should throw an error', async () => {
+    await expect(
+      userRepo.register(userStub().name, userStub().password, userStub().mail)
+    ).rejects.toThrow();
   });
 });
 
-describe('"useClass" functions', () => {
-  beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      providers: [
-        AuthenticationUserService,
-        { provide: getModelToken(UserDocument.name), useClass: MockUserModel },
-      ],
-    }).compile();
-    userRepoClass = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
+describe('When register is called without a role', () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    responseUser = await userRepo.register(
+      userStub().name,
+      userStub().password,
+      'anotheraddress@mail.com'
+    );
   });
 
-  describe('When getAll is called', () => {
-    let responseUsers: UserDocument[];
-    beforeEach(async () => {
-      jest.clearAllMocks();
-      responseUsers = await userRepoClass.getAll();
-    });
-    it('Should return an array', () => {
-      expect(responseUsers).toEqual([userStub()]);
-    });
+  it('Should return a generic type user', () => {
+    expect(responseUser).toBeInstanceOf(UserModel);
+  });
+});
+
+describe('When getAll is called', () => {
+  let responseUsers: UserDocument[];
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    responseUsers = await userRepo.getAll();
+  });
+  it('Should return an array', () => {
+    expect(responseUsers).toEqual([userStub()]);
   });
 });

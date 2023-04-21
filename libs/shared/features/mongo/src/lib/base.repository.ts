@@ -3,7 +3,7 @@
  *
  * Basic repository for Mongo, contains the calls that most repositories use
  */
-import { FilterQuery, Model, Types, SaveOptions, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
 import { BaseSchema } from './base.schema';
 
 export abstract class BaseRepository<TDocument extends BaseSchema> {
@@ -17,16 +17,8 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
    *
    * @returns The stored document
    */
-  protected async create(
-    document: Omit<TDocument, '_id' | 'createdAt'>,
-    options?: SaveOptions
-  ): Promise<TDocument> {
-    const createdDocument = new this.model({
-      ...document,
-      _id: new Types.ObjectId(),
-      createdAt: new Date(),
-    });
-    return (await createdDocument.save(options)) as unknown as TDocument;
+  protected async create(document: Omit<TDocument, '_id' | 'createdAt'>): Promise<TDocument> {
+    return this.model.create({ ...document, _id: new Types.ObjectId(), createdAt: new Date() });
   }
 
   /** find
