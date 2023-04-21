@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
 import { Model } from 'mongoose';
+import { UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
 @Schema({ versionKey: false, collection: 'users' })
@@ -16,7 +17,7 @@ export class UserDocument extends BaseSchema {
   password: string;
 
   @Prop({ type: String, required: true })
-  role: 'admin' | 'user';
+  role: UserRoles;
 
   @Prop({ type: Boolean, default: false })
   accountConfirmed: boolean;
@@ -43,7 +44,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     name: string,
     password: string,
     mail: string,
-    role: 'admin' | 'user' = 'user'
+    role: UserRoles = UserRoles.USER
   ): Promise<UserDocument> {
     // TODO: Ensure that the user doesn't already exist
 

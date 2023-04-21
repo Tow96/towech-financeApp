@@ -5,6 +5,7 @@ import { Types } from 'mongoose';
 import { AuthenticationUserService } from './authentication-user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { describe } from 'node:test';
+import { UserRoles } from '@towech-finance/shared/utils/models';
 
 const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
@@ -14,7 +15,7 @@ const userStub = (): UserDocument => ({
   name: 'Fakeman',
   password: 'THISISVERYENCRYPTED',
   refreshToken: [],
-  role: 'user',
+  role: UserRoles.USER,
 });
 
 class MockUserModel extends MockModel<UserDocument> {
