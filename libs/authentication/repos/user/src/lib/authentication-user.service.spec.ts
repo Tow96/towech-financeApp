@@ -37,13 +37,23 @@ describe('"useValue" functions', () => {
     userRepoValue = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
   });
 
+  describe('When register is called for a user that already exists', () => {
+    it('Should throw an error', () => {
+      const test = async () => {
+        await userRepoValue.register(userStub().name, userStub().password, userStub().mail);
+      };
+
+      expect(test).toThrow();
+    });
+  });
+
   describe('When register is called without a role', () => {
     beforeEach(async () => {
       jest.clearAllMocks();
       responseUser = await userRepoValue.register(
         userStub().name,
         userStub().password,
-        userStub().mail
+        'anotheraddress@mail.com'
       );
     });
 
