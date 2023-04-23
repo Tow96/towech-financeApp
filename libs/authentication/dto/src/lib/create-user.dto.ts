@@ -1,14 +1,14 @@
-import { CreateUser } from '@towech-finance/shared/utils/models';
+import { CreateUser, UserRoles } from '@towech-finance/shared/utils/models';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const convertToRole = (input: any): 'admin' | 'user' => {
-  if (typeof input !== 'string') return 'user';
+const convertToRole = (input: any): UserRoles => {
+  if (typeof input !== 'string') return UserRoles.USER;
 
   const lowerInput = input.toLowerCase();
-  if (lowerInput === 'admin') return 'admin';
-  return 'user';
+  if (lowerInput === 'admin') return UserRoles.ADMIN;
+  return UserRoles.USER;
 };
 /* eslint-enable */
 
@@ -25,5 +25,5 @@ export class CreateUserDto implements CreateUser {
 
   @IsOptional()
   @Transform(({ value }) => convertToRole(value))
-  role: 'admin' | 'user';
+  role: UserRoles;
 }

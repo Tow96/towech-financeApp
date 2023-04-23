@@ -1,7 +1,9 @@
+import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
 import { Model } from 'mongoose';
+import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
 @Schema({ versionKey: false, collection: 'users' })
@@ -16,13 +18,13 @@ export class UserDocument extends BaseSchema {
   password: string;
 
   @Prop({ type: String, required: true })
-  role: 'admin' | 'user';
+  role: UserRoles;
 
   @Prop({ type: Boolean, default: false })
   accountConfirmed: boolean;
 
   @Prop({ type: Array, default: [] })
-  refreshToken: string[];
+  refreshTokens: string[];
 
   @Prop({ type: String, required: false })
   singleSessionToken?: string;
@@ -35,32 +37,144 @@ export const UserSchema = SchemaFactory.createForClass(UserDocument);
 
 @Injectable()
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
+  private REFRESH_TOKEN_MAX_COUNT = 5;
+
   constructor(@InjectModel(UserDocument.name) readonly model: Model<UserDocument>) {
     super(model);
   }
 
-  async register(
+  private ConvertUserDocToUser(input: UserDocument | null): UserModel | null {
+    if (input === null) return null;
+
+    const output: UserModel = new UserModel(
+      input.name,
+      input.mail,
+      input.role,
+      input.accountConfirmed
+    );
+    return output;
+  }
+
+  public async getByEmail(mail: string): Promise<UserModel | null> {
+    const user = await this.findOne({ mail });
+
+    return this.ConvertUserDocToUser(user);
+  }
+
+  // TODO: i18n
+
+  /** register
+   * Registers a new user to the database
+   *
+   * @returns The new user
+   */
+  public async register(
     name: string,
     password: string,
     mail: string,
-    role: 'admin' | 'user' = 'user'
-  ): Promise<UserDocument> {
-    // TODO: Ensure that the user doesn't already exist
+    role: UserRoles = UserRoles.USER
+  ): Promise<UserModel> {
+    const userExists = await this.findOne({ mail });
+    if (userExists !== null) throw new Error('Mail already registered');
 
-    // TODO: Encrypt password
+    const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
 
-    // TODO: Send mail
-
-    return this.create({
+    const newUser = await this.create({
       accountConfirmed: false,
       mail,
       name,
-      password,
+      password: hashedPassword,
       role,
-      refreshToken: [],
+      refreshTokens: [],
+    });
+
+    return this.ConvertUserDocToUser(newUser);
+  }
+
+  /** removeRefreshToken
+   * clears the tokens from a user, if no token is given, all are cleared
+   */
+  public async removeRefreshToken(user_id: string, token: string | null): Promise<void> {
+    const user = await super.findById(user_id);
+    if (!user) return null;
+
+    user.refreshTokens = !token
+      ? []
+      : user.refreshTokens.filter(x => !bcrypt.compareSync(token, x));
+    user.singleSessionToken =
+      !token || bcrypt.compareSync(token, user.singleSessionToken)
+        ? undefined
+        : user.singleSessionToken;
+
+    this.findByIdAndUpdate(user_id, {
+      refreshTokens: user.refreshTokens,
+      singleSessionToken: user.singleSessionToken,
     });
   }
 
+  /** storeRefreshToken
+   * Adds a refresh token to the user
+   */
+  public async storeRefreshToken(
+    user_id: string,
+    token: string,
+    singleSession = false
+  ): Promise<void> {
+    const user = await this.findById(user_id);
+    if (!user) return;
+
+    const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
+
+    if (singleSession) {
+      if (user.refreshTokens.length >= this.REFRESH_TOKEN_MAX_COUNT) user.refreshTokens.shift();
+      user.refreshTokens.push(hashedToken);
+    } else {
+      user.singleSessionToken = hashedToken;
+    }
+
+    await this.findByIdAndUpdate(user_id, {
+      refreshTokens: user.refreshTokens,
+      singleSessionToken: user.singleSessionToken,
+    });
+
+    return;
+  }
+
+  /** validatePassword
+   * Checks if a user/password pair is valid
+   *
+   * @returns A boolean indicating validity
+   */
+  public async validatePassword(user_id: string, password: string): Promise<boolean> {
+    const user = await this.findById(user_id);
+    if (!user) return false;
+
+    // Validates password
+    return bcrypt.compare(password, user.password);
+  }
+
+  /** validatePassword
+   * Checks if a user/refreshtoken pair is valid
+   *
+   * @returns A boolean indicating validity
+   */
+  public async validateRefreshToken(user_id: string, token: string): Promise<boolean> {
+    const user = await this.findById(user_id);
+    if (!user) return false;
+
+    let valid = bcrypt.compareSync(token, user.singleSessionToken);
+
+    for (let i = 0; i < user.refreshTokens.length; i++) {
+      if (bcrypt.compareSync(token, user.refreshTokens[i])) {
+        valid = true;
+        break;
+      }
+    }
+
+    return valid;
+  }
+
+  // ---------------------------------------------
   async getAll(): Promise<UserDocument[]> {
     return this.find({});
   }
