@@ -22,8 +22,14 @@ class MockUserModel extends MockModel<UserDocument> {
   protected entityStub = userStub();
 }
 
+const validateUserType = (response: any) => {
+  expect(response).toBeInstanceOf(UserModel);
+  expect(response.password).toBeUndefined();
+  expect(response.refreshToken).toBeUndefined();
+  expect(response.singleSessionToken).toBeUndefined();
+};
+
 let userRepo: AuthenticationUserService;
-let responseUser: UserModel;
 
 beforeAll(async () => {
   const moduleRef = await Test.createTestingModule({
@@ -45,18 +51,45 @@ describe('register', () => {
   });
 
   describe('When register is called without a role', () => {
+    let response: any;
     beforeAll(async () => {
       jest.clearAllMocks();
-      responseUser = await userRepo.register(
+      response = await userRepo.register(
         userStub().name,
         userStub().password,
         'anotheraddress@mail.com'
       );
     });
 
-    it('Should return a generic type user', () => {
-      expect(responseUser).toBeInstanceOf(UserModel);
+    it('Should return a generic type user', () => validateUserType(response));
+  });
+});
+
+describe('getByEmail', () => {
+  describe('When it is called with an unregistered mail', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getByEmail('another@mail.com');
     });
+
+    it('Should return null', () => {
+      expect(response).toBe(null);
+    });
+  });
+
+  describe('When it is called with a registered mail', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getByEmail(userStub().mail);
+    });
+
+    it('Should return the requested user', () => {
+      expect(response.mail).toEqual(userStub().mail);
+    });
+
+    it('Should return a generic user', () => validateUserType(response));
   });
 });
 

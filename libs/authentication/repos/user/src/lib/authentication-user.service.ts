@@ -41,7 +41,9 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     super(model);
   }
 
-  private ConvertUserDocToUser(input: UserDocument): UserModel {
+  private ConvertUserDocToUser(input: UserDocument | null): UserModel | null {
+    if (input === null) return null;
+
     const output: UserModel = new UserModel(
       input.name,
       input.mail,
@@ -49,6 +51,12 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       input.accountConfirmed
     );
     return output;
+  }
+
+  public async getByEmail(mail: string): Promise<UserModel | null> {
+    const user = await this.findOne({ mail });
+
+    return this.ConvertUserDocToUser(user);
   }
 
   // TODO: i18n
@@ -75,6 +83,23 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return this.ConvertUserDocToUser(newUser);
   }
 
+  public async removeRefreshToken(user_id: string, token: string): Promise<void> {
+    return;
+  }
+
+  public async storeRefreshToken(
+    user_id: string,
+    token: string,
+    singleSession = false
+  ): Promise<void> {
+    return;
+  }
+
+  public async validatePassword(user_id: string, password: string): Promise<boolean> {
+    return true;
+  }
+
+  // ---------------------------------------------
   async getAll(): Promise<UserDocument[]> {
     return this.find({});
   }
