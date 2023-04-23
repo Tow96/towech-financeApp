@@ -153,7 +153,26 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return bcrypt.compare(password, user.password);
   }
 
-  public async validateRefreshToken(user_id: string, token: string);
+  /** validatePassword
+   * Checks if a user/refreshtoken pair is valid
+   *
+   * @returns A boolean indicating validity
+   */
+  public async validateRefreshToken(user_id: string, token: string): Promise<boolean> {
+    const user = await this.findById(user_id);
+    if (!user) return false;
+
+    let valid = bcrypt.compareSync(token, user.singleSessionToken);
+
+    for (let i = 0; i < user.refreshTokens.length; i++) {
+      if (bcrypt.compareSync(token, user.refreshTokens[i])) {
+        valid = true;
+        break;
+      }
+    }
+
+    return valid;
+  }
 
   // ---------------------------------------------
   async getAll(): Promise<UserDocument[]> {

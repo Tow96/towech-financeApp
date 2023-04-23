@@ -8,6 +8,8 @@ import { describe } from 'node:test';
 import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
 
 const passwordStub = (): string => 'testpass';
+const refreshArrStub = (): string => 'token';
+const refreshSingleStub = (): string => 'token2';
 const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
   accountConfirmed: true,
@@ -15,7 +17,8 @@ const userStub = (): UserDocument => ({
   mail: 'fake@mail.com',
   name: 'Fakeman',
   password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
-  refreshTokens: [],
+  refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
+  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
   role: UserRoles.USER,
 });
 
@@ -121,6 +124,41 @@ describe('validatePassword', () => {
     let response: any;
     beforeAll(async () => {
       response = await userRepo.validatePassword(userStub()._id.toString(), passwordStub());
+    });
+
+    it('Should return true', () => {
+      expect(response).toBe(true);
+    });
+  });
+});
+
+describe('validateRefreshToken', () => {
+  describe('when it is called for an invalid user', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validateRefreshToken('false', 'fake');
+    });
+
+    it('Should return false', () => {
+      expect(response).toBe(false);
+    });
+  });
+
+  describe('when it is called with an invalid token', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validateRefreshToken(userStub()._id.toString(), 'fake');
+    });
+
+    it('Should return false', () => {
+      expect(response).toBe(false);
+    });
+  });
+
+  describe('when it is called with a valid user/token', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validateRefreshToken(userStub()._id.toString(), refreshArrStub());
     });
 
     it('Should return true', () => {
