@@ -62,6 +62,12 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   // TODO: i18n
+
+  /** register
+   * Registers a new user to the database
+   *
+   * @returns The new user
+   */
   public async register(
     name: string,
     password: string,
@@ -85,6 +91,9 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return this.ConvertUserDocToUser(newUser);
   }
 
+  /** removeRefreshToken
+   * clears the tokens from a user
+   */
   public async removeRefreshToken(user_id: string, token: string): Promise<void> {
     const user = await super.findById(user_id);
     if (!user) return null;
@@ -99,6 +108,9 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     });
   }
 
+  /** storeRefreshToken
+   * Adds a refresh token to the user
+   */
   public async storeRefreshToken(
     user_id: string,
     token: string,
@@ -122,6 +134,11 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return;
   }
 
+  /** validatePassword
+   * Checks if a user/password pair is valid
+   *
+   * @returns A boolean indicating validity
+   */
   public async validatePassword(user_id: string, password: string): Promise<boolean> {
     const user = await this.findById(user_id);
     if (!user) return false;
