@@ -9,7 +9,7 @@ import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
 
 const passwordStub = (): string => 'testpass';
 const refreshArrStub = (): string => 'token';
-const refreshSingleStub = (): string => 'token2';
+// const refreshSingleStub = (): string => 'token2';
 const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
   accountConfirmed: true,
