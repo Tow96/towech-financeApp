@@ -37,6 +37,8 @@ export const UserSchema = SchemaFactory.createForClass(UserDocument);
 
 @Injectable()
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
+  private REFRESH_TOKEN_MAX_COUNT = 5;
+
   constructor(@InjectModel(UserDocument.name) readonly model: Model<UserDocument>) {
     super(model);
   }
@@ -84,7 +86,17 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   public async removeRefreshToken(user_id: string, token: string): Promise<void> {
-    return;
+    const user = await super.findById(user_id);
+    if (!user) return null;
+
+    user.refreshTokens = !token ? [] : user.refreshTokens.filter(x => x !== token);
+    user.singleSessionToken =
+      !token || user.singleSessionToken === token ? undefined : user.singleSessionToken;
+
+    this.findByIdAndUpdate(user_id, {
+      refreshTokens: user.refreshTokens,
+      singleSessionToken: user.singleSessionToken,
+    });
   }
 
   public async storeRefreshToken(
@@ -92,6 +104,21 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     token: string,
     singleSession = false
   ): Promise<void> {
+    const user = await this.findById(user_id);
+    if (!user) return;
+
+    if (singleSession) {
+      if (user.refreshTokens.length >= this.REFRESH_TOKEN_MAX_COUNT) user.refreshTokens.shift();
+      user.refreshTokens.push(token);
+    } else {
+      user.singleSessionToken = token;
+    }
+
+    await this.findByIdAndUpdate(user_id, {
+      refreshTokens: user.refreshTokens,
+      singleSessionToken: user.singleSessionToken,
+    });
+
     return;
   }
 
