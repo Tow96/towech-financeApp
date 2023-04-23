@@ -7,14 +7,15 @@ import { getModelToken } from '@nestjs/mongoose';
 import { describe } from 'node:test';
 import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
 
+const passwordStub = (): string => 'testpass';
 const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
   accountConfirmed: true,
   createdAt: new Date(0, 0, 0),
   mail: 'fake@mail.com',
   name: 'Fakeman',
-  password: 'THISISVERYENCRYPTED',
-  refreshToken: [],
+  password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
+  refreshTokens: [],
   role: UserRoles.USER,
 });
 
@@ -25,7 +26,7 @@ class MockUserModel extends MockModel<UserDocument> {
 const validateUserType = (response: any) => {
   expect(response).toBeInstanceOf(UserModel);
   expect(response.password).toBeUndefined();
-  expect(response.refreshToken).toBeUndefined();
+  expect(response.refreshTokens).toBeUndefined();
   expect(response.singleSessionToken).toBeUndefined();
 };
 
@@ -90,6 +91,41 @@ describe('getByEmail', () => {
     });
 
     it('Should return a generic user', () => validateUserType(response));
+  });
+});
+
+describe('validatePassword', () => {
+  describe('when it is called for an invalid user', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validatePassword('false', 'fake');
+    });
+
+    it('Should return false', () => {
+      expect(response).toBe(false);
+    });
+  });
+
+  describe('when it is called with an invalid password', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validatePassword(userStub()._id.toString(), 'fake');
+    });
+
+    it('Should return false', () => {
+      expect(response).toBe(false);
+    });
+  });
+
+  describe('when it is called with a valid user/password', () => {
+    let response: any;
+    beforeAll(async () => {
+      response = await userRepo.validatePassword(userStub()._id.toString(), passwordStub());
+    });
+
+    it('Should return true', () => {
+      expect(response).toBe(true);
+    });
   });
 });
 

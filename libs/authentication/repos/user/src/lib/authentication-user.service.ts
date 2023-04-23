@@ -24,7 +24,7 @@ export class UserDocument extends BaseSchema {
   accountConfirmed: boolean;
 
   @Prop({ type: Array, default: [] })
-  refreshToken: string[];
+  refreshTokens: string[];
 
   @Prop({ type: String, required: false })
   singleSessionToken?: string;
@@ -77,7 +77,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       name,
       password: hashedPassword,
       role,
-      refreshToken: [],
+      refreshTokens: [],
     });
 
     return this.ConvertUserDocToUser(newUser);
@@ -96,7 +96,11 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   public async validatePassword(user_id: string, password: string): Promise<boolean> {
-    return true;
+    const user = await this.findById(user_id);
+    if (!user) return false;
+
+    // Validates password
+    return bcrypt.compare(password, user.password);
   }
 
   // ---------------------------------------------
