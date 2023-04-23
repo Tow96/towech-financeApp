@@ -92,15 +92,19 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   /** removeRefreshToken
-   * clears the tokens from a user
+   * clears the tokens from a user, if no token is given, all are cleared
    */
-  public async removeRefreshToken(user_id: string, token: string): Promise<void> {
+  public async removeRefreshToken(user_id: string, token: string | null): Promise<void> {
     const user = await super.findById(user_id);
     if (!user) return null;
 
-    user.refreshTokens = !token ? [] : user.refreshTokens.filter(x => x !== token);
+    user.refreshTokens = !token
+      ? []
+      : user.refreshTokens.filter(x => !bcrypt.compareSync(token, x));
     user.singleSessionToken =
-      !token || user.singleSessionToken === token ? undefined : user.singleSessionToken;
+      !token || bcrypt.compareSync(token, user.singleSessionToken)
+        ? undefined
+        : user.singleSessionToken;
 
     this.findByIdAndUpdate(user_id, {
       refreshTokens: user.refreshTokens,
@@ -119,11 +123,13 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     const user = await this.findById(user_id);
     if (!user) return;
 
+    const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
+
     if (singleSession) {
       if (user.refreshTokens.length >= this.REFRESH_TOKEN_MAX_COUNT) user.refreshTokens.shift();
-      user.refreshTokens.push(token);
+      user.refreshTokens.push(hashedToken);
     } else {
-      user.singleSessionToken = token;
+      user.singleSessionToken = hashedToken;
     }
 
     await this.findByIdAndUpdate(user_id, {
@@ -146,6 +152,8 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     // Validates password
     return bcrypt.compare(password, user.password);
   }
+
+  public async validateRefreshToken(user_id: string, token: string);
 
   // ---------------------------------------------
   async getAll(): Promise<UserDocument[]> {
