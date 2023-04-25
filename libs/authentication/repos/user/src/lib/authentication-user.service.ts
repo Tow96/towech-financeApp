@@ -47,6 +47,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     if (input === null) return null;
 
     const output: UserModel = new UserModel(
+      input._id.toString(),
       input.name,
       input.mail,
       input.role,
