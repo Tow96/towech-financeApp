@@ -1,9 +1,18 @@
+/** jwt-auth-admin.middleware.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Strategy and guard for using endpoints only meant for administrators
+ */
+
+// Libraries
 import { Injectable, HttpException } from '@nestjs/common';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { StrategyNames } from './strategy.names';
+// Services
 import { ConfigService } from '@nestjs/config';
 import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
+// Models
+import { StrategyNames } from './strategy.names';
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO i18n

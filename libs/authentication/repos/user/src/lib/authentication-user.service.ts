@@ -1,8 +1,16 @@
-import * as bcrypt from 'bcrypt';
+/** authentication-user.service.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Repository that contains all the logic to interact with the users database,
+ */
+// Libraries
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
+import * as bcrypt from 'bcrypt';
 import { Model, Types } from 'mongoose';
+// Services
+import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
+// Models
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
@@ -35,6 +43,7 @@ export class UserDocument extends BaseSchema {
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);
 
+// TODO: i18n
 @Injectable()
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
   private REFRESH_TOKEN_MAX_COUNT = 5;

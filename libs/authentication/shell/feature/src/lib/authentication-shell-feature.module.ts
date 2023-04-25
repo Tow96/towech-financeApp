@@ -4,9 +4,10 @@ import { Module } from '@nestjs/common';
 // Modules
 import { RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import { AuthenticationShellRoutes } from './authentication-shell.routes';
 import { AuthenticationHttpSignageModule } from '@towech-finance/authentication/http/signage';
 import { SharedFeaturesMongoModule } from '@towech-finance/shared/features/mongo';
+// Misc
+import { AuthenticationShellRoutes } from './authentication-shell.routes';
 
 @Module({
   imports: [

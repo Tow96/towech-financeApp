@@ -1,11 +1,15 @@
+// Libraries
 import { Test } from '@nestjs/testing';
-import { MockModel } from '@towech-finance/shared/features/mongo';
-import { UserDocument } from './authentication-user.service';
-import { AuthenticationUserService } from './authentication-user.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { describe } from 'node:test';
-import { UserModel } from '@towech-finance/shared/utils/models';
+// Tested elements
+import { UserDocument } from './authentication-user.service';
+// Mocks
+import { MockModel } from '@towech-finance/shared/features/mongo';
 import { userStub, passwordStub, refreshArrStub } from '../mocks/user.stub';
+// Services
+import { AuthenticationUserService } from './authentication-user.service';
+// Models
+import { UserModel } from '@towech-finance/shared/utils/models';
 
 class MockUserModel extends MockModel<UserDocument> {
   protected entityStub = userStub();

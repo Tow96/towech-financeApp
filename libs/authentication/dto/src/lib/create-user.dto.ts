@@ -1,6 +1,13 @@
-import { CreateUser, UserRoles } from '@towech-finance/shared/utils/models';
+/** create-user-dto.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Class Validator dto for the createuser body
+ */
+// Libraries
 import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+// Models
+import { CreateUser, UserRoles } from '@towech-finance/shared/utils/models';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const convertToRole = (input: any): UserRoles => {

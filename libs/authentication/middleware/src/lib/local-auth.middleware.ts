@@ -3,12 +3,16 @@
  *
  * Strategy and guard for login using a username/password pair
  */
+// Libraries
 import { HttpException, Injectable } from '@nestjs/common';
-import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { UserModel } from '@towech-finance/shared/utils/models';
+// Services
+import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
+// Models
 import { StrategyNames } from './strategy.names';
+import { UserModel } from '@towech-finance/shared/utils/models';
+
 // TODO: i18n
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {

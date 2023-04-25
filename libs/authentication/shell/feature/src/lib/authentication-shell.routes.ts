@@ -1,4 +1,6 @@
+// Libraries
 import { Routes } from '@nestjs/core';
+// Modules
 import { AuthenticationHttpSignageModule } from '@towech-finance/authentication/http/signage';
 
 export enum AuthenticationShellPaths {

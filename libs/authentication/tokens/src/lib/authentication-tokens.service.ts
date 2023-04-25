@@ -1,8 +1,16 @@
+/** authentication-tokens.service.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Injectable that handles the creation of all the tokens
+ */
+// Libraries
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+// Services
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+// Models
 import { RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class AuthenticationTokenService {
