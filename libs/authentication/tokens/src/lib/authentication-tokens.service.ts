@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserModel } from '@towech-finance/shared/utils/models';
+import { RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -30,6 +30,11 @@ export class AuthenticationTokenService {
       ? this.config.get<string>('REFRESH_TOKEN_EXPIRATION')
       : this.config.get<string>('REFRESH_SINGLE_TOKEN_EXPIRATION');
 
-    return this.jwt.sign({ ...user }, { secret, expiresIn });
+    const content: RefreshToken = {
+      id: randomUUID(),
+      user: { ...user },
+    };
+
+    return this.jwt.sign(content, { secret, expiresIn });
   }
 }
