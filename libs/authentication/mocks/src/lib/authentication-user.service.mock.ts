@@ -2,6 +2,7 @@ import { Provider } from '@nestjs/common';
 import {
   AuthenticationUserService,
   passwordStub,
+  plainAdminStub,
   plainUserStub,
   userStub,
 } from '@towech-finance/authentication/repos/user';
@@ -15,6 +16,7 @@ const mockValues = {
 
   getById: jest.fn((id: string) => {
     if (id.toString() === plainUserStub()._id.toString()) return plainUserStub();
+    if (id.toString() === plainAdminStub()._id.toString()) return plainAdminStub();
     return null;
   }),
 

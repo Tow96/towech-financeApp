@@ -17,6 +17,18 @@ export const userStub = (): UserDocument => ({
   role: UserRoles.USER,
 });
 
+export const adminStub = (): UserDocument => ({
+  _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010b'),
+  accountConfirmed: true,
+  createdAt: new Date(0, 0, 0),
+  mail: 'fake@mail.com',
+  name: 'Fakeman',
+  password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
+  refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
+  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
+  role: UserRoles.ADMIN,
+});
+
 export const plainUserStub = (): UserModel => {
   return {
     _id: userStub()._id.toString(),
@@ -24,5 +36,15 @@ export const plainUserStub = (): UserModel => {
     mail: userStub().mail,
     name: userStub().name,
     role: userStub().role,
+  };
+};
+
+export const plainAdminStub = (): UserModel => {
+  return {
+    _id: adminStub()._id.toString(),
+    accountConfirmed: adminStub().accountConfirmed,
+    mail: adminStub().mail,
+    name: adminStub().name,
+    role: adminStub().role,
   };
 };
