@@ -20,6 +20,7 @@
         "libs/authentication/http/signage/src/index.ts"
       ],
       "@towech-finance/authentication/middleware": ["libs/authentication/middleware/src/index.ts"],
+      "@towech-finance/authentication/mocks": ["libs/authentication/mocks/src/index.ts"],
       "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src/index.ts"],
       "@towech-finance/authentication/shell/feature": [
         "libs/authentication/shell/feature/src/index.ts"

@@ -1,7 +1,11 @@
 import { UserModel } from '@towech-finance/shared/utils/models';
-import { passwordStub, userStub } from './user.stub';
 import { Provider } from '@nestjs/common';
-import { AuthenticationUserService } from '../lib/authentication-user.service';
+import {
+  AuthenticationUserService,
+  passwordStub,
+  userStub,
+} from '@towech-finance/authentication/repos/user';
+import { jest } from '@jest/globals';
 
 export const plainUserStub = (): UserModel => {
   return {
