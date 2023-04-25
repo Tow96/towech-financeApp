@@ -1,26 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { MockModel } from '@towech-finance/shared/features/mongo';
 import { UserDocument } from './authentication-user.service';
-import { Types } from 'mongoose';
 import { AuthenticationUserService } from './authentication-user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { describe } from 'node:test';
-import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
-
-const passwordStub = (): string => 'testpass';
-const refreshArrStub = (): string => 'token';
-// const refreshSingleStub = (): string => 'token2';
-const userStub = (): UserDocument => ({
-  _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
-  accountConfirmed: true,
-  createdAt: new Date(0, 0, 0),
-  mail: 'fake@mail.com',
-  name: 'Fakeman',
-  password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
-  refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
-  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
-  role: UserRoles.USER,
-});
+import { UserModel } from '@towech-finance/shared/utils/models';
+import { userStub, passwordStub, refreshArrStub } from '../mocks/user.stub';
 
 class MockUserModel extends MockModel<UserDocument> {
   protected entityStub = userStub();
@@ -97,6 +82,34 @@ describe('getByEmail', () => {
   });
 });
 
+describe('getById', () => {
+  describe('When it is called with an unregistered id', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getById('');
+    });
+
+    it('Should return null', () => {
+      expect(response).toBe(null);
+    });
+  });
+
+  describe('When it is called with a registered id', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getById(userStub()._id);
+    });
+
+    it('Should return the requested user', () => {
+      expect(response._id.toString()).toEqual(userStub()._id.toString());
+    });
+
+    it('Should return a generic user', () => validateUserType(response));
+  });
+});
+
 describe('validatePassword', () => {
   describe('when it is called for an invalid user', () => {
     let response: any;
@@ -139,8 +152,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken('false', 'fake');
     });
 
-    it('Should return false', () => {
-      expect(response).toBe(false);
+    it('Should return null', () => {
+      expect(response).toBe(null);
     });
   });
 
@@ -150,8 +163,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken(userStub()._id.toString(), 'fake');
     });
 
-    it('Should return false', () => {
-      expect(response).toBe(false);
+    it('Should return null', () => {
+      expect(response).toBe(null);
     });
   });
 
@@ -161,8 +174,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken(userStub()._id.toString(), refreshArrStub());
     });
 
-    it('Should return true', () => {
-      expect(response).toBe(true);
+    it('Should return the user', () => {
+      expect(response).toBeInstanceOf(UserModel);
     });
   });
 });

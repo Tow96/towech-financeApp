@@ -31,7 +31,7 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
     return this.model.find(filterQuery, {}, { lean: true });
   }
 
-  protected async findById(id: string) {
+  protected async findById(id: Types.ObjectId | string) {
     return this.model.findById(id);
   }
 

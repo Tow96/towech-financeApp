@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
@@ -47,6 +47,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     if (input === null) return null;
 
     const output: UserModel = new UserModel(
+      input._id.toString(),
       input.name,
       input.mail,
       input.role,
@@ -59,6 +60,10 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     const user = await this.findOne({ mail });
 
     return this.ConvertUserDocToUser(user);
+  }
+
+  public async getById(id: Types.ObjectId | string): Promise<UserModel | null> {
+    return this.ConvertUserDocToUser(await super.findById(id));
   }
 
   // TODO: i18n
@@ -158,9 +163,9 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    *
    * @returns A boolean indicating validity
    */
-  public async validateRefreshToken(user_id: string, token: string): Promise<boolean> {
+  public async validateRefreshToken(user_id: string, token: string): Promise<UserModel | null> {
     const user = await this.findById(user_id);
-    if (!user) return false;
+    if (!user) return null;
 
     let valid = bcrypt.compareSync(token, user.singleSessionToken);
 
@@ -171,7 +176,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       }
     }
 
-    return valid;
+    return valid ? this.ConvertUserDocToUser(user) : null;
   }
 
   // ---------------------------------------------
