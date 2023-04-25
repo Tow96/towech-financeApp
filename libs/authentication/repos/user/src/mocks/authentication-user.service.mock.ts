@@ -3,7 +3,7 @@ import { passwordStub, userStub } from './user.stub';
 import { Provider } from '@nestjs/common';
 import { AuthenticationUserService } from '../lib/authentication-user.service';
 
-const plainUserStub = (): UserModel => {
+export const plainUserStub = (): UserModel => {
   return {
     _id: userStub()._id.toString(),
     accountConfirmed: userStub().accountConfirmed,
@@ -15,12 +15,12 @@ const plainUserStub = (): UserModel => {
 
 const mockValues = {
   getByEmail: jest.fn((mail: string) => {
-    if (mail === plainUserStub().mail) return userStub();
+    if (mail === plainUserStub().mail) return plainUserStub();
     return null;
   }),
 
   validatePassword: jest.fn((id: string, password: string) => {
-    return id === plainUserStub()._id && password === passwordStub();
+    return id.toString() === plainUserStub()._id.toString() && password === passwordStub();
   }),
 };
 
