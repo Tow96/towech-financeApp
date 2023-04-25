@@ -5,7 +5,7 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { RefreshToken } from '@towech-finance/shared/utils/models';
-import { StrategyNames } from './authentication-middleware.module';
+import { StrategyNames } from './strategy.names';
 
 // TODO: i18n
 @Injectable()
@@ -26,7 +26,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames
     });
   }
 
-  async validate(payload: RefreshToken): Promise<RefreshToken> {
+  public async validate(payload: RefreshToken): Promise<RefreshToken> {
     const user = await this.userRepo.validateRefreshToken(payload.user._id, payload.id);
     if (!user) throw new HttpException('Invalid credentials', 401);
 

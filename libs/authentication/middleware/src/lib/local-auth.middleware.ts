@@ -8,8 +8,7 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UserModel } from '@towech-finance/shared/utils/models';
-import { StrategyNames } from './authentication-middleware.module';
-
+import { StrategyNames } from './strategy.names';
 // TODO: i18n
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {
@@ -17,7 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCA
     super();
   }
 
-  async validate(email: string, password: string): Promise<UserModel> {
+  public async validate(email: string, password: string): Promise<UserModel> {
     const user = await this.userRepo.getByEmail(email);
     if (!user) throw new HttpException('Bad credentials', 401);
 
