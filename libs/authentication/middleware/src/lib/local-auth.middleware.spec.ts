@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
 import { LocalStrategy } from './local-auth.middleware';
-import { AuthUserRepoMock, plainUserStub } from '@towech-finance/authentication/mocks';
-import { passwordStub } from '@towech-finance/authentication/repos/user';
+import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
+import { passwordStub, plainUserStub } from '@towech-finance/authentication/repos/user';
 
 let localStrat: LocalStrategy;
 
