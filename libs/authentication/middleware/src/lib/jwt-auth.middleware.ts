@@ -1,10 +1,18 @@
+/** jwt-auth.middleware.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Strategy and guard for accessing endpoints using a jwt token
+ */
+// Libraries
 import { Injectable, HttpException } from '@nestjs/common';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { StrategyNames } from './strategy.names';
+// Services
 import { ConfigService } from '@nestjs/config';
-import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 import { UserModel } from '@towech-finance/shared/utils/models';
+// Models
+import { StrategyNames } from './strategy.names';
+import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 
 // TODO i18n
 @Injectable()

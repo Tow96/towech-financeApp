@@ -1,6 +1,9 @@
+// Libraries
 import { Module } from '@nestjs/common';
-import { AuthenticationUserService, UserSchema, UserDocument } from './authentication-user.service';
+// Modules
 import { MongooseModule } from '@nestjs/mongoose';
+// Providers
+import { AuthenticationUserService, UserSchema, UserDocument } from './authentication-user.service';
 
 @Module({
   controllers: [],

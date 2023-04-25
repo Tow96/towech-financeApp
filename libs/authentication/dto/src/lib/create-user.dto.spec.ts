@@ -1,6 +1,8 @@
-import { CreateUserDto } from './create-user.dto';
+// Librariese
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+// Tested elements
+import { CreateUserDto } from './create-user.dto';
 
 const stubCreateUserDto = (): {
   name: any;

@@ -1,8 +1,12 @@
-import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
-import { JwtAuthStrategy } from './jwt-auth.middleware';
+// Libraries
 import { Test } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
+// Tested elements
+import { JwtAuthStrategy } from './jwt-auth.middleware';
+// Mocks
+import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { plainUserStub } from '@towech-finance/authentication/repos/user';
+// Services
+import { ConfigService } from '@nestjs/config';
 
 const OLD_ENV = process.env;
 let jwtStrat: JwtAuthStrategy;

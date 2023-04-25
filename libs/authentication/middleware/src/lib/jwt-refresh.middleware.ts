@@ -1,11 +1,19 @@
+/** jwt-refresh.middleware.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Strategy and guard for using endpoints that require a jwt refreshtoken
+ */
+// Libraries
 import { Injectable, HttpException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
-import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+// Services
+import { ConfigService } from '@nestjs/config';
+import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
+// Models
+import { StrategyNames } from './strategy.names';
 import { Request } from 'express';
 import { RefreshToken } from '@towech-finance/shared/utils/models';
-import { StrategyNames } from './strategy.names';
 
 // TODO: i18n
 @Injectable()

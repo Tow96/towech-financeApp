@@ -1,9 +1,13 @@
+// Libraries
 import { Test } from '@nestjs/testing';
-import { AuthenticationTokenService } from './authentication-tokens.service';
-import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
-import { ConfigService } from '@nestjs/config';
+// Tested elements
+import { AuthenticationTokenService } from './authentication-tokens.service';
+// Mocks
 import { plainUserStub } from '@towech-finance/authentication/repos/user';
+// Services
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 const authTokenSecret = 'testAuthToken';
 const refreshTokenSecret = 'testRefreshToken';
