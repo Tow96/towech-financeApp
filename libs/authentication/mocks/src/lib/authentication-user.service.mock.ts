@@ -3,6 +3,7 @@ import {
   AuthenticationUserService,
   passwordStub,
   plainUserStub,
+  userStub,
 } from '@towech-finance/authentication/repos/user';
 import { jest } from '@jest/globals';
 
@@ -14,6 +15,14 @@ const mockValues = {
 
   validatePassword: jest.fn((id: string, password: string) => {
     return id.toString() === plainUserStub()._id.toString() && password === passwordStub();
+  }),
+
+  validateRefreshToken: jest.fn((id: string, token: string) => {
+    const valid =
+      id.toString() === plainUserStub()._id &&
+      (userStub().refreshTokens.includes(token) || userStub().singleSessionToken === token);
+
+    return valid ? plainUserStub() : null;
   }),
 };
 
