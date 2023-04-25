@@ -5,10 +5,11 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { RefreshToken } from '@towech-finance/shared/utils/models';
+import { StrategyNames } from './authentication-middleware.module';
 
 // TODO: i18n
 @Injectable()
-export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames.REFRESH) {
   constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
@@ -34,4 +35,4 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
 }
 
 @Injectable()
-export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {}
+export class JwtRefreshGuard extends AuthGuard(StrategyNames.REFRESH) {}

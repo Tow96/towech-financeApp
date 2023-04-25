@@ -8,10 +8,11 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UserModel } from '@towech-finance/shared/utils/models';
+import { StrategyNames } from './authentication-middleware.module';
 
 // TODO: i18n
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {
   constructor(private readonly userRepo: AuthenticationUserService) {
     super();
   }
@@ -28,4 +29,4 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 }
 
 @Injectable()
-export class LocalAuthGuard extends AuthGuard('local') {}
+export class LocalAuthGuard extends AuthGuard(StrategyNames.LOCAL) {}
