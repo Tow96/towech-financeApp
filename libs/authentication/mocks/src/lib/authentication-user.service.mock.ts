@@ -13,6 +13,11 @@ const mockValues = {
     return null;
   }),
 
+  getById: jest.fn((id: string) => {
+    if (id.toString() === plainUserStub()._id.toString()) return plainUserStub();
+    return null;
+  }),
+
   validatePassword: jest.fn((id: string, password: string) => {
     return id.toString() === plainUserStub()._id.toString() && password === passwordStub();
   }),

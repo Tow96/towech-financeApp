@@ -82,6 +82,34 @@ describe('getByEmail', () => {
   });
 });
 
+describe('getById', () => {
+  describe('When it is called with an unregistered id', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getById('');
+    });
+
+    it('Should return null', () => {
+      expect(response).toBe(null);
+    });
+  });
+
+  describe('When it is called with a registered id', () => {
+    let response: any;
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      response = await userRepo.getById(userStub()._id);
+    });
+
+    it('Should return the requested user', () => {
+      expect(response._id.toString()).toEqual(userStub()._id.toString());
+    });
+
+    it('Should return a generic user', () => validateUserType(response));
+  });
+});
+
 describe('validatePassword', () => {
   describe('when it is called for an invalid user', () => {
     let response: any;

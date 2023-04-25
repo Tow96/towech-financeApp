@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 // TODO: Set conditions
@@ -60,6 +60,10 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     const user = await this.findOne({ mail });
 
     return this.ConvertUserDocToUser(user);
+  }
+
+  public async getById(id: Types.ObjectId | string): Promise<UserModel | null> {
+    return this.ConvertUserDocToUser(await super.findById(id));
   }
 
   // TODO: i18n
