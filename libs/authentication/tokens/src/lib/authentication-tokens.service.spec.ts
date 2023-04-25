@@ -3,7 +3,7 @@ import { AuthenticationTokenService } from './authentication-tokens.service';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { plainUserStub } from '@towech-finance/authentication/mocks';
+import { plainUserStub } from '@towech-finance/authentication/repos/user';
 
 const authTokenSecret = 'testAuthToken';
 const refreshTokenSecret = 'testRefreshToken';

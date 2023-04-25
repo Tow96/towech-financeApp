@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { UserDocument } from '../lib/authentication-user.service';
-import { UserRoles } from '@towech-finance/shared/utils/models';
+import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 export const passwordStub = (): string => 'testpass';
 export const refreshArrStub = (): string => 'token';
@@ -16,3 +16,13 @@ export const userStub = (): UserDocument => ({
   singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
   role: UserRoles.USER,
 });
+
+export const plainUserStub = (): UserModel => {
+  return {
+    _id: userStub()._id.toString(),
+    accountConfirmed: userStub().accountConfirmed,
+    mail: userStub().mail,
+    name: userStub().name,
+    role: userStub().role,
+  };
+};

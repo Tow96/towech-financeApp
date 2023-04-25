@@ -1,21 +1,10 @@
-import { UserModel } from '@towech-finance/shared/utils/models';
 import { Provider } from '@nestjs/common';
 import {
   AuthenticationUserService,
   passwordStub,
-  userStub,
+  plainUserStub,
 } from '@towech-finance/authentication/repos/user';
 import { jest } from '@jest/globals';
-
-export const plainUserStub = (): UserModel => {
-  return {
-    _id: userStub()._id.toString(),
-    accountConfirmed: userStub().accountConfirmed,
-    mail: userStub().mail,
-    name: userStub().name,
-    role: userStub().role,
-  };
-};
 
 const mockValues = {
   getByEmail: jest.fn((mail: string) => {
