@@ -159,9 +159,9 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    *
    * @returns A boolean indicating validity
    */
-  public async validateRefreshToken(user_id: string, token: string): Promise<boolean> {
+  public async validateRefreshToken(user_id: string, token: string): Promise<UserModel | null> {
     const user = await this.findById(user_id);
-    if (!user) return false;
+    if (!user) return null;
 
     let valid = bcrypt.compareSync(token, user.singleSessionToken);
 
@@ -172,7 +172,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       }
     }
 
-    return valid;
+    return valid ? this.ConvertUserDocToUser(user) : null;
   }
 
   // ---------------------------------------------

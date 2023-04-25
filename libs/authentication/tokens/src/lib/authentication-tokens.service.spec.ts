@@ -58,7 +58,10 @@ describe('when generateRefreshToken is called', () => {
 
     it('Should generate an encoded jwt', () => {
       expect(jwt.verify(token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
-        expect.objectContaining(plainUserStub())
+        expect.objectContaining({
+          id: expect.any(String),
+          user: plainUserStub(),
+        })
       );
     });
 
@@ -77,7 +80,10 @@ describe('when generateRefreshToken is called', () => {
 
     it('Should generate an encoded jwt', () => {
       expect(jwt.verify(token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
-        expect.objectContaining(plainUserStub())
+        expect.objectContaining({
+          id: expect.any(String),
+          user: plainUserStub(),
+        })
       );
     });
 

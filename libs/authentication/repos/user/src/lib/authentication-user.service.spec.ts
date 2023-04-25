@@ -124,8 +124,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken('false', 'fake');
     });
 
-    it('Should return false', () => {
-      expect(response).toBe(false);
+    it('Should return null', () => {
+      expect(response).toBe(null);
     });
   });
 
@@ -135,8 +135,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken(userStub()._id.toString(), 'fake');
     });
 
-    it('Should return false', () => {
-      expect(response).toBe(false);
+    it('Should return null', () => {
+      expect(response).toBe(null);
     });
   });
 
@@ -146,8 +146,8 @@ describe('validateRefreshToken', () => {
       response = await userRepo.validateRefreshToken(userStub()._id.toString(), refreshArrStub());
     });
 
-    it('Should return true', () => {
-      expect(response).toBe(true);
+    it('Should return the user', () => {
+      expect(response).toBeInstanceOf(UserModel);
     });
   });
 });
