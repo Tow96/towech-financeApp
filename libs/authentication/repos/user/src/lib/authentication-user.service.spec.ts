@@ -1,26 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { MockModel } from '@towech-finance/shared/features/mongo';
 import { UserDocument } from './authentication-user.service';
-import { Types } from 'mongoose';
 import { AuthenticationUserService } from './authentication-user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { describe } from 'node:test';
-import { UserRoles, UserModel } from '@towech-finance/shared/utils/models';
-
-const passwordStub = (): string => 'testpass';
-const refreshArrStub = (): string => 'token';
-// const refreshSingleStub = (): string => 'token2';
-const userStub = (): UserDocument => ({
-  _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
-  accountConfirmed: true,
-  createdAt: new Date(0, 0, 0),
-  mail: 'fake@mail.com',
-  name: 'Fakeman',
-  password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
-  refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
-  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
-  role: UserRoles.USER,
-});
+import { UserModel } from '@towech-finance/shared/utils/models';
+import { userStub, passwordStub, refreshArrStub } from '../mocks/user.stub';
 
 class MockUserModel extends MockModel<UserDocument> {
   protected entityStub = userStub();
