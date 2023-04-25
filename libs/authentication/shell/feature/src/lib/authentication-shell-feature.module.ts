@@ -21,6 +21,12 @@ import { SharedFeaturesMongoModule } from '@towech-finance/shared/features/mongo
         NAME: Joi.string().required(),
         // DB
         MONGO_URI: Joi.string().required(),
+        // Tokens
+        AUTH_TOKEN_SECRET: Joi.string().required(),
+        AUTH_TOKEN_EXPIRATION: Joi.string().default('1m'),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
+        REFRESH_TOKEN_EXPIRATION: Joi.string().default('30d'),
+        REFRESH_SINGLE_TOKEN_EXPIRATION: Joi.string().default('1h'),
       }),
     }),
 
