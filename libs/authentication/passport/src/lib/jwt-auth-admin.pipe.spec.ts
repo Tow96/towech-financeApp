@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { plainAdminStub, plainUserStub } from '@towech-finance/authentication/repos/user';
 // Tested elements
-import { JwtAuthAdminStrategy } from './jwt-auth-admin.middleware';
+import { JwtAuthAdminStrategy } from './jwt-auth-admin.pipe';
 // Services
 import { ConfigService } from '@nestjs/config';
 

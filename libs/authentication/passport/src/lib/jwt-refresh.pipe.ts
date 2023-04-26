@@ -1,4 +1,4 @@
-/** jwt-refresh.middleware.ts
+/** jwt-refresh.pipe.ts
  * Copyright (c) 2023, Towechlabs
  *
  * Strategy and guard for using endpoints that require a jwt refreshtoken

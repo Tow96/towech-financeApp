@@ -1,4 +1,4 @@
-/** local-auth.middleware.ts
+/** local-auth.pipe.ts
  * Copyright (c) 2023, Towechlabs
  *
  * Strategy and guard for login using a username/password pair
