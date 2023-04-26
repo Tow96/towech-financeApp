@@ -1,4 +1,4 @@
-// Librariese
+// Libraries
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 // Tested elements
