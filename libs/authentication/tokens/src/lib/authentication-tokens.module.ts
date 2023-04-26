@@ -2,9 +2,10 @@
 import { Module } from '@nestjs/common';
 // Providers
 import { AuthenticationTokenService } from './authentication-tokens.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  controllers: [],
+  imports: [JwtModule],
   providers: [AuthenticationTokenService],
   exports: [AuthenticationTokenService],
 })

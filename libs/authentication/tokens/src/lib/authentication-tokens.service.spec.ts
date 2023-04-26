@@ -34,7 +34,7 @@ afterAll(() => {
 });
 
 describe('when generateAuthToken is called', () => {
-  let token: string;
+  let token: any;
 
   beforeEach(() => {
     token = tokenService.generateAuthToken(plainUserStub());
@@ -56,12 +56,12 @@ describe('when generateAuthToken is called', () => {
 
 describe('when generateRefreshToken is called', () => {
   describe('with keepSession intent', () => {
-    let token: string;
+    let token: any;
 
     beforeEach(() => (token = tokenService.generateRefreshToken(plainUserStub(), true)));
 
     it('Should generate an encoded jwt', () => {
-      expect(jwt.verify(token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
+      expect(jwt.verify(token.token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
         expect.objectContaining({
           id: expect.any(String),
           user: plainUserStub(),
@@ -70,7 +70,7 @@ describe('when generateRefreshToken is called', () => {
     });
 
     it('Should have an expiration date', () => {
-      const decodedToken: jwt.JwtPayload = jwt.decode(token, { json: true });
+      const decodedToken: jwt.JwtPayload = jwt.decode(token.token, { json: true });
 
       expect(decodedToken.exp).toBeDefined();
       expect(decodedToken.exp - decodedToken.iat).toBeGreaterThan(0);
@@ -78,12 +78,12 @@ describe('when generateRefreshToken is called', () => {
   });
 
   describe('without keepSession intent', () => {
-    let token: string;
+    let token: any;
 
     beforeEach(() => (token = tokenService.generateRefreshToken(plainUserStub())));
 
     it('Should generate an encoded jwt', () => {
-      expect(jwt.verify(token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
+      expect(jwt.verify(token.token, refreshTokenSecret, { ignoreExpiration: true })).toEqual(
         expect.objectContaining({
           id: expect.any(String),
           user: plainUserStub(),
@@ -92,7 +92,7 @@ describe('when generateRefreshToken is called', () => {
     });
 
     it('Should have an expiration date', () => {
-      const decodedToken: jwt.JwtPayload = jwt.decode(token, { json: true });
+      const decodedToken: jwt.JwtPayload = jwt.decode(token.token, { json: true });
 
       expect(decodedToken.exp).toBeDefined();
       expect(decodedToken.exp - decodedToken.iat).toBeGreaterThan(0);
