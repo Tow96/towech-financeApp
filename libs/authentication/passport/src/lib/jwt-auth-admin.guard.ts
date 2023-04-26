@@ -1,4 +1,4 @@
-/** jwt-auth-admin.pipe.ts
+/** jwt-auth-admin.guard.ts
  * Copyright (c) 2023, Towechlabs
  *
  * Strategy and guard for using endpoints only meant for administrators
