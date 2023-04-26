@@ -9,6 +9,6 @@ export default {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../../../coverage/libs/authentication/http/signage',
   collectCoverage: true,
-  collectCoverageFrom: ['**/*.(t|j)s'],
-  coveragePathIgnorePatterns: ['jest.config.ts', 'index.ts'],
+  collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
 };
