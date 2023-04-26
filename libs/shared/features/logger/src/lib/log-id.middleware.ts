@@ -3,13 +3,12 @@
  *
  * Middleware that adds a random uuid for logging purposes
  */
+// Libaries
 import { randomUUID } from 'crypto';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Response } from 'express';
-
-export interface LogIdRequest extends Request {
-  logId: string;
-}
+// Models
+import { LogIdRequest } from './log-id.model';
 
 @Injectable()
 export class LogIdMiddleware implements NestMiddleware {
