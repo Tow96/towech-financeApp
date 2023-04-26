@@ -27,6 +27,8 @@ const mockValues = {
     return plainUserStub();
   }),
 
+  storeRefreshToken: jest.fn(),
+
   validatePassword: jest.fn((id: string, password: string) => {
     return id.toString() === plainUserStub()._id.toString() && password === passwordStub();
   }),

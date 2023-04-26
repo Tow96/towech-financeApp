@@ -1,7 +1,7 @@
 // Libraries
 import { Test } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
-
+import * as jwt from 'jsonwebtoken';
 // Tested elements
 import { SignageController } from './signage.controller';
 // Mocks
@@ -9,17 +9,34 @@ import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { SharedFeaturesLoggerModule } from '@towech-finance/shared/features/logger';
 import { plainUserStub } from '@towech-finance/authentication/repos/user';
 import { UserRoles } from '@towech-finance/shared/utils/models';
+import { ConfigService } from '@nestjs/config';
+import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
+import { JwtService } from '@nestjs/jwt';
 
 let signController: SignageController;
+const authTokenSecret = 'testAuthToken';
+const refreshTokenSecret = 'testRefreshToken';
+const OLD_ENV = process.env;
 
 beforeAll(async () => {
+  jest.clearAllMocks();
+  process.env.AUTH_TOKEN_SECRET = authTokenSecret;
+  process.env.AUTH_TOKEN_EXPIRATION = '1m';
+  process.env.REFRESH_TOKEN_SECRET = refreshTokenSecret;
+  process.env.REFRESH_TOKEN_EXPIRATION = '30d';
+  process.env.REFRESH_SINGLE_TOKEN_EXPIRATION = '1h';
+
   const moduleRef = await Test.createTestingModule({
     controllers: [SignageController],
     imports: [SharedFeaturesLoggerModule],
-    providers: [AuthUserRepoMock],
+    providers: [AuthUserRepoMock, ConfigService, AuthenticationTokenService, JwtService],
   }).compile();
 
   signController = moduleRef.get<SignageController>(SignageController);
+});
+
+afterAll(() => {
+  process.env = OLD_ENV;
 });
 
 describe('When register is called', () => {
@@ -54,6 +71,17 @@ describe('When register is called', () => {
 describe('When login is called', () => {
   let response: any;
   beforeEach(async () => {
-    response = await signController.login(plainUserStub(), 'TEST');
+    response = await signController.login(
+      plainUserStub(),
+      { keepSession: true, username: 'a', password: 'b' },
+      'TEST',
+      { cookie: () => {} } // eslint-disable-line
+    );
+  });
+
+  it('Should return a jwt token', () => {
+    const decodedToken: jwt.JwtPayload = jwt.decode(response.token, { json: true });
+
+    expect(decodedToken).toEqual(expect.objectContaining(plainUserStub()));
   });
 });
