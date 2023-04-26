@@ -50,3 +50,10 @@ describe('When register is called', () => {
     });
   });
 });
+
+describe('When login is called', () => {
+  let response: any;
+  beforeEach(async () => {
+    response = await signController.login(plainUserStub(), 'TEST');
+  });
+});

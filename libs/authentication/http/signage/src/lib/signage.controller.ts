@@ -1,8 +1,14 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+// Libraries
+import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
+// Services
 import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
-import { CreateUserDto } from '@towech-finance/authentication/dto';
+import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
 import { LogId, PidWinstonLogger } from '@towech-finance/shared/features/logger';
+// Models
+import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';
 import { UserModel } from '@towech-finance/shared/utils/models';
+// Guards
+import { LocalAuthGuard, User } from '@towech-finance/authentication/passport';
 
 export enum SIGNAGE_ROUTES {
   REGISTER = 'register',
@@ -13,6 +19,7 @@ export enum SIGNAGE_ROUTES {
 export class SignageController {
   constructor(
     private readonly userRepo: AuthenticationUserService,
+    private readonly tokens: AuthenticationTokenService,
     private readonly logger: PidWinstonLogger
   ) {}
 
@@ -40,11 +47,22 @@ export class SignageController {
 
   // TODO: Swagger
   // TODO: I18n
-  // TODO: Guard
-  // TODO: Dto
-  // TODO: Logs
+  @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
-  public login() {
-    return this.userRepo.getAll();
+  public async login(
+    @User() user: UserModel,
+    @Body() body: LoginDto,
+    @LogId() logId: string
+  ): Promise<{ token: string; refresh: string }> {
+    this.logger.pidLog(logId, `Logging in user: ${user._id}`);
+
+    const refreshToken = this.tokens.generateRefreshToken(user);
+    const authToken = this.tokens.generateAuthToken(user);
+    this.logger.pidLog(logId, `Generated tokens`);
+
+    this.userRepo.storeRefreshToken(user._id, refreshToken.id, body.keepSession);
+    this.logger.pidLog(logId, `Stored refresh token`);
+
+    return { token: authToken, refresh: refreshToken.token };
   }
 }
