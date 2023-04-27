@@ -1,5 +1,3 @@
-// TODO: Add roles enumerator
-
 import { UserRoles } from './roles.enum';
 
 export interface CreateUser {

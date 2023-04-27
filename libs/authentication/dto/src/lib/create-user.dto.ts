@@ -8,6 +8,8 @@ import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 // Models
 import { CreateUser, UserRoles } from '@towech-finance/shared/utils/models';
+// OpenAPi
+import { ApiProperty } from '@nestjs/swagger';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const convertToRole = (input: any): UserRoles => {
@@ -20,17 +22,26 @@ const convertToRole = (input: any): UserRoles => {
 /* eslint-enable */
 
 // TODO: I18n
-// TODO: Swagger
 export class CreateUserDto implements CreateUser {
   @IsString({ message: 'Name must be a string' })
   @MinLength(3, { message: 'Name must be at least three characters long' })
+  @ApiProperty({ description: 'Name of the new user', required: true })
   name: string;
 
   @IsString({ message: 'Email must be a valid address' })
   @IsEmail()
+  @ApiProperty({
+    description: 'Email address of the user, it is also used as the username',
+    required: true,
+  })
   mail: string;
 
   @IsOptional()
   @Transform(({ value }) => convertToRole(value))
+  @ApiProperty({
+    type: String,
+    description: 'Role that the new user will take, defaults to USER',
+    required: false,
+  })
   role: UserRoles;
 }

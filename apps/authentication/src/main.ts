@@ -7,8 +7,9 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 // Modules
-import { AppModule } from './app/app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
+import { AppModule } from './app/app.module';
 // Services
 import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
 import { ConfigService } from '@nestjs/config';
@@ -32,7 +33,26 @@ async function bootstrap() {
 
   // TODO: CORS
 
-  // TODO: Swagger
+  // Swagger
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Towech Finance Auth Service')
+    .setDescription('MicroService that is in charge of handling users and authentication')
+    .setVersion('2.0')
+    .addBearerAuth(
+      {
+        description: `Please enter the JWT token`,
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token'
+    )
+    .build();
+
+  const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, swaggerDoc);
 
   app.use(cookieParser());
   await app.listen(configService.get('PORT'));

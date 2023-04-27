@@ -25,6 +25,8 @@ import {
   User,
 } from '@towech-finance/authentication/passport';
 import { ConfigService } from '@nestjs/config';
+// OpenAPI
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 enum SIGNAGE_ROUTES {
   LOGIN = 'login',
@@ -38,6 +40,7 @@ enum COOKIES {
 }
 
 @Controller()
+@ApiTags('')
 export class SignageController {
   constructor(
     private readonly userRepo: AuthenticationUserService,
@@ -46,11 +49,11 @@ export class SignageController {
     private readonly config: ConfigService
   ) {}
 
-  // TODO: Swagger
   // TODO: I18n
-  // TODO: Guard
   @UseGuards(JwtAuthAdminGuard)
   @Post(SIGNAGE_ROUTES.REGISTER)
+  @ApiOperation({ summary: 'Registers a new user to the application, only admins can call it' })
+  @ApiBearerAuth('access-token')
   public async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
     this.logger.pidLog(logId, `Registering new user under email ${user.mail}`);
 
@@ -69,10 +72,10 @@ export class SignageController {
     }
   }
 
-  // TODO: Swagger
   // TODO: I18n
   @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
+  @ApiOperation({ summary: 'Creates the authToken and the refreshToken cookie for a user' })
   public async login(
     @User() user: UserModel,
     @Body() body: LoginDto,
@@ -104,10 +107,10 @@ export class SignageController {
     return { token: authToken };
   }
 
-  // TODO: Swagger
   // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.REFRESH)
+  @ApiOperation({ summary: 'Reads the refreshToken cookie to generate a new authToken' })
   public async refresh(
     @Refresh() { user }: RefreshToken,
     @LogId() logId: string
@@ -117,11 +120,11 @@ export class SignageController {
     return { token };
   }
 
-  // TODO: Swagger
   // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.LOGOUT)
   @HttpCode(204)
+  @ApiOperation({ summary: 'Deregisters and removes a refreshToken cookie for a user' })
   public async logout(
     @Refresh() { id, user }: RefreshToken,
     @LogId() logId: string,
