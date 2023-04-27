@@ -1,5 +1,14 @@
 // Libraries
-import { Body, Controller, HttpException, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 // Services
 import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
@@ -8,12 +17,22 @@ import { LogId, PidWinstonLogger } from '@towech-finance/shared/features/logger'
 import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';
 import { UserModel } from '@towech-finance/shared/utils/models';
 // Guards
-import { LocalAuthGuard, User } from '@towech-finance/authentication/passport';
+import {
+  JwtRefreshGuard,
+  LocalAuthGuard,
+  Refresh,
+  User,
+} from '@towech-finance/authentication/passport';
 import { ConfigService } from '@nestjs/config';
 
 export enum SIGNAGE_ROUTES {
   REGISTER = 'register',
   LOGIN = 'login',
+  LOGOUT = 'logout',
+}
+
+enum COOKIES {
+  REFRESH = 'jid',
 }
 
 @Controller()
@@ -76,9 +95,26 @@ export class SignageController {
       secure: isProd ? true : undefined,
     };
 
-    res.cookie('jid', refreshToken.token, cookieOptions);
+    res.cookie(COOKIES.REFRESH, refreshToken.token, cookieOptions);
     this.logger.pidLog(logId, `Generated cookie`);
 
     return { token: authToken };
+  }
+
+  // TODO: Swagger
+  // TODO: I18n
+  @UseGuards(JwtRefreshGuard)
+  @Post(SIGNAGE_ROUTES.LOGOUT)
+  @HttpCode(204)
+  public async logout(
+    @Refresh() { id, user }: { id: string; user: UserModel },
+    @LogId() logId: string,
+    @Res({ passthrough: true }) res
+  ): Promise<void> {
+    this.logger.pidLog(logId, `Logging user: ${user._id} out`);
+    this.userRepo.removeRefreshToken(user._id, id);
+
+    this.logger.pidLog(logId, `Removing cookie`);
+    res.clearCookie(COOKIES.REFRESH);
   }
 }

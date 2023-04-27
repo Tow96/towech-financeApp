@@ -5,6 +5,7 @@
 // Libraries
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 // Modules
 import { AppModule } from './app/app.module';
 import { WinstonModule } from 'nest-winston';
@@ -33,6 +34,7 @@ async function bootstrap() {
 
   // TODO: Swagger
 
+  app.use(cookieParser());
   await app.listen(configService.get('PORT'));
   Logger.log(`App running on port ${configService.get('PORT')}`);
 }
