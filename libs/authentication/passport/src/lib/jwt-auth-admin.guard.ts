@@ -31,7 +31,6 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
 
   public async validate(payload: UserModel): Promise<UserModel> {
     const user = await this.userRepo.getById(payload._id);
-    console.log(user);
     if (!user || user.role !== UserRoles.ADMIN) {
       throw new HttpException('Invalid credentials', 401);
     }

@@ -18,6 +18,7 @@ import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';
 import { AuthToken, RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
 // Guards
 import {
+  JwtAuthAdminGuard,
   JwtRefreshGuard,
   LocalAuthGuard,
   Refresh,
@@ -48,6 +49,7 @@ export class SignageController {
   // TODO: Swagger
   // TODO: I18n
   // TODO: Guard
+  @UseGuards(JwtAuthAdminGuard)
   @Post(SIGNAGE_ROUTES.REGISTER)
   public async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
     this.logger.pidLog(logId, `Registering new user under email ${user.mail}`);
