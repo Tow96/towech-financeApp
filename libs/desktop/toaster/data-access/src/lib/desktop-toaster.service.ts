@@ -9,14 +9,16 @@ export interface DesktopToast {
 
 @Injectable({ providedIn: 'root' })
 export class DesktopToasterService {
-  toastTray: BehaviorSubject<DesktopToast[]> = new BehaviorSubject<DesktopToast[]>([]);
+  private toasts: BehaviorSubject<DesktopToast[]> = new BehaviorSubject<DesktopToast[]>([]);
 
-  addToast(message: string, duration?: number): void {
+  public toastTray = this.toasts.asObservable();
+
+  public addToast(message: string, duration?: number): void {
     const toast = { id: new Date().getTime(), message, duration };
-    this.toastTray.next([toast, ...this.toastTray.value]);
+    this.toasts.next([toast, ...this.toasts.value]);
   }
 
-  dismiss(id: number) {
-    this.toastTray.next(this.toastTray.value.filter(t => t.id != id));
+  public dismiss(id: number) {
+    this.toasts.next(this.toasts.value.filter(t => t.id != id));
   }
 }
