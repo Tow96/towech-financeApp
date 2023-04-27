@@ -4,7 +4,7 @@
  * Dumb component that displays the toast message
  */
 import { AfterContentInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toaster/feature';
+import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toaster/data-access';
 
 @Component({
   standalone: true,
