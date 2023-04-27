@@ -37,12 +37,6 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
 
     return user;
   }
-  // public async validate(payload: UserModel): Promise<UserModel> {
-  //   const user = this.userRepo.getById(payload._id);
-  //   if (!user) throw new HttpException('Invalid credentials', 401);
-
-  //   return user;
-  // }
 }
 
 export class JwtAuthAdminGuard extends AuthGuard(StrategyNames.AUTH_ADMIN) {}
