@@ -24,6 +24,7 @@ async function bootstrap() {
     }),
   });
   const configService = app.get(ConfigService);
+  const isProd = configService.get('NODE_ENV') === 'production';
 
   // Adds the body trimming pipe
   app.useGlobalPipes(new TrimPipe());
@@ -31,7 +32,12 @@ async function bootstrap() {
 
   // TODO: i18n
 
-  // TODO: CORS
+  // CORS
+  app.enableCors({
+    origin: isProd ? '*' : configService.get('CORS_ORIGIN'),
+    methods: ['POST'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  });
 
   // Swagger
   const swaggerConfig = new DocumentBuilder()

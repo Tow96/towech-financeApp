@@ -20,6 +20,7 @@ import { AuthenticationShellRoutes } from './authentication-shell.routes';
         PORT: Joi.number().default(3001),
         DISABLE_LOGGING: Joi.boolean().default(false),
         NAME: Joi.string().required(),
+        CORS_ORIGIN: Joi.string().required(),
         // DB
         MONGO_URI: Joi.string().required(),
         // Tokens
