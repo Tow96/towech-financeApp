@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Libraries
 import { LogIdMiddleware } from './log-id.middleware';
-import { LogIdRequest } from './log-id.middleware';
+import { LogIdRequest } from './log-id.model';
 
 // Stubs
 const stubResponse = (): any => {

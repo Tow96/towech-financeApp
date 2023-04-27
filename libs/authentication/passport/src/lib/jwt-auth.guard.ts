@@ -1,4 +1,4 @@
-/** jwt-auth.middleware.ts
+/** jwt-auth.guard.ts
  * Copyright (c) 2023, Towechlabs
  *
  * Strategy and guard for accessing endpoints using a jwt token

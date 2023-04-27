@@ -5,9 +5,11 @@
 // Libraries
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 // Modules
-import { AppModule } from './app/app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
+import { AppModule } from './app/app.module';
 // Services
 import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
 import { ConfigService } from '@nestjs/config';
@@ -22,6 +24,7 @@ async function bootstrap() {
     }),
   });
   const configService = app.get(ConfigService);
+  const isProd = configService.get('NODE_ENV') === 'production';
 
   // Adds the body trimming pipe
   app.useGlobalPipes(new TrimPipe());
@@ -29,10 +32,35 @@ async function bootstrap() {
 
   // TODO: i18n
 
-  // TODO: CORS
+  // CORS
+  app.enableCors({
+    origin: isProd ? '*' : configService.get('CORS_ORIGIN'),
+    methods: ['POST'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  });
 
-  // TODO: Swagger
+  // Swagger
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Towech Finance Auth Service')
+    .setDescription('MicroService that is in charge of handling users and authentication')
+    .setVersion('2.0')
+    .addBearerAuth(
+      {
+        description: `Please enter the JWT token`,
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token'
+    )
+    .build();
 
+  const swaggerDoc = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, swaggerDoc);
+
+  app.use(cookieParser());
   await app.listen(configService.get('PORT'));
   Logger.log(`App running on port ${configService.get('PORT')}`);
 }

@@ -132,14 +132,14 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   public async storeRefreshToken(
     user_id: string,
     token: string,
-    singleSession = false
+    keepSession = false
   ): Promise<void> {
     const user = await this.findById(user_id);
     if (!user) return;
 
     const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
 
-    if (singleSession) {
+    if (keepSession) {
       if (user.refreshTokens.length >= this.REFRESH_TOKEN_MAX_COUNT) user.refreshTokens.shift();
       user.refreshTokens.push(hashedToken);
     } else {

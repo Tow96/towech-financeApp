@@ -1,7 +1,7 @@
 // Libraries
 import { Test } from '@nestjs/testing';
 // Tested elements
-import { JwtRefreshStrategy } from './jwt-refresh.middleware';
+import { JwtRefreshStrategy } from './jwt-refresh.guard';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { plainUserStub, userStub } from '@towech-finance/authentication/repos/user';

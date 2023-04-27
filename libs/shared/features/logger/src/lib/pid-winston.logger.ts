@@ -3,10 +3,12 @@
  *
  * Logger class that adds writing logs with pid and custom format
  */
+import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import 'winston-daily-rotate-file';
 import * as winston from 'winston';
 
+@Injectable()
 export class PidWinstonLogger extends Logger {
   static logsFolder = `${__dirname}/../logs`;
 

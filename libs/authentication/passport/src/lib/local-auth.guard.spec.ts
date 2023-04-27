@@ -2,7 +2,7 @@
 import { Test } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
 // Tested elements
-import { LocalStrategy } from './local-auth.middleware';
+import { LocalStrategy } from './local-auth.guard';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { passwordStub, plainUserStub } from '@towech-finance/authentication/repos/user';

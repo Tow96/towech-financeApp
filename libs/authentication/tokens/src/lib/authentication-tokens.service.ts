@@ -32,7 +32,7 @@ export class AuthenticationTokenService {
    *
    * @returns The token
    */
-  generateRefreshToken(user: UserModel, keepSession = false): string {
+  generateRefreshToken(user: UserModel, keepSession = false): { token: string; id: string } {
     const secret = this.config.get<string>('REFRESH_TOKEN_SECRET');
     const expiresIn = keepSession
       ? this.config.get<string>('REFRESH_TOKEN_EXPIRATION')
@@ -43,6 +43,6 @@ export class AuthenticationTokenService {
       user: { ...user },
     };
 
-    return this.jwt.sign(content, { secret, expiresIn });
+    return { token: this.jwt.sign(content, { secret, expiresIn }), id: content.id };
   }
 }
