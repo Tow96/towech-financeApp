@@ -15,7 +15,7 @@ import { AuthenticationTokenService } from '@towech-finance/authentication/token
 import { LogId, PidWinstonLogger } from '@towech-finance/shared/features/logger';
 // Models
 import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';
-import { UserModel } from '@towech-finance/shared/utils/models';
+import { AuthToken, RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
 // Guards
 import {
   JwtRefreshGuard,
@@ -25,10 +25,11 @@ import {
 } from '@towech-finance/authentication/passport';
 import { ConfigService } from '@nestjs/config';
 
-export enum SIGNAGE_ROUTES {
-  REGISTER = 'register',
+enum SIGNAGE_ROUTES {
   LOGIN = 'login',
   LOGOUT = 'logout',
+  REFRESH = 'refresh',
+  REGISTER = 'register',
 }
 
 enum COOKIES {
@@ -75,7 +76,7 @@ export class SignageController {
     @Body() body: LoginDto,
     @LogId() logId: string,
     @Res({ passthrough: true }) res
-  ): Promise<{ token: string }> {
+  ): Promise<AuthToken> {
     this.logger.pidLog(logId, `Logging in user: ${user._id}`);
 
     const refreshToken = this.tokens.generateRefreshToken(user);
@@ -104,10 +105,23 @@ export class SignageController {
   // TODO: Swagger
   // TODO: I18n
   @UseGuards(JwtRefreshGuard)
+  @Post(SIGNAGE_ROUTES.REFRESH)
+  public async refresh(
+    @Refresh() { user }: RefreshToken,
+    @LogId() logId: string
+  ): Promise<AuthToken> {
+    this.logger.pidLog(logId, `Generating new token for user: ${user._id}`);
+    const token = this.tokens.generateAuthToken(user);
+    return { token };
+  }
+
+  // TODO: Swagger
+  // TODO: I18n
+  @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.LOGOUT)
   @HttpCode(204)
   public async logout(
-    @Refresh() { id, user }: { id: string; user: UserModel },
+    @Refresh() { id, user }: RefreshToken,
     @LogId() logId: string,
     @Res({ passthrough: true }) res
   ): Promise<void> {

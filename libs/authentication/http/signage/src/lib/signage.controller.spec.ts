@@ -85,3 +85,16 @@ describe('When login is called', () => {
     expect(decodedToken).toEqual(expect.objectContaining(plainUserStub()));
   });
 });
+
+describe('When refresh is called', () => {
+  let response: any;
+  beforeEach(async () => {
+    response = await signController.refresh({ id: 'TEST', user: plainUserStub() }, 'TEST');
+  });
+
+  it('Should return a jwt token', () => {
+    const decodedToken: jwt.JwtPayload = jwt.decode(response.token, { json: true });
+
+    expect(decodedToken).toEqual(expect.objectContaining(plainUserStub()));
+  });
+});

@@ -1,3 +1,4 @@
+export * from './lib/auth-token.model';
 export * from './lib/create-user.model';
 export * from './lib/login.model';
 export * from './lib/refreshToken.model';
