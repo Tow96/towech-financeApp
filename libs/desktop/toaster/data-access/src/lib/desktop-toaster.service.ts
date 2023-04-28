@@ -1,8 +1,15 @@
+/** desktop-toaster.service.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Service in charge of handling the toast tray
+ */
+// Libraries
 import { Injectable } from '@angular/core';
+import { randomUUID } from 'crypto';
 import { BehaviorSubject } from 'rxjs';
 
 export interface DesktopToast {
-  id: number;
+  id: string;
   message: string;
   duration?: number;
 }
@@ -13,12 +20,12 @@ export class DesktopToasterService {
 
   public toastTray = this.toasts.asObservable();
 
-  public addToast(message: string, duration?: number): void {
-    const toast = { id: new Date().getTime(), message, duration };
+  public add(message: string, duration?: number): void {
+    const toast = { id: randomUUID(), message, duration };
     this.toasts.next([toast, ...this.toasts.value]);
   }
 
-  public dismiss(id: number) {
-    this.toasts.next(this.toasts.value.filter(t => t.id != id));
+  public dismiss(id: string) {
+    this.toasts.next(this.toasts.value.filter(t => t.id !== id));
   }
 }
