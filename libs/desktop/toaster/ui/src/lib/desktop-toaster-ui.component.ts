@@ -14,17 +14,17 @@ import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toa
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DesktopToastUIComponent implements AfterContentInit {
-  @Input() toast?: DesktopToast;
+  @Input() public toast?: DesktopToast;
 
   constructor(private readonly toastService: DesktopToasterService) {}
 
-  ngAfterContentInit(): void {
+  public ngAfterContentInit(): void {
     if (!this.toast) return;
 
     setTimeout(() => this.hide(), this.toast.duration || 3000);
   }
 
-  hide() {
+  public hide(): void {
     if (!this.toast) return;
 
     this.toastService.dismiss(this.toast.id);
