@@ -5,7 +5,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { UserDocument } from './authentication-user.service';
 // Mocks
 import { MockModel } from '@towech-finance/shared/features/mongo';
-import { userStub, passwordStub, refreshArrStub } from '../mocks/user.stub';
+import { userStub, passwordStub, refreshArrStub, singleTokenStub } from '../mocks/user.stub';
 // Services
 import { AuthenticationUserService } from './authentication-user.service';
 // Models
@@ -22,175 +22,286 @@ const validateUserType = (response: any) => {
   expect(response.singleSessionToken).toBeUndefined();
 };
 
-let userRepo: AuthenticationUserService;
+describe('User Repo', () => {
+  let userRepo: AuthenticationUserService;
 
-beforeAll(async () => {
-  const moduleRef = await Test.createTestingModule({
-    providers: [
-      AuthenticationUserService,
-      { provide: getModelToken(UserDocument.name), useClass: MockUserModel },
-    ],
-  }).compile();
-  userRepo = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
-});
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        AuthenticationUserService,
+        { provide: getModelToken(UserDocument.name), useClass: MockUserModel },
+      ],
+    }).compile();
+    userRepo = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
+  });
 
-describe('register', () => {
-  describe('When register is called for a user that already exists', () => {
-    it('Should throw an error', async () => {
-      await expect(
-        userRepo.register(userStub().name, userStub().password, userStub().mail)
-      ).rejects.toThrow();
+  describe('register', () => {
+    describe('When register is called for a user that already exists', () => {
+      it('Should throw an error', async () => {
+        await expect(
+          userRepo.register(userStub().name, userStub().password, userStub().mail)
+        ).rejects.toThrow();
+      });
+    });
+
+    describe('When register is called without a role', () => {
+      let response: any;
+      beforeAll(async () => {
+        jest.clearAllMocks();
+        response = await userRepo.register(
+          userStub().name,
+          userStub().password,
+          'anotheraddress@mail.com'
+        );
+      });
+
+      it('Should return a generic type user', () => validateUserType(response));
     });
   });
 
-  describe('When register is called without a role', () => {
-    let response: any;
-    beforeAll(async () => {
+  describe('getByEmail', () => {
+    describe('When it is called with an unregistered mail', () => {
+      let response: any;
+      beforeEach(async () => {
+        jest.clearAllMocks();
+        response = await userRepo.getByEmail('another@mail.com');
+      });
+
+      it('Should return null', () => {
+        expect(response).toBe(null);
+      });
+    });
+
+    describe('When it is called with a registered mail', () => {
+      let response: any;
+      beforeEach(async () => {
+        jest.clearAllMocks();
+        response = await userRepo.getByEmail(userStub().mail);
+      });
+
+      it('Should return the requested user', () => {
+        expect(response.mail).toEqual(userStub().mail);
+      });
+
+      it('Should return a generic user', () => validateUserType(response));
+    });
+  });
+
+  describe('getById', () => {
+    describe('When it is called with an unregistered id', () => {
+      let response: any;
+      beforeEach(async () => {
+        jest.clearAllMocks();
+        response = await userRepo.getById('');
+      });
+
+      it('Should return null', () => {
+        expect(response).toBe(null);
+      });
+    });
+
+    describe('When it is called with a registered id', () => {
+      let response: any;
+      beforeEach(async () => {
+        jest.clearAllMocks();
+        response = await userRepo.getById(userStub()._id);
+      });
+
+      it('Should return the requested user', () => {
+        expect(response._id.toString()).toEqual(userStub()._id.toString());
+      });
+
+      it('Should return a generic user', () => validateUserType(response));
+    });
+  });
+
+  describe('validatePassword', () => {
+    describe('when it is called for an invalid user', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validatePassword('false', 'fake');
+      });
+
+      it('Should return false', () => {
+        expect(response).toBe(false);
+      });
+    });
+
+    describe('when it is called with an invalid password', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validatePassword(userStub()._id.toString(), 'fake');
+      });
+
+      it('Should return false', () => {
+        expect(response).toBe(false);
+      });
+    });
+
+    describe('when it is called with a valid user/password', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validatePassword(userStub()._id.toString(), passwordStub());
+      });
+
+      it('Should return true', () => {
+        expect(response).toBe(true);
+      });
+    });
+  });
+
+  describe('validateRefreshToken', () => {
+    describe('when it is called for an invalid user', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validateRefreshToken('false', 'fake');
+      });
+
+      it('Should return null', () => {
+        expect(response).toBe(null);
+      });
+    });
+
+    describe('when it is called with an invalid token', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validateRefreshToken(userStub()._id.toString(), 'fake');
+      });
+
+      it('Should return null', () => {
+        expect(response).toBe(null);
+      });
+    });
+
+    describe('when it is called with a valid user/token', () => {
+      let response: any;
+      beforeAll(async () => {
+        response = await userRepo.validateRefreshToken(userStub()._id.toString(), refreshArrStub());
+      });
+
+      it('Should return the user', () => {
+        expect(response).toBeInstanceOf(UserModel);
+      });
+    });
+  });
+
+  describe('When getAll is called', () => {
+    let responseUsers: UserDocument[];
+    beforeEach(async () => {
       jest.clearAllMocks();
-      response = await userRepo.register(
-        userStub().name,
-        userStub().password,
-        'anotheraddress@mail.com'
+      responseUsers = await userRepo.getAll();
+    });
+    it('Should return an array', () => {
+      expect(responseUsers).toEqual([userStub()]);
+    });
+  });
+
+  describe('When removeRefreshToken is called for an inexistent user', () => {
+    it('Should not do nothing and return', async () => {
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.removeRefreshToken('invalid', 'token');
+
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe('When removeRefreshToken is called without any token', () => {
+    it('Should call the model and remove only the refreshtoken', async () => {
+      jest.clearAllMocks();
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.removeRefreshToken(userStub()._id.toString(), null);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        userStub()._id.toString(),
+        {
+          refreshTokens: [],
+          singleSessionToken: undefined,
+        },
+        { lean: true, new: true, upsert: true }
       );
     });
-
-    it('Should return a generic type user', () => validateUserType(response));
   });
-});
 
-describe('getByEmail', () => {
-  describe('When it is called with an unregistered mail', () => {
-    let response: any;
-    beforeEach(async () => {
+  describe('When removeRefreshToken is called for a kept session token', () => {
+    it('Should call the model and remove only the refreshtoken', async () => {
       jest.clearAllMocks();
-      response = await userRepo.getByEmail('another@mail.com');
-    });
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.removeRefreshToken(userStub()._id.toString(), refreshArrStub());
 
-    it('Should return null', () => {
-      expect(response).toBe(null);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        userStub()._id.toString(),
+        {
+          refreshTokens: [],
+          singleSessionToken: userStub().singleSessionToken,
+        },
+        { lean: true, new: true, upsert: true }
+      );
     });
   });
 
-  describe('When it is called with a registered mail', () => {
-    let response: any;
-    beforeEach(async () => {
+  describe('When removeRefreshToken is called for a single session token', () => {
+    it('Should call the model and remove only the single session token', async () => {
       jest.clearAllMocks();
-      response = await userRepo.getByEmail(userStub().mail);
-    });
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.removeRefreshToken(userStub()._id.toString(), singleTokenStub());
 
-    it('Should return the requested user', () => {
-      expect(response.mail).toEqual(userStub().mail);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        userStub()._id.toString(),
+        {
+          refreshTokens: userStub().refreshTokens,
+          singleSessionToken: undefined,
+        },
+        { lean: true, new: true, upsert: true }
+      );
     });
-
-    it('Should return a generic user', () => validateUserType(response));
   });
-});
 
-describe('getById', () => {
-  describe('When it is called with an unregistered id', () => {
-    let response: any;
-    beforeEach(async () => {
+  describe('When storeRefreshToken is called for an inexistent user', () => {
+    it('Should not do nothing and return', async () => {
       jest.clearAllMocks();
-      response = await userRepo.getById('');
-    });
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.storeRefreshToken('invalid', 'token');
 
-    it('Should return null', () => {
-      expect(response).toBe(null);
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
-  describe('When it is called with a registered id', () => {
-    let response: any;
-    beforeEach(async () => {
+  describe('When storeRefreshToken is called with keep session', () => {
+    it('Should call the model and add the refreshtoken', async () => {
       jest.clearAllMocks();
-      response = await userRepo.getById(userStub()._id);
-    });
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.storeRefreshToken(userStub()._id.toString(), 'newToken', true);
 
-    it('Should return the requested user', () => {
-      expect(response._id.toString()).toEqual(userStub()._id.toString());
-    });
-
-    it('Should return a generic user', () => validateUserType(response));
-  });
-});
-
-describe('validatePassword', () => {
-  describe('when it is called for an invalid user', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validatePassword('false', 'fake');
-    });
-
-    it('Should return false', () => {
-      expect(response).toBe(false);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        userStub()._id.toString(),
+        {
+          refreshTokens: [...userStub().refreshTokens, expect.any(String)],
+          singleSessionToken: userStub().singleSessionToken,
+        },
+        { lean: true, new: true, upsert: true }
+      );
     });
   });
 
-  describe('when it is called with an invalid password', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validatePassword(userStub()._id.toString(), 'fake');
-    });
+  describe('When storeRefreshToken is called without keep session', () => {
+    it('Should call the model and add the refreshtoken', async () => {
+      jest.clearAllMocks();
+      const spy = jest.spyOn(userRepo.model, 'findByIdAndUpdate');
+      await userRepo.storeRefreshToken(userStub()._id.toString(), 'newToken');
 
-    it('Should return false', () => {
-      expect(response).toBe(false);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        userStub()._id.toString(),
+        {
+          refreshTokens: userStub().refreshTokens,
+          singleSessionToken: expect.any(String),
+        },
+        { lean: true, new: true, upsert: true }
+      );
     });
-  });
-
-  describe('when it is called with a valid user/password', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validatePassword(userStub()._id.toString(), passwordStub());
-    });
-
-    it('Should return true', () => {
-      expect(response).toBe(true);
-    });
-  });
-});
-
-describe('validateRefreshToken', () => {
-  describe('when it is called for an invalid user', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validateRefreshToken('false', 'fake');
-    });
-
-    it('Should return null', () => {
-      expect(response).toBe(null);
-    });
-  });
-
-  describe('when it is called with an invalid token', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validateRefreshToken(userStub()._id.toString(), 'fake');
-    });
-
-    it('Should return null', () => {
-      expect(response).toBe(null);
-    });
-  });
-
-  describe('when it is called with a valid user/token', () => {
-    let response: any;
-    beforeAll(async () => {
-      response = await userRepo.validateRefreshToken(userStub()._id.toString(), refreshArrStub());
-    });
-
-    it('Should return the user', () => {
-      expect(response).toBeInstanceOf(UserModel);
-    });
-  });
-});
-
-describe('When getAll is called', () => {
-  let responseUsers: UserDocument[];
-  beforeEach(async () => {
-    jest.clearAllMocks();
-    responseUsers = await userRepo.getAll();
-  });
-  it('Should return an array', () => {
-    expect(responseUsers).toEqual([userStub()]);
   });
 });

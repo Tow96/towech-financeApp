@@ -2,12 +2,13 @@
 import { Test } from '@nestjs/testing';
 import { HttpException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import * as httpMock from 'node-mocks-http';
 // Tested elements
 import { SignageController } from './signage.controller';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { SharedFeaturesLoggerModule } from '@towech-finance/shared/features/logger';
-import { plainUserStub } from '@towech-finance/authentication/repos/user';
+import { plainUserStub, refreshArrStub } from '@towech-finance/authentication/repos/user';
 import { UserRoles } from '@towech-finance/shared/utils/models';
 import { ConfigService } from '@nestjs/config';
 import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
@@ -68,21 +69,24 @@ describe('When register is called', () => {
   });
 });
 
-describe('When login is called', () => {
+describe('When login is called with keepSession', () => {
   let response: any;
+  let res: any;
   beforeEach(async () => {
+    res = httpMock.createResponse();
     response = await signController.login(
       plainUserStub(),
       { keepSession: true, username: 'a', password: 'b' },
       'TEST',
-      { cookie: () => {} } // eslint-disable-line
+      res
     );
   });
 
-  it('Should return a jwt token', () => {
+  it('Should return a jwt and a cookie', () => {
     const decodedToken: jwt.JwtPayload = jwt.decode(response.token, { json: true });
 
     expect(decodedToken).toEqual(expect.objectContaining(plainUserStub()));
+    expect(res.cookies.jid).toBeDefined();
   });
 });
 
@@ -96,5 +100,23 @@ describe('When refresh is called', () => {
     const decodedToken: jwt.JwtPayload = jwt.decode(response.token, { json: true });
 
     expect(decodedToken).toEqual(expect.objectContaining(plainUserStub()));
+  });
+});
+
+describe('When logout is called', () => {
+  let res: any;
+  beforeEach(async () => {
+    res = httpMock.createResponse();
+
+    await signController.logout({ id: refreshArrStub(), user: plainUserStub() }, 'TEST', res);
+  });
+
+  it('Should send an expired empty jid cookie', () => {
+    expect(res.cookies.jid).toEqual({
+      value: '',
+      options: expect.objectContaining({
+        expires: new Date('1970-01-01T00:00:00.001Z'),
+      }),
+    });
   });
 });

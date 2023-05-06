@@ -14,8 +14,4 @@ import { DesktopToasterService } from '@towech-finance/desktop/toaster/data-acce
 })
 export class LayoutComponent {
   constructor(private readonly toaster: DesktopToasterService) {}
-
-  test() {
-    this.toaster.addToast('test', 3000);
-  }
 }

@@ -110,19 +110,19 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    */
   public async removeRefreshToken(user_id: string, token: string | null): Promise<void> {
     const user = await super.findById(user_id);
-    if (!user) return null;
+    if (!user) return;
 
-    user.refreshTokens = !token
+    const refreshTokens = !token
       ? []
       : user.refreshTokens.filter(x => !bcrypt.compareSync(token, x));
-    user.singleSessionToken =
+    const singleSessionToken =
       !token || bcrypt.compareSync(token, user.singleSessionToken)
         ? undefined
         : user.singleSessionToken;
 
     this.findByIdAndUpdate(user_id, {
-      refreshTokens: user.refreshTokens,
-      singleSessionToken: user.singleSessionToken,
+      refreshTokens,
+      singleSessionToken,
     });
   }
 

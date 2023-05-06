@@ -4,12 +4,15 @@ import { DesktopToasterService } from '@towech-finance/desktop/toaster/data-acce
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
-  template: ` <button (click)="msg()">aaaa</button> `,
+  template: ` <button (click)="msg()">aaaa</button> <button (click)="err()">bbbb</button>`,
 })
 export class DesktopDashboardComponent {
   constructor(private readonly toastService: DesktopToasterService) {}
 
   msg() {
-    this.toastService.addToast('pesto');
+    this.toastService.add('pesto');
+  }
+  err() {
+    throw new Error('THIS IS A TEST');
   }
 }

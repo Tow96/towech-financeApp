@@ -4,7 +4,9 @@
  * Decorator that extracts the user from the http request
  */
 // Libraries
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { UserModel } from '@towech-finance/shared/utils/models';
 
-export const User = createParamDecorator((data, req): UserModel => req.args[0].user);
+export const User = createParamDecorator(
+  (_: unknown, ctx: ExecutionContext): UserModel | undefined => ctx.switchToHttp().getRequest().user
+);

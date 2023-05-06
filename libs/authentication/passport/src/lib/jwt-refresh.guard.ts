@@ -23,12 +23,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames
     private readonly configService: ConfigService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          const token = request.cookies['jid'];
-          return token;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => request.cookies['jid']]),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('REFRESH_TOKEN_SECRET'),
     });

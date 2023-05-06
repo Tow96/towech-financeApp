@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { describe } from 'node:test';
 import { PidWinstonLogger } from './pid-winston.logger';
 
@@ -44,6 +43,21 @@ describe('Logger Message', () => {
     it('Should return a message', () => {
       expect(PidWinstonLogger.getFormattedOutput(info)).toBe(
         `${info.timestamp} [UNNAMED APP] ${info.level}: ${info.message}`
+      );
+    });
+  });
+});
+
+describe('Logger Format', () => {
+  describe('When the logger format is called', () => {
+    it('Should return something', () => {
+      const msg = PidWinstonLogger.format().transform({ level: 'debug', message: 'test message' });
+      expect(msg).toEqual(
+        expect.objectContaining({
+          level: 'debug',
+          message: 'test message',
+          timestamp: expect.any(String),
+        })
       );
     });
   });

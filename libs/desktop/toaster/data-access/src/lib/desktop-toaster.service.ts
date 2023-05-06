@@ -5,7 +5,7 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import { randomUUID } from 'crypto';
+import * as uuid from 'uuid';
 import { BehaviorSubject } from 'rxjs';
 
 export interface DesktopToast {
@@ -21,7 +21,7 @@ export class DesktopToasterService {
   public toastTray = this.toasts.asObservable();
 
   public add(message: string, duration?: number): void {
-    const toast = { id: randomUUID(), message, duration };
+    const toast = { id: uuid.v4(), message, duration };
     this.toasts.next([toast, ...this.toasts.value]);
   }
 
