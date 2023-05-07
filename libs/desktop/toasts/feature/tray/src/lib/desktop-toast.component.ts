@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgFor, AsyncPipe } from '@angular/common';
-import { DesktopToasterService } from '@towech-finance/desktop/toaster/data-access';
-import { DesktopToastUIComponent } from '@towech-finance/desktop/toaster/ui';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
+import { DesktopToastUIComponent } from '@towech-finance/desktop/toasts/ui';
 
 @Component({
   standalone: true,

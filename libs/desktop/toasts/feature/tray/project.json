@@ -1,7 +1,7 @@
 {
-  "name": "desktop-toaster-data-access",
+  "name": "desktop-toasts-feature",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/desktop/toaster/data-access/src",
+  "sourceRoot": "libs/desktop/toasts/feature/src",
   "prefix": "towech-finance",
   "tags": [],
   "projectType": "library",
@@ -10,7 +10,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/desktop/toaster/data-access/jest.config.ts",
+        "jestConfig": "libs/desktop/toasts/feature/tray/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -25,8 +25,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/desktop/toaster/data-access/**/*.ts",
-          "libs/desktop/toaster/data-access/**/*.html"
+          "libs/desktop/toasts/feature/**/*.ts",
+          "libs/desktop/toasts/feature/**/*.html"
         ]
       }
     }

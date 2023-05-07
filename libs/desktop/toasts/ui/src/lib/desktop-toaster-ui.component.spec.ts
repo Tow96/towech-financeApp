@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested Elements
 import { DesktopToastUIComponent } from './desktop-toaster-ui.component';
-import { DesktopToast } from '@towech-finance/desktop/toaster/data-access';
+import { DesktopToast } from '@towech-finance/desktop/toasts/data-access';
 
 const stubToast = (): DesktopToast => ({
   id: 'test-id',

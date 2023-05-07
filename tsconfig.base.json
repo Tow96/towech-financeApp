@@ -33,11 +33,11 @@
       ],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
-      "@towech-finance/desktop/toaster/data-access": [
-        "libs/desktop/toaster/data-access/src/index.ts"
+      "@towech-finance/desktop/toasts/data-access": [
+        "libs/desktop/toasts/data-access/src/index.ts"
       ],
-      "@towech-finance/desktop/toaster/feature": ["libs/desktop/toaster/feature/src/index.ts"],
-      "@towech-finance/desktop/toaster/ui": ["libs/desktop/toaster/ui/src/index.ts"],
+      "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src/index.ts"],
+      "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
       "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
       "@towech-finance/shared/ui/themes/themes": ["libs/shared/ui/themes/themes/src/index.ts"],

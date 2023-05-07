@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-shell-feature',
+  displayName: 'desktop-shell-feature-tray',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../../coverage/libs/desktop/shell/feature',
