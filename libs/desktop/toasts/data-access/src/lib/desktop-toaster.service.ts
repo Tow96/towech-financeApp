@@ -17,7 +17,6 @@ export interface DesktopToast {
 @Injectable({ providedIn: 'root' })
 export class DesktopToasterService {
   private toasts: BehaviorSubject<DesktopToast[]> = new BehaviorSubject<DesktopToast[]>([]);
-
   public toastTray = this.toasts.asObservable();
 
   public add(message: string, duration?: number): void {
