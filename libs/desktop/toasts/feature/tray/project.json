@@ -25,8 +25,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/desktop/toasts/feature/**/*.ts",
-          "libs/desktop/toasts/feature/**/*.html"
+          "libs/desktop/toasts/feature/tray/**/*.ts",
+          "libs/desktop/toasts/feature/tray/**/*.html"
         ]
       }
     }

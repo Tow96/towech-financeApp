@@ -4,7 +4,8 @@ import {
   DesktopAuthenticationService,
   LoginCredentials,
 } from '@towech-finance/desktop/shell/data-access/authentication';
-import { EMPTY, Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+// import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export interface LoginState {
   loading: boolean;
@@ -21,16 +22,17 @@ export class LoginStore extends ComponentStore<LoginState> {
 
   // Effects
   login = this.effect((credentials$: Observable<LoginCredentials>) =>
-    credentials$.pipe(
-      switchMap(credentials =>
-        this.authService.login(credentials).pipe(
-          map(res => {
-            console.log(res);
-          }),
-          catchError(err => of(console.log(err)))
-        )
-      ),
-      catchError(() => EMPTY)
-    )
+    credentials$
+      .pipe
+      // switchMap(credentials =>
+      //   this.authService.login(credentials).pipe(
+      //     map(res => {
+      //       console.log(res);
+      //     }),
+      //     catchError(err => of(console.log(err)))
+      //   )
+      // ),
+      // catchError(() => EMPTY)
+      ()
   );
 }
