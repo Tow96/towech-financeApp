@@ -1,5 +1,5 @@
 {
-  "name": "shared-ui-themes-themes",
+  "name": "shared-ui-themes",
   "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ui/themes/src",
   "prefix": "towech-finance",
@@ -24,10 +24,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/shared/ui/themes/themes/**/*.ts",
-          "libs/shared/ui/themes/themes/**/*.html"
-        ]
+        "lintFilePatterns": ["libs/shared/ui/themes/**/*.ts", "libs/shared/ui/themes/**/*.html"]
       }
     }
   }

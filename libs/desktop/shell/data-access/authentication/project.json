@@ -25,8 +25,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/desktop/shell/data/authentication/**/*.ts",
-          "libs/desktop/shell/data/authentication/**/*.html"
+          "libs/desktop/shell/data-access/authentication/**/*.ts",
+          "libs/desktop/shell/data-access/authentication/**/*.html"
         ]
       }
     }

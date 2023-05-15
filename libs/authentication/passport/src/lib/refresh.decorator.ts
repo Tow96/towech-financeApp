@@ -3,7 +3,10 @@
  *
  * Decorator that extracts the refreshToken information from the http request
  */
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { RefreshToken } from '@towech-finance/shared/utils/models';
 
-export const Refresh = createParamDecorator((data, req): RefreshToken => req.args[0].user);
+export const Refresh = createParamDecorator(
+  (_: unknown, ctx: ExecutionContext): RefreshToken | undefined =>
+    ctx.switchToHttp().getRequest().user
+);

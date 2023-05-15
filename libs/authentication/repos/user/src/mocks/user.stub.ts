@@ -4,6 +4,7 @@ import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 export const passwordStub = (): string => 'testpass';
 export const refreshArrStub = (): string => 'token';
+export const singleTokenStub = (): string => 'singleTest';
 
 export const userStub = (): UserDocument => ({
   _id: new Types.ObjectId('63ef9ebca2b48f1fe74b010a'),
@@ -13,7 +14,7 @@ export const userStub = (): UserDocument => ({
   name: 'Fakeman',
   password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
   refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
-  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
+  singleSessionToken: '$2a$12$AoktqIf/Ujus4k2AOhk7De5mNZ8pUXw/x8zTpVvulDmyTMj7j9Uqm',
   role: UserRoles.USER,
 });
 
@@ -25,7 +26,7 @@ export const adminStub = (): UserDocument => ({
   name: 'Fakeman',
   password: '$2a$12$JxPo81IP7gIwdReGNCYNEOFi5usufyYbnWKHuZpiBkRdOZEx6XUoW',
   refreshTokens: ['$2a$12$/ARloS5YIBlbrtuHXjLTs.ytHzBk/2mvAOJhkPK/9fKVC6c/wvaUu'],
-  singleSessionToken: '$2a$12$uN60DdNH1CxQVdFXfG5Zn.ddqo.hlp9RB7BRIJ2S30O3b/0W6v/EC',
+  singleSessionToken: '$2a$12$AoktqIf/Ujus4k2AOhk7De5mNZ8pUXw/x8zTpVvulDmyTMj7j9Uqm',
   role: UserRoles.ADMIN,
 });
 

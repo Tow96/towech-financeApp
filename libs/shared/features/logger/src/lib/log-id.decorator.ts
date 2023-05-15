@@ -4,6 +4,8 @@
  * Decorator that extracts the logId from the http request
  */
 // Libraries
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const LogId = createParamDecorator((data, req): string => req.args[0].logId);
+export const LogId = createParamDecorator(
+  (_: unknown, ctx: ExecutionContext): string => ctx.switchToHttp().getRequest().logId || 'NO-LOGID'
+);

@@ -19,8 +19,8 @@
       "@towech-finance/authentication/http/signage": [
         "libs/authentication/http/signage/src/index.ts"
       ],
-      "@towech-finance/authentication/passport": ["libs/authentication/passport/src/index.ts"],
       "@towech-finance/authentication/mocks": ["libs/authentication/mocks/src/index.ts"],
+      "@towech-finance/authentication/passport": ["libs/authentication/passport/src/index.ts"],
       "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src/index.ts"],
       "@towech-finance/authentication/shell/feature": [
         "libs/authentication/shell/feature/src/index.ts"
@@ -33,7 +33,11 @@
       ],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
-      "@towech-finance/desktop/toaster/feature": ["libs/desktop/toaster/feature/src/index.ts"],
+      "@towech-finance/desktop/toasts/data-access": [
+        "libs/desktop/toasts/data-access/src/index.ts"
+      ],
+      "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src/index.ts"],
+      "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
       "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
       "@towech-finance/shared/ui/themes/themes": ["libs/shared/ui/themes/themes/src/index.ts"],

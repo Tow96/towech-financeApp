@@ -1,8 +1,18 @@
 import { Component } from '@angular/core';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
-  template: ` Dashboard Works `,
+  template: ` <button (click)="msg()">aaaa</button> <button (click)="err()">bbbb</button>`,
 })
-export class DesktopDashboardComponent {}
+export class DesktopDashboardComponent {
+  constructor(private readonly toastService: DesktopToasterService) {}
+
+  msg() {
+    this.toastService.add('pesto');
+  }
+  err() {
+    throw new Error('THIS IS A TEST');
+  }
+}

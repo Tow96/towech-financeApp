@@ -1,5 +1,5 @@
 {
-  "name": "desktop-shell-feature",
+  "name": "desktop-shell-feature-tray",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/desktop/shell/feature/src",
   "prefix": "towech-finance",

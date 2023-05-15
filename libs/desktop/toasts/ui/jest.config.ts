@@ -1,9 +1,8 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-toaster-feature',
+  displayName: 'desktop-toasts-ui',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/desktop/toaster/feature',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -19,4 +18,13 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
   ],
+  coverageDirectory: '../../../../coverage/libs/desktop/toasts/ui',
+  collectCoverageFrom: [
+    '**/*.(t|j)s',
+    '!**/*.module.ts',
+    '!**/index.ts',
+    '!**/jest.config.ts',
+    '!**/mocks/**',
+  ],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
 };

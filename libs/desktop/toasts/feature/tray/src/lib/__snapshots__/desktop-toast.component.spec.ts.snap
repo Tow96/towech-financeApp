@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Desktop Toaster Must match the snapshot 1`] = `
+<div
+  id="root0"
+>
+  <div
+    class="desktop-toaster"
+  >
+    <towech-finance-toast>
+      <div
+        class="desktop-toast"
+      >
+        ADD TEST 3
+      </div>
+    </towech-finance-toast>
+    <towech-finance-toast>
+      <div
+        class="desktop-toast"
+      >
+        ADD TEST 2
+      </div>
+    </towech-finance-toast>
+    <towech-finance-toast>
+      <div
+        class="desktop-toast"
+      >
+        ADD TEST 1
+      </div>
+    </towech-finance-toast>
+    <towech-finance-toast>
+      <div
+        class="desktop-toast"
+      >
+        ADD TEST 0
+      </div>
+    </towech-finance-toast>
+    
+  </div>
+</div>
+`;

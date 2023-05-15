@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {
-  DesktopToasterComponent,
-  DesktopToasterService,
-} from '@towech-finance/desktop/toaster/feature';
+import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
 @Component({
   standalone: true,
@@ -16,8 +14,4 @@ import {
 })
 export class LayoutComponent {
   constructor(private readonly toaster: DesktopToasterService) {}
-
-  test() {
-    this.toaster.addToast('test', 3000);
-  }
 }

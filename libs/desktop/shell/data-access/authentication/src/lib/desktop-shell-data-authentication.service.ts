@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, switchMap, throwError, timer } from 'rxjs';
+import { switchMap, throwError, timer } from 'rxjs';
 
 export interface LoginCredentials {
   username?: string | null;
@@ -9,6 +9,7 @@ export interface LoginCredentials {
 @Injectable({ providedIn: 'root' })
 export class DesktopAuthenticationService {
   // TODO: Connect using HTTP to services
+  /* eslint-disable */
   login(credentials: LoginCredentials) {
     return timer(2000).pipe(
       switchMap(() =>

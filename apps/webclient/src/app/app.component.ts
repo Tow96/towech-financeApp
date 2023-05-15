@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DesktopShellModule } from '@towech-finance/desktop/shell/feature';
 
 @Component({
   selector: 'webclient-root',

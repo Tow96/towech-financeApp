@@ -32,7 +32,7 @@ export class PidWinstonLogger extends Logger {
     return this.debug({ pid, message });
   }
 
-  private static format(): winston.Logform.Format {
+  public static format(): winston.Logform.Format {
     return winston.format.combine(
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
       winston.format.printf(info => PidWinstonLogger.getFormattedOutput(info))
