@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { DesktopToasterComponent } from '@towech-finance/desktop/toaster/feature';
-import { DesktopToasterService } from '@towech-finance/desktop/toaster/data-access';
+import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
 @Component({
   standalone: true,

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DesktopToasterService } from '@towech-finance/desktop/toaster/data-access';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
 @Component({
   standalone: true,
