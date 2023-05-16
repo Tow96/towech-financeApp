@@ -22,11 +22,17 @@ export class DesktopLoginComponent {
   public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
+    keepSession: [false],
   });
 
   constructor(private readonly fb: FormBuilder, private readonly loginStore: LoginStore) {}
 
   onLoginFormSubmit() {
-    this.loginStore.login(this.loginForm.value);
+    const value = this.loginForm.value;
+    this.loginStore.login({
+      keepSession: value.keepSession || false,
+      password: value.password || '',
+      username: value.username || '',
+    });
   }
 }

@@ -1,16 +1,16 @@
 {
-  "name": "desktop-shell-feature",
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/desktop/shell/feature/src",
+  "name": "desktop-shell-data-access-user-state",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/desktop/shell/data-access/user-state/src",
   "prefix": "towech-finance",
   "tags": [],
   "projectType": "library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/desktop/shell/feature/jest.config.ts",
+        "jestConfig": "libs/desktop/shell/data-access/user-state/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -21,12 +21,12 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/desktop/shell/feature/**/*.ts",
-          "libs/desktop/shell/feature/**/*.html"
+          "libs/desktop/shell/data-access/user-state/**/*.ts",
+          "libs/desktop/shell/data-access/user-state/**/*.html"
         ]
       }
     }

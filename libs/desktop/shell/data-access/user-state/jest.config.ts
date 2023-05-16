@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-shell-feature-tray',
-  preset: '../../../../jest.preset.js',
+  displayName: 'desktop-shell-data-access-user-state',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/desktop/shell/feature',
+  coverageDirectory: '../../../../../coverage/libs/desktop/shell/data-access/user-state',
   collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
   transform: {

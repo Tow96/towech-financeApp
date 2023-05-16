@@ -31,6 +31,9 @@
       "@towech-finance/desktop/shell/data-access/authentication": [
         "libs/desktop/shell/data-access/authentication/src/index.ts"
       ],
+      "@towech-finance/desktop/shell/data-access/user-state": [
+        "libs/desktop/shell/data-access/user-state/src/index.ts"
+      ],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
       "@towech-finance/desktop/shell/utils/environments": [
