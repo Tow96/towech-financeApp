@@ -33,6 +33,9 @@
       ],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
+      "@towech-finance/desktop/shell/utils/environments": [
+        "libs/desktop/shell/utils/environments/src/index.ts"
+      ],
       "@towech-finance/desktop/toasts/data-access": [
         "libs/desktop/toasts/data-access/src/index.ts"
       ],
