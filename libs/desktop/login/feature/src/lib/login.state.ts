@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import {
-  DesktopAuthenticationService,
-  LoginCredentials,
-} from '@towech-finance/desktop/shell/data-access/authentication';
+import { DesktopAuthenticationService } from '@towech-finance/desktop/shell/data-access/authentication';
 // import { EMPTY, Observable, catchError, map, of, switchMap } from 'rxjs';
-import { Observable } from 'rxjs';
+import { catchError, Observable, switchMap, map, of } from 'rxjs';
 
 export interface LoginState {
   loading: boolean;
@@ -21,18 +18,23 @@ export class LoginStore extends ComponentStore<LoginState> {
   public loading$ = this.select(state => state.loading);
 
   // Effects
-  login = this.effect((credentials$: Observable<LoginCredentials>) =>
-    credentials$
-      .pipe
-      // switchMap(credentials =>
-      //   this.authService.login(credentials).pipe(
-      //     map(res => {
-      //       console.log(res);
-      //     }),
-      //     catchError(err => of(console.log(err)))
-      //   )
-      // ),
-      // catchError(() => EMPTY)
-      ()
+  /* eslint-disable max-nested-callbacks */
+  login = this.effect((credentials$: Observable<any>) =>
+    credentials$.pipe(
+      switchMap(credentials =>
+        this.authService
+          .login({
+            keepSession: true,
+            password: 'oh4r7pqk',
+            username: 'jose.towe@gmail.com',
+          })
+          .pipe(
+            map(res => {
+              console.log(res);
+            }),
+            catchError(err => of(console.log(err)))
+          )
+      )
+    )
   );
 }
