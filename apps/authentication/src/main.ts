@@ -34,7 +34,7 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: isProd ? '*' : configService.get('CORS_ORIGIN'),
+    origin: !isProd ? '*' : configService.get('CORS_ORIGIN'),
     methods: ['POST'],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
   });

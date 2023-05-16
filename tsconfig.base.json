@@ -36,6 +36,9 @@
       "@towech-finance/desktop/toasts/data-access": [
         "libs/desktop/toasts/data-access/src/index.ts"
       ],
+      "@towech-finance/desktop/toasts/feature/error-handler": [
+        "libs/desktop/toasts/feature/error-handler/src/index.ts"
+      ],
       "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src/index.ts"],
       "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
