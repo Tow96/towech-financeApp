@@ -55,4 +55,16 @@ describe('Toast Component', () => {
       jest.useRealTimers();
     });
   });
+
+  describe('When hide is called and the component does not have a toast', () => {
+    it('Should do nothing', async () => {
+      component.toast = undefined;
+
+      const spy = jest.spyOn(service, 'dismiss');
+      component.hide();
+
+      expect(spy).toHaveBeenCalledTimes(0);
+      jest.useRealTimers();
+    });
+  });
 });

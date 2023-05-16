@@ -39,6 +39,9 @@
       "@towech-finance/desktop/shell/utils/environments": [
         "libs/desktop/shell/utils/environments/src/index.ts"
       ],
+      "@towech-finance/desktop/shell/utils/guards": [
+        "libs/desktop/shell/utils/guards/src/index.ts"
+      ],
       "@towech-finance/desktop/toasts/data-access": [
         "libs/desktop/toasts/data-access/src/index.ts"
       ],
