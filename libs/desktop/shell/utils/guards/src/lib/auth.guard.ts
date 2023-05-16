@@ -16,9 +16,8 @@ export class AuthGuard {
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
   canActivate(): Observable<boolean> {
-    return this.store.select(UserSelectors.selectUser).pipe(
-      map(user => {
-        const isLoggedIn = user ? true : false;
+    return this.store.select(UserSelectors.isLoggedIn).pipe(
+      map(isLoggedIn => {
         if (!isLoggedIn) {
           this.router.navigate(['login']);
         }
