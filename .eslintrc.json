@@ -44,7 +44,7 @@
       "rules": {}
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.cy.ts"],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.cy.ts", "*.mock.ts"],
       "env": {
         "jest": true
       },

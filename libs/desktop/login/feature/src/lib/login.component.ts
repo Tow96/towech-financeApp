@@ -1,12 +1,19 @@
+/** login.component.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Login Feature component
+ */
+// Libraries
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginStore } from './login.state';
+import { Store } from '@ngrx/store';
+// NGRX
+import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
   imports: [ReactiveFormsModule],
-  providers: [LoginStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="login-container">
@@ -25,14 +32,18 @@ export class DesktopLoginComponent {
     keepSession: [false],
   });
 
-  constructor(private readonly fb: FormBuilder, private readonly loginStore: LoginStore) {}
+  constructor(private readonly fb: FormBuilder, private readonly store: Store) {}
 
   onLoginFormSubmit() {
     const value = this.loginForm.value;
-    this.loginStore.login({
-      keepSession: value.keepSession || false,
-      password: value.password || '',
-      username: value.username || '',
-    });
+    this.store.dispatch(
+      UserActions.login({
+        credentials: {
+          keepSession: value.keepSession || false,
+          password: value.password || '',
+          username: value.username || '',
+        },
+      })
+    );
   }
 }

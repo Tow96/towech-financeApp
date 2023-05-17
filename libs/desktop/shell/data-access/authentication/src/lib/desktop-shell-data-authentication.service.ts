@@ -28,10 +28,9 @@ export class DesktopAuthenticationService {
     @Inject(APP_CONFIG) private readonly appConfig: typeof environment
   ) {}
 
-  // TODO: Connect using HTTP to services
-  login(credentials: LoginUser): Observable<UserModel> {
+  login(credentials: LoginUser): Observable<{ user: UserModel; token: string }> {
     return this.http.post(`${this.ROOTURL}/login`, credentials, { headers: this.headers }).pipe(
-      map((res: any) => jwtDecode(res.token) as UserModel), // eslint-disable-line @typescript-eslint/no-explicit-any
+      map((res: any) => ({ user: jwtDecode(res.token) as UserModel, token: res.token })), // eslint-disable-line @typescript-eslint/no-explicit-any
       catchError(error => this.processError(error))
     );
   }

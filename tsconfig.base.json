@@ -28,6 +28,7 @@
       "@towech-finance/authentication/tokens": ["libs/authentication/tokens/src/index.ts"],
       "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src/index.ts"],
       "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src/index.ts"],
+      "@towech-finance/desktop/mocks": ["libs/desktop/mocks/src/index.ts"],
       "@towech-finance/desktop/shell/data-access/authentication": [
         "libs/desktop/shell/data-access/authentication/src/index.ts"
       ],

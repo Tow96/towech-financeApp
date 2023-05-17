@@ -4,9 +4,11 @@
  * Reducer that contains the logged in user data
  */
 // Libraries
-import { createReducer } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 // Models
 import { UserModel } from '@towech-finance/shared/utils/models';
+// NGRX
+import * as actions from './user-state.actions';
 
 export const userStateFeatureKey = 'user';
 
@@ -24,4 +26,15 @@ export const initialState: State = {
   token: null,
 };
 
-export const reducer = createReducer(initialState);
+export const reducer = createReducer(
+  initialState,
+  on(actions.login, state => ({ ...state, loading: true })),
+  on(actions.loginFailure, state => ({ ...state, loading: false })),
+  on(actions.loginSuccess, (state, action) => ({
+    ...state,
+    loaded: true,
+    loading: false,
+    token: action.token,
+    user: { ...action.user },
+  }))
+);
