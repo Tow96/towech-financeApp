@@ -8,6 +8,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
 
+// TODO: Move this to its correct location
 @mixin color($theme) {
   $colors: map.get($theme, color);
   $accent: map.get($colors, accent);
@@ -56,6 +57,7 @@
 @include color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);
 
+// TODO: MOVE this to its correct locations
 div.container {
   width: 450px;
   padding: 50px;
