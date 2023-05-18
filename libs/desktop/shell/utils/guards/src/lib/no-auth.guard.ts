@@ -11,7 +11,7 @@ import { UserSelectors } from '@towech-finance/desktop/shell/data-access/user-st
 import { filter, map, Observable } from 'rxjs';
 
 @Injectable()
-export class AuthGuard {
+export class NoAuthGuard {
   constructor(private readonly router: Router, private readonly store: Store) {}
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -19,9 +19,9 @@ export class AuthGuard {
     return this.store.select(UserSelectors.isLoggedIn).pipe(
       filter(logState => logState.loaded),
       map(logState => {
-        if (!logState.loggedIn) this.router.navigate(['login']);
+        if (logState.loggedIn) this.router.navigate(['']);
 
-        return logState.loggedIn;
+        return !logState.loggedIn;
       })
     );
   }

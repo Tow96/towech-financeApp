@@ -31,16 +31,22 @@ describe('User selectors', () => {
   });
 
   describe('isLoggedIn', () => {
-    it('Should return true when a user is registered', () => {
+    it('Should return true when a user is logged in, and include if a load was already attempted', () => {
       result = userSelectors.isLoggedIn.projector(initialState);
-      expect(result).toBe(true);
+      expect(result).toEqual({
+        loggedIn: true,
+        loaded: initialState.loaded,
+      });
     });
 
     it('Should return false when a user is not registered', () => {
       initialState.user = null;
 
       result = userSelectors.isLoggedIn.projector(initialState);
-      expect(result).toBe(false);
+      expect(result).toEqual({
+        loggedIn: false,
+        loaded: initialState.loaded,
+      });
     });
   });
 
