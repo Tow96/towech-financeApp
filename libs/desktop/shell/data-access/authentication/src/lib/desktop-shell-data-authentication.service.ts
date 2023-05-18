@@ -29,9 +29,26 @@ export class DesktopAuthenticationService {
   ) {}
 
   login(credentials: LoginUser): Observable<{ user: UserModel; token: string }> {
-    return this.http.post(`${this.ROOTURL}/login`, credentials, { headers: this.headers }).pipe(
-      map((res: any) => ({ user: jwtDecode(res.token) as UserModel, token: res.token })), // eslint-disable-line @typescript-eslint/no-explicit-any
-      catchError(error => this.processError(error))
-    );
+    return this.http
+      .post(`${this.ROOTURL}/login`, credentials, {
+        headers: this.headers,
+        withCredentials: true,
+      })
+      .pipe(
+        map((res: any) => ({ user: jwtDecode(res.token) as UserModel, token: res.token })), // eslint-disable-line @typescript-eslint/no-explicit-any
+        catchError(error => this.processError(error))
+      );
+  }
+
+  refresh(): Observable<{ user: UserModel; token: string }> {
+    return this.http
+      .post(`${this.ROOTURL}/refresh`, undefined, {
+        headers: this.headers,
+        withCredentials: true,
+      })
+      .pipe(
+        map((res: any) => ({ user: jwtDecode(res.token) as UserModel, token: res.token })), // eslint-disable-line @typescript-eslint/no-explicit-any
+        catchError(error => this.processError(error))
+      );
   }
 }

@@ -1,17 +1,19 @@
+// Libraries
 import { Component } from '@angular/core';
+// Modules
 import { RouterModule } from '@angular/router';
+// Components
 import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
-import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
+import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-layout',
-  imports: [DesktopToasterComponent, RouterModule],
+  imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
   template: `
     <towech-finance-toaster></towech-finance-toaster>
+    <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
     <router-outlet></router-outlet>
   `,
 })
-export class LayoutComponent {
-  constructor(private readonly toaster: DesktopToasterService) {}
-}
+export class LayoutComponent {}

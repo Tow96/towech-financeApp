@@ -19,3 +19,12 @@ export const loginFailure = createAction(
   '[User Effects] Login Failure',
   props<{ message: string }>()
 );
+
+export const refreshToken = createAction('[User Effects] RefreshToken');
+
+export const refreshTokenSuccess = createAction(
+  '[User Effects] RefreshToken Success',
+  props<{ token: string; user: UserModel }>()
+);
+
+export const refreshTokenFailure = createAction('[User Effects] Refresh Token Failure');

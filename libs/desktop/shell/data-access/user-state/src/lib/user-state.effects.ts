@@ -6,7 +6,7 @@
 // Libraries
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, ROOT_EFFECTS_INIT, createEffect, ofType } from '@ngrx/effects';
 import { Action, ActionCreator } from '@ngrx/store';
 import { Observable, catchError, map, of, switchMap } from 'rxjs';
 // Services
@@ -27,9 +27,20 @@ export class UserEffects {
   ) {}
 
   // Effects ----------------------------------------------------------------------
+  public initialLoad = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      map(() => userActions.refreshToken()) // eslint-disable-line max-nested-callbacks
+    )
+  );
+
   public errorEffect = createEffect(() => this.handleError$(), { dispatch: false });
 
   public login = createEffect(() => this.handleLogin$());
+  public refresh = createEffect(() => this.handleRefresh$());
+
+  public redirectToHome = createEffect(() => this.handleRedirectToHome$(), { dispatch: false });
+  public redirectToLogin = createEffect(() => this.handleRedirectToLogin$(), { dispatch: false });
 
   // Pipes ------------------------------------------------------------------------
   private handleError$(): Observable<void> {
@@ -48,11 +59,40 @@ export class UserEffects {
 
   private resolveLoginCall$(credentials: LoginUser): Observable<Action> {
     return this.authApi.login(credentials).pipe(
-      map(res => {
-        this.router.navigate(['']);
-        return userActions.loginSuccess({ token: res.token, user: res.user });
-      }),
+      map(res => userActions.loginSuccess({ token: res.token, user: res.user })),
       catchError(err => this.returnFailure$(err, userActions.loginFailure, 'Failed to Login'))
+    );
+  }
+
+  private handleRefresh$(): Observable<Action> {
+    return this.actions$.pipe(
+      ofType(userActions.refreshToken),
+      switchMap(() => this.resolveRefreshCall$())
+    );
+  }
+
+  private resolveRefreshCall$(): Observable<Action> {
+    return this.authApi.refresh().pipe(
+      map(res => userActions.refreshTokenSuccess({ token: res.token, user: res.user })),
+      catchError(() => of(userActions.refreshTokenFailure()))
+    );
+  }
+
+  private handleRedirectToHome$(): Observable<void> {
+    return this.actions$.pipe(
+      ofType(userActions.loginSuccess, userActions.refreshTokenSuccess),
+      map(() => {
+        this.router.navigate(['']);
+      })
+    );
+  }
+
+  private handleRedirectToLogin$(): Observable<void> {
+    return this.actions$.pipe(
+      ofType(userActions.refreshTokenFailure),
+      map(() => {
+        this.router.navigate(['login']);
+      })
     );
   }
 

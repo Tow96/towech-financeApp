@@ -35,6 +35,8 @@ const stubData = {
 describe('Authentication Service', () => {
   let service: DesktopAuthenticationService;
   let httpTestingController: HttpTestingController;
+  let res: any;
+  let req: TestRequest;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -48,8 +50,6 @@ describe('Authentication Service', () => {
   it('Should exist', () => expect(service).toBeTruthy());
 
   describe('When login is called', () => {
-    let res: any;
-    let req: TestRequest;
     beforeEach(() => {
       service.login(stubLogin).subscribe({ next: data => (res = data), error: e => (res = e) });
       req = httpTestingController.expectOne(`${environment.authenticationServiceUrl}/login`);
@@ -59,7 +59,29 @@ describe('Authentication Service', () => {
     describe('When the data is correct', () => {
       it('Should call the correct endpoint and return the info', () => {
         req.flush({ token: stubData.token });
-        expect(res).toEqual(stubData.user);
+        expect(res).toEqual({ token: stubData.token, user: stubData.user });
+      });
+    });
+
+    describe('When something fails', () => {
+      it('Should return the error', () => {
+        req.flush('500 error', { status: 500, statusText: 'Unexpected error' });
+        expect(res).toEqual('500 error');
+      });
+    });
+  });
+
+  describe('When refresh is called', () => {
+    beforeEach(() => {
+      service.refresh().subscribe({ next: data => (res = data), error: e => (res = e) });
+      req = httpTestingController.expectOne(`${environment.authenticationServiceUrl}/refresh`);
+      expect(req.request.method).toEqual('POST');
+    });
+
+    describe('When the sent cookie is valid', () => {
+      it('Should call the correct endpoint and return the info', () => {
+        req.flush({ token: stubData.token });
+        expect(res).toEqual({ token: stubData.token, user: stubData.user });
       });
     });
 

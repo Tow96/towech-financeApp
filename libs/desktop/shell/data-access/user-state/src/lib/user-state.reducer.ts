@@ -28,9 +28,13 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(actions.login, state => ({ ...state, loading: true })),
-  on(actions.loginFailure, state => ({ ...state, loading: false })),
-  on(actions.loginSuccess, (state, action) => ({
+  on(actions.login, actions.refreshToken, state => ({ ...state, loading: true })),
+  on(actions.loginFailure, actions.refreshTokenFailure, state => ({
+    ...state,
+    loading: false,
+    loaded: true,
+  })),
+  on(actions.loginSuccess, actions.refreshTokenSuccess, (state, action) => ({
     ...state,
     loaded: true,
     loading: false,

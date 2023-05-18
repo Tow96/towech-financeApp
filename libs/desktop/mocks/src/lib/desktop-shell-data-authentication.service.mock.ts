@@ -31,6 +31,17 @@ const mockValues = {
       user: stubUser(),
     });
   }),
+
+  refresh: jest.fn((): Observable<{ user: UserModel; token: string }> => {
+    if (process.env['FAILHTTP']?.toUpperCase() === 'TRUE') {
+      return throwError(() => 'TEST ERROR');
+    }
+
+    return of({
+      token: stubToken(),
+      user: stubUser(),
+    });
+  }),
 };
 
 export const MockDesktopAuthenticationService: Provider = {

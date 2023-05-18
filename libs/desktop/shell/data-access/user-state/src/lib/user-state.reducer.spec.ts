@@ -1,7 +1,7 @@
 // Tested Elements
 import { initialState as Init, reducer, State } from './user-state.reducer';
 // NGRX
-import { login, loginFailure, loginSuccess } from './user-state.actions';
+import * as actions from './user-state.actions';
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 
 describe('User Reducer', () => {
@@ -29,7 +29,7 @@ describe('User Reducer', () => {
         user: null,
       };
 
-      action = login({
+      action = actions.login({
         credentials: { keepSession: false, password: 'pass', username: 'testino' },
       });
       result = reducer(initialState, action);
@@ -50,7 +50,7 @@ describe('User Reducer', () => {
       };
       const token = 'this is totally a JWT';
 
-      action = loginSuccess({ token, user });
+      action = actions.loginSuccess({ token, user });
       result = reducer({ ...initialState, loading: true }, action);
 
       expect(result).toEqual({ ...initialState, loading: false, loaded: true, user, token });
@@ -60,10 +60,47 @@ describe('User Reducer', () => {
 
   describe('loginFailure', () => {
     it('Should return an immutable state without loading', () => {
-      action = loginFailure({ message: 'Fail' });
+      action = actions.loginFailure({ message: 'Fail' });
       result = reducer({ ...initialState, loading: true }, action);
 
-      expect(result).toEqual({ ...initialState, loading: false });
+      expect(result).toEqual({ ...initialState, loading: false, loaded: true });
+    });
+  });
+
+  describe('authGuardRefreshToken', () => {
+    it('Should return an immutable state with loading', () => {
+      action = actions.refreshToken();
+      result = reducer(initialState, action);
+
+      expect(result).toEqual({ ...initialState, loading: true });
+    });
+  });
+
+  describe('refreshTokenSuccess', () => {
+    it('Should return an immutable state containing the token and the user', () => {
+      const user: UserModel = {
+        _id: '0',
+        accountConfirmed: false,
+        mail: 'test@gmail.com',
+        name: 'TESTINO',
+        role: UserRoles.USER,
+      };
+      const token = 'this is totally a JWT';
+
+      action = actions.refreshTokenSuccess({ token, user });
+      result = reducer({ ...initialState, loading: true }, action);
+
+      expect(result).toEqual({ ...initialState, loading: false, loaded: true, user, token });
+      expect(result.user).not.toBe(user);
+    });
+  });
+
+  describe('refreshTokenFailure', () => {
+    it('Should return an immutable state without loading', () => {
+      action = actions.refreshTokenFailure();
+      result = reducer({ ...initialState, loading: true }, action);
+
+      expect(result).toEqual({ ...initialState, loading: false, loaded: true });
     });
   });
 });

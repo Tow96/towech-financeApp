@@ -18,11 +18,16 @@ import { desktopShellRoutes } from './desktop-shell.routes';
 @NgModule({
   providers: [DesktopToasterService, DesktopGlobalErrorToast, provideStore(), devOnlyModulesImport],
   imports: [
+    // Base
     CommonModule,
+    // Http
     HttpClientModule,
+    // Routing
     RouterModule.forRoot(desktopShellRoutes),
+    // NGRX
     DesktopShellUtilsEnvironmentsModule,
     DesktopShellDataAccessUserStateModule,
+    // Guards
     DesktopShellUtilsGuardsModule,
   ],
   exports: [RouterModule],
