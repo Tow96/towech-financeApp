@@ -92,4 +92,29 @@ describe('Authentication Service', () => {
       });
     });
   });
+
+  describe('When logout is called', () => {
+    beforeEach(() => {
+      service.logout().subscribe({ next: data => (res = data), error: e => (res = e) });
+      req = httpTestingController.expectOne(`${environment.authenticationServiceUrl}/logout`);
+      expect(req.request.method).toEqual('POST');
+    });
+
+    it('a', () => {
+      expect(1).toBe(1);
+    });
+    describe('When the sent cookie is valid', () => {
+      it('Should call the correct endpoint and return the info', () => {
+        req.flush({});
+        expect(res).toEqual(true);
+      });
+    });
+
+    describe('When something fails', () => {
+      it('Should return the error', () => {
+        req.flush('500 error', { status: 500, statusText: 'Unexpected error' });
+        expect(res).toEqual('500 error');
+      });
+    });
+  });
 });

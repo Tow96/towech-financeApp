@@ -42,6 +42,14 @@ const mockValues = {
       user: stubUser(),
     });
   }),
+
+  logout: jest.fn((): Observable<boolean> => {
+    if (process.env['FAILHTTP']?.toUpperCase() === 'TRUE') {
+      return throwError(() => 'TEST ERROR');
+    }
+
+    return of(true);
+  }),
 };
 
 export const MockDesktopAuthenticationService: Provider = {

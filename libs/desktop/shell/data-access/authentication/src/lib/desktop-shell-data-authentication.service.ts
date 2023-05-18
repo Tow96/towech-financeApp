@@ -51,4 +51,16 @@ export class DesktopAuthenticationService {
         catchError(error => this.processError(error))
       );
   }
+
+  logout(): Observable<boolean> {
+    return this.http
+      .post(`${this.ROOTURL}/logout`, undefined, {
+        headers: this.headers,
+        withCredentials: true,
+      })
+      .pipe(
+        map(() => true),
+        catchError(error => this.processError(error))
+      );
+  }
 }
