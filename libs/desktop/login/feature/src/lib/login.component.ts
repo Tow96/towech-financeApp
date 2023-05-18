@@ -9,13 +9,16 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 // NGRX
 import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
+// Components
+import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DesktopToasterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <towech-finance-toaster></towech-finance-toaster>
     <div class="login-container">
       <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()">
         <input type="text" formControlName="username" placeholder="Username" />

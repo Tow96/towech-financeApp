@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 import { LayoutComponent } from '@towech-finance/desktop/shell/ui/layout';
-import { AuthGuard } from '@towech-finance/desktop/shell/utils/guards';
-import { Observable, of } from 'rxjs';
+import { AuthGuard, NoAuthGuard } from '@towech-finance/desktop/shell/utils/guards';
 
 export const desktopShellRoutes: Route[] = [
   {
@@ -14,11 +13,12 @@ export const desktopShellRoutes: Route[] = [
           (await import('@towech-finance/desktop/dashboard/feature')).DesktopDashboardComponent,
         canActivate: [AuthGuard],
       },
-      {
-        path: 'login',
-        loadComponent: async () =>
-          (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
-      },
     ],
+  },
+  {
+    path: 'login',
+    loadComponent: async () =>
+      (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
+    canActivate: [NoAuthGuard],
   },
 ];
