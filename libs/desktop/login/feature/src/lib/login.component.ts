@@ -12,6 +12,7 @@ import { UserActions } from '@towech-finance/desktop/shell/data-access/user-stat
 // Components
 import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
 
+// TODO: Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',

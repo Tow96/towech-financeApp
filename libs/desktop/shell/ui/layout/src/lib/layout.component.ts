@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
 import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
 
+// TODO: Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-layout',

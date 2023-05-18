@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
+// TODO: Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
