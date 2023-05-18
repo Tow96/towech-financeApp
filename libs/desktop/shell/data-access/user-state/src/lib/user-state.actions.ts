@@ -28,3 +28,12 @@ export const refreshTokenSuccess = createAction(
 );
 
 export const refreshTokenFailure = createAction('[User Effects] Refresh Token Failure');
+
+export const logout = createAction('[NavBar] Logout');
+
+export const logoutSuccess = createAction('[User Effects] Logout Success');
+
+export const logoutFailure = createAction(
+  '[User Effects] Logout Failure',
+  props<{ message: string }>()
+);

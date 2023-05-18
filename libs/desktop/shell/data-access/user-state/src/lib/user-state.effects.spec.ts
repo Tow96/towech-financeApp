@@ -179,5 +179,42 @@ describe('User Effects', () => {
       expect(routeSpy).toHaveBeenCalledTimes(1);
       expect(routeSpy).toHaveBeenLastCalledWith(['login']);
     });
+
+    it('Should call the router when logoutSuccess is dispatched', () => {
+      actions$ = of(userActions.logoutSuccess);
+      spy = subscribeSpyTo(effects.redirectToLogin);
+      expect(routeSpy).toHaveBeenCalledTimes(1);
+      expect(routeSpy).toHaveBeenLastCalledWith(['login']);
+    });
+  });
+
+  describe('logout', () => {
+    const makeCall = (): void => {
+      actions$ = of(userActions.logout);
+      spy = subscribeSpyTo(effects.logout);
+      result = spy.getLastValue();
+    };
+
+    beforeEach(() => jest.clearAllMocks());
+
+    it('Should call the auth service', () => {
+      makeCall();
+      expect(api.logout).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should return a logoutSuccess action when login works correctly', () => {
+      makeCall();
+      expect(result).toEqual(userActions.logoutSuccess());
+    });
+
+    it('Should return a logoutFailure action when not working correctly', () => {
+      const oldEnv = { ...process.env };
+      process.env['FAILHTTP'] = 'true';
+      makeCall();
+
+      expect(result).toEqual(userActions.logoutFailure({ message: expect.any(String) }));
+
+      process.env = { ...oldEnv };
+    });
   });
 });

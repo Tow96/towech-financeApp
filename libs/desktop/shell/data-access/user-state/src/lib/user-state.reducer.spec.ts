@@ -9,6 +9,15 @@ describe('User Reducer', () => {
   let initialState: State;
   let result: State;
 
+  const user: UserModel = {
+    _id: '0',
+    accountConfirmed: false,
+    mail: 'test@gmail.com',
+    name: 'TESTINO',
+    role: UserRoles.USER,
+  };
+  const token = 'this is totally a JWT';
+
   beforeEach(() => (initialState = Init));
 
   describe('Unknown action', () => {
@@ -41,15 +50,6 @@ describe('User Reducer', () => {
 
   describe('loginSuccess', () => {
     it('Should return an immutable state containing the token and the user', () => {
-      const user: UserModel = {
-        _id: '0',
-        accountConfirmed: false,
-        mail: 'test@gmail.com',
-        name: 'TESTINO',
-        role: UserRoles.USER,
-      };
-      const token = 'this is totally a JWT';
-
       action = actions.loginSuccess({ token, user });
       result = reducer({ ...initialState, loading: true }, action);
 
@@ -78,15 +78,6 @@ describe('User Reducer', () => {
 
   describe('refreshTokenSuccess', () => {
     it('Should return an immutable state containing the token and the user', () => {
-      const user: UserModel = {
-        _id: '0',
-        accountConfirmed: false,
-        mail: 'test@gmail.com',
-        name: 'TESTINO',
-        role: UserRoles.USER,
-      };
-      const token = 'this is totally a JWT';
-
       action = actions.refreshTokenSuccess({ token, user });
       result = reducer({ ...initialState, loading: true }, action);
 
@@ -101,6 +92,45 @@ describe('User Reducer', () => {
       result = reducer({ ...initialState, loading: true }, action);
 
       expect(result).toEqual({ ...initialState, loading: false, loaded: true });
+    });
+  });
+
+  describe('logout', () => {
+    it('Should return an immutable state with loading', () => {
+      action = actions.logout();
+      result = reducer({ ...initialState }, action);
+
+      expect(result).toEqual({ ...initialState, loading: true });
+    });
+  });
+
+  describe('logoutSuccess', () => {
+    it('Should return an immutable state without a user', () => {
+      action = actions.logoutSuccess();
+      result = reducer({ ...initialState, token, user, loading: true }, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        user: null,
+        token: null,
+        loading: false,
+        loaded: true,
+      });
+    });
+  });
+
+  describe('logoutFailure', () => {
+    it('Should return an immutable state without loading', () => {
+      action = actions.logoutFailure({ message: 'fail' });
+      result = reducer({ ...initialState, user, token, loading: true }, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        user,
+        token,
+        loading: false,
+        loaded: true,
+      });
     });
   });
 });

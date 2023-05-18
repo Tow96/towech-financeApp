@@ -37,12 +37,13 @@ export class UserEffects {
   public errorEffect = createEffect(() => this.handleError$(), { dispatch: false });
 
   public login = createEffect(() => this.handleLogin$());
+  public logout = createEffect(() => this.handleLogout$());
   public refresh = createEffect(() => this.handleRefresh$());
 
   public redirectToHome = createEffect(() => this.handleRedirectToHome$(), { dispatch: false });
   public redirectToLogin = createEffect(() => this.handleRedirectToLogin$(), { dispatch: false });
 
-  // Pipes ------------------------------------------------------------------------
+  // Handle pipes -------------------------------------------------------------------
   private handleError$(): Observable<void> {
     return this.actions$.pipe(
       ofType(userActions.loginFailure),
@@ -57,10 +58,10 @@ export class UserEffects {
     );
   }
 
-  private resolveLoginCall$(credentials: LoginUser): Observable<Action> {
-    return this.authApi.login(credentials).pipe(
-      map(res => userActions.loginSuccess({ token: res.token, user: res.user })),
-      catchError(err => this.returnFailure$(err, userActions.loginFailure, 'Failed to Login'))
+  private handleLogout$(): Observable<Action> {
+    return this.actions$.pipe(
+      ofType(userActions.logout),
+      switchMap(() => this.resolveLogoutCall$())
     );
   }
 
@@ -68,13 +69,6 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(userActions.refreshToken),
       switchMap(() => this.resolveRefreshCall$())
-    );
-  }
-
-  private resolveRefreshCall$(): Observable<Action> {
-    return this.authApi.refresh().pipe(
-      map(res => userActions.refreshTokenSuccess({ token: res.token, user: res.user })),
-      catchError(() => of(userActions.refreshTokenFailure()))
     );
   }
 
@@ -89,10 +83,34 @@ export class UserEffects {
 
   private handleRedirectToLogin$(): Observable<void> {
     return this.actions$.pipe(
-      ofType(userActions.refreshTokenFailure),
+      ofType(userActions.refreshTokenFailure, userActions.logoutSuccess),
       map(() => {
         this.router.navigate(['login']);
       })
+    );
+  }
+
+  // Resolve pipes -----------------------------------------------------------
+  private resolveRefreshCall$(): Observable<Action> {
+    return this.authApi.refresh().pipe(
+      map(res => userActions.refreshTokenSuccess({ token: res.token, user: res.user })),
+      catchError(() => of(userActions.refreshTokenFailure()))
+    );
+  }
+
+  private resolveLoginCall$(credentials: LoginUser): Observable<Action> {
+    return this.authApi.login(credentials).pipe(
+      map(res => userActions.loginSuccess({ token: res.token, user: res.user })),
+      catchError(err => this.returnFailure$(err, userActions.loginFailure, 'Failed to Login'))
+    );
+  }
+
+  private resolveLogoutCall$(): Observable<Action> {
+    return this.authApi.logout().pipe(
+      map(() => userActions.logoutSuccess()),
+      catchError(e =>
+        this.returnFailure$(e, userActions.logoutFailure, 'Failed to log out correctly')
+      )
     );
   }
 
