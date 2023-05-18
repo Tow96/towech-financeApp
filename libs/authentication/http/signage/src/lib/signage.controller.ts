@@ -97,7 +97,7 @@ export class SignageController {
     const isProd = this.config.get<string>('NODE_ENV') === 'production';
 
     const cookieOptions: CookieOptions = {
-      httpOnly: undefined,
+      httpOnly: true,
       expires: body.keepSession ? expiration : undefined,
       secure: isProd ? true : undefined,
     };
