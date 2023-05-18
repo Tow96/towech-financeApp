@@ -5,6 +5,8 @@
  */
 
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 
 // Libraries
 @Component({
@@ -12,6 +14,12 @@ import { Component } from '@angular/core';
   selector: 'towech-finance-webclient-navbar',
   imports: [],
   styleUrls: ['./desktop-navbar-feature.component.scss'],
-  template: `<p>DesktopNavbarComponent works</p>`,
+  template: `<button (click)="onLogoutClick()">Logout</button>`,
 })
-export class DesktopNavbarComponent {}
+export class DesktopNavbarComponent {
+  constructor(private readonly store: Store) {}
+
+  onLogoutClick() {
+    this.store.dispatch(UserActions.logout());
+  }
+}
