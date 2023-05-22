@@ -16,15 +16,23 @@ import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
+  styleUrls: ['./login.component.scss'],
   imports: [ReactiveFormsModule, DesktopToasterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <towech-finance-toaster></towech-finance-toaster>
     <div class="login-container">
+      <h1>Login</h1>
       <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()">
-        <input type="text" formControlName="username" placeholder="Username" />
-        <input type="password" formControlName="password" placeholder="Password" />
-        <button type="submit">Login</button>
+        <div>
+          <input type="text" formControlName="username" placeholder="Username" />
+        </div>
+        <div>
+          <input type="password" formControlName="password" placeholder="Password" />
+        </div>
+        <div>
+          <button type="submit">Login</button>
+        </div>
       </form>
     </div>
   `,
@@ -40,14 +48,16 @@ export class DesktopLoginComponent {
 
   onLoginFormSubmit() {
     const value = this.loginForm.value;
-    this.store.dispatch(
-      UserActions.login({
-        credentials: {
-          keepSession: value.keepSession || false,
-          password: value.password || '',
-          username: value.username || '',
-        },
-      })
-    );
+
+    console.log(this.loginForm);
+    // this.store.dispatch(
+    //   UserActions.login({
+    //     credentials: {
+    //       keepSession: value.keepSession || false,
+    //       password: value.password || '',
+    //       username: value.username || '',
+    //     },
+    //   })
+    // );
   }
 }
