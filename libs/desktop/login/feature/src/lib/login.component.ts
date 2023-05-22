@@ -5,11 +5,12 @@
  */
 // Libraries
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-// Components
-import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
-import { SharedFormElementInputComponent } from '@towech-finance/shared/ui/form-elements/input';
+// Modules
 import { NgrxFormsModule } from 'ngrx-forms';
 import { AsyncPipe, NgIf } from '@angular/common';
+// Components
+import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+// NGRX
 import { LoginStore } from './login.store';
 
 // TODO: Testing
@@ -18,13 +19,7 @@ import { LoginStore } from './login.store';
   selector: 'towech-finance-webclient-dashboard',
   styleUrls: ['./login.component.scss'],
   providers: [LoginStore],
-  imports: [
-    AsyncPipe,
-    NgIf,
-    DesktopToasterComponent,
-    SharedFormElementInputComponent,
-    NgrxFormsModule,
-  ],
+  imports: [AsyncPipe, NgIf, DesktopToasterComponent, NgrxFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <towech-finance-toaster></towech-finance-toaster>
