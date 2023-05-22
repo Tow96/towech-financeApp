@@ -5,59 +5,49 @@
  */
 // Libraries
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-// NGRX
-import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 // Components
 import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+import { SharedFormElementInputComponent } from '@towech-finance/shared/ui/form-elements/input';
+import { NgrxFormsModule } from 'ngrx-forms';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { LoginStore } from './login.store';
 
 // TODO: Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
   styleUrls: ['./login.component.scss'],
-  imports: [ReactiveFormsModule, DesktopToasterComponent],
+  providers: [LoginStore],
+  imports: [
+    AsyncPipe,
+    NgIf,
+    DesktopToasterComponent,
+    SharedFormElementInputComponent,
+    NgrxFormsModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <towech-finance-toaster></towech-finance-toaster>
-    <div class="login-container">
+    <div class="login-container" *ngIf="store.form$ | async as form">
       <h1>Login</h1>
-      <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()">
-        <div>
-          <input type="text" formControlName="username" placeholder="Username" />
-        </div>
-        <div>
-          <input type="password" formControlName="password" placeholder="Password" />
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
+      <form novalidate [ngrxFormState]="form" (submit)="onLoginFormSubmit()">
+        <input
+          type="text"
+          [ngrxFormControlState]="form.controls.username"
+          (ngrxFormsAction)="store.handleFormAction($event)" />
+        <input
+          type="password"
+          [ngrxFormControlState]="form.controls.password"
+          (ngrxFormsAction)="store.handleFormAction($event)" />
+        <button type="submit">Login</button>
       </form>
     </div>
   `,
 })
 export class DesktopLoginComponent {
-  public loginForm = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-    keepSession: [false],
-  });
-
-  constructor(private readonly fb: FormBuilder, private readonly store: Store) {}
+  constructor(public readonly store: LoginStore) {}
 
   onLoginFormSubmit() {
-    const value = this.loginForm.value;
-
-    console.log(this.loginForm);
-    // this.store.dispatch(
-    //   UserActions.login({
-    //     credentials: {
-    //       keepSession: value.keepSession || false,
-    //       password: value.password || '',
-    //       username: value.username || '',
-    //     },
-    //   })
-    // );
+    this.store.login();
   }
 }
