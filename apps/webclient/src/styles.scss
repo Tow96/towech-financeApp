@@ -1,9 +1,10 @@
 @use 'sass:map';
 @use './styles/themes/gold-night/index' as theme;
-@use '../../../libs/shared/ui/themes/src' as core;
+@use 'libs/shared/ui/themes' as core;
 
 // Components ---------------------------
-@use '../../../libs/desktop/toasts/ui/theme/desktop-toaster.component' as toaster;
+@use 'libs/desktop/toasts/ui/theme/desktop-toaster.component' as toaster;
+@use 'libs/desktop/login/ui/theme' as login;
 // --------------------------------------
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
@@ -56,6 +57,7 @@
 @include core.color(theme.$gold-night-theme);
 @include color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);
+@include login.color(theme.$gold-night-theme);
 
 // TODO: MOVE this to its correct locations
 div.container {
