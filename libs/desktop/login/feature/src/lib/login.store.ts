@@ -8,10 +8,18 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { Observable, map, tap } from 'rxjs';
 // NGRX
 import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
-import { Actions, FormGroupState, createFormGroupState, formGroupReducer } from 'ngrx-forms';
-import { Observable, map, tap } from 'rxjs';
+import {
+  Actions,
+  FormGroupState,
+  createFormGroupState,
+  formGroupReducer,
+  updateGroup,
+  validate,
+} from 'ngrx-forms';
+import { required } from 'ngrx-forms/validation';
 
 interface FormValues {
   username: string;
@@ -30,6 +38,11 @@ const generateForm = (): FormGroupState<FormValues> => {
     username: '',
   });
 };
+
+const validateForm = updateGroup<FormValues>({
+  username: validate(required),
+  password: validate(required),
+});
 
 @Injectable()
 export class LoginStore extends ComponentStore<State> {
@@ -53,7 +66,8 @@ export class LoginStore extends ComponentStore<State> {
   private updateForm$(action$: Observable<Actions<string>>): Observable<void> {
     return action$.pipe(
       concatLatestFrom(() => this.form$),
-      map(([action, form]) => this.patchState({ form: formGroupReducer(form, action) }))
+      map(([action, form]) => formGroupReducer(form, action)), // Generates the new form-state
+      map(updatedForm => this.patchState({ form: validateForm(updatedForm) })) // Stores the state after validation
     );
   }
 
