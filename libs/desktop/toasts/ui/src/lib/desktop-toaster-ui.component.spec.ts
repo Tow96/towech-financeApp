@@ -2,11 +2,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested Elements
 import { DesktopToastUIComponent } from './desktop-toaster-ui.component';
-import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
+import {
+  DesktopToast,
+  DesktopToasterService,
+  ToastTypes,
+} from '@towech-finance/desktop/toasts/data-access';
 
 const stubToast = (): DesktopToast => ({
   id: 'test-id',
   message: 'Toast content',
+  type: ToastTypes.ACCENT,
 });
 
 describe('Toast Component', () => {

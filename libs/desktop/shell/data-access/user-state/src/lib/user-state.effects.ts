@@ -47,7 +47,7 @@ export class UserEffects {
   private handleError$(): Observable<void> {
     return this.actions$.pipe(
       ofType(userActions.loginFailure),
-      map(action => this.toast.add(action.message))
+      map(action => this.toast.addError(action.message))
     );
   }
 

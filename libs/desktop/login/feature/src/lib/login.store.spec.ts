@@ -94,7 +94,7 @@ describe('Login Store', () => {
         value: 'pass',
       });
 
-      toastSpy = jest.spyOn(toasts, 'add');
+      toastSpy = jest.spyOn(toasts, 'addWarning');
       storeSpy = jest.spyOn(store, 'dispatch');
     });
 

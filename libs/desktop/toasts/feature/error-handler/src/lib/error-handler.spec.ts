@@ -24,7 +24,7 @@ describe('Toast error handler', () => {
     jest.clearAllMocks();
     toasts = new DesktopToasterService();
     handler = new DesktopGlobalErrorToastClass({ get: () => toasts });
-    spy = jest.spyOn(toasts, 'add');
+    spy = jest.spyOn(toasts, 'addError');
   });
 
   it('Should exist', () => expect(handler).toBeTruthy());

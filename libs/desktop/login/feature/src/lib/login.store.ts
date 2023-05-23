@@ -80,7 +80,7 @@ export class LoginStore extends ComponentStore<State> {
       concatLatestFrom(() => this.form$),
       map(([, form]) => {
         if (form.isInvalid || form.isPristine) {
-          this.toasts.add('Please complete the fields');
+          this.toasts.addWarning('Please complete the fields');
           return;
         }
         this.globalStore.dispatch(UserActions.login({ credentials: form.value }));

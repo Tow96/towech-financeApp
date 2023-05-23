@@ -11,10 +11,10 @@ describe('Desktop Toaster', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DesktopToasterComponent);
     component = fixture.componentInstance;
-    component.service.add('ADD TEST 0');
-    component.service.add('ADD TEST 1');
-    component.service.add('ADD TEST 2');
-    component.service.add('ADD TEST 3');
+    component.service.addAccent('ADD TEST 0');
+    component.service.addError('ADD TEST 1');
+    component.service.addSuccess('ADD TEST 2');
+    component.service.addWarning('ADD TEST 3');
 
     fixture.detectChanges();
     compiled = fixture.nativeElement;

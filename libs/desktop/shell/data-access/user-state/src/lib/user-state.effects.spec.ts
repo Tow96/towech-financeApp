@@ -69,7 +69,7 @@ describe('User Effects', () => {
 
   describe('showError', () => {
     it('show add a toast to the tray and do nothing else', () => {
-      const toastSpy = jest.spyOn(toasts, 'add');
+      const toastSpy = jest.spyOn(toasts, 'addError');
 
       actions$ = of(userActions.loginFailure({ message: 'TESTING' }));
 
