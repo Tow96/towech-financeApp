@@ -19,35 +19,35 @@ export class DummyModel extends MockModel<DummyDoc> {
 }
 
 export class DummyRepo extends BaseRepository<DummyDoc> {
-  constructor(@InjectModel(DummyDoc.name) model: Model<DummyDoc>) {
+  public constructor(@InjectModel(DummyDoc.name) model: Model<DummyDoc>) {
     super(model);
   }
 
-  create(document: DummyDoc) {
+  public create(document: DummyDoc) {
     return super.create(document);
   }
 
-  find(filterQuery: FilterQuery<DummyDoc>) {
+  public find(filterQuery: FilterQuery<DummyDoc>) {
     return super.find(filterQuery);
   }
 
-  findById(id: string) {
+  public findById(id: string) {
     return super.findById(id);
   }
 
-  findOne(filterQuery: FilterQuery<DummyDoc>) {
+  public findOne(filterQuery: FilterQuery<DummyDoc>) {
     return super.findOne(filterQuery);
   }
 
-  findOneAndUpdate(filterQuery: FilterQuery<DummyDoc>, update: UpdateQuery<DummyDoc>) {
+  public findOneAndUpdate(filterQuery: FilterQuery<DummyDoc>, update: UpdateQuery<DummyDoc>) {
     return super.findOneAndUpdate(filterQuery, update);
   }
 
-  findByIdAndUpdate(id: Types.ObjectId | string, update: UpdateQuery<DummyDoc>) {
+  public findByIdAndUpdate(id: Types.ObjectId | string, update: UpdateQuery<DummyDoc>) {
     return super.findByIdAndUpdate(id, update);
   }
 
-  findByIdAndDelete(id: string | Types.ObjectId, options?: FilterQuery<DummyDoc>) {
+  public findByIdAndDelete(id: string | Types.ObjectId, options?: FilterQuery<DummyDoc>) {
     return super.findByIdAndDelete(id, options);
   }
 }

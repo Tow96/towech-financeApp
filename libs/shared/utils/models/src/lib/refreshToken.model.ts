@@ -1,10 +1,10 @@
 import { UserModel } from './user.model';
 
 export class RefreshToken {
-  id: string;
-  user: UserModel;
+  public id: string;
+  public user: UserModel;
 
-  constructor(id: string, user: UserModel) {
+  public constructor(id: string, user: UserModel) {
     this.id = id;
     this.user = user;
   }

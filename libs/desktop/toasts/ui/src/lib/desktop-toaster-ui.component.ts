@@ -16,7 +16,7 @@ import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toa
 export class DesktopToastUIComponent implements AfterContentInit {
   @Input() public toast?: DesktopToast;
 
-  constructor(private readonly toastService: DesktopToasterService) {}
+  public constructor(private readonly toastService: DesktopToasterService) {}
 
   public ngAfterContentInit(): void {
     if (!this.toast) return;

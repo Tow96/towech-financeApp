@@ -40,9 +40,9 @@ import { LoginStore } from './login.store';
   `,
 })
 export class DesktopLoginComponent {
-  constructor(public readonly store: LoginStore) {}
+  public constructor(public readonly store: LoginStore) {}
 
-  onLoginFormSubmit() {
+  public onLoginFormSubmit() {
     this.store.login();
   }
 }

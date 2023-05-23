@@ -16,7 +16,7 @@ import { UserModel } from '@towech-finance/shared/utils/models';
 // TODO: i18n
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {
-  constructor(private readonly userRepo: AuthenticationUserService) {
+  public constructor(private readonly userRepo: AuthenticationUserService) {
     super();
   }
 

@@ -8,12 +8,12 @@ import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-acces
   template: ` <button (click)="msg()">aaaa</button> <button (click)="err()">bbbb</button>`,
 })
 export class DesktopDashboardComponent {
-  constructor(private readonly toastService: DesktopToasterService) {}
+  public constructor(private readonly toastService: DesktopToasterService) {}
 
-  msg() {
+  public msg() {
     this.toastService.add('pesto');
   }
-  err() {
+  public err() {
     throw new Error('THIS IS A TEST');
   }
 }

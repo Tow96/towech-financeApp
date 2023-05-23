@@ -33,7 +33,7 @@ const generateForm = (): FormGroupState<FormValues> => {
 
 @Injectable()
 export class LoginStore extends ComponentStore<State> {
-  constructor(private readonly globalStore: Store) {
+  public constructor(private readonly globalStore: Store) {
     super({
       form: generateForm(),
     });

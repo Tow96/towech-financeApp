@@ -17,28 +17,28 @@ import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 @Schema({ versionKey: false, collection: 'users' })
 export class UserDocument extends BaseSchema {
   @Prop({ type: String, required: true })
-  name: string;
+  public name: string;
 
   @Prop({ type: String, required: true })
-  mail: string;
+  public mail: string;
 
   @Prop({ type: String, required: true })
-  password: string;
+  public password: string;
 
   @Prop({ type: String, required: true })
-  role: UserRoles;
+  public role: UserRoles;
 
   @Prop({ type: Boolean, default: false })
-  accountConfirmed: boolean;
+  public accountConfirmed: boolean;
 
   @Prop({ type: Array, default: [] })
-  refreshTokens: string[];
+  public refreshTokens: string[];
 
   @Prop({ type: String, required: false })
-  singleSessionToken?: string;
+  public singleSessionToken?: string;
 
   @Prop({ type: String, required: false })
-  resetToken?: string;
+  public resetToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);
@@ -48,7 +48,7 @@ export const UserSchema = SchemaFactory.createForClass(UserDocument);
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
   private REFRESH_TOKEN_MAX_COUNT = 5;
 
-  constructor(@InjectModel(UserDocument.name) readonly model: Model<UserDocument>) {
+  public constructor(@InjectModel(UserDocument.name) public readonly model: Model<UserDocument>) {
     super(model);
   }
 
@@ -189,7 +189,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
   }
 
   // ---------------------------------------------
-  async getAll(): Promise<UserDocument[]> {
+  public async getAll(): Promise<UserDocument[]> {
     return this.find({});
   }
 }

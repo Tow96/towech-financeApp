@@ -12,7 +12,7 @@ import { LogIdRequest } from './log-id.model';
 
 @Injectable()
 export class LogIdMiddleware implements NestMiddleware {
-  use(req: LogIdRequest, res: Response, next: NextFunction) {
+  public use(req: LogIdRequest, res: Response, next: NextFunction) {
     const id = randomUUID();
     req.logId = id;
     res.set('logId', id);

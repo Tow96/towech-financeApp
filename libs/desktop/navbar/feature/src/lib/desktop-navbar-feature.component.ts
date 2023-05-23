@@ -17,9 +17,9 @@ import { UserActions } from '@towech-finance/desktop/shell/data-access/user-stat
   template: `<button (click)="onLogoutClick()">Logout</button>`,
 })
 export class DesktopNavbarComponent {
-  constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store) {}
 
-  onLogoutClick() {
+  public onLogoutClick() {
     this.store.dispatch(UserActions.logout());
   }
 }

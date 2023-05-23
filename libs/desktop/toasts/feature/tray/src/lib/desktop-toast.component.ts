@@ -18,5 +18,5 @@ import { DesktopToastUIComponent } from '@towech-finance/desktop/toasts/ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DesktopToasterComponent {
-  constructor(public readonly service: DesktopToasterService) {}
+  public constructor(public readonly service: DesktopToasterService) {}
 }

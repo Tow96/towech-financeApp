@@ -19,7 +19,7 @@ import { LoginUser } from '@towech-finance/shared/utils/models';
 
 @Injectable()
 export class UserEffects {
-  constructor(
+  public constructor(
     private readonly actions$: Actions,
     private readonly authApi: DesktopAuthenticationService,
     private readonly router: Router,

@@ -43,7 +43,7 @@ enum COOKIES {
 @Controller()
 @ApiTags('')
 export class SignageController {
-  constructor(
+  public constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly tokens: AuthenticationTokenService,
     private readonly logger: PidWinstonLogger,

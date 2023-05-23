@@ -12,10 +12,10 @@ import { filter, map, Observable } from 'rxjs';
 
 @Injectable()
 export class NoAuthGuard {
-  constructor(private readonly router: Router, private readonly store: Store) {}
+  public constructor(private readonly router: Router, private readonly store: Store) {}
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-  canActivate(): Observable<boolean> {
+  public canActivate(): Observable<boolean> {
     return this.store.select(UserSelectors.isLoggedIn).pipe(
       filter(logState => logState.loaded),
       map(logState => {

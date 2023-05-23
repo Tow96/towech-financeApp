@@ -36,7 +36,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/explicit-member-accessibility": "error"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

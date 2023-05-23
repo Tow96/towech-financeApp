@@ -11,7 +11,7 @@ import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-acces
   template: '',
 })
 export class MockComponent {
-  test() {
+  public test() {
     throw new Error('test Error');
   }
 }

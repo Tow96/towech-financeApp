@@ -23,12 +23,12 @@ export class DesktopAuthenticationService {
   };
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  constructor(
+  public constructor(
     private readonly http: HttpClient,
     @Inject(APP_CONFIG) private readonly appConfig: typeof environment
   ) {}
 
-  login(credentials: LoginUser): Observable<{ user: UserModel; token: string }> {
+  public login(credentials: LoginUser): Observable<{ user: UserModel; token: string }> {
     return this.http
       .post(`${this.ROOTURL}/login`, credentials, {
         headers: this.headers,
@@ -40,7 +40,7 @@ export class DesktopAuthenticationService {
       );
   }
 
-  refresh(): Observable<{ user: UserModel; token: string }> {
+  public refresh(): Observable<{ user: UserModel; token: string }> {
     return this.http
       .post(`${this.ROOTURL}/refresh`, undefined, {
         headers: this.headers,
@@ -52,7 +52,7 @@ export class DesktopAuthenticationService {
       );
   }
 
-  logout(): Observable<boolean> {
+  public logout(): Observable<boolean> {
     return this.http
       .post(`${this.ROOTURL}/logout`, undefined, {
         headers: this.headers,

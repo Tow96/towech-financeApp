@@ -10,25 +10,25 @@ import * as winston from 'winston';
 
 @Injectable()
 export class PidWinstonLogger extends Logger {
-  static logsFolder = `${__dirname}/../logs`;
+  public static logsFolder = `${__dirname}/../logs`;
 
-  pidError(pid: string, message: string, stack?: string, context?: string) {
+  public pidError(pid: string, message: string, stack?: string, context?: string) {
     return this.error({ pid, message }, stack, context);
   }
 
-  pidWarn(pid: string, message: string) {
+  public pidWarn(pid: string, message: string) {
     return this.warn({ pid, message });
   }
 
-  pidLog(pid: string, message: string) {
+  public pidLog(pid: string, message: string) {
     return this.log({ pid, message });
   }
 
-  pidVerbose(pid: string, message: string) {
+  public pidVerbose(pid: string, message: string) {
     return this.verbose({ pid, message });
   }
 
-  pidDebug(pid: string, message: string) {
+  public pidDebug(pid: string, message: string) {
     return this.debug({ pid, message });
   }
 
@@ -49,7 +49,7 @@ export class PidWinstonLogger extends Logger {
     return `${timestamp}${pid} ${name} ${level}: ${msg}`;
   }
 
-  static transports(): winston.transport[] {
+  public static transports(): winston.transport[] {
     const silent =
       process.env.DISABLE_LOGGING === undefined
         ? false

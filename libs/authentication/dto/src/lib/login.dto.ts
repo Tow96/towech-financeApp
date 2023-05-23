@@ -11,12 +11,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginDto implements LoginUser {
   @ApiProperty({ required: true })
-  username: string;
+  public username: string;
 
   @ApiProperty({ required: true })
-  password: string;
+  public password: string;
 
   @IsBoolean()
   @ApiProperty({ description: 'True if the session is not temporary', required: true })
-  keepSession: boolean;
+  public keepSession: boolean;
 }
