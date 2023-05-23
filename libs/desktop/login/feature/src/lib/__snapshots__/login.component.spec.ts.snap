@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Desktop Login Component Must match the snapshot 1`] = `
+<div
+  id="root1"
+>
+  <towech-finance-toaster>
+    <div
+      class="desktop-toaster"
+    >
+      
+    </div>
+  </towech-finance-toaster>
+  <div
+    class="login-container"
+  >
+    <h1>
+      Login
+    </h1>
+    <form
+      class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+      novalidate=""
+    >
+      <input
+        class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+        id="loginForm.username"
+        type="text"
+      />
+      <input
+        class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+        id="loginForm.password"
+        type="password"
+      />
+      <button
+        type="submit"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+  
+</div>
+`;

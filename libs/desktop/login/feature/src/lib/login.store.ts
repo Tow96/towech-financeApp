@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 // NGRX
 import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 import {
@@ -20,6 +20,7 @@ import {
   validate,
 } from 'ngrx-forms';
 import { required } from 'ngrx-forms/validation';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
 interface FormValues {
   username: string;
@@ -31,7 +32,7 @@ interface State {
   form: FormGroupState<FormValues>;
 }
 
-const generateForm = (): FormGroupState<FormValues> => {
+export const generateForm = (): FormGroupState<FormValues> => {
   return createFormGroupState('loginForm', {
     keepSession: false,
     password: '',
@@ -46,7 +47,10 @@ const validateForm = updateGroup<FormValues>({
 
 @Injectable()
 export class LoginStore extends ComponentStore<State> {
-  public constructor(private readonly globalStore: Store) {
+  public constructor(
+    private readonly globalStore: Store,
+    private readonly toasts: DesktopToasterService
+  ) {
     super({
       form: generateForm(),
     });
@@ -74,11 +78,13 @@ export class LoginStore extends ComponentStore<State> {
   private handleLogin$(login$: Observable<void>): Observable<void> {
     return login$.pipe(
       concatLatestFrom(() => this.form$),
-      tap(([, form]) => {
-        console.log(form);
-      }),
-      // TODO: Validate form
-      map(([, form]) => this.globalStore.dispatch(UserActions.login({ credentials: form.value })))
+      map(([, form]) => {
+        if (form.isInvalid || form.isPristine) {
+          this.toasts.add('Please complete the fields');
+          return;
+        }
+        this.globalStore.dispatch(UserActions.login({ credentials: form.value }));
+      })
     );
   }
 }
