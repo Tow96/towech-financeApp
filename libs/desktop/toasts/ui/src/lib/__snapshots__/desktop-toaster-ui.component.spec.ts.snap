@@ -8,10 +8,10 @@ exports[`Toast Component Must match the snapshot 1`] = `
     class="desktop-toast"
   >
     <div
-      class="color"
+      class="ng-trigger ng-trigger-color color"
     />
     <div
-      class="message"
+      class="message ng-trigger ng-trigger-message_body"
     >
        Toast content 
     </div>

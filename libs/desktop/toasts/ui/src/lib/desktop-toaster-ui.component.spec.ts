@@ -82,7 +82,7 @@ describe('Toast Component', () => {
       expect(result).toEqual({
         color: true,
         error: false,
-        sucess: false,
+        success: false,
         warning: false,
       });
     });
@@ -94,7 +94,7 @@ describe('Toast Component', () => {
       expect(result).toEqual({
         color: true,
         error: false,
-        sucess: false,
+        success: false,
         warning: false,
       });
     });
