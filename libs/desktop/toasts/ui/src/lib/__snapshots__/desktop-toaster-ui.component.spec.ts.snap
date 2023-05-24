@@ -7,7 +7,14 @@ exports[`Toast Component Must match the snapshot 1`] = `
   <div
     class="desktop-toast"
   >
-    Toast content
+    <div
+      class="color"
+    />
+    <div
+      class="message"
+    >
+       Toast content 
+    </div>
   </div>
 </div>
 `;

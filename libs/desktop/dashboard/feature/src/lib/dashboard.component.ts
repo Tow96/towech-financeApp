@@ -11,7 +11,10 @@ export class DesktopDashboardComponent {
   public constructor(private readonly toastService: DesktopToasterService) {}
 
   public msg() {
-    this.toastService.add('pesto');
+    this.toastService.addAccent('pesto');
+    this.toastService.addError('pesto');
+    this.toastService.addSuccess('pesto');
+    this.toastService.addWarning('pesto');
   }
   public err() {
     throw new Error('THIS IS A TEST');

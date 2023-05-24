@@ -1,5 +1,6 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Tested Elements
 import { DesktopToastUIComponent } from './desktop-toaster-ui.component';
 import {
@@ -21,6 +22,7 @@ describe('Toast Component', () => {
   let service: DesktopToasterService;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({ imports: [BrowserAnimationsModule] });
     fixture = TestBed.createComponent(DesktopToastUIComponent);
     service = TestBed.inject(DesktopToasterService);
     component = fixture.componentInstance;
@@ -70,6 +72,31 @@ describe('Toast Component', () => {
 
       expect(spy).toHaveBeenCalledTimes(0);
       jest.useRealTimers();
+    });
+  });
+
+  describe('When getClass is called', () => {
+    it('Should return an array indicating which classes should be activated', () => {
+      const result = component.getTypeClass();
+
+      expect(result).toEqual({
+        color: true,
+        error: false,
+        sucess: false,
+        warning: false,
+      });
+    });
+
+    it('Should return default values if there is no toast', () => {
+      component.toast = undefined;
+      const result = component.getTypeClass();
+
+      expect(result).toEqual({
+        color: true,
+        error: false,
+        sucess: false,
+        warning: false,
+      });
     });
   });
 });

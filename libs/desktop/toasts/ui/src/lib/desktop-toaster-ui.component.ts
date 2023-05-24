@@ -3,15 +3,37 @@
  *
  * Dumb component that displays the toast message
  */
+// Libraries
+import { NgClass } from '@angular/common';
 import { AfterContentInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DesktopToast, DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
+// Services
+import {
+  DesktopToast,
+  DesktopToasterService,
+  ToastTypes,
+} from '@towech-finance/desktop/toasts/data-access';
+// Animations
+import {
+  colorTransition,
+  messageBodyTransition,
+  messageTextTransition,
+} from './desktop-toaster-ui.animations';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-toast',
-  template: ` <div class="desktop-toast">{{ toast?.message }}</div> `,
+  imports: [NgClass],
+  template: `
+    <div class="desktop-toast">
+      <div @color [ngClass]="getTypeClass()"></div>
+      <div @message_body @message_text class="message">
+        {{ toast?.message }}
+      </div>
+    </div>
+  `,
   styleUrls: ['./desktop-toaster-ui.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [colorTransition, messageBodyTransition, messageTextTransition],
 })
 export class DesktopToastUIComponent implements AfterContentInit {
   @Input() public toast?: DesktopToast;
@@ -28,5 +50,14 @@ export class DesktopToastUIComponent implements AfterContentInit {
     if (!this.toast) return;
 
     this.toastService.dismiss(this.toast.id);
+  }
+
+  public getTypeClass(): Record<string, boolean> {
+    return {
+      color: true,
+      error: this.toast?.type === ToastTypes.ERROR,
+      success: this.toast?.type === ToastTypes.SUCCESS,
+      warning: this.toast?.type === ToastTypes.WARNING,
+    };
   }
 }

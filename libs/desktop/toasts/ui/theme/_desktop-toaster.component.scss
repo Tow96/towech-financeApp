@@ -4,13 +4,26 @@
 @mixin color($theme) {
   $colors: map.get($theme, color);
   $primary: map.get($colors, primary);
-  // $accent: map.get($colors, accent);
-  // $success: map.get($colors, success);
-  // $error: map.get($colors, error);
-  // $warn: map.get($colors, warning);
+  $accent: map.get($colors, accent);
+  $success: map.get($colors, success);
+  $error: map.get($colors, error);
+  $warn: map.get($colors, warning);
 
   .desktop-toast {
     background-color: core.get-palette-hue($primary, 500);
     color: core.get-palette-hue-contrast($primary, 500);
+
+    .color {
+      background-color: core.get-palette-hue($accent, 500);
+    }
+    .color.error {
+      background-color: core.get-palette-hue($error, 500);
+    }
+    .color.success {
+      background-color: core.get-palette-hue($success, 500);
+    }
+    .color.warning {
+      background-color: core.get-palette-hue($warn, 500);
+    }
   }
 }
