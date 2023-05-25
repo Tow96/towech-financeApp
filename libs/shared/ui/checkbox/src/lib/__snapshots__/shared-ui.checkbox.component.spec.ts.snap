@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Shared Input Component Must match the snapshot 1`] = `
+<div
+  id="root1"
+>
+  <div
+    class="checkbox"
+  >
+    <input
+      id="towech-checkbox"
+      type="checkbox"
+    />
+    <label
+      for="towech-checkbox"
+    >
+      TEST
+    </label>
+  </div>
+</div>
+`;

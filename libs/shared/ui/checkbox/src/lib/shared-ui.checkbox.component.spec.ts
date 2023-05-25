@@ -21,7 +21,7 @@ describe('Shared Input Component', () => {
 
   it('Should be defined', () => expect(component).toBeTruthy());
 
-  it.skip('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
+  it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
   it('Should implement the NGRX_FORM_VIEW_ADAPTER', () => {
     expect(fixture.debugElement.injector.get(NGRX_FORM_VIEW_ADAPTER)).toBeTruthy();
