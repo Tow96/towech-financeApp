@@ -60,11 +60,6 @@
 @include login.color(theme.$gold-night-theme);
 
 // TODO: MOVE this to its correct locations
-div.container {
-  width: 450px;
-  padding: 50px;
-}
-
 button {
   border: 0;
   width: 80px;
@@ -76,8 +71,4 @@ button {
 
 webclient-root {
   z-index: 1;
-}
-webclient-toast,
-.toast-class {
-  z-index: 2000;
 }

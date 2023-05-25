@@ -52,7 +52,7 @@ export class LoginStore extends ComponentStore<State> {
     private readonly toasts: DesktopToasterService
   ) {
     super({
-      form: generateForm(),
+      form: validateForm(generateForm()),
     });
   }
 

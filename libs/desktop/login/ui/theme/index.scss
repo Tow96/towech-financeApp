@@ -9,7 +9,7 @@
   // $error: map.get($colors, error);
   // $warn: map.get($colors, warning);
 
-  .login-container {
+  towech-finance-webclient-dashboard .login-container {
     background-color: core.get-palette-hue($primary, 500);
     color: core.get-palette-hue-contrast($primary, 500);
   }

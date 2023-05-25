@@ -9,7 +9,7 @@
   $error: map.get($colors, error);
   $warn: map.get($colors, warning);
 
-  .desktop-toast {
+  towech-finance-toast .desktop-toast {
     background-color: core.get-palette-hue($primary, 500);
     color: core.get-palette-hue-contrast($primary, 500);
 
