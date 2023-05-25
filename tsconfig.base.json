@@ -56,6 +56,7 @@
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
       "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
       "@towech-finance/shared/ui/button": ["libs/shared/ui/button/src/index.ts"],
+      "@towech-finance/shared/ui/checkbox": ["libs/shared/ui/checkbox/src/index.ts"],
       "@towech-finance/shared/ui/input": ["libs/shared/ui/input/src/index.ts"],
       "@towech-finance/shared/ui/themes": ["libs/shared/ui/themes/src/index.ts"],
       "@towech-finance/shared/utils/models": ["libs/shared/utils/models/src/index.ts"],
