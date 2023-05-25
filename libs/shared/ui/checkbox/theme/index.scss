@@ -1,0 +1,22 @@
+@use 'sass:map';
+@use 'libs/shared/ui/themes' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $primary: map.get($colors, primary);
+  $accent: map.get($colors, accent);
+
+  towech-finance-checkbox .checkbox {
+    input {
+      background-color: core.get-palette-hue($primary, 600);
+    }
+
+    input:after {
+      color: core.get-palette-hue($accent, 500);
+    }
+
+    input:focus + label {
+      color: core.get-palette-hue($accent, 500);
+    }
+  }
+}

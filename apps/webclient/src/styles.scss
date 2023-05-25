@@ -6,6 +6,7 @@
 @use 'libs/desktop/toasts/ui/theme/desktop-toaster.component' as toaster;
 @use 'libs/desktop/login/ui/theme' as login;
 @use 'libs/shared/ui/input/theme' as inputs;
+@use 'libs/shared/ui/checkbox/theme' as checkbox;
 @use 'libs/shared/ui/button/theme' as buttons;
 // --------------------------------------
 
@@ -17,6 +18,7 @@
 
 @include core.color(theme.$gold-night-theme);
 @include buttons.color(theme.$gold-night-theme);
+@include checkbox.color(theme.$gold-night-theme);
 @include inputs.color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);
 @include login.color(theme.$gold-night-theme);
