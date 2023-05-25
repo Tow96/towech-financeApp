@@ -14,10 +14,10 @@ exports[`Desktop Toaster Must match the snapshot 1`] = `
         class="desktop-toast"
       >
         <div
-          class="ng-trigger ng-trigger-r color warning"
+          class="ng-trigger ng-trigger-color color warning"
         />
         <div
-          class="message ng-trigger ng-trigger-toast"
+          class="message ng-trigger ng-trigger-message_body"
         >
            ADD TEST 3 
         </div>
@@ -30,10 +30,10 @@ exports[`Desktop Toaster Must match the snapshot 1`] = `
         class="desktop-toast"
       >
         <div
-          class="ng-trigger ng-trigger-r color success"
+          class="ng-trigger ng-trigger-color color success"
         />
         <div
-          class="message ng-trigger ng-trigger-toast"
+          class="message ng-trigger ng-trigger-message_body"
         >
            ADD TEST 2 
         </div>
@@ -46,10 +46,10 @@ exports[`Desktop Toaster Must match the snapshot 1`] = `
         class="desktop-toast"
       >
         <div
-          class="ng-trigger ng-trigger-r color error"
+          class="ng-trigger ng-trigger-color color error"
         />
         <div
-          class="message ng-trigger ng-trigger-toast"
+          class="message ng-trigger ng-trigger-message_body"
         >
            ADD TEST 1 
         </div>
@@ -62,10 +62,10 @@ exports[`Desktop Toaster Must match the snapshot 1`] = `
         class="desktop-toast"
       >
         <div
-          class="ng-trigger ng-trigger-r color"
+          class="ng-trigger ng-trigger-color color"
         />
         <div
-          class="message ng-trigger ng-trigger-toast"
+          class="message ng-trigger ng-trigger-message_body"
         >
            ADD TEST 0 
         </div>
