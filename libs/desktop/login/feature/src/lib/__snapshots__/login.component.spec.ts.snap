@@ -17,26 +17,51 @@ exports[`Desktop Login Component Must match the snapshot 1`] = `
     <h1>
       Login
     </h1>
-    <form
-      class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-      novalidate=""
-    >
-      <input
-        class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-        id="loginForm.username"
-        type="text"
-      />
-      <input
-        class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-        id="loginForm.password"
-        type="password"
-      />
-      <button
-        type="submit"
+    <towech-finance-login-form>
+      <form
+        class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+        novalidate=""
       >
-        Login
-      </button>
-    </form>
+        <towech-finance-shared-input
+          class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+          label="Username"
+        >
+          <div
+            class="input_component"
+          >
+            <input
+              placeholder=" "
+              type="text"
+            />
+            <label>
+              Username
+            </label>
+          </div>
+        </towech-finance-shared-input>
+        <towech-finance-shared-input
+          class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+          label="Password"
+          type="password"
+        >
+          <div
+            class="input_component"
+          >
+            <input
+              placeholder=" "
+              type="password"
+            />
+            <label>
+              Password
+            </label>
+          </div>
+        </towech-finance-shared-input>
+        <button
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+    </towech-finance-login-form>
   </div>
   
 </div>

@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login Form Must match the snapshot 1`] = `
+<div
+  id="root1"
+>
+  <form
+    class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+    novalidate=""
+  >
+    <towech-finance-shared-input
+      class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+      label="Username"
+    >
+      <div
+        class="input_component"
+      >
+        <input
+          placeholder=" "
+          type="text"
+        />
+        <label>
+          Username
+        </label>
+      </div>
+    </towech-finance-shared-input>
+    <towech-finance-shared-input
+      class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+      label="Password"
+      type="password"
+    >
+      <div
+        class="input_component"
+      >
+        <input
+          placeholder=" "
+          type="password"
+        />
+        <label>
+          Password
+        </label>
+      </div>
+    </towech-finance-shared-input>
+    <button
+      type="submit"
+    >
+      Login
+    </button>
+  </form>
+</div>
+`;

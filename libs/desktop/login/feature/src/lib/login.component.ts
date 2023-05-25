@@ -6,14 +6,12 @@
 // Libraries
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 // Modules
-import { NgrxFormsModule } from 'ngrx-forms';
 import { AsyncPipe, NgIf } from '@angular/common';
 // Components
 import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
-
+import { LoginFormComponent } from '@towech-finance/desktop/login/ui/form';
 // NGRX
 import { LoginStore } from './login.store';
-import { SharedInputComponent } from '@towech-finance/shared/ui/input';
 
 // TODO: Testing
 @Component({
@@ -21,26 +19,17 @@ import { SharedInputComponent } from '@towech-finance/shared/ui/input';
   selector: 'towech-finance-webclient-dashboard',
   styleUrls: ['./login.component.scss'],
   providers: [LoginStore],
-  imports: [AsyncPipe, NgIf, DesktopToasterComponent, NgrxFormsModule, SharedInputComponent],
+  imports: [AsyncPipe, NgIf, DesktopToasterComponent, LoginFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <towech-finance-toaster></towech-finance-toaster>
     <div class="login-container" *ngIf="store.form$ | async as form">
       <h1>Login</h1>
-      <form novalidate [ngrxFormState]="form" (submit)="onLoginFormSubmit()">
-        <towech-finance-shared-input
-          label="Username"
-          [ngrxFormControlState]="form.controls.username"
-          (ngrxFormsAction)="store.handleFormAction($event)">
-        </towech-finance-shared-input>
-        <towech-finance-shared-input
-          label="Password"
-          type="password"
-          [ngrxFormControlState]="form.controls.password"
-          (ngrxFormsAction)="store.handleFormAction($event)">
-        </towech-finance-shared-input>
-        <button type="submit">Login</button>
-      </form>
+      <towech-finance-login-form
+        [form]="form"
+        (submitted)="onLoginFormSubmit()"
+        (updated)="store.handleFormAction($event)">
+      </towech-finance-login-form>
     </div>
   `,
 })
