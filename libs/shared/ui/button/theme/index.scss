@@ -16,6 +16,9 @@
     button:hover {
       background-color: core.get-palette-hue($accent, 400);
     }
+    button:active {
+      background-color: core.get-palette-hue($accent, 600);
+    }
 
     button.success {
       background-color: core.get-palette-hue($success, 500);
@@ -23,6 +26,9 @@
     }
     button.success:hover {
       background-color: core.get-palette-hue($success, 400);
+    }
+    button.success:active {
+      background-color: core.get-palette-hue($success, 600);
     }
 
     button.error {
@@ -32,6 +38,9 @@
     button.error:hover {
       background-color: core.get-palette-hue($error, 400);
     }
+    button.error:active {
+      background-color: core.get-palette-hue($error, 600);
+    }
 
     button.warning {
       background-color: core.get-palette-hue($warn, 500);
@@ -39,6 +48,9 @@
     }
     button.warning:hover {
       background-color: core.get-palette-hue($warn, 400);
+    }
+    button.warning:active {
+      background-color: core.get-palette-hue($warn, 600);
     }
   }
 }
