@@ -60,14 +60,14 @@ export class LoginStore extends ComponentStore<State> {
   public form$ = this.select(state => state.form);
 
   // Effects -------------------------------------------------------
-  public handleFormAction = this.effect((action$: Observable<Actions<string>>) =>
+  public handleFormAction = this.effect((action$: Observable<Actions<string> | Actions<boolean>>) =>
     this.updateForm$(action$)
   );
 
   public login = this.effect((login$: Observable<void>) => this.handleLogin$(login$));
 
   // Pipes ---------------------------------------------------------
-  private updateForm$(action$: Observable<Actions<string>>): Observable<void> {
+  private updateForm$(action$: Observable<Actions<string> | Actions<boolean>>): Observable<void> {
     return action$.pipe(
       concatLatestFrom(() => this.form$),
       map(([action, form]) => formGroupReducer(form, action)), // Generates the new form-state

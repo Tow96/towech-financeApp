@@ -55,11 +55,38 @@ exports[`Desktop Login Component Must match the snapshot 1`] = `
             </label>
           </div>
         </towech-finance-shared-input>
-        <button
-          type="submit"
+        <div
+          class="bottom-row"
         >
-          Login
-        </button>
+          <towech-finance-checkbox
+            class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
+            label="Keep Session"
+          >
+            <div
+              class="checkbox"
+            >
+              <input
+                id="towech-checkbox"
+                type="checkbox"
+              />
+              <label
+                for="towech-checkbox"
+              >
+                Keep Session
+              </label>
+            </div>
+          </towech-finance-checkbox>
+          <towech-finance-button
+            type="submit"
+          >
+            <button
+              class="accent"
+              type="submit"
+            >
+              Login
+            </button>
+          </towech-finance-button>
+        </div>
       </form>
     </towech-finance-login-form>
   </div>
