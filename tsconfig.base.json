@@ -54,6 +54,7 @@
       "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
       "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
+      "@towech-finance/shared/ui/input": ["libs/shared/ui/input/src/index.ts"],
       "@towech-finance/shared/ui/themes": ["libs/shared/ui/themes/src/index.ts"],
       "@towech-finance/shared/utils/models": ["libs/shared/utils/models/src/index.ts"],
       "@towech-finance/shared/utils/pipes": ["libs/shared/utils/pipes/src/index.ts"]

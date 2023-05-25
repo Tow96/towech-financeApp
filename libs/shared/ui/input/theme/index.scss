@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use 'libs/shared/ui/themes' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $primary: map.get($colors, primary);
+  $accent: map.get($colors, accent);
+  $error: map.get($colors, error);
+
+  towech-finance-shared-input .input_component {
+    input {
+      background-color: core.get-palette-hue($primary, 600);
+      color: core.get-palette-hue-contrast($primary, 500);
+    }
+
+    label {
+      background-color: transparent;
+      color: core.get-palette-hue-contrast($primary, 500);
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      color: core.get-palette-hue($accent, 500);
+    }
+  }
+
+  towech-finance-shared-input.ngrx-forms-invalid.ngrx-forms-dirty .input_component {
+    label {
+      color: core.get-palette-hue($error, 500);
+      font-weight: 600;
+    }
+  }
+}

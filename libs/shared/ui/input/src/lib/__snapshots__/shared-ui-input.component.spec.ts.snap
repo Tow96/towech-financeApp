@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Shared Input Component Must match the snapshot 1`] = `
+<div
+  id="root2"
+>
+  <div
+    class="input_component"
+  >
+    <input
+      placeholder=" "
+      type="text"
+    />
+    <label>
+      TEST
+    </label>
+  </div>
+</div>
+`;
