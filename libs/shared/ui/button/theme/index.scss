@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use 'libs/shared/ui/themes' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $accent: map.get($colors, accent);
+  $success: map.get($colors, success);
+  $error: map.get($colors, error);
+  $warn: map.get($colors, warning);
+
+  towech-finance-button {
+    button {
+      background-color: core.get-palette-hue($accent, 500);
+      color: core.get-palette-hue-contrast($accent, 500);
+    }
+    button:hover {
+      background-color: core.get-palette-hue($accent, 400);
+    }
+
+    button.success {
+      background-color: core.get-palette-hue($success, 500);
+      color: core.get-palette-hue-contrast($success, 500);
+    }
+    button.success:hover {
+      background-color: core.get-palette-hue($success, 400);
+    }
+
+    button.error {
+      background-color: core.get-palette-hue($error, 500);
+      color: core.get-palette-hue-contrast($error, 500);
+    }
+    button.error:hover {
+      background-color: core.get-palette-hue($error, 400);
+    }
+
+    button.warning {
+      background-color: core.get-palette-hue($warn, 500);
+      color: core.get-palette-hue-contrast($warn, 500);
+    }
+    button.warning:hover {
+      background-color: core.get-palette-hue($warn, 400);
+    }
+  }
+}

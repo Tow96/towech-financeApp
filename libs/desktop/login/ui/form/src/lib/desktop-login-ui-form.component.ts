@@ -5,13 +5,14 @@
  */
 // Libraries
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ButtonComponent } from '@towech-finance/shared/ui/button';
 import { SharedInputComponent } from '@towech-finance/shared/ui/input';
 import { Actions, FormGroupState, NgrxFormsModule, createFormGroupState } from 'ngrx-forms';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-login-form',
-  imports: [NgrxFormsModule, SharedInputComponent],
+  imports: [NgrxFormsModule, SharedInputComponent, ButtonComponent],
   template: `
     <form novalidate [ngrxFormState]="form" (submit)="onSubmit()">
       <towech-finance-shared-input
@@ -25,7 +26,7 @@ import { Actions, FormGroupState, NgrxFormsModule, createFormGroupState } from '
         [ngrxFormControlState]="form.controls.password"
         (ngrxFormsAction)="updateForm($event)">
       </towech-finance-shared-input>
-      <button type="submit">Login</button>
+      <towech-finance-button type="submit">Login</towech-finance-button>
     </form>
   `,
 })

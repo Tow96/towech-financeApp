@@ -6,71 +6,20 @@
 @use 'libs/desktop/toasts/ui/theme/desktop-toaster.component' as toaster;
 @use 'libs/desktop/login/ui/theme' as login;
 @use 'libs/shared/ui/input/theme' as inputs;
+@use 'libs/shared/ui/button/theme' as buttons;
 // --------------------------------------
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
-
-// TODO: Move this to its correct location
-@mixin color($theme) {
-  $colors: map.get($theme, color);
-  $accent: map.get($colors, accent);
-  $success: map.get($colors, success);
-  $error: map.get($colors, error);
-  $warn: map.get($colors, warning);
-
-  button {
-    background-color: core.get-palette-hue($accent, 500);
-    color: core.get-palette-hue-contrast($accent, 500);
-  }
-  button:hover {
-    background-color: core.get-palette-hue($accent, 400);
-  }
-
-  button.success {
-    background-color: core.get-palette-hue($success, 500);
-    color: core.get-palette-hue-contrast($success, 500);
-  }
-  button.success:hover {
-    background-color: core.get-palette-hue($success, 400);
-  }
-
-  button.error {
-    background-color: core.get-palette-hue($error, 500);
-    color: core.get-palette-hue-contrast($error, 500);
-  }
-  button.error:hover {
-    background-color: core.get-palette-hue($error, 400);
-  }
-
-  button.warning {
-    background-color: core.get-palette-hue($warn, 500);
-    color: core.get-palette-hue-contrast($warn, 500);
-  }
-  button.warning:hover {
-    background-color: core.get-palette-hue($warn, 400);
-  }
-}
 
 :root {
   font-family: 'Raleway', serif;
 }
 
-@include color(theme.$gold-night-theme);
-
 @include core.color(theme.$gold-night-theme);
+@include buttons.color(theme.$gold-night-theme);
 @include inputs.color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);
 @include login.color(theme.$gold-night-theme);
-
-// TODO: MOVE this to its correct locations
-button {
-  border: 0;
-  width: 80px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 20px;
-  margin-right: 20px;
-}
 
 webclient-root {
   z-index: 1;

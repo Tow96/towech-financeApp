@@ -13,7 +13,6 @@ import { LoginFormComponent } from '@towech-finance/desktop/login/ui/form';
 // NGRX
 import { LoginStore } from './login.store';
 
-// TODO: Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
