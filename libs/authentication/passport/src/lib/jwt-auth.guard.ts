@@ -17,7 +17,7 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 // TODO i18n
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH) {
-  constructor(
+  public constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {

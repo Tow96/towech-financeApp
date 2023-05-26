@@ -14,6 +14,7 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
 import { LogId, PidWinstonLogger } from '@towech-finance/shared/features/logger';
 // Models
+import { Response, CookieOptions } from 'express';
 import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';
 import { AuthToken, RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
 // Guards
@@ -42,7 +43,7 @@ enum COOKIES {
 @Controller()
 @ApiTags('')
 export class SignageController {
-  constructor(
+  public constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly tokens: AuthenticationTokenService,
     private readonly logger: PidWinstonLogger,
@@ -80,7 +81,7 @@ export class SignageController {
     @User() user: UserModel,
     @Body() body: LoginDto,
     @LogId() logId: string,
-    @Res({ passthrough: true }) res
+    @Res({ passthrough: true }) res: Response
   ): Promise<AuthToken> {
     this.logger.pidLog(logId, `Logging in user: ${user._id}`);
 
@@ -95,7 +96,7 @@ export class SignageController {
     const expiration = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     const isProd = this.config.get<string>('NODE_ENV') === 'production';
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
       httpOnly: true,
       expires: body.keepSession ? expiration : undefined,
       secure: isProd ? true : undefined,

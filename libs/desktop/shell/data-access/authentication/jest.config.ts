@@ -1,9 +1,12 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-shell-data-authentication',
+  displayName: 'desktop-shell-data-access-authentication',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/desktop/shell/data/authentication',
+  // coverageDirectory: '../../../../../coverage/libs/desktop/shell/data-access/authentication',
+  coverageDirectory: '../../../../../coverage/libs/desktop/shell/data-access/authentication',
+  collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
+  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

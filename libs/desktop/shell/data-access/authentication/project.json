@@ -1,5 +1,5 @@
 {
-  "name": "desktop-shell-data-authentication",
+  "name": "desktop-shell-data-access-authentication",
   "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/desktop/shell/data-access/authentication/src",
   "prefix": "towech-finance",

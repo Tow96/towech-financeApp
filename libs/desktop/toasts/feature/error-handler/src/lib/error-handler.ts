@@ -13,10 +13,10 @@ export enum messages {
 
 @Injectable()
 export class DesktopGlobalErrorToastClass implements ErrorHandler {
-  constructor(private readonly injector: Injector) {}
+  public constructor(private readonly injector: Injector) {}
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  handleError(error: any): void {
+  public handleError(error: any): void {
     let message = messages.UNKNOWN;
 
     if (error) {
@@ -29,7 +29,7 @@ export class DesktopGlobalErrorToastClass implements ErrorHandler {
     }
 
     const toastService = this.injector.get<DesktopToasterService>(DesktopToasterService);
-    toastService.add(message);
+    toastService.addError(message);
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }

@@ -36,7 +36,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/explicit-member-accessibility": "error"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
@@ -44,7 +46,7 @@
       "rules": {}
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.cy.ts"],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.cy.ts", "*.mock.ts"],
       "env": {
         "jest": true
       },

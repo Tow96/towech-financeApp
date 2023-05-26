@@ -14,14 +14,14 @@ import { RefreshToken, UserModel } from '@towech-finance/shared/utils/models';
 
 @Injectable()
 export class AuthenticationTokenService {
-  constructor(private readonly jwt: JwtService, private readonly config: ConfigService) {}
+  public constructor(private readonly jwt: JwtService, private readonly config: ConfigService) {}
 
   /** generateAuthToken
    * Creates an authToken
    *
    * @returns The Token
    */
-  generateAuthToken(user: UserModel): string {
+  public generateAuthToken(user: UserModel): string {
     const expiresIn = this.config.get<string>('AUTH_TOKEN_EXPIRATION');
     const secret = this.config.get<string>('AUTH_TOKEN_SECRET');
     return this.jwt.sign({ ...user }, { expiresIn, secret });
@@ -32,7 +32,7 @@ export class AuthenticationTokenService {
    *
    * @returns The token
    */
-  generateRefreshToken(user: UserModel, keepSession = false): { token: string; id: string } {
+  public generateRefreshToken(user: UserModel, keepSession = false): { token: string; id: string } {
     const secret = this.config.get<string>('REFRESH_TOKEN_SECRET');
     const expiresIn = keepSession
       ? this.config.get<string>('REFRESH_TOKEN_EXPIRATION')

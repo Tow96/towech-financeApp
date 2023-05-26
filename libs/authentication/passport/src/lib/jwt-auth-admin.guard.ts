@@ -18,7 +18,7 @@ import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 // TODO i18n
 @Injectable()
 export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH_ADMIN) {
-  constructor(
+  public constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {

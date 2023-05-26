@@ -7,7 +7,7 @@ import { LogIdMiddleware } from './log-id.middleware';
   exports: [PidWinstonLogger],
 })
 export class SharedFeaturesLoggerModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  public configure(consumer: MiddlewareConsumer) {
     consumer.apply(LogIdMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

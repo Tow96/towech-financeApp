@@ -1,0 +1,50 @@
+.input_component {
+  $bezel: 0.5rem;
+  $radius: 10px;
+
+  position: relative;
+  margin: 25px 5px 20px;
+
+  label {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    background: none;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 0.8;
+    padding: calc($bezel * 0.75) calc($bezel * 0.5);
+    pointer-events: none;
+    margin: calc($bezel * 0.6) calc($bezel * 0.5);
+    white-space: nowrap;
+
+    transform: translate(0, 0);
+    transform-origin: 0 0;
+    transition: transform 120ms ease-in;
+  }
+
+  input {
+    border: none;
+    border-radius: $radius;
+    box-sizing: border-box;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    display: block;
+    font-family: inherit;
+    font-size: 26px;
+    font-weight: 400;
+    padding: 7px 15px;
+    width: 100%;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    transform: translate(0.25rem, -70%) scale(0.57);
+    font-weight: 700;
+  }
+}

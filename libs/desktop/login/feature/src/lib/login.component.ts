@@ -1,32 +1,41 @@
+/** login.component.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Login Feature component
+ */
+// Libraries
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginStore } from './login.state';
+// Modules
+import { AsyncPipe, NgIf } from '@angular/common';
+// Components
+import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+import { LoginFormComponent } from '@towech-finance/desktop/login/ui/form';
+// NGRX
+import { LoginStore } from './login.store';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
-  imports: [ReactiveFormsModule],
+  styleUrls: ['./login.component.scss'],
   providers: [LoginStore],
+  imports: [AsyncPipe, NgIf, DesktopToasterComponent, LoginFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="login-container">
-      <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()">
-        <input type="text" formControlName="username" placeholder="Username" />
-        <input type="password" formControlName="password" placeholder="Password" />
-        <button type="submit">Login</button>
-      </form>
+    <towech-finance-toaster></towech-finance-toaster>
+    <div class="login-container" *ngIf="store.form$ | async as form">
+      <h1>Login</h1>
+      <towech-finance-login-form
+        [form]="form"
+        (submitted)="onLoginFormSubmit()"
+        (updated)="store.handleFormAction($event)">
+      </towech-finance-login-form>
     </div>
   `,
 })
 export class DesktopLoginComponent {
-  public loginForm = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-  });
+  public constructor(public readonly store: LoginStore) {}
 
-  constructor(private readonly fb: FormBuilder, private readonly loginStore: LoginStore) {}
-
-  onLoginFormSubmit() {
-    this.loginStore.login(this.loginForm.value);
+  public onLoginFormSubmit() {
+    this.store.login();
   }
 }

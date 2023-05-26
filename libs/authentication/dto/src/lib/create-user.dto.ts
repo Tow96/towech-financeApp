@@ -26,7 +26,7 @@ export class CreateUserDto implements CreateUser {
   @IsString({ message: 'Name must be a string' })
   @MinLength(3, { message: 'Name must be at least three characters long' })
   @ApiProperty({ description: 'Name of the new user', required: true })
-  name: string;
+  public name: string;
 
   @IsString({ message: 'Email must be a valid address' })
   @IsEmail()
@@ -34,7 +34,7 @@ export class CreateUserDto implements CreateUser {
     description: 'Email address of the user, it is also used as the username',
     required: true,
   })
-  mail: string;
+  public mail: string;
 
   @IsOptional()
   @Transform(({ value }) => convertToRole(value))
@@ -43,5 +43,5 @@ export class CreateUserDto implements CreateUser {
     description: 'Role that the new user will take, defaults to USER',
     required: false,
   })
-  role: UserRoles;
+  public role: UserRoles;
 }

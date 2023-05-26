@@ -18,7 +18,7 @@ import { RefreshToken } from '@towech-finance/shared/utils/models';
 // TODO: i18n
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames.REFRESH) {
-  constructor(
+  public constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {

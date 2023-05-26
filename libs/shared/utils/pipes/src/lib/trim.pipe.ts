@@ -30,7 +30,7 @@ export class TrimPipe implements PipeTransform {
     return values;
   }
 
-  transform(values: any, { type }: ArgumentMetadata) {
+  public transform(values: any, { type }: ArgumentMetadata) {
     if (!(this.isObj(values) && type === 'body')) return values;
 
     return this.trim(values);
