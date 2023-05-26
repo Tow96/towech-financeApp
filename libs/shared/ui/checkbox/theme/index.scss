@@ -5,6 +5,7 @@
   $colors: map.get($theme, color);
   $primary: map.get($colors, primary);
   $accent: map.get($colors, accent);
+  $error: map.get($colors, error);
 
   towech-finance-checkbox .checkbox {
     input {
@@ -15,8 +16,28 @@
       color: core.get-palette-hue($accent, 500);
     }
 
+    input:focus-visible {
+      box-shadow: 0 0 0 0.1rem rgba($color: core.get-palette-hue($accent, 300), $alpha: 0.5),
+        inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
+    }
+
     input:focus + label {
       color: core.get-palette-hue($accent, 500);
+    }
+  }
+
+  towech-finance-checkbox.ngrx-forms-invalid.ngrx-forms-dirty .checkbox {
+    input:focus-visible {
+      box-shadow: 0 0 0 0.1rem rgba($color: core.get-palette-hue($error, 300), $alpha: 0.5),
+        inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
+    }
+
+    input:after {
+      color: core.get-palette-hue($error, 500);
+    }
+
+    input:focus + label {
+      color: core.get-palette-hue($error, 500);
     }
   }
 }

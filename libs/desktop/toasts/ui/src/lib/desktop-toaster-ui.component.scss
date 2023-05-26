@@ -4,7 +4,6 @@
 
   height: $height;
   border-radius: $border-radius;
-  width: 100%;
 
   display: inline-flex;
   flex-flow: row nowrap;
@@ -25,5 +24,21 @@
     padding-right: 0.5rem;
     flex: 1;
     width: 8.5rem;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .desktop-toast {
+    .message {
+      width: 12rem;
+    }
+  }
+}
+
+@media screen and (min-width: 961px) {
+  .desktop-toast {
+    .message {
+      width: 15rem;
+    }
   }
 }

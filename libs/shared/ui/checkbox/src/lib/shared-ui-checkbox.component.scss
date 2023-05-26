@@ -27,7 +27,7 @@
     display: block;
   }
 
-  input:focus {
+  input:focus-visible {
     outline: none;
   }
 
@@ -35,7 +35,7 @@
     cursor: pointer;
     font-weight: 500;
     font-size: 15px;
-    transition: font-weight, color 120ms;
+    transition: font-weight, color 120ms ease-in;
   }
 
   input:focus + label {

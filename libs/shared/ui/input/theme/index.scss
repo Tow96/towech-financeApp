@@ -18,6 +18,11 @@
       color: core.get-palette-hue-contrast($primary, 500);
     }
 
+    input:focus-visible {
+      box-shadow: 0 0 0 0.1rem rgba($color: core.get-palette-hue($accent, 300), $alpha: 0.5),
+        inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
+    }
+
     input:focus + label,
     input:not(:placeholder-shown) + label {
       color: core.get-palette-hue($accent, 500);
@@ -28,6 +33,11 @@
     label {
       color: core.get-palette-hue($error, 500);
       font-weight: 600;
+    }
+
+    input:focus-visible {
+      box-shadow: 0 0 0 0.1rem rgba($color: core.get-palette-hue($error, 300), $alpha: 0.5),
+        inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
     }
   }
 }
