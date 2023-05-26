@@ -1,6 +1,6 @@
 .input_component {
   $bezel: 0.5rem;
-  $radius: 10px;
+  $radius: 5px;
 
   position: relative;
   margin: 25px 5px 20px;
@@ -28,8 +28,7 @@
     border: none;
     border-radius: $radius;
     box-sizing: border-box;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     display: block;
     font-family: inherit;
     font-size: 26px;
@@ -44,7 +43,7 @@
 
   input:focus + label,
   input:not(:placeholder-shown) + label {
-    transform: translate(0.25rem, -70%) scale(0.57);
+    transform: translate(0.25rem, -73%) scale(0.57);
     font-weight: 700;
   }
 }

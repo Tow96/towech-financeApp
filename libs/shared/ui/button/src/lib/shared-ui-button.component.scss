@@ -11,3 +11,8 @@ button {
 button:active {
   box-shadow: inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
+
+button:focus-visible {
+  outline: 0;
+  transition: box-shadow 150ms ease-in;
+}
