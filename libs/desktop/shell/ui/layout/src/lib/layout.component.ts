@@ -11,10 +11,16 @@ import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
   standalone: true,
   selector: 'towech-finance-webclient-layout',
   imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
+  styleUrls: ['layout.component.scss'],
   template: `
-    <towech-finance-toaster></towech-finance-toaster>
-    <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
-    <router-outlet></router-outlet>
+    <div class="layout">
+      <towech-finance-webclient-navbar class="nav"></towech-finance-webclient-navbar>
+      <div class="header">TODO: HEADER</div>
+      <div class="content">
+        <towech-finance-toaster></towech-finance-toaster>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   `,
 })
 export class LayoutComponent {}
