@@ -85,7 +85,7 @@ export class SignageController {
   ): Promise<AuthToken> {
     this.logger.pidLog(logId, `Logging in user: ${user._id}`);
 
-    const refreshToken = this.tokens.generateRefreshToken(user);
+    const refreshToken = this.tokens.generateRefreshToken(user, body.keepSession);
     const authToken = this.tokens.generateAuthToken(user);
     this.logger.pidLog(logId, `Generated tokens`);
 
