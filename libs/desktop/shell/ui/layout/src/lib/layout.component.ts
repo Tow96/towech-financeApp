@@ -13,14 +13,21 @@ import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
   imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
   styleUrls: ['layout.component.scss'],
   template: `
+    <towech-finance-toaster></towech-finance-toaster>
     <div class="layout">
-      <towech-finance-webclient-navbar class="nav"></towech-finance-webclient-navbar>
+      <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
+      <div class="contents">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <!-- <div class="layout">
+      < !-- <towech-finance-webclient-navbar class="nav"></towech-finance-webclient-navbar>
       <div class="header">TODO: HEADER</div>
       <div class="content">
         <towech-finance-toaster></towech-finance-toaster>
         <router-outlet></router-outlet>
-      </div>
-    </div>
+      </div> -- >
+    </div> -->
   `,
 })
 export class LayoutComponent {}

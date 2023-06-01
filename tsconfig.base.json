@@ -31,6 +31,7 @@
       "@towech-finance/desktop/login/ui/form": ["libs/desktop/login/ui/form/src/index.ts"],
       "@towech-finance/desktop/mocks": ["libs/desktop/mocks/src/index.ts"],
       "@towech-finance/desktop/navbar/feature": ["libs/desktop/navbar/feature/src/index.ts"],
+      "@towech-finance/desktop/navbar/ui/item": ["libs/desktop/navbar/ui/item/src/index.ts"],
       "@towech-finance/desktop/shell/data-access/authentication": [
         "libs/desktop/shell/data-access/authentication/src/index.ts"
       ],
