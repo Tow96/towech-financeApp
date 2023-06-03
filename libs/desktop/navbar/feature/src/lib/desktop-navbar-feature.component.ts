@@ -7,53 +7,68 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 // Modules
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgFor } from '@angular/common';
 // NGRX
 import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 // Components
 import { DesktopNavbarItemComponent } from '@towech-finance/desktop/navbar/ui/item';
-// icons
-import { faCircleUp, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+// Models
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-// Libraries
+interface NavIcon {
+  title: string;
+  icon: IconProp;
+}
+
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-navbar',
-  imports: [FontAwesomeModule, DesktopNavbarItemComponent],
+  imports: [DesktopNavbarItemComponent, NgFor],
   styleUrls: ['./desktop-navbar-feature.component.scss'],
   template: `
-    <nav>
-      <div>
-        <div>
-          <fa-icon icon="circle-up"></fa-icon>
+    <div class="nav-wrapper">
+      <nav>
+        <!-- Menu toggle -->
+        <towech-finance-navbar-item
+          (click)="onToggleCollapse()"
+          label="Close"
+          [collapsed]="collapsed"
+          icon="bars"></towech-finance-navbar-item>
+        <div class="nav__divider"></div>
+        <!-- Menu items -->
+        <div class="nav__contents">
+          <towech-finance-navbar-item
+            *ngFor="let item of items"
+            [label]="item.title"
+            [collapsed]="collapsed"
+            [icon]="item.icon"></towech-finance-navbar-item>
         </div>
+        <!-- Logout -->
+        <div class="nav__divider"></div>
         <div>
-          <fa-icon icon="circle-up"></fa-icon>
+          <towech-finance-navbar-item
+            (click)="onLogoutClick()"
+            label="Logout"
+            [collapsed]="collapsed"></towech-finance-navbar-item>
         </div>
-      </div>
-      <div>
-        <towech-finance-navbar-item></towech-finance-navbar-item>
-        <!-- <div class="pesto" (click)="onLogoutClick()">
-          <fa-icon icon="right-from-bracket"></fa-icon>
-          This is a test
-        </div> -->
-      </div>
-    </nav>
+      </nav>
+    </div>
   `,
 })
 export class DesktopNavbarComponent {
-  public sidebar = false;
+  public items: NavIcon[] = [
+    { title: 'Transactions', icon: 'money-check-dollar' },
+    { title: 'Settings', icon: 'gear' },
+  ];
+  public collapsed = true;
 
-  public constructor(private readonly store: Store, private readonly library: FaIconLibrary) {
-    library.addIcons(faCircleUp, faRightFromBracket);
-  }
+  public constructor(private readonly store: Store) {}
 
-  public onLogoutClick() {
+  public onLogoutClick(): void {
     this.store.dispatch(UserActions.logout());
   }
 
-  public setSidebar() {
-    this.sidebar = true;
+  public onToggleCollapse(): void {
+    this.collapsed = !this.collapsed;
   }
 }

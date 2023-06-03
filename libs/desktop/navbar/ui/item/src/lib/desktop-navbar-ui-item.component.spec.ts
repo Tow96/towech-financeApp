@@ -11,6 +11,7 @@ describe('NavBar Item', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DesktopNavbarItemComponent);
     component = fixture.componentInstance;
+    component.label = 'Test';
 
     fixture.detectChanges();
     compiled = fixture.nativeElement;
@@ -18,7 +19,7 @@ describe('NavBar Item', () => {
 
   it('Should be defined', () => expect(component).toBeTruthy());
 
-  it.skip('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
+  it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
   //TEST GOES HERE
 });

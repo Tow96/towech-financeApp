@@ -6,8 +6,29 @@
   $primary: map.get($colors, primary);
 
   towech-finance-webclient-navbar {
-    nav {
+    .nav-wrapper {
+      nav {
+        background-color: core.get-palette-hue($primary, 500);
+
+        .nav__divider {
+          border-top: 2px solid core.get-palette-hue($primary, 900);
+        }
+      }
+    }
+  }
+
+  towech-finance-navbar-item {
+    button {
+      color: core.get-palette-hue-contrast($primary, 500);
+    }
+    button:hover {
+      background-color: core.get-palette-hue($primary, 400);
+    }
+    button:active {
       background-color: core.get-palette-hue($primary, 600);
+    }
+    button:focus-visible {
+      background-color: core.get-palette-hue($primary, 400);
     }
   }
 }

@@ -1,12 +1,23 @@
-nav {
-  height: 100%;
-  box-shadow: rgba(0, 0, 0, 0.22) 10px 0 10px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.nav-wrapper {
+  max-width: 63.328px;
 
-  .pesto {
-    width: 150px;
+  display: flex;
+  height: 100%;
+
+  nav {
+    height: 100%;
+    box-shadow: rgba(0, 0, 0, 0.22) 10px 0 10px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+
+    .nav__contents {
+      flex: 1;
+    }
+
+    .nav__divider {
+      margin: 0 15px;
+      padding-top: 10px;
+    }
   }
 }
