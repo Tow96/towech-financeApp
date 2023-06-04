@@ -6,6 +6,7 @@
 // Libraries
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 // Modules
 import { NgFor } from '@angular/common';
 // NGRX
@@ -18,6 +19,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 interface NavIcon {
   title: string;
   icon: IconProp;
+  route: string;
 }
 
 @Component({
@@ -41,7 +43,8 @@ interface NavIcon {
             *ngFor="let item of items"
             [label]="item.title"
             [collapsed]="collapsed"
-            [icon]="item.icon"></towech-finance-navbar-item>
+            [icon]="item.icon"
+            (click)="navigateTo(item.route)"></towech-finance-navbar-item>
         </div>
         <!-- Logout -->
         <div class="nav__divider"></div>
@@ -57,12 +60,12 @@ interface NavIcon {
 })
 export class DesktopNavbarComponent {
   public items: NavIcon[] = [
-    { title: 'Transactions', icon: 'money-check-dollar' },
-    { title: 'Settings', icon: 'gear' },
+    { title: 'Transactions', icon: 'money-check-dollar', route: '' },
+    { title: 'Settings', icon: 'gear', route: 'settings' },
   ];
   public collapsed = true;
 
-  public constructor(private readonly store: Store) {}
+  public constructor(private readonly store: Store, private readonly router: Router) {}
 
   public onLogoutClick(): void {
     this.store.dispatch(UserActions.logout());
@@ -70,5 +73,9 @@ export class DesktopNavbarComponent {
 
   public onToggleCollapse(): void {
     this.collapsed = !this.collapsed;
+  }
+
+  public navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 }
