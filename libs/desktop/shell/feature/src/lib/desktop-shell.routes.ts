@@ -11,9 +11,14 @@ export const desktopShellRoutes: Route[] = [
         path: '',
         loadComponent: async () =>
           (await import('@towech-finance/desktop/dashboard/feature')).DesktopDashboardComponent,
-        canActivate: [AuthGuard],
+      },
+      {
+        path: 'settings',
+        loadComponent: async () =>
+          (await import('@towech-finance/desktop/settings/feature')).SettingsFeatureComponent,
       },
     ],
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
