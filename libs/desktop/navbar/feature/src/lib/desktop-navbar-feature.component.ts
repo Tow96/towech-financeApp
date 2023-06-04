@@ -44,6 +44,7 @@ interface NavIcon {
             [label]="item.title"
             [collapsed]="collapsed"
             [icon]="item.icon"
+            [active]="isRouteActive(item.route)"
             (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
         </div>
         <!-- Logout -->
@@ -77,5 +78,10 @@ export class DesktopNavbarComponent {
 
   public navigateTo(route: string): void {
     this.router.navigate([route]);
+  }
+
+  public isRouteActive(route: string): boolean {
+    const currentRoute = this.router.url.slice(1);
+    return route === currentRoute;
   }
 }

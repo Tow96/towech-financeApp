@@ -29,6 +29,7 @@ button:disabled {
   pointer-events: none;
   text-decoration: underline dotted;
   text-underline-offset: 3px;
+  transition: color 100ms ease-in;
 }
 
 .label {

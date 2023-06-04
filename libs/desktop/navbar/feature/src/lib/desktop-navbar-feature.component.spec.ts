@@ -1,6 +1,7 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Tested elements
 import { DesktopNavbarComponent } from './desktop-navbar-feature.component';
 import { Store, StoreModule } from '@ngrx/store';
@@ -17,8 +18,8 @@ describe('Desktop Navbar', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
-      providers: [provideRouter([{ path: 'test', redirectTo: '' }])],
+      imports: [StoreModule.forRoot({}), BrowserAnimationsModule],
+      providers: [provideRouter([{ path: 'test', component: DesktopNavbarComponent }])],
     });
     fixture = TestBed.createComponent(DesktopNavbarComponent);
     component = fixture.componentInstance;
@@ -59,6 +60,20 @@ describe('Desktop Navbar', () => {
       component.navigateTo('test');
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(['test']);
+    });
+  });
+
+  describe('isRouteActive', () => {
+    describe('When it is called with the same route as the current', () => {
+      it('Should return true', () => {
+        expect(component.isRouteActive('')).toBe(true);
+      });
+    });
+
+    describe('When it is called with a different route as the current', () => {
+      it('Should return true', () => {
+        expect(component.isRouteActive('test')).toBe(false);
+      });
     });
   });
 });
