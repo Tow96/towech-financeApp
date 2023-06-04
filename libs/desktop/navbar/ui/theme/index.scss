@@ -4,6 +4,7 @@
 @mixin color($theme) {
   $colors: map.get($theme, color);
   $primary: map.get($colors, primary);
+  $accent: map.get($colors, accent);
 
   towech-finance-webclient-navbar {
     .nav-wrapper {
@@ -29,6 +30,11 @@
     }
     button:focus-visible {
       background-color: core.get-palette-hue($primary, 400);
+    }
+
+    button:disabled {
+      color: core.get-palette-hue($accent, 500);
+      background-color: transparent;
     }
   }
 }

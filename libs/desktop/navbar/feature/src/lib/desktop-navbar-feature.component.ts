@@ -32,7 +32,7 @@ interface NavIcon {
       <nav>
         <!-- Menu toggle -->
         <towech-finance-navbar-item
-          (click)="onToggleCollapse()"
+          (clicked)="onToggleCollapse()"
           label="Close"
           [collapsed]="collapsed"
           icon="bars"></towech-finance-navbar-item>
@@ -44,13 +44,13 @@ interface NavIcon {
             [label]="item.title"
             [collapsed]="collapsed"
             [icon]="item.icon"
-            (click)="navigateTo(item.route)"></towech-finance-navbar-item>
+            (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
         </div>
         <!-- Logout -->
         <div class="nav__divider"></div>
         <div>
           <towech-finance-navbar-item
-            (click)="onLogoutClick()"
+            (clicked)="onLogoutClick()"
             label="Logout"
             [collapsed]="collapsed"></towech-finance-navbar-item>
         </div>
@@ -63,7 +63,7 @@ export class DesktopNavbarComponent {
     { title: 'Transactions', icon: 'money-check-dollar', route: '' },
     { title: 'Settings', icon: 'gear', route: 'settings' },
   ];
-  public collapsed = true;
+  public collapsed = false;
 
   public constructor(private readonly store: Store, private readonly router: Router) {}
 

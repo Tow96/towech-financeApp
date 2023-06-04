@@ -24,6 +24,13 @@ button:focus-visible {
   transition: box-shadow 150ms ease-in;
 }
 
+button:disabled {
+  box-shadow: none;
+  pointer-events: none;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
 .label {
   padding-left: 15px;
   font-size: 20px;

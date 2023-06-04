@@ -4,7 +4,7 @@
  * Component that represents the menuitems
  */
 // Libraries
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 // Modules
 import { NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -25,7 +25,7 @@ import { menuTransitions } from './desktop-navbar-ui-item.animations';
   imports: [FontAwesomeModule, NgIf],
   styleUrls: ['desktop-navbar-ui-item.component.scss'],
   template: `
-    <button>
+    <button [disabled]="active" (click)="onBttnClick()">
       <div>
         <fa-icon [icon]="icon" size="2x" [fixedWidth]="true"></fa-icon>
         <div class="label" *ngIf="!collapsed" @pesto>
@@ -40,8 +40,14 @@ export class DesktopNavbarItemComponent {
   @Input() public label = '';
   @Input() public icon: IconProp = 'right-from-bracket';
   @Input() public collapsed = true;
+  @Input() public active = false;
+  @Output() public clicked = new EventEmitter<void>();
 
   public constructor(private readonly library: FaIconLibrary) {
     library.addIcons(faBars, faRightFromBracket, faGear, faMoneyCheckDollar);
+  }
+
+  public onBttnClick(): void {
+    this.clicked.next();
   }
 }
