@@ -4,7 +4,7 @@
  * Navbar for the complete app
  */
 // Libraries
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 // Modules
@@ -64,9 +64,13 @@ export class DesktopNavbarComponent {
     { title: 'Transactions', icon: 'money-check-dollar', route: '' },
     { title: 'Settings', icon: 'gear', route: 'settings' },
   ];
-  public collapsed = false;
+  public collapsed = true;
 
-  public constructor(private readonly store: Store, private readonly router: Router) {}
+  public constructor(
+    private readonly store: Store,
+    private readonly router: Router,
+    public eRef: ElementRef
+  ) {}
 
   public onLogoutClick(): void {
     this.store.dispatch(UserActions.logout());
@@ -78,10 +82,18 @@ export class DesktopNavbarComponent {
 
   public navigateTo(route: string): void {
     this.router.navigate([route]);
+    this.collapsed = true;
   }
 
   public isRouteActive(route: string): boolean {
     const currentRoute = this.router.url.slice(1);
     return route === currentRoute;
+  }
+
+  @HostListener('document:click', ['$event'])
+  public clickListener(event: PointerEvent): void {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.collapsed = true;
+    }
   }
 }

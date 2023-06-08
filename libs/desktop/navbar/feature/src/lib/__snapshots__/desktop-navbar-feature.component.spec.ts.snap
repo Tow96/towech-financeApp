@@ -34,11 +34,6 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
                 />
               </svg>
             </fa-icon>
-            <div
-              class="label ng-trigger ng-trigger-pesto"
-            >
-               Close 
-            </div>
             
           </div>
         </button>
@@ -74,11 +69,6 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
                   />
                 </svg>
               </fa-icon>
-              <div
-                class="label ng-trigger ng-trigger-pesto"
-              >
-                 Transactions 
-              </div>
               
             </div>
           </button>
@@ -106,11 +96,6 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
                   />
                 </svg>
               </fa-icon>
-              <div
-                class="label ng-trigger ng-trigger-pesto"
-              >
-                 Settings 
-              </div>
               
             </div>
           </button>
@@ -146,11 +131,6 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
                   />
                 </svg>
               </fa-icon>
-              <div
-                class="label ng-trigger ng-trigger-pesto"
-              >
-                 Logout 
-              </div>
               
             </div>
           </button>

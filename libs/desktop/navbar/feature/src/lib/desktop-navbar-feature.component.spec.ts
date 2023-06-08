@@ -61,6 +61,12 @@ describe('Desktop Navbar', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(['test']);
     });
+
+    it('Should collapse the menu if it is open', () => {
+      component.collapsed = false;
+      component.navigateTo('test');
+      expect(component.collapsed).toBe(true);
+    });
   });
 
   describe('isRouteActive', () => {
@@ -73,6 +79,36 @@ describe('Desktop Navbar', () => {
     describe('When it is called with a different route as the current', () => {
       it('Should return true', () => {
         expect(component.isRouteActive('test')).toBe(false);
+      });
+    });
+  });
+
+  describe('When onOutside click is called', () => {
+    let clickedTarget: any;
+
+    describe('When clicking inside the navbar', () => {
+      it('Should do nothing', () => {
+        clickedTarget = compiled.children[0];
+        component.collapsed = true;
+        component.clickListener({ target: clickedTarget } as PointerEvent);
+        expect((component.collapsed = true));
+
+        component.collapsed = false;
+        component.clickListener({ target: clickedTarget } as PointerEvent);
+        expect((component.collapsed = false));
+      });
+    });
+
+    describe('When clicking outside the navbar', () => {
+      it('Should close the navbar', () => {
+        clickedTarget = document.createElement('p');
+        component.collapsed = true;
+        component.clickListener({ target: clickedTarget } as PointerEvent);
+        expect((component.collapsed = true));
+
+        component.collapsed = false;
+        component.clickListener({ target: clickedTarget } as PointerEvent);
+        expect((component.collapsed = true));
       });
     });
   });
