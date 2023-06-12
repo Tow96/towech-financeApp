@@ -8,7 +8,7 @@ import { Component, ElementRef, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 // Modules
-import { NgFor } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 // NGRX
 import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 // Components
@@ -25,35 +25,42 @@ interface NavIcon {
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-navbar',
-  imports: [DesktopNavbarItemComponent, NgFor],
+  imports: [DesktopNavbarItemComponent, NgFor, NgClass],
   styleUrls: ['./desktop-navbar-feature.component.scss'],
   template: `
     <div class="nav-wrapper">
-      <nav>
-        <!-- Menu toggle -->
-        <towech-finance-navbar-item
-          (clicked)="onToggleCollapse()"
-          label="Close"
-          [collapsed]="collapsed"
-          icon="bars"></towech-finance-navbar-item>
-        <div class="nav__divider"></div>
-        <!-- Menu items -->
-        <div class="nav__contents">
+      <nav [ngClass]="getNavClass()">
+        <!-- Menu toggle + header -->
+        <div class="header">
           <towech-finance-navbar-item
-            *ngFor="let item of items"
-            [label]="item.title"
+            (clicked)="onToggleCollapse()"
+            label="Close"
             [collapsed]="collapsed"
-            [icon]="item.icon"
-            [active]="isRouteActive(item.route)"
-            (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
+            icon="bars"></towech-finance-navbar-item>
+          <div class="title">
+            <h1>Header</h1>
+          </div>
         </div>
-        <!-- Logout -->
-        <div class="nav__divider"></div>
-        <div>
-          <towech-finance-navbar-item
-            (clicked)="onLogoutClick()"
-            label="Logout"
-            [collapsed]="collapsed"></towech-finance-navbar-item>
+        <!-- Menu contents -->
+        <div class="contents">
+          <div class="nav__divider desk__only"></div>
+          <div class="contents__main">
+            <towech-finance-navbar-item
+              *ngFor="let item of items"
+              [label]="item.title"
+              [collapsed]="collapsed"
+              [icon]="item.icon"
+              [active]="isRouteActive(item.route)"
+              (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
+          </div>
+          <!-- Logout -->
+          <div class="nav__divider"></div>
+          <div>
+            <towech-finance-navbar-item
+              (clicked)="onLogoutClick()"
+              label="Logout"
+              [collapsed]="collapsed"></towech-finance-navbar-item>
+          </div>
         </div>
       </nav>
     </div>
@@ -95,5 +102,11 @@ export class DesktopNavbarComponent {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.collapsed = true;
     }
+  }
+
+  public getNavClass(): Record<string, boolean> {
+    return {
+      deployed: !this.collapsed,
+    };
   }
 }

@@ -112,4 +112,20 @@ describe('Desktop Navbar', () => {
       });
     });
   });
+
+  describe('When getNavClass is called', () => {
+    it('Should return the correct classes', () => {
+      component.collapsed = true;
+      let result = component.getNavClass();
+      expect(result).toEqual({
+        deployed: false,
+      });
+
+      component.collapsed = false;
+      result = component.getNavClass();
+      expect(result).toEqual({
+        deployed: true,
+      });
+    });
+  });
 });

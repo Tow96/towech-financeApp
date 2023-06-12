@@ -12,7 +12,11 @@
         background-color: core.get-palette-hue($primary, 500);
 
         .nav__divider {
-          border-top: 2px solid core.get-palette-hue($primary, 900);
+          border-top: 2px solid core.get-palette-hue($primary, 700);
+        }
+
+        .contents {
+          background-color: inherit;
         }
       }
     }
