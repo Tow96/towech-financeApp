@@ -55,6 +55,7 @@
       ],
       "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src/index.ts"],
       "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
+      "@towech-finance/shared/features/i18n-nest": ["libs/shared/features/i18n-nest/src/index.ts"],
       "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
       "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
       "@towech-finance/shared/ui/button": ["libs/shared/ui/button/src/index.ts"],

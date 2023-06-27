@@ -8,6 +8,7 @@ import { AuthenticationHttpSignageModule } from '@towech-finance/authentication/
 import { SharedFeaturesMongoModule } from '@towech-finance/shared/features/mongo';
 // Misc
 import { AuthenticationShellRoutes } from './authentication-shell.routes';
+import { SharedFeaturesI18nNestModule } from '@towech-finance/shared/features/i18n-nest';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { AuthenticationShellRoutes } from './authentication-shell.routes';
     AuthenticationHttpSignageModule,
 
     SharedFeaturesMongoModule,
+
+    SharedFeaturesI18nNestModule,
   ],
 })
 export class AuthenticationShellFeatureModule {}
