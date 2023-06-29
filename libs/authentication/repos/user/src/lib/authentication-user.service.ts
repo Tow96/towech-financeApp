@@ -52,6 +52,11 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     super(model);
   }
 
+  /**
+   * Converts the databse user into the user Model that is used app wide
+   * @param {UserDocument} input - The user document
+   * @returns {UserModel} The user in Model format
+   */
   private ConvertUserDocToUser(input: UserDocument | null): UserModel | null {
     if (input === null) return null;
 
@@ -65,22 +70,33 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return output;
   }
 
+  /**
+   * Fetches a user by matching the email
+   * @param {string} mail - The user document
+   * @returns {UserModel | null} The retrieved user, null if not found
+   */
   public async getByEmail(mail: string): Promise<UserModel | null> {
     const user = await this.findOne({ mail });
 
     return this.ConvertUserDocToUser(user);
   }
 
+  /**
+   * Fetches a user by matching the id
+   * @param {ObjectId | string} id - The user id
+   * @returns {UserModel | null} The retrieved user, null if not found
+   */
   public async getById(id: Types.ObjectId | string): Promise<UserModel | null> {
     return this.ConvertUserDocToUser(await super.findById(id));
   }
 
-  // TODO: i18n
-
-  /** register
+  /**
    * Registers a new user to the database
-   *
-   * @returns The new user
+   * @param {string} name
+   * @param {string} password - The plaintext password, this function hashes it
+   * @param {string} mail
+   * @param {UserRoles} role - Defaults to USER
+   * @returns {UserModel} The new user
    */
   public async register(
     name: string,
@@ -105,11 +121,13 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return this.ConvertUserDocToUser(newUser);
   }
 
-  /** removeRefreshToken
-   * clears the tokens from a user, if no token is given, all are cleared
+  /**
+   * Clears the tokens from a user
+   * @param {string} id - Id of the user
+   * @param {string | null} token - Token that will be removed, if null all tokens are removed
    */
-  public async removeRefreshToken(user_id: string, token: string | null): Promise<void> {
-    const user = await super.findById(user_id);
+  public async removeRefreshToken(id: string, token: string | null): Promise<void> {
+    const user = await super.findById(id);
     if (!user) return;
 
     const refreshTokens = !token
@@ -120,21 +138,20 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
         ? undefined
         : user.singleSessionToken;
 
-    this.findByIdAndUpdate(user_id, {
+    this.findByIdAndUpdate(id, {
       refreshTokens,
       singleSessionToken,
     });
   }
 
-  /** storeRefreshToken
-   * Adds a refresh token to the user
+  /**
+   * Adds a refresh token to the user, the token is hashed inside the database
+   * @param {string} id - Id of the user
+   * @param {string} token - Token that will be added
+   * @param keepSession - Flag that indicates if the token is a singleSessionToken or a regular token
    */
-  public async storeRefreshToken(
-    user_id: string,
-    token: string,
-    keepSession = false
-  ): Promise<void> {
-    const user = await this.findById(user_id);
+  public async storeRefreshToken(id: string, token: string, keepSession = false): Promise<void> {
+    const user = await this.findById(id);
     if (!user) return;
 
     const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
@@ -146,7 +163,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       user.singleSessionToken = hashedToken;
     }
 
-    await this.findByIdAndUpdate(user_id, {
+    await this.findByIdAndUpdate(id, {
       refreshTokens: user.refreshTokens,
       singleSessionToken: user.singleSessionToken,
     });
@@ -154,26 +171,28 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     return;
   }
 
-  /** validatePassword
+  /**
    * Checks if a user/password pair is valid
-   *
+   * @param {string} id - Id if the user
+   * @param {string} password - Plaintext password of the user
    * @returns A boolean indicating validity
    */
-  public async validatePassword(user_id: string, password: string): Promise<boolean> {
-    const user = await this.findById(user_id);
+  public async validatePassword(id: string, password: string): Promise<boolean> {
+    const user = await this.findById(id);
     if (!user) return false;
 
     // Validates password
     return bcrypt.compare(password, user.password);
   }
 
-  /** validatePassword
+  /**
    * Checks if a user/refreshtoken pair is valid
-   *
+   * @param {string} id - Id if the user
+   * @param {string} token - Refresh token
    * @returns A boolean indicating validity
    */
-  public async validateRefreshToken(user_id: string, token: string): Promise<UserModel | null> {
-    const user = await this.findById(user_id);
+  public async validateRefreshToken(id: string, token: string): Promise<UserModel | null> {
+    const user = await this.findById(id);
     if (!user) return null;
 
     let valid = bcrypt.compareSync(token, user.singleSessionToken);
