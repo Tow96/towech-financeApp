@@ -10,6 +10,8 @@ import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 import { CreateUser, UserRoles } from '@towech-finance/shared/utils/models';
 // OpenAPi
 import { ApiProperty } from '@nestjs/swagger';
+// I18n
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const convertToRole = (input: any): UserRoles => {
@@ -21,15 +23,15 @@ const convertToRole = (input: any): UserRoles => {
 };
 /* eslint-enable */
 
-// TODO: I18n
 export class CreateUserDto implements CreateUser {
-  @IsString({ message: 'Name must be a string' })
-  @MinLength(3, { message: 'Name must be at least three characters long' })
+  @IsString({ message: i18nValidationMessage('validation.INVALID_STRING', { parameter: 'name' }) })
+  @MinLength(3, {
+    message: i18nValidationMessage('validation.MIN_LENGTH', { parameter: 'name', count: 3 }),
+  })
   @ApiProperty({ description: 'Name of the new user', required: true })
   public name: string;
 
-  @IsString({ message: 'Email must be a valid address' })
-  @IsEmail()
+  @IsEmail({}, { message: i18nValidationMessage('validation.INVALID_MAIL', { parameter: 'mail' }) })
   @ApiProperty({
     description: 'Email address of the user, it is also used as the username',
     required: true,
@@ -43,5 +45,5 @@ export class CreateUserDto implements CreateUser {
     description: 'Role that the new user will take, defaults to USER',
     required: false,
   })
-  public role: UserRoles;
+  public role: UserRoles = UserRoles.USER;
 }

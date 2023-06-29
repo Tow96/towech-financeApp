@@ -28,6 +28,46 @@ const runAndValidate = async (input: { username: any; password: any; keepSession
   errors = await validate(importedDto);
 };
 
+describe('username', () => {
+  beforeAll(() => resetTest());
+
+  describe('When the username is not a string', () => {
+    beforeAll(async () => {
+      testData.username = 657684;
+      importedDto = plainToInstance(LoginDto, testData);
+      errors = await validate(importedDto);
+    });
+
+    it('Should throw an error', () => {
+      expect(errors.length).toBe(1);
+    });
+
+    it('Should have a name error', () => {
+      expect(errors[0].property).toBe('username');
+    });
+  });
+});
+
+describe('password', () => {
+  beforeAll(() => resetTest());
+
+  describe('When the password is not a string', () => {
+    beforeAll(async () => {
+      testData.password = 657684;
+      importedDto = plainToInstance(LoginDto, testData);
+      errors = await validate(importedDto);
+    });
+
+    it('Should throw an error', () => {
+      expect(errors.length).toBe(1);
+    });
+
+    it('Should have a name error', () => {
+      expect(errors[0].property).toBe('password');
+    });
+  });
+});
+
 describe('keepSession', () => {
   describe('When it is not a boolean', () => {
     beforeEach(async () => {
