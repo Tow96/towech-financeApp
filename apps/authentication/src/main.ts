@@ -14,8 +14,8 @@ import { AppModule } from './app/app.module';
 import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
-import { ValidationPipe } from '@nestjs/common';
 import { TrimPipe } from '@towech-finance/shared/utils/pipes';
+import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,9 +28,12 @@ async function bootstrap() {
 
   // Adds the body trimming pipe
   app.useGlobalPipes(new TrimPipe());
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  // TODO: i18n
+  // TODO: i18n update when it is ready
+  app.useGlobalPipes(new I18nValidationPipe({ transform: true }));
+  app.useGlobalFilters(
+    new I18nValidationExceptionFilter({ detailedErrors: true, errorHttpStatusCode: 422 })
+  );
 
   // CORS
   app.enableCors({
