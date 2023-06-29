@@ -43,7 +43,6 @@ export class UserDocument extends BaseSchema {
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);
 
-// TODO: i18n
 @Injectable()
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
   private REFRESH_TOKEN_MAX_COUNT = 5;
@@ -105,7 +104,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     role: UserRoles = UserRoles.USER
   ): Promise<UserModel> {
     const userExists = await this.findOne({ mail });
-    if (userExists !== null) throw new Error('Mail already registered');
+    if (userExists !== null) throw new Error('validation.REGISTERED_MAIL');
 
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
 

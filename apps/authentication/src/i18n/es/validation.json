@@ -4,5 +4,6 @@
     "one": "{parameter} debe tener al menos un caracter",
     "other": "{parameter} debe tener al menos {count} caracteres"
   },
-  "INVALID_MAIL": "{parameter} debe ser una cuenta válida"
+  "INVALID_MAIL": "{parameter} debe ser una cuenta válida",
+  "REGISTERED_MAIL": "Correo previamente registrado"
 }
