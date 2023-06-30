@@ -5,5 +5,6 @@
     "other": "{parameter} debe tener al menos {count} caracteres"
   },
   "INVALID_MAIL": "{parameter} debe ser una cuenta válida",
-  "REGISTERED_MAIL": "Correo previamente registrado"
+  "REGISTERED_MAIL": "Correo previamente registrado",
+  "INVALID_CREDENTIALS": "Credenciales inválidas"
 }
