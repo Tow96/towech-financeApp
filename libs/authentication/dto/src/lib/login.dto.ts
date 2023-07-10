@@ -5,14 +5,22 @@
  */
 
 import { LoginUser } from '@towech-finance/shared/utils/models';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 // OpenAPi
 import { ApiProperty } from '@nestjs/swagger';
+// I18n
+import { i18nValidationMessage } from 'nestjs-i18n';
 
 export class LoginDto implements LoginUser {
+  @IsString({
+    message: i18nValidationMessage('validation.INVALID_STRING', { parameter: 'username' }),
+  })
   @ApiProperty({ required: true })
   public username: string;
 
+  @IsString({
+    message: i18nValidationMessage('validation.INVALID_STRING', { parameter: 'password' }),
+  })
   @ApiProperty({ required: true })
   public password: string;
 

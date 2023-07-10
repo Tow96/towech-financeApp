@@ -1,0 +1,10 @@
+{
+  "INVALID_STRING": "{parameter} debe ser una cadena de texto",
+  "MIN_LENGTH": {
+    "one": "{parameter} debe tener al menos un caracter",
+    "other": "{parameter} debe tener al menos {count} caracteres"
+  },
+  "INVALID_MAIL": "{parameter} debe ser una cuenta válida",
+  "REGISTERED_MAIL": "Correo previamente registrado",
+  "INVALID_CREDENTIALS": "Credenciales inválidas"
+}

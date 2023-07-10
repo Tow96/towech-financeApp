@@ -1,0 +1,10 @@
+{
+  "INVALID_STRING": "{parameter} must be a string",
+  "MIN_LENGTH": {
+    "one": "{parameter} must be at least one character long",
+    "other": "{parameter} must be at least {count} characters long"
+  },
+  "INVALID_MAIL": "{parameter} must be a valid email address",
+  "REGISTERED_MAIL": "Mail already registered",
+  "INVALID_CREDENTIALS": "Invalid Credentials"
+}

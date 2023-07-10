@@ -2,6 +2,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpException,
   HttpStatus,
@@ -28,6 +29,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 // OpenAPI
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 enum SIGNAGE_ROUTES {
   LOGIN = 'login',
@@ -49,6 +51,11 @@ export class SignageController {
     private readonly logger: PidWinstonLogger,
     private readonly config: ConfigService
   ) {}
+
+  @Get('ping')
+  public ping(@I18n() i18n: I18nContext) {
+    return i18n.t('test.HELLO');
+  }
 
   // TODO: I18n
   @UseGuards(JwtAuthAdminGuard)
@@ -85,7 +92,7 @@ export class SignageController {
   ): Promise<AuthToken> {
     this.logger.pidLog(logId, `Logging in user: ${user._id}`);
 
-    const refreshToken = this.tokens.generateRefreshToken(user);
+    const refreshToken = this.tokens.generateRefreshToken(user, body.keepSession);
     const authToken = this.tokens.generateAuthToken(user);
     this.logger.pidLog(logId, `Generated tokens`);
 

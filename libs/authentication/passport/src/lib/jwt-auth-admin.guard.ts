@@ -5,7 +5,7 @@
  */
 
 // Libraries
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 // Services
@@ -14,8 +14,8 @@ import { AuthenticationUserService } from '@towech-finance/authentication/repos/
 // Models
 import { StrategyNames } from './strategy.names';
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
+import { validateWithI18n } from './utils';
 
-// TODO i18n
 @Injectable()
 export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH_ADMIN) {
   public constructor(
@@ -29,14 +29,23 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
     });
   }
 
-  public async validate(payload: UserModel): Promise<UserModel> {
+  public async validate(payload: UserModel): Promise<UserModel | false> {
     const user = await this.userRepo.getById(payload._id);
-    if (!user || user.role !== UserRoles.ADMIN) {
-      throw new HttpException('Invalid credentials', 401);
-    }
 
+    if (!user || user.role !== UserRoles.ADMIN) return false;
     return user;
   }
 }
 
-export class JwtAuthAdminGuard extends AuthGuard(StrategyNames.AUTH_ADMIN) {}
+export class JwtAuthAdminGuard extends AuthGuard(StrategyNames.AUTH_ADMIN) {
+  public handleRequest<UserModel>(
+    err: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    user: UserModel | false,
+    info: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    context: ExecutionContext,
+    status?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): UserModel {
+    validateWithI18n(user, context);
+    return super.handleRequest(err, user, info, context, status);
+  }
+}
