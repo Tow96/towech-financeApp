@@ -25,6 +25,7 @@
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src"],
       "@towech-finance/desktop/toasts/data-access": ["libs/desktop/toasts/data-access/src"],
+      "@towech-finance/desktop/toasts/error": ["libs/desktop/toasts/feature/error-handler/src"],
       "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src"],
       "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src"],
       "@towech-finance/shared/features/i18n-nest": ["libs/shared/features/i18n-nest/src"],

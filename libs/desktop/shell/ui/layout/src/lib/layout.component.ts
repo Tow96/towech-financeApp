@@ -15,6 +15,7 @@ import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
   styleUrls: ['layout.component.scss'],
   template: `
     <towech-finance-toaster></towech-finance-toaster>
+    <button (click)="testhrow()">throw</button>
     <!-- <towech-finance-toaster></towech-finance-toaster>
     <div class="layout">
       <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
@@ -24,4 +25,8 @@ import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
     </div> -->
   `,
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  public testhrow() {
+    throw new Error('aaaaa');
+  }
+}

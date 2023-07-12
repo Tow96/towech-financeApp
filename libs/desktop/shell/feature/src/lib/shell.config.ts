@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Services
 import { provideRouter } from '@angular/router';
 import { devOnlyModulesImport } from '../../imports/dev-only.modules';
+import { DesktopGlobalErrorToast } from '@towech-finance/desktop/toasts/error';
 // Routes
 import { desktopShellRoutes } from './desktop-shell.routes';
 // Environment
@@ -21,10 +22,17 @@ import { adaptReducer } from '@state-adapt/core';
 const APP_CONFIG = new InjectionToken('Application config');
 export const DesktopShellConfig: ApplicationConfig = {
   providers: [
+    // Environment
     { provide: APP_CONFIG, useValue: environment },
-    provideStore({ adapt: adaptReducer }),
-    provideRouter(desktopShellRoutes),
+    // Old Modules
     importProvidersFrom([BrowserAnimationsModule]),
+    // Store
+    provideStore({ adapt: adaptReducer }),
+    // Routes
+    provideRouter(desktopShellRoutes),
+    // Global Toaster
+    DesktopGlobalErrorToast,
+    // DEV ONLY
     devOnlyModulesImport,
   ],
 };
