@@ -17,15 +17,31 @@ import { toastTransition } from './desktop-toast.animations';
   standalone: true,
   selector: 'towech-finance-toaster',
   imports: [AsyncPipe, NgFor, DesktopToastUIComponent],
+  styles: [
+    `
+      .desktop-toaster {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 2rem;
+        display: flex;
+        align-items: flex-end;
+        flex-direction: column;
+        overflow-x: hidden;
+        z-index: 999;
+      }
+    `,
+  ],
   template: `
     <div class="desktop-toaster">
       <towech-finance-toast
         @toast
-        *ngFor="let toast of service.toastTray | async"
-        [toast]="toast"></towech-finance-toast>
+        *ngFor="let toast of service.toasts.state$ | async"
+        [toast]="toast"
+        (dismiss)="service.dismiss$.next($event)">
+      </towech-finance-toast>
     </div>
   `,
-  styleUrls: ['./desktop-toaster.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [toastTransition],
 })

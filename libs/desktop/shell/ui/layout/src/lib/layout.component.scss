@@ -1,0 +1,13 @@
+// TODO: This is probably unused
+.layout {
+  display: flex;
+
+  .contents {
+    flex: 1;
+    margin: 1em;
+  }
+
+  @media screen and (max-width: 30em) {
+    flex-direction: column;
+  }
+}

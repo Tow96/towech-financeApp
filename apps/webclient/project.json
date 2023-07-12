@@ -36,12 +36,12 @@
           "outputHashing": "all",
           "fileReplacements": [
             {
-              "replace": "libs/desktop/shell/utils/environments/src/lib/environments/environment.ts",
-              "with": "libs/desktop/shell/utils/environments/src/lib/environments/environment.prod.ts"
+              "replace": "libs/desktop/shell/feature/environments/environment.ts",
+              "with": "libs/desktop/shell/feature/environments/environment.prod.ts"
             },
             {
-              "replace": "libs/desktop/shell/feature/src/lib/imports/dev-only.modules.ts",
-              "with": "libs/desktop/shell/feature/src/lib/imports/dev-only.modules.prod.ts"
+              "replace": "libs/desktop/shell/feature/imports/dev-only.modules.ts",
+              "with": "libs/desktop/shell/feature/imports/dev-only.modules.prod.ts"
             }
           ]
         },
