@@ -27,7 +27,8 @@
       <div class="nav__divider"></div>
       <div>
         <towech-finance-navbar-item
-          (clicked)="onLogoutClick()"
+          id="logout"
+          (clicked)="user.logout$.next()"
           label="Logout"
           [collapsed]="collapsed"></towech-finance-navbar-item>
       </div>

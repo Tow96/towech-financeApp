@@ -1,5 +1,5 @@
 // Libraries
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { subscribeSpyTo } from '@hirez_io/observer-spy';
@@ -9,9 +9,10 @@ import { DesktopNavbarComponent } from './desktop-navbar-feature.component';
 // Mocks
 import { provideRouter } from '@angular/router';
 import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { Source } from '@state-adapt/rxjs';
 
 const mockStore = {
-  logout$: new Observable<void>(),
+  logout$: new Source<void>('aaa'),
 };
 
 describe('Desktop Navbar', () => {
@@ -26,7 +27,7 @@ describe('Desktop Navbar', () => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule],
       providers: [
-        { provide: DesktopUserService, useValues: mockStore },
+        { provide: DesktopUserService, useValue: mockStore },
         provideRouter([{ path: 'test', component: DesktopNavbarComponent }]),
       ],
     });
@@ -36,20 +37,21 @@ describe('Desktop Navbar', () => {
     fixture.detectChanges();
     compiled = fixture.nativeElement;
 
-    // service = TestBed.inject(DesktopUserService);
+    service = TestBed.inject(DesktopUserService);
     // router = TestBed.inject(Router);
   });
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  // describe('onLogoutClick', () => {
-  //   it('Should dispatch a logout action', () => {
-  //     const spy = subscribeSpyTo(service.logout$);
-  //     component.onLogoutClick();
+  describe('When logout button is clicked', () => {
+    it('Should next a logout event', () => {
+      const spy = subscribeSpyTo(service.logout$);
 
-  //     expect(spy.receivedNext()).toBe(true);
-  //   });
-  // });
+      const logoutBttn = fixture.debugElement.nativeElement.querySelector('#logout > button');
+      logoutBttn.click();
+      expect(spy.receivedNext()).toBe(true);
+    });
+  });
 
   // describe('onToggleCollapse', () => {
   //   it('Should toggle the value of the collapsed variable', () => {

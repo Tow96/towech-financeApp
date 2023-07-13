@@ -121,6 +121,7 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
         />
         <div>
           <towech-finance-navbar-item
+            id="logout"
             label="Logout"
           >
             <button>

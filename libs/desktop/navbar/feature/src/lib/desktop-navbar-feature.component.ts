@@ -37,14 +37,10 @@ export class DesktopNavbarComponent {
   public collapsed = true;
 
   public constructor(
-    // private readonly user: DesktopUserService,
     private readonly router: Router,
+    public readonly user: DesktopUserService,
     public eRef: ElementRef
   ) {}
-
-  public onLogoutClick(): void {
-    //   this.user.logout$.next();
-  }
 
   public onToggleCollapse(): void {
     this.collapsed = !this.collapsed;
