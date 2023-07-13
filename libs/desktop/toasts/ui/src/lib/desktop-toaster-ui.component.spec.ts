@@ -5,7 +5,7 @@ import { subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested Elements
 import { DesktopToastUIComponent } from './desktop-toaster-ui.component';
 // Models
-import { DesktopToast, ToastTypes } from '@towech-finance/desktop/toasts/data-access';
+import { DesktopToast, ToastTypes } from '@towech-finance/desktop/toasts/utils';
 
 const stubToast = (): DesktopToast => ({
   id: 'test-id',

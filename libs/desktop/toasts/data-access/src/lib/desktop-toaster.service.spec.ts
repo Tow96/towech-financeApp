@@ -2,10 +2,12 @@
 import { TestBed } from '@angular/core/testing';
 import { subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested elements
-import { DesktopToasterService, ToastTypes } from './desktop-toaster.service';
+import { DesktopToasterService } from './desktop-toaster.service';
 // Mocks
 import { provideStore } from '@ngrx/store';
 import { adaptReducer } from '@state-adapt/core';
+// Models
+import { ToastTypes } from '@towech-finance/desktop/toasts/utils';
 
 let service: DesktopToasterService;
 const TOASTDURATION = 2000;

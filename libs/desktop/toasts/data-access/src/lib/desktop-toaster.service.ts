@@ -8,24 +8,9 @@ import { Injectable } from '@angular/core';
 import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { Source } from '@state-adapt/rxjs';
+import { DesktopToast, NewToast, ToastTypes } from '@towech-finance/desktop/toasts/utils';
 
 import * as uuid from 'uuid';
-// import { BehaviorSubject } from 'rxjs';
-
-export enum ToastTypes {
-  ACCENT = 'accent',
-  ERROR = 'error',
-  SUCCESS = 'success',
-  WARNING = 'warning',
-}
-export interface DesktopToast {
-  id: string;
-  message: string;
-  duration?: number;
-  type: ToastTypes;
-}
-
-export type NewToast = Omit<DesktopToast, 'id' | 'type'>;
 
 @Injectable({ providedIn: 'root' })
 export class DesktopToasterService {

@@ -1,16 +1,11 @@
 // Libraries
 import { Component } from '@angular/core';
-// Modules
-// import { RouterModule } from '@angular/router';
-// Components
-import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
-// import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
 
-// TODO: Testing
+// TODO: Add Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-layout',
-  imports: [DesktopToasterComponent],
+  imports: [],
   // imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
   styles: [
     `
@@ -29,7 +24,6 @@ import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
     `,
   ],
   template: `
-    <towech-finance-toaster></towech-finance-toaster>
     <div class="layout">
       <button (click)="testhrow()">throw</button>
       <!-- <towech-finance-webclient-navbar></towech-finance-webclient-navbar> -->

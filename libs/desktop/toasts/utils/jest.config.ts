@@ -1,11 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-shell-ui-layout',
-  preset: '../../../../../jest.preset.js',
+  displayName: 'desktop-toasts-utils',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/desktop/shell/ui/layout',
-  collectCoverageFrom: ['**/*.(t|j)s', '!**/*.module.ts', '!**/index.ts', '!**/jest.config.ts'],
-  coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
+  coverageDirectory: '../../../../coverage/libs/desktop/toasts/utils',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -20,5 +18,5 @@ export default {
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
-  ],
+  ]
 };

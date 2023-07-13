@@ -28,6 +28,7 @@
       "@towech-finance/desktop/toasts/error": ["libs/desktop/toasts/feature/error-handler/src"],
       "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src"],
       "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src"],
+      "@towech-finance/desktop/toasts/utils": ["libs/desktop/toasts/utils/src/index.ts"],
       "@towech-finance/desktop/user/data-access": ["libs/desktop/user/data-access/src"],
       "@towech-finance/desktop/user/guards": ["libs/desktop/user/feature/guards/src"],
       "@towech-finance/shared/feature/i18n-nest": ["libs/shared/feature/i18n-nest/src"],

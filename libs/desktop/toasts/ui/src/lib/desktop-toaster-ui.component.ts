@@ -14,7 +14,7 @@ import {
   Output,
 } from '@angular/core';
 // Services
-import { DesktopToast, ToastTypes } from '@towech-finance/desktop/toasts/data-access';
+import { DesktopToast, ToastTypes } from '@towech-finance/desktop/toasts/utils';
 // Animations
 import {
   colorTransition,
