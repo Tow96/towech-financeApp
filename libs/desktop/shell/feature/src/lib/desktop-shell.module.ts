@@ -5,10 +5,6 @@
     CommonModule,
     // Http
     HttpClientModule,
-    // NGRX
-    DesktopShellDataAccessUserStateModule,
-    // Guards
-    DesktopShellUtilsGuardsModule,
   ],
 })
 export class DesktopShellModule {}
