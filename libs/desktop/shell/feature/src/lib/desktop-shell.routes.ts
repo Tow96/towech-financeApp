@@ -1,29 +1,30 @@
 import { Route } from '@angular/router';
 import { LayoutComponent } from '@towech-finance/desktop/shell/ui/layout';
-// import { AuthGuard, NoAuthGuard } from '@towech-finance/desktop/shell/utils/guards';
+import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@towech-finance/desktop/user/guards';
 
 export const desktopShellRoutes: Route[] = [
   {
     path: '',
     component: LayoutComponent,
-    // children: [
-    //   {
-    //     path: '',
-    //     loadComponent: async () =>
-    //       (await import('@towech-finance/desktop/dashboard/feature')).DesktopDashboardComponent,
-    //   },
-    //   {
-    //     path: 'settings',
-    //     loadComponent: async () =>
-    //       (await import('@towech-finance/desktop/settings/feature')).SettingsFeatureComponent,
-    //   },
-    // ],
-    // canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: async () =>
+          (await import('@towech-finance/desktop/dashboard/feature')).DesktopDashboardComponent,
+      },
+      // {
+      //   path: 'settings',
+      //   loadComponent: async () =>
+      //     (await import('@towech-finance/desktop/settings/feature')).SettingsFeatureComponent,
+      // },
+    ],
+    // canActivate: [DesktopUserAuthGuard],
   },
-  // {
-  //   path: 'login',
-  //   loadComponent: async () =>
-  //     (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
-  //   canActivate: [NoAuthGuard],
-  // },
+  {
+    path: 'login',
+    component: LayoutComponent,
+    // loadComponent: async () =>
+    //   (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
+    // canActivate: [DesktopUserNoAuthGuard],
+  },
 ];

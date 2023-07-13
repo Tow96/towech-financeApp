@@ -19,7 +19,7 @@ import { environment } from '../../environments/environment';
 import { provideStore } from '@ngrx/store';
 // State Adapt
 import { adaptReducer } from '@state-adapt/core';
-import { DesktopUserAuthGuard } from '@towech-finance/desktop/user/guards';
+import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@towech-finance/desktop/user/guards';
 
 const APP_CONFIG = new InjectionToken('Application config');
 export const DesktopShellConfig: ApplicationConfig = {
@@ -37,6 +37,7 @@ export const DesktopShellConfig: ApplicationConfig = {
     // User
     DesktopUserService,
     DesktopUserAuthGuard,
+    DesktopUserNoAuthGuard,
     // DEV ONLY
     devOnlyModulesImport,
   ],

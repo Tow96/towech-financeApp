@@ -1,11 +1,12 @@
 // Libraries
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 // TODO: Add Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-layout',
-  imports: [],
+  imports: [RouterOutlet],
   // imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
   styles: [
     `
@@ -25,10 +26,9 @@ import { Component } from '@angular/core';
   ],
   template: `
     <div class="layout">
-      <button (click)="testhrow()">throw</button>
       <!-- <towech-finance-webclient-navbar></towech-finance-webclient-navbar> -->
       <div class="contents">
-        <!-- <router-outlet></router-outlet> -->
+        <router-outlet></router-outlet>
       </div>
     </div>
   `,

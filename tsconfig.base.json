@@ -22,6 +22,7 @@
       "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src"],
       "@towech-finance/authentication/shell/feature": ["libs/authentication/shell/feature/src"],
       "@towech-finance/authentication/tokens": ["libs/authentication/tokens/src"],
+      "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src"],
       "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src"],
       "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src"],
       "@towech-finance/desktop/toasts/data-access": ["libs/desktop/toasts/data-access/src"],
