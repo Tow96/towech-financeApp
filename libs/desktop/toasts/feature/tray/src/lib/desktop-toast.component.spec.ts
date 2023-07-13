@@ -4,8 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Tested Elements
 import { DesktopToasterComponent } from './desktop-toast.component';
 // Services
-import { DesktopToasterService, ToastTypes } from '@towech-finance/desktop/toasts/data-access';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 import { of } from 'rxjs';
+// Models
+import { ToastTypes } from '@towech-finance/desktop/toasts/utils';
 
 const mockValues = {
   toasts: {
