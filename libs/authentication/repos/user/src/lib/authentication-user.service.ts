@@ -9,7 +9,7 @@ import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model, Types } from 'mongoose';
 // Services
-import { BaseSchema, BaseRepository } from '@towech-finance/shared/features/mongo';
+import { BaseSchema, BaseRepository } from '@towech-finance/shared/feature/mongo';
 // Models
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 

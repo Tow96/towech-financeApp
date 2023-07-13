@@ -5,10 +5,10 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { AuthenticationHttpSignageModule } from '@towech-finance/authentication/http/signage';
-import { SharedFeaturesMongoModule } from '@towech-finance/shared/features/mongo';
+import { SharedFeaturesMongoModule } from '@towech-finance/shared/feature/mongo';
 // Misc
 import { AuthenticationShellRoutes } from './authentication-shell.routes';
-import { SharedFeaturesI18nNestModule } from '@towech-finance/shared/features/i18n-nest';
+import { SharedFeaturesI18nNestModule } from '@towech-finance/shared/feature/i18n-nest';
 
 @Module({
   imports: [
