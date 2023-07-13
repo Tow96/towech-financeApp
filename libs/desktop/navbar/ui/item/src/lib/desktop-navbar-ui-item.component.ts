@@ -23,9 +23,9 @@ import { menuTransitions } from './desktop-navbar-ui-item.animations';
   standalone: true,
   selector: 'towech-finance-navbar-item',
   imports: [FontAwesomeModule, NgIf],
-  styleUrls: ['desktop-navbar-ui-item.component.scss'],
+  styleUrls: [`desktop-navbar-ui-item.component.scss`],
   template: `
-    <button [disabled]="active" (click)="onBttnClick()">
+    <button [disabled]="active" (click)="clicked.next()">
       <div>
         <fa-icon [icon]="icon" size="2x" [fixedWidth]="true"></fa-icon>
         <div class="label" *ngIf="!collapsed" @pesto>
@@ -45,9 +45,5 @@ export class DesktopNavbarItemComponent {
 
   public constructor(private readonly library: FaIconLibrary) {
     library.addIcons(faBars, faRightFromBracket, faGear, faMoneyCheckDollar);
-  }
-
-  public onBttnClick(): void {
-    this.clicked.next();
   }
 }

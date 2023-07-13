@@ -7,7 +7,7 @@
 import { Injectable } from '@angular/core';
 import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
-import { toSource } from '@state-adapt/rxjs';
+import { Source, toSource } from '@state-adapt/rxjs';
 // Models
 import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
 import { Observable, map, of, timer } from 'rxjs';
@@ -18,10 +18,11 @@ export class DesktopUserService {
   private initialState: UserModel | null = null;
 
   // Pipes ---------------------------------------------------------
-  public refreshToken$ = timer(1000).pipe(
-    map(() => new UserModel('-1', 'test', 'test@mail.com', UserRoles.USER, true)),
-    toSource('[User Service] Refresh Token')
-  );
+  public logout$ = new Source<void>('[Navbar] Logout');
+  // public refreshToken$ = timer(1000).pipe(
+  //   map(() => new UserModel('-1', 'test', 'test@mail.com', UserRoles.USER, true)),
+  //   toSource('[User Service] Refresh Token')
+  // );
 
   // Adapter -------------------------------------------------------
   private adapter = createAdapter<UserModel | null>()({
@@ -32,7 +33,7 @@ export class DesktopUserService {
 
   // Store ---------------------------------------------------------
   public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
-    set: this.refreshToken$,
+    // set: this.refreshToken$,
   });
 
   // Helpers -------------------------------------------------------

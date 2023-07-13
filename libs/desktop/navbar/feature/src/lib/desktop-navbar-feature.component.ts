@@ -5,12 +5,11 @@
  */
 // Libraries
 import { Component, ElementRef, HostListener } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 // Modules
 import { NgClass, NgFor } from '@angular/common';
-// NGRX
-import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
+// Services
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
 // Components
 import { DesktopNavbarItemComponent } from '@towech-finance/desktop/navbar/ui/item';
 // Models
@@ -22,49 +21,13 @@ interface NavIcon {
   route: string;
 }
 
+// TODO: Make declarative rather than imperative
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-navbar',
   imports: [DesktopNavbarItemComponent, NgFor, NgClass],
   styleUrls: ['./desktop-navbar-feature.component.scss'],
-  template: `
-    <div class="nav-wrapper">
-      <nav [ngClass]="getNavClass()">
-        <!-- Menu toggle + header -->
-        <div class="header">
-          <towech-finance-navbar-item
-            (clicked)="onToggleCollapse()"
-            label="Close"
-            [collapsed]="collapsed"
-            icon="bars"></towech-finance-navbar-item>
-          <div class="title">
-            <h1>Header</h1>
-          </div>
-        </div>
-        <!-- Menu contents -->
-        <div class="contents">
-          <div class="nav__divider desk__only"></div>
-          <div class="contents__main">
-            <towech-finance-navbar-item
-              *ngFor="let item of items"
-              [label]="item.title"
-              [collapsed]="collapsed"
-              [icon]="item.icon"
-              [active]="isRouteActive(item.route)"
-              (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
-          </div>
-          <!-- Logout -->
-          <div class="nav__divider"></div>
-          <div>
-            <towech-finance-navbar-item
-              (clicked)="onLogoutClick()"
-              label="Logout"
-              [collapsed]="collapsed"></towech-finance-navbar-item>
-          </div>
-        </div>
-      </nav>
-    </div>
-  `,
+  templateUrl: `./desktop-navbar-feature.component.html`,
 })
 export class DesktopNavbarComponent {
   public items: NavIcon[] = [
@@ -74,13 +37,13 @@ export class DesktopNavbarComponent {
   public collapsed = true;
 
   public constructor(
-    private readonly store: Store,
+    // private readonly user: DesktopUserService,
     private readonly router: Router,
     public eRef: ElementRef
   ) {}
 
   public onLogoutClick(): void {
-    this.store.dispatch(UserActions.logout());
+    //   this.user.logout$.next();
   }
 
   public onToggleCollapse(): void {
