@@ -14,7 +14,6 @@ import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
   standalone: true,
   selector: 'towech-finance-webclient-layout',
   imports: [DesktopNavbarComponent, RouterOutlet],
-  // imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
   styles: [
     `
       .layout {
