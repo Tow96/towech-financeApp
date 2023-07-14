@@ -48,9 +48,10 @@ export class DesktopNavbarComponent {
   // Listeners ----------------------------------------------------------------
   @HostListener('document:click', ['$event'])
   public clickListener(event: PointerEvent): void {
-    if (!this.eRef.nativeElement.contains(event.target)) {
-      this.forceCollapse$.next();
-    }
+    const refContainsTarget: boolean = this.eRef.nativeElement.contains(event.target);
+    const refIsDeployed = this.eRef.nativeElement.querySelector('.deployed') !== null;
+
+    if (refIsDeployed && !refContainsTarget) this.forceCollapse$.next();
   }
 
   // Pipes --------------------------------------------------------------------
@@ -87,9 +88,7 @@ export class DesktopNavbarComponent {
   }
 
   public getNavClass(collapsed: boolean): Record<string, boolean> {
-    return {
-      deployed: !collapsed,
-    };
+    return { deployed: !collapsed };
   }
 
   public isRouteActive(route: string): boolean {

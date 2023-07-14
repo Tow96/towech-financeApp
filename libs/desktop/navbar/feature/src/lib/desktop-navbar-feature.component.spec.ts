@@ -64,18 +64,21 @@ describe('Desktop Navbar', () => {
     });
   });
 
-  describe('When onOutside click is called', () => {
+  describe('When a click happens and the navbar is deployed', () => {
     let clickedTarget: any;
+
+    beforeEach(() => {
+      spy = subscribeSpyTo(component.store.isCollapsed$);
+
+      if (spy.getLastValue()) component.toggleCollapse$.next();
+
+      fixture.detectChanges();
+      compiled = fixture.nativeElement;
+    });
 
     describe('When clicking inside the navbar', () => {
       it('Should do nothing', () => {
-        spy = subscribeSpyTo(component.store.isCollapsed$);
-
         clickedTarget = compiled.children[0];
-        component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect(spy.getLastValue()).toBe(true);
-
-        component.toggleCollapse$.next();
         component.clickListener({ target: clickedTarget } as PointerEvent);
         expect(spy.getLastValue()).toBe(false);
       });
@@ -83,13 +86,7 @@ describe('Desktop Navbar', () => {
 
     describe('When clicking outside the navbar', () => {
       it('Should close the navbar', () => {
-        spy = subscribeSpyTo(component.store.isCollapsed$);
-
         clickedTarget = document.createElement('p');
-        component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect(spy.getLastValue()).toBe(true);
-
-        component.toggleCollapse$.next();
         component.clickListener({ target: clickedTarget } as PointerEvent);
         expect(spy.getLastValue()).toBe(true);
       });
@@ -105,9 +102,7 @@ describe('Desktop Navbar', () => {
       spy = subscribeSpyTo(component.store.isCollapsed$);
       routeSpy = jest.spyOn(router, 'navigate');
 
-      if (spy.getLastValue()) {
-        component.toggleCollapse$.next();
-      }
+      if (spy.getLastValue()) component.toggleCollapse$.next();
 
       bttn.click();
     });
