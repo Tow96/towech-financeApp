@@ -1,11 +1,12 @@
 <div class="nav-wrapper">
-  <nav [ngClass]="getNavClass()">
+  <nav [ngClass]="getNavClass((store.isCollapsed$ | async) || false)">
     <!-- Menu toggle + header -->
     <div class="header">
       <towech-finance-navbar-item
-        (clicked)="onToggleCollapse()"
+        id="navbar-menu"
+        (clicked)="toggleCollapse$.next()"
         label="Close"
-        [collapsed]="collapsed"
+        [collapsed]="(store.isCollapsed$ | async) || false"
         icon="bars"></towech-finance-navbar-item>
       <div class="title">
         <h1>Header</h1>
@@ -16,12 +17,13 @@
       <div class="nav__divider desk__only"></div>
       <div class="contents__main">
         <towech-finance-navbar-item
-          *ngFor="let item of items"
+          *ngFor="let item of store.items$ | async; let i = index"
+          [id]="setItemId(i)"
           [label]="item.title"
-          [collapsed]="collapsed"
+          [collapsed]="(store.isCollapsed$ | async) || false"
           [icon]="item.icon"
           [active]="isRouteActive(item.route)"
-          (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
+          (clicked)="navigateTo$.next(item.route)"></towech-finance-navbar-item>
       </div>
       <!-- Logout -->
       <div class="nav__divider"></div>
@@ -30,7 +32,7 @@
           id="logout"
           (clicked)="user.logout$.next()"
           label="Logout"
-          [collapsed]="collapsed"></towech-finance-navbar-item>
+          [collapsed]="(store.isCollapsed$ | async) || false"></towech-finance-navbar-item>
       </div>
     </div>
   </nav>
