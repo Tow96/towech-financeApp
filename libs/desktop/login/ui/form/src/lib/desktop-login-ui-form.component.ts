@@ -15,9 +15,9 @@ import { SharedInputComponent } from '@towech-finance/shared/ui/input';
   standalone: true,
   selector: 'towech-finance-login-form',
   styleUrls: ['./desktop-login-ui-form.component.scss'],
-  imports: [NgrxFormsModule, SharedInputComponent, ButtonComponent, SharedCheckboxComponent],
+  // imports: [NgrxFormsModule, SharedInputComponent, ButtonComponent, SharedCheckboxComponent],
   template: `
-    <form novalidate [ngrxFormState]="form" (submit)="onSubmit()">
+    <!-- <form novalidate [ngrxFormState]="form" (submit)="onSubmit()">
       <towech-finance-shared-input
         label="Username"
         [ngrxFormControlState]="form.controls.username"
@@ -37,23 +37,21 @@ import { SharedInputComponent } from '@towech-finance/shared/ui/input';
         </towech-finance-checkbox>
         <towech-finance-button type="submit">Login</towech-finance-button>
       </div>
-    </form>
+    </form> -->
   `,
 })
 export class LoginFormComponent {
-  @Input() public form: FormGroupState<{
-    username: string;
-    password: string;
-    keepSession: boolean;
-  }> = createFormGroupState('loginForm', { username: '', password: '', keepSession: false });
-  @Output() public updated = new EventEmitter<Actions<string> | Actions<boolean>>();
-  @Output() public submitted = new EventEmitter<void>();
-
-  public onSubmit(): void {
-    this.submitted.next();
-  }
-
-  public updateForm(event: Actions<string> | Actions<boolean>) {
-    this.updated.next(event);
-  }
+  // @Input() public form: FormGroupState<{
+  //   username: string;
+  //   password: string;
+  //   keepSession: boolean;
+  // }> = createFormGroupState('loginForm', { username: '', password: '', keepSession: false });
+  // @Output() public updated = new EventEmitter<Actions<string> | Actions<boolean>>();
+  // @Output() public submitted = new EventEmitter<void>();
+  // public onSubmit(): void {
+  //   this.submitted.next();
+  // }
+  // public updateForm(event: Actions<string> | Actions<boolean>) {
+  //   this.updated.next(event);
+  // }
 }

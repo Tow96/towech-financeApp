@@ -7,7 +7,7 @@
 // @use 'libs/shared/ui/input/theme' as inputs;
 // @use 'libs/shared/ui/checkbox/theme' as checkbox;
 // @use 'libs/shared/ui/button/theme' as buttons;
-// @use 'libs/desktop/login/ui/theme' as login;
+@use 'libs/desktop/login/ui/theme' as login;
 @use 'libs/desktop/navbar/ui/theme' as navbar;
 // --------------------------------------
 
@@ -27,7 +27,7 @@
 @include navbar.color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);
 // Pages -----------------------------------------------
-// @include login.color(theme.$gold-night-theme);
+@include login.color(theme.$gold-night-theme);
 
 webclient-root {
   z-index: 1;

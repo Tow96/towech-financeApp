@@ -18,13 +18,12 @@ export const desktopShellRoutes: Route[] = [
           (await import('@towech-finance/desktop/settings/feature')).SettingsFeatureComponent,
       },
     ],
-    // canActivate: [DesktopUserAuthGuard],
+    canActivate: [DesktopUserAuthGuard],
   },
   {
     path: 'login',
-    component: LayoutComponent,
-    // loadComponent: async () =>
-    //   (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
-    // canActivate: [DesktopUserNoAuthGuard],
+    loadComponent: async () =>
+      (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
+    canActivate: [DesktopUserNoAuthGuard],
   },
 ];

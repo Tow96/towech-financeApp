@@ -10,7 +10,7 @@ import { concatLatestFrom } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
 // NGRX
-import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
+// import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
 import {
   Actions,
   FormGroupState,
@@ -80,10 +80,10 @@ export class LoginStore extends ComponentStore<State> {
       concatLatestFrom(() => this.form$),
       map(([, form]) => {
         if (form.isInvalid || form.isPristine) {
-          this.toasts.addWarning('Please complete the fields');
+          // this.toasts.addWarning('Please complete the fields'); // TODO
           return;
         }
-        this.globalStore.dispatch(UserActions.login({ credentials: form.value }));
+        // this.globalStore.dispatch(UserActions.login({ credentials: form.value })); // TODO
       })
     );
   }
