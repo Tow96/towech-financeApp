@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
 import { SharedInputComponent } from './shared-ui-input.component';
-import { NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('Shared Input Component', () => {
   let component: SharedInputComponent;
@@ -21,8 +21,8 @@ describe('Shared Input Component', () => {
 
   it('Should be defined', () => expect(component).toBeTruthy());
 
-  it('Should implement the NGRX_FORM_VIEW_ADAPTER', () => {
-    expect(fixture.debugElement.injector.get(NGRX_FORM_VIEW_ADAPTER)).toBeTruthy();
+  it('Should implement the NG_VALUE_ACCESSOR', () => {
+    expect(fixture.debugElement.injector.get(NG_VALUE_ACCESSOR)).toBeTruthy();
   });
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
@@ -36,7 +36,7 @@ describe('Shared Input Component', () => {
     it('Should update the value', () => {
       const newValue = 'This is a test value';
 
-      component.setViewValue(newValue);
+      component.writeValue(newValue);
       expect(component.value).toBe(newValue);
     });
   });
@@ -47,7 +47,7 @@ describe('Shared Input Component', () => {
         console.log(value);
       };
 
-      component.setOnChangeCallback(newChanged);
+      component.registerOnChange(newChanged);
       expect(component.changed).toBe(newChanged);
     });
   });
@@ -58,16 +58,16 @@ describe('Shared Input Component', () => {
         console.log('NEW FUNCTION');
       };
 
-      component.setOnTouchedCallback(newTouched);
+      component.registerOnTouched(newTouched);
       expect(component.touched).toBe(newTouched);
     });
   });
 
   describe('When setIsDisabled is called', () => {
     it('Should set the disabled value', () => {
-      component.setIsDisabled(true);
+      component.setDisabledState(true);
       expect(component.disabled).toBe(true);
-      component.setIsDisabled(false);
+      component.setDisabledState(false);
       expect(component.disabled).toBe(false);
     });
   });
