@@ -5,7 +5,7 @@
  */
 // Libraries
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -13,7 +13,7 @@ import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
   styleUrls: ['./shared-ui-checkbox.component.scss'],
   providers: [
     {
-      provide: NGRX_FORM_VIEW_ADAPTER,
+      provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SharedCheckboxComponent),
       multi: true,
     },
@@ -25,29 +25,32 @@ import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
     </div>
   `,
 })
-export class SharedCheckboxComponent implements FormViewAdapter {
+export class SharedCheckboxComponent implements ControlValueAccessor {
   @Input() public label = '';
   @Input() public id = 'towech-checkbox';
   public value = false;
   public disabled = false;
-  public touched = (): void => {}; // eslint-disable-line
-  public changed = (value: boolean): void => {}; // eslint-disable-line
+  public customTouched = (): void => {};
+  public customChanged = (value: boolean): void => {};
+
+  public registerOnChange(fn: any): void {
+    this.customChanged = fn;
+  }
+
+  public registerOnTouched(fn: any): void {
+    this.customTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
   public onChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).checked;
-    this.changed(value);
+    this.customChanged(value);
   }
 
-  public setViewValue(value: boolean): void {
+  public writeValue(value: boolean): void {
     this.value = value;
-  }
-  public setOnChangeCallback(fn: (value: boolean) => void): void {
-    this.changed = fn;
-  }
-  public setOnTouchedCallback(fn: () => void): void {
-    this.touched = fn;
-  }
-  public setIsDisabled(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 }
