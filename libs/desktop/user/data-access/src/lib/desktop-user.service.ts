@@ -9,8 +9,7 @@ import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { Source, toSource } from '@state-adapt/rxjs';
 // Models
-import { UserModel, UserRoles } from '@towech-finance/shared/utils/models';
-import { Observable, map, of, timer } from 'rxjs';
+import { LoginUser, UserModel } from '@towech-finance/shared/utils/models';
 
 @Injectable()
 export class DesktopUserService {
@@ -18,6 +17,7 @@ export class DesktopUserService {
   private initialState: UserModel | null = null;
 
   // Pipes ---------------------------------------------------------
+  public login$ = new Source<LoginUser>('[User Service] Login');
   public logout$ = new Source<void>('[Navbar] Logout');
   // public refreshToken$ = timer(1000).pipe(
   //   map(() => new UserModel('-1', 'test', 'test@mail.com', UserRoles.USER, true)),
