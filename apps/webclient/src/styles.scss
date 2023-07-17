@@ -4,9 +4,9 @@
 
 // Components ---------------------------
 @use 'libs/desktop/toasts/ui/theme' as toaster;
-// @use 'libs/shared/ui/input/theme' as inputs;
-// @use 'libs/shared/ui/checkbox/theme' as checkbox;
-// @use 'libs/shared/ui/button/theme' as buttons;
+@use 'libs/shared/ui/input/theme' as inputs;
+@use 'libs/shared/ui/checkbox/theme' as checkbox;
+@use 'libs/shared/ui/button/theme' as buttons;
 @use 'libs/desktop/login/ui/theme' as login;
 @use 'libs/desktop/navbar/ui/theme' as navbar;
 // --------------------------------------
@@ -20,9 +20,9 @@
 // Core
 @include core.color(theme.$gold-night-theme);
 // Components -----------------------------------------
-// @include buttons.color(theme.$gold-night-theme);
-// @include checkbox.color(theme.$gold-night-theme);
-// @include inputs.color(theme.$gold-night-theme);
+@include buttons.color(theme.$gold-night-theme);
+@include checkbox.color(theme.$gold-night-theme);
+@include inputs.color(theme.$gold-night-theme);
 // Features --------------------------------------------
 @include navbar.color(theme.$gold-night-theme);
 @include toaster.color(theme.$gold-night-theme);

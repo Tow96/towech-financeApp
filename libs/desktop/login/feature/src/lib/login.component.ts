@@ -6,87 +6,74 @@
 // Libraries
 import { ChangeDetectionStrategy, Component, Directive, Input } from '@angular/core';
 import {
-  FormBuilder,
+  AbstractControl,
   FormControl,
-  FormsModule,
-  NgControl,
+  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Source, toSource } from '@state-adapt/rxjs';
 import { adaptNgrx } from '@state-adapt/ngrx';
-import { map, of } from 'rxjs';
+// Services
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
 // Modules
-import { AsyncPipe, NgIf } from '@angular/common';
-// Components
-import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
+import { AsyncPipe } from '@angular/common';
 // Models
 import { LoginUser } from '@towech-finance/shared/utils/models';
 import { createAdapter } from '@state-adapt/core';
-// import { LoginFormComponent } from '@towech-finance/desktop/login/ui/form';
-// NGRX
-// import { LoginStore } from './login.store';
+import { ButtonComponent } from '@towech-finance/shared/ui/button';
+import { SharedCheckboxComponent } from '@towech-finance/shared/ui/checkbox';
+import { SharedInputComponent } from '@towech-finance/shared/ui/input';
+
+// TODO: Move this into its own library when more forms are created -----------
+export type IForm<T> = {
+  [K in keyof T]: AbstractControl<T[K] | null>;
+};
 
 @Directive({
   selector: '[patchFormGroupValues]', // eslint-disable-line @angular-eslint/directive-selector
   standalone: true,
 })
-export class PatchFormGroupValuesDirective {
-  @Input() public formGroup: any;
+export class PatchFormGroupValuesDirective<T> {
+  @Input() public formGroup?: FormGroup<IForm<T>>;
   @Input()
-  public set patchFormGroupValues(val: any) {
-    if (!val) return;
+  public set patchFormGroupValues(val: T | undefined) {
+    if (!this.formGroup || !val) return;
     this.formGroup.patchValue(val, { emitEvent: false });
   }
 }
-
-@Directive({
-  selector: '[setValue]',
-  standalone: true,
-})
-export class SetValueDirective {
-  @Input()
-  public set setValue(val: any) {
-    this.ngControl.control?.setValue(val, { emitEvent: false });
-  }
-
-  public constructor(private ngControl: NgControl) {}
-}
+// ----------------------------------------------------------------------------
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
   styleUrls: ['./login.component.scss'],
-  // providers: [LoginStore],
   imports: [
     AsyncPipe,
-    NgIf,
-    DesktopToasterComponent,
     ReactiveFormsModule,
-    SetValueDirective,
     PatchFormGroupValuesDirective,
+    SharedInputComponent,
+    ButtonComponent,
+    SharedCheckboxComponent,
   ],
-  // imports: [AsyncPipe, NgIf, DesktopToasterComponent, LoginFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <towech-finance-toaster></towech-finance-toaster>
     <div class="login-container">
-      <!-- <div class="login-container" *ngIf="store.form$ | async as form"> -->
       <h1>Login</h1>
-      <form [formGroup]="form" [patchFormGroupValues]="store.state$ | async">
-        <!-- <input type="text" [formControl]="username" [setValue]="store.username$ | async" />
-      <input type="text" />
-      <input type="checkbox" /> -->
-        <input type="text" formControlName="username" />
-        <input type="text" formControlName="password" />
-        <input type="checkbox" formControlName="keepSession" />
+      <form
+        [formGroup]="form"
+        [patchFormGroupValues]="store.state$ | async"
+        (submit)="login$.next()">
+        <towech-finance-shared-input label="Username" formControlName="username">
+        </towech-finance-shared-input>
+        <towech-finance-shared-input type="password" label="Password" formControlName="password">
+        </towech-finance-shared-input>
+        <div class="bottom-row">
+          <towech-finance-checkbox label="Keep Session" formControlName="keepSession">
+          </towech-finance-checkbox>
+          <towech-finance-button type="submit">Login</towech-finance-button>
+        </div>
       </form>
-      <button (click)="pesto$.next()">qqqqq</button>
-      <!-- <towech-finance-login-form
-        [form]="form"
-        (submitted)="onLoginFormSubmit()"
-        (updated)="store.handleFormAction($event)">
-      </towech-finance-login-form> -->
     </div>
   `,
 })
@@ -98,58 +85,34 @@ export class DesktopLoginComponent {
     username: '',
   };
 
-  // public keepSession = new FormControl(this.initialState.keepSession);
-  // public password = new FormControl(this.initialState.password);
-  // public username = new FormControl(this.initialState.username);
-
-  public form = this.fb.group({
-    keepSession: [this.initialState.keepSession],
-    password: [this.initialState.password, Validators.required],
-    username: [this.initialState.username, Validators.required],
+  public form = new FormGroup<IForm<LoginUser | null>>({
+    keepSession: new FormControl(this.initialState.keepSession),
+    password: new FormControl(this.initialState.password, { validators: [Validators.required] }),
+    username: new FormControl(this.initialState.username, { validators: [Validators.required] }),
   });
 
   // Pipes --------------------------------------------------------------------
-  // private keepSessionChange$ = this.keepSession.valueChanges.pipe(toSource('[Form] Keep Change'));
-  // private usernameChange$ = this.username.valueChanges.pipe(toSource('[Form] Name Change'));
-  // private passwordChange$ = this.password.valueChanges.pipe(toSource('[Form] Pass Change'));
-  private valueChanges$ = this.form.valueChanges.pipe(toSource('[Login] form change'));
-  public pesto$ = new Source<void>('[Login] test');
+  private valueChanges$ = this.form.valueChanges.pipe(toSource('[Login Page] Form change'));
+  public login$ = new Source<void>('[Login Page] Trigger Login');
 
   // Adapter ------------------------------------------------------------------
   private adapter = createAdapter<LoginUser>()({
     changeValue: (state, value) => ({ ...state, ...value }),
-    pesto: () => ({ ...this.initialState }),
+    login: state => this.triggerLogin(state),
   });
-  // private adapter = createAdapter<LoginUser>()({
-  //   changeUsername: (state, username: string | null) => ({ ...state, username: username || '' }),
-  //   changePassword: (state, password: string | null) => ({ ...state, password: password || '' }),
-  //   changeKeepSession: (state, keepSession: boolean | null) => ({
-  //     ...state,
-  //     keepSession: keepSession || false,
-  //   }),
-  //   selectors: {
-  //     username: state => state.username,
-  //     password: state => state.password,
-  //     keepSession: state => state.keepSession,
-  //   },
-  // });
 
   // Store --------------------------------------------------------------------
-  // public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
-  //   changeUsername: this.usernameChange$,
-  //   changePassword: this.passwordChange$,
-  //   changeKeepSession: this.keepSessionChange$,
-  // });
   public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
     changeValue: this.valueChanges$,
-    pesto: this.pesto$,
+    login: this.login$,
   });
 
   // Helpers ------------------------------------------------------------------
+  private triggerLogin(state: LoginUser): LoginUser {
+    // Triggers the pipe rather than being the pipe itself to avoid circular imports
+    this.user.login$.next(state);
+    return state;
+  }
 
-  public constructor(private fb: FormBuilder) {}
-  // public constructor(public readonly store: LoginStore) {}
-  // public onLoginFormSubmit() {
-  //   this.store.login();
-  // }
+  public constructor(public readonly user: DesktopUserService) {}
 }
