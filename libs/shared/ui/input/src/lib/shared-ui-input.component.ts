@@ -6,18 +6,12 @@
 // Libraries
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-// import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-shared-input',
   styleUrls: ['./shared-ui-input.component.scss'],
   providers: [
-    // {
-    //   provide: NGRX_FORM_VIEW_ADAPTER,
-    //   useExisting: forwardRef(() => SharedInputComponent),
-    //   multi: true,
-    // },
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SharedInputComponent),
@@ -32,7 +26,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         [value]="value"
         [disabled]="disabled"
         (input)="onChange($event)"
-        (blur)="touched()" />
+        (blur)="customTouched()" />
       <label>{{ label }}</label>
     </div>
   `,
@@ -42,19 +36,15 @@ export class SharedInputComponent implements ControlValueAccessor {
   @Input() public label = '';
   public value = '';
   public disabled = false;
-  public touched = (): void => {};
-  public changed = (value: string): void => {};
-
-  public writeValue(value: string): void {
-    this.value = value;
-  }
+  public customTouched = (): void => {};
+  public customChanged = (value: string): void => {};
 
   public registerOnChange(fn: any): void {
-    this.changed = fn;
+    this.customChanged = fn;
   }
 
   public registerOnTouched(fn: any): void {
-    this.touched = fn;
+    this.customTouched = fn;
   }
 
   public setDisabledState(isDisabled: boolean): void {
@@ -63,6 +53,10 @@ export class SharedInputComponent implements ControlValueAccessor {
 
   public onChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).value;
-    this.changed(value);
+    this.customChanged(value);
+  }
+
+  public writeValue(value: string): void {
+    this.value = value;
   }
 }

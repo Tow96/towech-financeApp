@@ -27,9 +27,9 @@ describe('Shared Input Component', () => {
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  it('The changed and touched functions must do nothing at start', () => {
-    expect(component.changed('t')).toBeUndefined();
-    expect(component.touched()).toBeUndefined();
+  it('The customChanged and customTouched functions must do nothing at start', () => {
+    expect(component.customChanged('t')).toBeUndefined();
+    expect(component.customTouched()).toBeUndefined();
   });
 
   describe('When setViewValue is called', () => {
@@ -42,13 +42,13 @@ describe('Shared Input Component', () => {
   });
 
   describe('When setOnChangeCallback is called', () => {
-    it('Should update the changed function', () => {
+    it('Should update the customChanged function', () => {
       const newChanged = (value: string) => {
         console.log(value);
       };
 
       component.registerOnChange(newChanged);
-      expect(component.changed).toBe(newChanged);
+      expect(component.customChanged).toBe(newChanged);
     });
   });
 
@@ -59,7 +59,7 @@ describe('Shared Input Component', () => {
       };
 
       component.registerOnTouched(newTouched);
-      expect(component.touched).toBe(newTouched);
+      expect(component.customTouched).toBe(newTouched);
     });
   });
 
@@ -73,11 +73,11 @@ describe('Shared Input Component', () => {
   });
 
   describe('When on change is called', () => {
-    it('Should call the changed function with the new value', () => {
+    it('Should call the customChanged function with the new value', () => {
       const newValue = 'updatedValue';
       const event = { target: { value: newValue } } as any;
 
-      const spy = jest.spyOn(component, 'changed');
+      const spy = jest.spyOn(component, 'customChanged');
 
       component.onChange(event);
 
