@@ -71,7 +71,7 @@ export class PatchFormGroupValuesDirective<T> {
         <div class="bottom-row">
           <towech-finance-checkbox label="Keep Session" formControlName="keepSession">
           </towech-finance-checkbox>
-          <towech-finance-button type="submit">Login</towech-finance-button>
+          <towech-finance-button type="submit" id="Login-button">Login</towech-finance-button>
         </div>
       </form>
     </div>
@@ -109,6 +109,7 @@ export class DesktopLoginComponent {
 
   // Helpers ------------------------------------------------------------------
   private triggerLogin(state: LoginUser): LoginUser {
+    console.log('qqq');
     // Triggers the pipe rather than being the pipe itself to avoid circular imports
     this.user.login$.next(state);
     return state;

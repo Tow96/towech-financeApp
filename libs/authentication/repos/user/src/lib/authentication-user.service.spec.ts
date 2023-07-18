@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/mongoose';
 // Tested elements
 import { UserDocument } from './authentication-user.service';
 // Mocks
-import { MockModel } from '@towech-finance/shared/features/mongo';
+import { MockModel } from '@towech-finance/shared/feature/mongo';
 import { userStub, passwordStub, refreshArrStub, singleTokenStub } from '../mocks/user.stub';
 // Services
 import { AuthenticationUserService } from './authentication-user.service';

@@ -1,4 +1,4 @@
-# shared-features-logger
+# shared-feature-logger
 
 This library was generated with [Nx](https://nx.dev).
 Loggin Library that uses winston, this ensures logging into files.

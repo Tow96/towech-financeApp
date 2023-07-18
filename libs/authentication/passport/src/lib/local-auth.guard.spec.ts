@@ -7,7 +7,7 @@ import { LocalAuthGuard, LocalStrategy } from './local-auth.guard';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { passwordStub, plainUserStub } from '@towech-finance/authentication/repos/user';
-import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/features/i18n-nest';
+import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/feature/i18n-nest';
 // Models
 import { UserModel } from '@towech-finance/shared/utils/models';
 // Services

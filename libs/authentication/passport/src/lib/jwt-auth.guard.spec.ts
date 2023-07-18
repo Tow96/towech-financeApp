@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { plainUserStub } from '@towech-finance/authentication/repos/user';
-import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/features/i18n-nest';
+import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/feature/i18n-nest';
 import { generateI18nMockExecutionContext } from './utils';
 // Tested elements
 import { JwtAuthGuard, JwtAuthStrategy } from './jwt-auth.guard';

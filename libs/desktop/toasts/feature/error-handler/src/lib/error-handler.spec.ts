@@ -4,7 +4,7 @@ import { subscribeSpyTo, SubscriberSpy } from '@hirez_io/observer-spy';
 // Tested elements
 import { DesktopGlobalErrorToastClass, messages } from './error-handler';
 // Services
-import { NewToast } from '@towech-finance/desktop/toasts/data-access';
+import { NewToast } from '@towech-finance/desktop/toasts/utils';
 import { Source } from '@state-adapt/rxjs';
 
 const ACTIONTYPE = '[Toast Service] Add Error Toast';

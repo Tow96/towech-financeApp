@@ -1,4 +1,4 @@
-# shared-features-mongo
+# shared-feature-mongo
 
 This library was generated with [Nx](https://nx.dev).
 

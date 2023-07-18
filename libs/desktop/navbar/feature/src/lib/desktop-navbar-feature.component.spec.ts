@@ -1,9 +1,8 @@
 // Libraries
-import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
-import { Observable } from 'rxjs';
 // Tested elements
 import { DesktopNavbarComponent } from './desktop-navbar-feature.component';
 // Mocks
