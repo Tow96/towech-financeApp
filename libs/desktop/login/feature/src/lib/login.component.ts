@@ -109,8 +109,7 @@ export class DesktopLoginComponent {
 
   // Helpers ------------------------------------------------------------------
   private triggerLogin(state: LoginUser): LoginUser {
-    console.log('qqq');
-    // Triggers the pipe rather than being the pipe itself to avoid circular imports
+    // Triggers the pipe generic pipe instead of having an specific login pipe in the userservice to avoid circular imports
     this.user.login$.next(state);
     return state;
   }
