@@ -4,7 +4,7 @@
  * Main Shell configuration
  */
 // Libraries
-import { ApplicationConfig, InjectionToken, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 // Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Services
@@ -12,22 +12,24 @@ import { provideRouter } from '@angular/router';
 import { devOnlyModulesImport } from '../../imports/dev-only.modules';
 import { DesktopGlobalErrorToast } from '@towech-finance/desktop/toasts/error';
 import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { provideHttpClient } from '@angular/common/http';
 // Routes
 import { desktopShellRoutes } from './desktop-shell.routes';
 // Environment
-import { environment } from '../../environments/environment';
+import { provideEnvironment } from '@towech-finance/desktop/environment';
 import { provideStore } from '@ngrx/store';
 // State Adapt
 import { adaptReducer } from '@state-adapt/core';
 import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@towech-finance/desktop/user/guards';
 
-const APP_CONFIG = new InjectionToken('Application config');
 export const DesktopShellConfig: ApplicationConfig = {
   providers: [
     // Environment
-    { provide: APP_CONFIG, useValue: environment },
+    provideEnvironment(),
     // Old Modules
     importProvidersFrom([BrowserAnimationsModule]),
+    // Http
+    provideHttpClient(),
     // Store
     provideStore({ adapt: adaptReducer }),
     // Routes
