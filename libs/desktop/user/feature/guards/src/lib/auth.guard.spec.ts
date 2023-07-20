@@ -11,7 +11,7 @@ import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
 
 const mockState = (value: boolean) => ({
   store: {
-    isLoggedIn$: of(value),
+    isLoggedIn$: of({ loaded: true, logged: value }),
   },
 });
 

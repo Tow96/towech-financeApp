@@ -5,7 +5,7 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 // Services
 import { Router } from '@angular/router';
 import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
@@ -20,9 +20,10 @@ export class DesktopUserNoAuthGuard {
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
   public canActivate(): Observable<boolean> {
     return this.user.store.isLoggedIn$.pipe(
-      map(logged => {
-        if (logged) this.router.navigate(['']);
-        return !logged;
+      filter(isLoggedIn => isLoggedIn.loaded),
+      map(isLoggedIn => {
+        if (isLoggedIn.logged) this.router.navigate(['']); // TODO: Redirect to where you want to go
+        return !isLoggedIn.logged;
       })
     );
   }
