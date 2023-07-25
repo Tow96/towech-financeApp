@@ -8,10 +8,11 @@ import { Injectable } from '@angular/core';
 import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { Source, toRequestSource, splitRequestSources, toSource } from '@state-adapt/rxjs';
+import { catchError, exhaustMap, map, of, tap } from 'rxjs';
+// Services
+import { DesktopAuthenticationService } from './authentication.service';
 // Models
 import { LoginUser, UserModel } from '@towech-finance/shared/utils/models';
-import { Observable, catchError, exhaustMap, filter, map, of, tap, timer } from 'rxjs';
-import { DesktopAuthenticationService, UserResponse } from './authentication.service';
 
 enum Actions {
   LOGIN = '[User Service] Login',
@@ -46,28 +47,37 @@ export class DesktopUserService extends DesktopAuthenticationService {
   public logout$ = new Source<void>(Actions.LOGOUT);
   public refresh$ = new Source<void>(Actions.REFRESH);
 
-  // Pipes ------------------------------------------------------------
-  private loginResult = splitRequestSources(
+  // Helpers -------------------------------------------------------
+  private handleLogin = splitRequestSources(
     Actions.LOGIN,
     this.login$.pipe(
       exhaustMap(action => this.login(action.payload).pipe(toRequestSource(Actions.LOGIN)))
     )
   );
-
-  private whenLoginIsSuccessful$ = this.loginResult.success$.pipe(
-    tap(() => this.router.navigate(['']))
-  );
-
-  private refreshResult = splitRequestSources(
+  private handleRefresh = splitRequestSources(
     Actions.REFRESH,
     this.refresh$.pipe(exhaustMap(action => this.refresh().pipe(toRequestSource(Actions.REFRESH))))
   );
 
-  private initialLoad$ = this.refresh().pipe(
-    map(res => ({ data: res.user, token: res.token, status: Status.COMPLETED })),
-    catchError(() => of({ ...this.initialState, status: Status.FAILED })),
-    toSource('[User Service] initial load')
+  // Pipes ------------------------------------------------------------
+  private loginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
+  private loginError$ = this.handleLogin.error$.pipe(
+    tap(error => this.toast.addError$.next({ message: error.payload.message }))
   );
+
+  private refreshSucess$ = this.handleRefresh.success$.pipe();
+  private refreshError$ = this.handleRefresh.error$.pipe(
+    tap(error => {
+      this.router.navigate(['login']);
+      this.toast.addError$.next({ message: error.payload.message });
+    })
+  );
+
+  // private initialLoad$ = this.refresh().pipe(
+  //   map(res => ({ data: res.user, token: res.token, status: Status.COMPLETED })),
+  //   catchError(() => of({ ...this.initialState, status: Status.FAILED })),
+  //   toSource('[User Service] initial load')
+  // );
 
   // Adapter -------------------------------------------------------
   private adapter = createAdapter<state>()({
@@ -87,11 +97,10 @@ export class DesktopUserService extends DesktopAuthenticationService {
   // Store ---------------------------------------------------------
   public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
     set: this.initialLoad$,
-    setUser: [this.whenLoginIsSuccessful$, this.refreshResult.success$],
-    setStatusComplete: this.whenLoginIsSuccessful$,
-    setStatusFailed: this.loginResult.error$,
+    clearUser: this.refreshError$,
+    setUser: [this.loginSuccess$, this.refreshSucess$],
+    setStatusComplete: [this.loginSuccess$, this.refreshSucess$],
+    setStatusFailed: [this.loginError$, this.refreshError$],
     setStatusInProgress: this.login$,
   });
-
-  // Helpers -------------------------------------------------------
 }

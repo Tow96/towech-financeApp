@@ -9,6 +9,7 @@ import { Inject, Injectable } from '@angular/core';
 import { catchError, Observable, map, throwError, of } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 // Services
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 import { Router } from '@angular/router';
 import { APP_CONFIG, environment } from '@towech-finance/desktop/environment';
 import { LoginUser, UserModel } from '@towech-finance/shared/utils/models';
@@ -59,6 +60,7 @@ export class DesktopAuthenticationService {
   constructor(
     protected readonly http: HttpClient,
     protected readonly router: Router,
+    protected readonly toast: DesktopToasterService,
     @Inject(APP_CONFIG) protected readonly env: typeof environment
   ) {}
 }
