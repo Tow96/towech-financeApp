@@ -22,7 +22,6 @@ export class DesktopUserAuthGuard {
     return this.user.store.isLoggedIn$.pipe(
       filter(isLoggedIn => isLoggedIn.loaded),
       map(isLoggedIn => {
-        console.log('aqui');
         if (!isLoggedIn.logged) this.router.navigate(['login']);
         return isLoggedIn.logged;
       })

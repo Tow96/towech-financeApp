@@ -8,11 +8,7 @@ import { TestBed } from '@angular/core/testing';
 // Tested elements
 import { DesktopAuthenticationService } from './desktop-shell-data-authentication.service';
 // Models
-import { LoginUser } from '@towech-finance/shared/utils/models';
-import {
-  DesktopShellUtilsEnvironmentsModule,
-  environment,
-} from '@towech-finance/desktop/shell/utils/environments';
+// import { LoginUser } from '@towech-finance/shared/utils/models';
 
 const stubLogin: LoginUser = {
   keepSession: false,
@@ -41,7 +37,7 @@ describe('Authentication Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, DesktopShellUtilsEnvironmentsModule],
+      imports: [HttpClientTestingModule],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(DesktopAuthenticationService);
