@@ -2,7 +2,7 @@
 
 exports[`Desktop Navbar Must match the snapshot 1`] = `
 <div
-  id="root0"
+  id="root1"
 >
   <div
     class="nav-wrapper"

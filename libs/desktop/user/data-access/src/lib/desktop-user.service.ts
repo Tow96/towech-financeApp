@@ -7,8 +7,8 @@
 import { Injectable } from '@angular/core';
 import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
-import { Source, toRequestSource, splitRequestSources, toSource } from '@state-adapt/rxjs';
-import { catchError, exhaustMap, map, of, tap } from 'rxjs';
+import { Source, splitRequestSources, toSource } from '@state-adapt/rxjs';
+import { exhaustMap, map, tap } from 'rxjs';
 // Services
 import { DesktopAuthenticationService } from './authentication.service';
 // Models
@@ -27,7 +27,7 @@ export enum Status {
   FAILED = 'failed',
 }
 
-interface state {
+export interface state {
   data: UserModel | null;
   status: Status;
   token: string | null;
@@ -50,34 +50,47 @@ export class DesktopUserService extends DesktopAuthenticationService {
   // Helpers -------------------------------------------------------
   private handleLogin = splitRequestSources(
     Actions.LOGIN,
-    this.login$.pipe(
-      exhaustMap(action => this.login(action.payload).pipe(toRequestSource(Actions.LOGIN)))
-    )
+    this.login$.pipe(exhaustMap(action => this.callLogin(action.payload, Actions.LOGIN)))
   );
   private handleRefresh = splitRequestSources(
     Actions.REFRESH,
-    this.refresh$.pipe(exhaustMap(action => this.refresh().pipe(toRequestSource(Actions.REFRESH))))
+    this.refresh$.pipe(exhaustMap(() => this.callRefresh(Actions.REFRESH)))
+  );
+  private handleLogout = splitRequestSources(
+    Actions.LOGOUT,
+    this.logout$.pipe(exhaustMap(() => this.callLogout(Actions.LOGOUT)))
   );
 
   // Pipes ------------------------------------------------------------
-  private loginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
-  private loginError$ = this.handleLogin.error$.pipe(
+  private initialLoad$ = this.callRefresh('').pipe(
+    map(({ payload, type }) => {
+      if (type === '.success$')
+        return { data: payload.user, token: payload.token, status: Status.COMPLETED };
+      return { ...this.initialState, status: Status.FAILED };
+    }),
+    toSource('[User Service] initial load')
+  );
+
+  private onLoginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
+  private onLoginError$ = this.handleLogin.error$.pipe(
     tap(error => this.toast.addError$.next({ message: error.payload.message }))
   );
 
-  private refreshSucess$ = this.handleRefresh.success$.pipe();
-  private refreshError$ = this.handleRefresh.error$.pipe(
+  private onRefreshSucess$ = this.handleRefresh.success$.pipe();
+  private onRefreshError$ = this.handleRefresh.error$.pipe(
     tap(error => {
       this.router.navigate(['login']);
       this.toast.addError$.next({ message: error.payload.message });
     })
   );
 
-  // private initialLoad$ = this.refresh().pipe(
-  //   map(res => ({ data: res.user, token: res.token, status: Status.COMPLETED })),
-  //   catchError(() => of({ ...this.initialState, status: Status.FAILED })),
-  //   toSource('[User Service] initial load')
-  // );
+  private onLogoutSuccess$ = this.handleLogout.success$.pipe(
+    tap(() => this.router.navigate(['login']))
+  );
+  private onLogoutError$ = this.handleLogout.error$.pipe(
+    tap(() => this.router.navigate(['login'])),
+    tap(({ payload }) => this.toast.addError$.next({ message: payload }))
+  );
 
   // Adapter -------------------------------------------------------
   private adapter = createAdapter<state>()({
@@ -97,10 +110,10 @@ export class DesktopUserService extends DesktopAuthenticationService {
   // Store ---------------------------------------------------------
   public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
     set: this.initialLoad$,
-    clearUser: this.refreshError$,
-    setUser: [this.loginSuccess$, this.refreshSucess$],
-    setStatusComplete: [this.loginSuccess$, this.refreshSucess$],
-    setStatusFailed: [this.loginError$, this.refreshError$],
+    clearUser: [this.onRefreshError$, this.onLogoutSuccess$, this.onLogoutError$],
+    setUser: [this.onLoginSuccess$, this.onRefreshSucess$],
+    setStatusComplete: [this.onLoginSuccess$, this.onRefreshSucess$, this.onLogoutSuccess$],
+    setStatusFailed: [this.onLoginError$, this.onRefreshError$, this.onLogoutError$],
     setStatusInProgress: this.login$,
   });
 }

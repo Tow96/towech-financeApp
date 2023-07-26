@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Desktop Shell Component Must match the snapshot 1`] = `
+<div
+  id="root1"
+>
+  <towech-finance-toaster>
+    <div
+      class="desktop-toaster"
+    >
+      
+    </div>
+  </towech-finance-toaster>
+</div>
+`;

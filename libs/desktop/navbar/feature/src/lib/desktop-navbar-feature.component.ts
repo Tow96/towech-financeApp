@@ -17,6 +17,7 @@ import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
 import { DesktopNavbarItemComponent } from '@towech-finance/desktop/navbar/ui/item';
 // Models
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { tap } from 'rxjs';
 
 interface NavIcon {
   title: string;
@@ -54,16 +55,20 @@ export class DesktopNavbarComponent {
     if (refIsDeployed && !refContainsTarget) this.forceCollapse$.next();
   }
 
-  // Pipes --------------------------------------------------------------------
+  // Sources ------------------------------------------------------------------
   private forceCollapse$ = new Source<void>('[Navbar] Collapse drawer');
   public toggleCollapse$ = new Source<void>('[Navbar] Toggle drawer');
   public navigateTo$ = new Source<string>('[Navbar] Navigate to');
+
+  // Pipes --------------------------------------------------------------------
+  private handleNavigate$ = this.navigateTo$.pipe(
+    tap(({ payload }) => this.router.navigate([payload]))
+  );
 
   // Adapter ------------------------------------------------------------------
   private adapter = createAdapter<state>()({
     forceCollapse: state => ({ ...state, collapsed: true }),
     toggleCollapse: state => ({ ...state, collapsed: !state.collapsed }),
-    navigateTo: (state, route: string) => this.navigateTo(state, route),
     selectors: {
       isCollapsed: state => state.collapsed,
       items: state => state.items,
@@ -72,17 +77,11 @@ export class DesktopNavbarComponent {
 
   // Store --------------------------------------------------------------------
   public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
-    forceCollapse: this.forceCollapse$,
+    forceCollapse: [this.forceCollapse$, this.handleNavigate$],
     toggleCollapse: this.toggleCollapse$,
-    navigateTo: this.navigateTo$,
   });
 
   // Helpers ------------------------------------------------------------------
-  private navigateTo(state: state, route: string): state {
-    this.router.navigate([route]);
-    return { ...state, collapsed: true };
-  }
-
   public setItemId(index: number): string {
     return `${this.storeName}-${index}`;
   }

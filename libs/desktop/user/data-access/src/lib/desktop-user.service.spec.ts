@@ -38,9 +38,14 @@ const stubUser = (): UserModel => ({
 });
 
 const stubError = () => ({ message: 'Invalid', error: 'Unauthorized', statusCode: 401 });
+const stubErrorOpts = () => ({ status: stubError().statusCode, statusText: stubError().error });
 
 const mockService = {
   addError$: new Source<NewToast>('Test Error Toast'),
+};
+
+const isLogged = (input: any, loaded: boolean, logged: boolean) => {
+  expect(input).toEqual({ loaded, logged });
 };
 
 describe('Desktop User Service', () => {
@@ -78,6 +83,29 @@ describe('Desktop User Service', () => {
 
   it('Should be defined', () => expect(service).toBeTruthy());
 
+  describe('SET', () => {
+    beforeEach(() => {
+      httpCall = httpController.expectOne(`${environment.authenticationServiceUrl}/refresh`);
+    });
+
+    it('Should call the authentication microservice', () =>
+      expect(httpCall.request.method).toEqual('POST'));
+
+    it('Should SET a completed state when the microservice returns successful', () => {
+      httpCall.flush({ token: stubToken() });
+      expect(state.getLastValue()).toEqual({
+        data: stubUser(),
+        token: stubToken(),
+        status: Status.COMPLETED,
+      });
+    });
+
+    it('Should SET a failed state when the microservice returns failed', () => {
+      httpCall.flush(stubError(), stubErrorOpts());
+      expect(state.getLastValue()).toEqual({ data: null, token: null, status: Status.FAILED });
+    });
+  });
+
   describe('When the login pipe is nexted', () => {
     beforeEach(() => {
       service.login$.next(stubLogin());
@@ -111,24 +139,30 @@ describe('Desktop User Service', () => {
         ));
 
       it('Should redirect to the dashboard', () => expect(routerSpy).toHaveBeenCalledWith(['']));
+
+      it('Should change the isLoggedIn selector to be true', () =>
+        isLogged(subscribeSpyTo(service.store.isLoggedIn$).getLastValue(), true, true));
     });
 
     describe('When the authentication microservice answers with an error', () => {
-      beforeEach(() => httpCall.flush({ status: stubError().statusCode, error: stubError() }));
+      beforeEach(() => httpCall.flush(stubError(), stubErrorOpts()));
 
       it('Should update the store status to failed', () =>
         expect(state.getLastValue()).toEqual(expect.objectContaining({ status: Status.FAILED })));
 
       it('Should send an error to the toast service', () =>
         expect(toastSpy.receivedNext()).toBeTruthy());
+
+      it('Should change the isLoggedIn selector to be false', () =>
+        isLogged(subscribeSpyTo(service.store.isLoggedIn$).getLastValue(), true, false));
     });
   });
 
   describe('When the refresh pipe is nexted', () => {
     beforeEach(() => {
-      jest.clearAllMocks(); // Since the initial load already calls the service
       service.refresh$.next();
-      httpCall = httpController.expectOne(`${environment.authenticationServiceUrl}/refresh`);
+      // Gets the latest one since the setup calls the first one
+      httpCall = httpController.match(`${environment.authenticationServiceUrl}/refresh`)[1];
     });
 
     it('Should call the authentication microservice', () =>
@@ -152,7 +186,7 @@ describe('Desktop User Service', () => {
     });
 
     describe('When the authentication microservice answers with an error', () => {
-      beforeEach(() => httpCall.flush({ status: stubError().statusCode, error: stubError() }));
+      beforeEach(() => httpCall.flush(stubError(), stubErrorOpts()));
 
       it('Should update the store status to failed', () =>
         expect(state.getLastValue()).toEqual(expect.objectContaining({ status: Status.FAILED })));
@@ -165,6 +199,45 @@ describe('Desktop User Service', () => {
 
       it('Should redirect to the login screen', () =>
         expect(routerSpy).toHaveBeenCalledWith(['login']));
+    });
+  });
+
+  describe('When the logout pipe is nexted', () => {
+    beforeEach(() => {
+      service.logout$.next();
+      httpCall = httpController.expectOne(`${environment.authenticationServiceUrl}/logout`);
+    });
+
+    it('Should call the authentication microservice', () =>
+      expect(httpCall.request.method).toEqual('POST'));
+
+    describe('When the authentication microservice answers with a successful response', () => {
+      beforeEach(() => httpCall.flush({}));
+
+      it('Should change the store status to completed', () =>
+        expect(state.getLastValue()).toEqual(
+          expect.objectContaining({ status: Status.COMPLETED })
+        ));
+
+      it('Should remove the user', () =>
+        expect(state.getLastValue()).toEqual(expect.objectContaining({ data: null, token: null })));
+
+      it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
+    });
+
+    describe('When the authentication microservice answers with an error', () => {
+      beforeEach(() => httpCall.flush(stubError(), stubErrorOpts()));
+
+      it('Should change the store status to failed', () =>
+        expect(state.getLastValue()).toEqual(expect.objectContaining({ status: Status.FAILED })));
+
+      it('Should remove the user', () =>
+        expect(state.getLastValue()).toEqual(expect.objectContaining({ data: null, token: null })));
+
+      it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
+
+      it('Should send an error to the toast service', () =>
+        expect(toastSpy.receivedNext()).toBeTruthy());
     });
   });
 });

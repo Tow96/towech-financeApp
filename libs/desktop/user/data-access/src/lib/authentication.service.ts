@@ -6,7 +6,8 @@
 // Libraries
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { catchError, Observable, map, throwError, of } from 'rxjs';
+import { toRequestSource } from '@state-adapt/rxjs';
+import { catchError, Observable, map, throwError } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 // Services
 import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
@@ -21,7 +22,6 @@ export type UserResponse = {
 
 @Injectable()
 export class DesktopAuthenticationService {
-  private headers = { Accept: 'application/json' };
   private ROOTURL = this.env.authenticationServiceUrl;
 
   private tokenIntoResponse = (token: string): UserResponse => ({
@@ -29,7 +29,7 @@ export class DesktopAuthenticationService {
     token,
   });
 
-  private postWithCredentials<Payload, Response>(
+  protected postWithCredentials<Payload, Response>(
     url: string,
     body?: Payload
   ): Observable<Response> {
@@ -41,20 +41,25 @@ export class DesktopAuthenticationService {
       .pipe(catchError(error => throwError(() => error.error)));
   }
 
-  protected login(credentials: LoginUser): Observable<UserResponse> {
+  protected callLogin<T extends string>(credentials: LoginUser, typePrefix: T) {
     return this.postWithCredentials<LoginUser, { token: string }>('login', credentials).pipe(
-      map(res => this.tokenIntoResponse(res.token))
+      map(res => this.tokenIntoResponse(res.token)),
+      toRequestSource(typePrefix)
     );
   }
 
-  protected refresh(): Observable<UserResponse> {
+  protected callLogout<T extends string>(typePrefix: T) {
+    return this.postWithCredentials('logout').pipe(
+      map(() => true),
+      toRequestSource(typePrefix)
+    );
+  }
+
+  protected callRefresh<T extends string>(typePrefix: T) {
     return this.postWithCredentials<null, { token: string }>('refresh').pipe(
-      map(res => this.tokenIntoResponse(res.token))
+      map(res => this.tokenIntoResponse(res.token)),
+      toRequestSource(typePrefix)
     );
-  }
-
-  protected logout(): Observable<boolean> {
-    return this.postWithCredentials('logout').pipe(map(() => true));
   }
 
   constructor(
