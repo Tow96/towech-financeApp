@@ -24,6 +24,7 @@ import { createAdapter } from '@state-adapt/core';
 import { ButtonComponent } from '@towech-finance/shared/ui/button';
 import { SharedCheckboxComponent } from '@towech-finance/shared/ui/checkbox';
 import { SharedInputComponent } from '@towech-finance/shared/ui/input';
+import { debounceTime } from 'rxjs';
 
 // TODO: Move this into its own library when more forms are created -----------
 export type IForm<T> = {
@@ -92,7 +93,10 @@ export class DesktopLoginComponent {
   });
 
   // Pipes --------------------------------------------------------------------
-  private valueChanges$ = this.form.valueChanges.pipe(toSource('[Login Page] Form change'));
+  private valueChanges$ = this.form.valueChanges.pipe(
+    debounceTime(150),
+    toSource('[Login Page] Form change')
+  );
   public login$ = new Source<void>('[Login Page] Trigger Login');
 
   // Adapter ------------------------------------------------------------------
