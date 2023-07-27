@@ -5,7 +5,7 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import { Observable, filter, map, tap } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 // Services
 import { Router } from '@angular/router';
 import { DesktopUserService } from '@towech-finance/desktop/user/data-access';

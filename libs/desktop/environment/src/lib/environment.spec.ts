@@ -1,5 +1,3 @@
-// Libraries
-import { TestBed } from '@angular/core/testing';
 // Tested elements
 import { APP_CONFIG, provideEnvironment } from './environment.service';
 import { environment as base } from './environment';

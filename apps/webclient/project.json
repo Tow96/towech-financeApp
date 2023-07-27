@@ -36,8 +36,8 @@
           "outputHashing": "all",
           "fileReplacements": [
             {
-              "replace": "libs/desktop/shell/feature/environments/environment.ts",
-              "with": "libs/desktop/shell/feature/environments/environment.prod.ts"
+              "replace": "libs/desktop/environment/src/lib/environment.ts",
+              "with": "libs/desktop/environment/src/lib/environment.prod.ts"
             },
             {
               "replace": "libs/desktop/shell/feature/imports/dev-only.modules.ts",

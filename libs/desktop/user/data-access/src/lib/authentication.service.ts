@@ -29,6 +29,10 @@ export class DesktopAuthenticationService {
     token,
   });
 
+  private processError<T>(err: Record<string, T>) {
+    return throwError(() => err['error']);
+  }
+
   protected postWithCredentials<Payload, Response>(
     url: string,
     body?: Payload
@@ -38,7 +42,7 @@ export class DesktopAuthenticationService {
         headers: { Accept: 'application/json' },
         withCredentials: true,
       })
-      .pipe(catchError(error => throwError(() => error.error)));
+      .pipe(catchError(e => this.processError(e)));
   }
 
   protected callLogin<T extends string>(credentials: LoginUser, typePrefix: T) {
@@ -62,7 +66,7 @@ export class DesktopAuthenticationService {
     );
   }
 
-  constructor(
+  public constructor(
     protected readonly http: HttpClient,
     protected readonly router: Router,
     protected readonly toast: DesktopToasterService,

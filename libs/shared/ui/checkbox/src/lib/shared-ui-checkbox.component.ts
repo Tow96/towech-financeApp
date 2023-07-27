@@ -31,13 +31,13 @@ export class SharedCheckboxComponent implements ControlValueAccessor {
   public value = false;
   public disabled = false;
   public customTouched = (): void => {};
-  public customChanged = (value: boolean): void => {};
+  public customChanged = (_: boolean): void => {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (v: boolean) => void): void {
     this.customChanged = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.customTouched = fn;
   }
 

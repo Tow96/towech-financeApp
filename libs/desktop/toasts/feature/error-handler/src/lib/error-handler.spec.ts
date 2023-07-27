@@ -1,5 +1,4 @@
 // Libraries
-import { Component } from '@angular/core';
 import { subscribeSpyTo, SubscriberSpy } from '@hirez_io/observer-spy';
 // Tested elements
 import { DesktopGlobalErrorToastClass, messages } from './error-handler';

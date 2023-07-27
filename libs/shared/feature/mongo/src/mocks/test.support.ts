@@ -14,7 +14,8 @@ export const dummyStub = (): DummyDoc => {
   };
 };
 
-export class DummyModel extends MockModel<DummyDoc> {
+export class DummyModel extends MockModel {
+  // export class DummyModel extends MockModel<DummyDoc> {
   protected entityStub = dummyStub();
 }
 

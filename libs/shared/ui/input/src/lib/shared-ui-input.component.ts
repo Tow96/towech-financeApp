@@ -37,13 +37,13 @@ export class SharedInputComponent implements ControlValueAccessor {
   public value = '';
   public disabled = false;
   public customTouched = (): void => {};
-  public customChanged = (value: string): void => {};
+  public customChanged = (_: string): void => {}; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (v: string) => void): void {
     this.customChanged = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.customTouched = fn;
   }
 

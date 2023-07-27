@@ -3,14 +3,14 @@ import { Component, EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
-import { subscribeSpyTo } from '@hirez_io/observer-spy';
+// import { subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested elements
-import { DesktopLoginComponent, PatchFormGroupValuesDirective } from './login.component';
+import { PatchFormGroupValuesDirective } from './login.component';
 // Mocks
-import { provideStore } from '@ngrx/store';
-import { adaptReducer } from '@state-adapt/core';
-import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
-import { LoginUser } from '@towech-finance/shared/utils/models';
+// import { provideStore } from '@ngrx/store';
+// import { adaptReducer } from '@state-adapt/core';
+// import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+// import { LoginUser } from '@towech-finance/shared/utils/models';
 
 @Component({
   standalone: true,
@@ -65,11 +65,11 @@ describe('Patch form Directive', () => {
 });
 
 describe('Desktop Login Component', () => {
-  const newValue: LoginUser = { username: 'user', password: 'pass', keepSession: false };
-  let component: DesktopLoginComponent;
-  let fixture: ComponentFixture<DesktopLoginComponent>;
-  let service: DesktopUserService;
-  let compiled: HTMLElement;
+  // const newValue: LoginUser = { username: 'user', password: 'pass', keepSession: false };
+  // let component: DesktopLoginComponent;
+  // let fixture: ComponentFixture<DesktopLoginComponent>;
+  // let service: DesktopUserService;
+  // let compiled: HTMLElement;
 
   it('', () => {
     expect(1).toBeTruthy();
