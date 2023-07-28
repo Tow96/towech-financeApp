@@ -1,17 +1,21 @@
 // Libraries
 import { Component, EventEmitter } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
-// import { subscribeSpyTo } from '@hirez_io/observer-spy';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
+import { Source } from '@state-adapt/rxjs';
+import { Subject } from 'rxjs';
 // Tested elements
-import { PatchFormGroupValuesDirective } from './login.component';
+import { DesktopLoginComponent, PatchFormGroupValuesDirective } from './login.component';
 // Mocks
-// import { provideStore } from '@ngrx/store';
-// import { adaptReducer } from '@state-adapt/core';
-// import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
-// import { LoginUser } from '@towech-finance/shared/utils/models';
+import { provideStore } from '@ngrx/store';
+import { Action, adaptReducer } from '@state-adapt/core';
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 
+// Directive ------------------------------------------------------------------
 @Component({
   standalone: true,
   imports: [PatchFormGroupValuesDirective, ReactiveFormsModule, AsyncPipe],
@@ -64,51 +68,115 @@ describe('Patch form Directive', () => {
   });
 });
 
+// Component ------------------------------------------------------------------
+const fakeFire = new Subject<Action<any, '[User Service] Login.error$'>>();
+
+const mockUserService = {
+  login$: new Source('TEST LOGIN'),
+  onLoginError$: fakeFire.pipe(),
+};
+const mockToastService = {
+  addError$: new Source('TEST ERROR'),
+};
+
 describe('Desktop Login Component', () => {
-  // const newValue: LoginUser = { username: 'user', password: 'pass', keepSession: false };
-  // let component: DesktopLoginComponent;
-  // let fixture: ComponentFixture<DesktopLoginComponent>;
-  // let service: DesktopUserService;
-  // let compiled: HTMLElement;
+  let component: DesktopLoginComponent;
+  let fixture: ComponentFixture<DesktopLoginComponent>;
+  let userService: DesktopUserService;
+  let toastService: DesktopToasterService;
+  let compiled: HTMLElement;
+  let stateSpy: SubscriberSpy<any>;
 
-  it('', () => {
-    expect(1).toBeTruthy();
+  const updateComponent = () => {
+    fixture.detectChanges();
+    component = fixture.componentInstance;
+    compiled = fixture.nativeElement;
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    TestBed.configureTestingModule({
+      providers: [
+        provideStore({ adapt: adaptReducer }),
+        { provide: DesktopUserService, useValue: mockUserService },
+        { provide: DesktopToasterService, useValue: mockToastService },
+      ],
+    });
+    fixture = TestBed.createComponent(DesktopLoginComponent);
+
+    // updateComponent();
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    compiled = fixture.nativeElement;
+
+    userService = TestBed.inject<DesktopUserService>(DesktopUserService);
+    toastService = TestBed.inject<DesktopToasterService>(DesktopToasterService);
+    stateSpy = subscribeSpyTo(component.store.state$);
   });
-  // beforeEach(() => {
-  //   jest.clearAllMocks();
-  //   TestBed.configureTestingModule({
-  //     providers: [provideStore({ adapt: adaptReducer }), DesktopUserService],
-  //   });
-  //   fixture = TestBed.createComponent(DesktopLoginComponent);
 
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-  //   compiled = fixture.nativeElement;
+  it('Should be defined', () => expect(component).toBeTruthy());
 
-  //   service = TestBed.inject<DesktopUserService>(DesktopUserService);
-  // });
+  it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  // it('Should be defined', () => expect(component).toBeTruthy());
+  describe('When the form fields are changed', () => {
+    it('Should update the store after the debounce time has passed', fakeAsync(() => {
+      const newState = {
+        ...component.initialState,
+        form: {
+          keepSession: false,
+          password: 'pass',
+          username: 'user',
+        },
+      };
 
-  // it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
+      component.form.patchValue(newState.form);
+      tick(1000);
+      expect(stateSpy.getLastValue()).toEqual(newState);
+    }));
+  });
 
-  // describe('When the form fields are changed', () => {
-  //   it('Should update the store', () => {
-  //     const spy = subscribeSpyTo(component.store.state$);
-  //     component.form.patchValue(newValue);
+  // TODO: Add form validation before sending and error processing
+  describe('When the login button is pressed', () => {
+    let userSpy: SubscriberSpy<Action<any, string>>;
+    let toastSpy: SubscriberSpy<Action<any, string>>;
+    let loginBttn: HTMLElement;
 
-  //     expect(spy.getLastValue()).toEqual(newValue);
-  //   });
-  // });
+    beforeEach(() => {
+      userSpy = subscribeSpyTo(userService.login$);
+      toastSpy = subscribeSpyTo(toastService.addError$);
+      loginBttn = fixture.debugElement.nativeElement.querySelector('#Login-button > button');
+    });
 
-  // // TODO: Add form validation before sending and error processing
-  // describe('When the login button is pressed', () => {
-  //   it('Should next the userservice', () => {
-  //     const userSpy = subscribeSpyTo(service.login$);
-  //     const loginBttn: HTMLElement =
-  //       fixture.debugElement.nativeElement.querySelector('#Login-button > button');
-  //     loginBttn.click();
-  //     expect(userSpy.receivedNext()).toBe(true);
-  //   });
-  // });
+    describe('With an invalid form', () => {
+      beforeEach(() => {
+        component.form.patchValue({ username: '', keepSession: false, password: '' });
+        loginBttn.click();
+      });
+
+      it('Should not call the user service', () => expect(userSpy.receivedNext()).toBeFalsy());
+
+      it('Should send an error toast', () => expect(toastSpy.receivedNext()).toBeTruthy());
+    });
+
+    describe('With a valid form', () => {
+      it('Should next the userservice', () => {
+        component.form.patchValue({ username: 'user', keepSession: false, password: 'pass' });
+        loginBttn.click();
+        expect(userSpy.receivedNext()).toBe(true);
+      });
+    });
+  });
+
+  describe('When the userService nexts the onLoginError$ pipe', () => {
+    beforeEach(() => fakeFire.next({ payload: '', type: '[User Service] Login.error$' }));
+
+    it('Should clear the form', () => expect(stateSpy.getLastValue()).toBe(component.initialState));
+
+    it('Should set the form components to dirty', () => {
+      updateComponent();
+      expect(fixture.debugElement.query(By.css('#form-username')).classes['ng-dirty']).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('#form-password')).classes['ng-dirty']).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('#form-keep')).classes['ng-dirty']).toBeTruthy();
+    });
+  });
 });

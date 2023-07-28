@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { Source, splitRequestSources, toSource } from '@state-adapt/rxjs';
-import { exhaustMap, map, tap } from 'rxjs';
+import { exhaustMap, map, share, tap } from 'rxjs';
 // Services
 import { DesktopAuthenticationService } from './authentication.service';
 // Models
@@ -72,8 +72,9 @@ export class DesktopUserService extends DesktopAuthenticationService {
   );
 
   private onLoginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
-  private onLoginError$ = this.handleLogin.error$.pipe(
-    tap(error => this.toast.addError$.next({ message: error.payload.message }))
+  public onLoginError$ = this.handleLogin.error$.pipe(
+    tap(error => this.toast.addError$.next({ message: error.payload.message })),
+    share()
   );
 
   private onRefreshSucess$ = this.handleRefresh.success$.pipe();

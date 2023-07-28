@@ -7,7 +7,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { toRequestSource } from '@state-adapt/rxjs';
-import { catchError, Observable, map, throwError } from 'rxjs';
+import { catchError, Observable, map, throwError, tap } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 // Services
 import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
@@ -47,6 +47,7 @@ export class DesktopAuthenticationService {
 
   protected callLogin<T extends string>(credentials: LoginUser, typePrefix: T) {
     return this.postWithCredentials<LoginUser, { token: string }>('login', credentials).pipe(
+      tap(() => console.log('http')),
       map(res => this.tokenIntoResponse(res.token)),
       toRequestSource(typePrefix)
     );
