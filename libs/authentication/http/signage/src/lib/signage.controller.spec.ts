@@ -7,7 +7,7 @@ import * as httpMock from 'node-mocks-http';
 import { SignageController } from './signage.controller';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
-import { SharedFeaturesLoggerModule } from '@towech-finance/shared/features/logger';
+import { SharedFeaturesLoggerModule } from '@towech-finance/shared/feature/logger';
 import { plainUserStub, refreshArrStub } from '@towech-finance/authentication/repos/user';
 import { UserRoles } from '@towech-finance/shared/utils/models';
 import { ConfigService } from '@nestjs/config';

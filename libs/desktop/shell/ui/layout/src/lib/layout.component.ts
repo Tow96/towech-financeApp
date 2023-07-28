@@ -1,33 +1,42 @@
+/** layout.component.ts
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Main component for the whole application, holds the components that appear globally
+ */
 // Libraries
 import { Component } from '@angular/core';
-// Modules
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 // Components
-import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
 import { DesktopNavbarComponent } from '@towech-finance/desktop/navbar/feature';
 
-// TODO: Testing
+// TODO: Add Testing
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-layout',
-  imports: [DesktopNavbarComponent, DesktopToasterComponent, RouterModule],
-  styleUrls: ['layout.component.scss'],
+  imports: [DesktopNavbarComponent, RouterOutlet],
+  styles: [
+    `
+      .layout {
+        display: flex;
+
+        .layout__contents {
+          flex: 1;
+          margin: 1em;
+        }
+
+        @media screen and (max-width: 30em) {
+          flex-direction: column;
+        }
+      }
+    `,
+  ],
   template: `
-    <towech-finance-toaster></towech-finance-toaster>
     <div class="layout">
       <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
-      <div class="contents">
+      <div class="layout__contents">
         <router-outlet></router-outlet>
       </div>
     </div>
-    <!-- <div class="layout">
-      < !-- <towech-finance-webclient-navbar class="nav"></towech-finance-webclient-navbar>
-      <div class="header">TODO: HEADER</div>
-      <div class="content">
-        <towech-finance-toaster></towech-finance-toaster>
-        <router-outlet></router-outlet>
-      </div> -- >
-    </div> -->
   `,
 })
 export class LayoutComponent {}

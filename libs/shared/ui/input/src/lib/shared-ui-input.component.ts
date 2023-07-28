@@ -5,7 +5,7 @@
  */
 // Libraries
 import { Component, forwardRef, Input } from '@angular/core';
-import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -13,7 +13,7 @@ import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
   styleUrls: ['./shared-ui-input.component.scss'],
   providers: [
     {
-      provide: NGRX_FORM_VIEW_ADAPTER,
+      provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SharedInputComponent),
       multi: true,
     },
@@ -26,35 +26,37 @@ import { FormViewAdapter, NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
         [value]="value"
         [disabled]="disabled"
         (input)="onChange($event)"
-        (blur)="touched()" />
+        (blur)="customTouched()" />
       <label>{{ label }}</label>
     </div>
   `,
 })
-export class SharedInputComponent implements FormViewAdapter {
+export class SharedInputComponent implements ControlValueAccessor {
   @Input() public type: 'text' | 'password' = 'text';
   @Input() public label = '';
   public value = '';
   public disabled = false;
-  public touched = (): void => {}; // eslint-disable-line
-  public changed = (value: string): void => {}; // eslint-disable-line
+  public customTouched = (): void => {};
+  public customChanged = (_: string): void => {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+  public registerOnChange(fn: (v: string) => void): void {
+    this.customChanged = fn;
+  }
+
+  public registerOnTouched(fn: () => void): void {
+    this.customTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
   public onChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).value;
-
-    this.changed(value);
+    this.customChanged(value);
   }
 
-  public setViewValue(value: string): void {
+  public writeValue(value: string): void {
     this.value = value;
-  }
-  public setOnChangeCallback(fn: (value: string) => void): void {
-    this.changed = fn;
-  }
-  public setOnTouchedCallback(fn: () => void): void {
-    this.touched = fn;
-  }
-  public setIsDisabled(isDisabled: boolean): void {
-    this.disabled = isDisabled;
   }
 }

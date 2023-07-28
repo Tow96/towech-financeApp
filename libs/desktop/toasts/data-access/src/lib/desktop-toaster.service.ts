@@ -5,49 +5,52 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import * as uuid from 'uuid';
-import { BehaviorSubject } from 'rxjs';
+import { createAdapter } from '@state-adapt/core';
+import { adaptNgrx } from '@state-adapt/ngrx';
+import { Source } from '@state-adapt/rxjs';
+import { DesktopToast, NewToast, ToastTypes } from '@towech-finance/desktop/toasts/utils';
 
-export enum ToastTypes {
-  ACCENT = 'accent',
-  ERROR = 'error',
-  SUCCESS = 'success',
-  WARNING = 'warning',
-}
-export interface DesktopToast {
-  id: string;
-  message: string;
-  duration?: number;
-  type: ToastTypes;
-}
+import * as uuid from 'uuid';
 
 @Injectable({ providedIn: 'root' })
 export class DesktopToasterService {
-  private toasts: BehaviorSubject<DesktopToast[]> = new BehaviorSubject<DesktopToast[]>([]);
-  public toastTray = this.toasts.asObservable();
+  private storeName = 'toast-tray';
+  private initialState: DesktopToast[] = [];
 
-  private add(message: string, type: ToastTypes, duration?: number): void {
-    const toast = { id: uuid.v4(), message, duration, type };
-    this.toasts.next([toast, ...this.toasts.value]);
-  }
+  // Pipes --------------------------------------------------------------------
+  public addAccent$ = new Source<NewToast>('[Toast Service] Add Accent Toast');
+  public addError$ = new Source<NewToast>('[Toast Service] Add Error Toast');
+  public addSuccess$ = new Source<NewToast>('[Toast Service] Add Success Toast');
+  public addWarning$ = new Source<NewToast>('[Toast Service] Add Warning Toast');
+  public dismiss$ = new Source<string>('[Toast Service] Dismiss Toast');
 
-  public addAccent(message: string, duration?: number): void {
-    this.add(message, ToastTypes.ACCENT, duration);
-  }
+  // Adapter ------------------------------------------------------------------
+  private toastAdapter = createAdapter<DesktopToast[]>()({
+    addAccent: (state, toast: NewToast) => this.addToast(state, toast, ToastTypes.ACCENT),
+    addError: (state, toast: NewToast) => this.addToast(state, toast, ToastTypes.ERROR),
+    addSuccess: (state, toast: NewToast) => this.addToast(state, toast, ToastTypes.SUCCESS),
+    addWarning: (state, toast: NewToast) => this.addToast(state, toast, ToastTypes.WARNING),
+    dismiss: (state, id: string) => [...state.filter(t => t.id !== id)],
+  });
 
-  public addError(message: string, duration?: number): void {
-    this.add(message, ToastTypes.ERROR, duration);
-  }
+  // Store --------------------------------------------------------------------
+  public toasts = adaptNgrx([this.storeName, this.initialState, this.toastAdapter], {
+    addAccent: this.addAccent$,
+    addError: this.addError$,
+    addSuccess: this.addSuccess$,
+    addWarning: this.addWarning$,
+    dismiss: this.dismiss$,
+  });
 
-  public addSuccess(message: string, duration?: number): void {
-    this.add(message, ToastTypes.SUCCESS, duration);
-  }
+  // Helpers ------------------------------------------------------------------
+  private addToast = (
+    state: DesktopToast[],
+    newToast: NewToast,
+    type: ToastTypes
+  ): DesktopToast[] => {
+    const toast: DesktopToast = { id: uuid.v4(), type, ...newToast };
 
-  public addWarning(message: string, duration?: number): void {
-    this.add(message, ToastTypes.WARNING, duration);
-  }
-
-  public dismiss(id: string) {
-    this.toasts.next(this.toasts.value.filter(t => t.id !== id));
-  }
+    // TODO: Use state.toSpliced(0, 0, newToast) when it finally arrives
+    return [toast, ...state];
+  };
 }

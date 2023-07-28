@@ -1,5 +1,5 @@
 {
-  "name": "desktop-toasts-feature",
+  "name": "desktop-toasts-feature-tray",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/desktop/toasts/feature/src",
   "prefix": "towech-finance",

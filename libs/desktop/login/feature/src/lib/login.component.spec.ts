@@ -1,42 +1,182 @@
 // Libraries
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StoreModule } from '@ngrx/store';
+import { Component, EventEmitter } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
+import { Source } from '@state-adapt/rxjs';
+import { Subject } from 'rxjs';
 // Tested elements
-import { DesktopLoginComponent } from './login.component';
-import { LoginStore } from './login.store';
+import { DesktopLoginComponent, PatchFormGroupValuesDirective } from './login.component';
+// Mocks
+import { provideStore } from '@ngrx/store';
+import { Action, adaptReducer } from '@state-adapt/core';
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
+
+// Directive ------------------------------------------------------------------
+@Component({
+  standalone: true,
+  imports: [PatchFormGroupValuesDirective, ReactiveFormsModule, AsyncPipe],
+  template: ` <form [formGroup]="form" [patchFormGroupValues]="patcher$ | async"></form> `,
+})
+class TestComponent {
+  public form = new FormGroup({
+    user: new FormControl(''),
+    pass: new FormControl(''),
+  });
+
+  public patch = new EventEmitter<{ user: string; pass: string }>();
+  public patcher$ = this.patch.pipe();
+}
+
+describe('Patch form Directive', () => {
+  let component: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
+  let spy: jest.SpyInstance;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    TestBed.configureTestingModule({ imports: [TestComponent] });
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    spy = jest.spyOn(component.form, 'patchValue');
+  });
+
+  describe('When the patch pipe is called without anything', () => {
+    it('Should not modify the form', () => {
+      const prevValue = { ...component.form.value };
+      // component.patcher$.next(undefined);
+      const newValue = { ...component.form.value };
+
+      expect(prevValue).toEqual(newValue);
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe('When the patch pipe is called with an update', () => {
+    it('Should patch the form and have it NOT emit', () => {
+      const newValue = { user: 'newuser', pass: 'password' };
+      component.patch.next(newValue);
+      fixture.detectChanges();
+      expect(component.form.value).toEqual(newValue);
+      expect(spy).toHaveBeenCalledWith(newValue, { emitEvent: false });
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+// Component ------------------------------------------------------------------
+const fakeFire = new Subject<Action<any, '[User Service] Login.error$'>>();
+
+const mockUserService = {
+  login$: new Source('TEST LOGIN'),
+  onLoginError$: fakeFire.pipe(),
+};
+const mockToastService = {
+  addError$: new Source('TEST ERROR'),
+};
 
 describe('Desktop Login Component', () => {
   let component: DesktopLoginComponent;
   let fixture: ComponentFixture<DesktopLoginComponent>;
+  let userService: DesktopUserService;
+  let toastService: DesktopToasterService;
   let compiled: HTMLElement;
-  // let store: LoginStore;
+  let stateSpy: SubscriberSpy<any>;
+
+  const updateComponent = () => {
+    fixture.detectChanges();
+    component = fixture.componentInstance;
+    compiled = fixture.nativeElement;
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
-      providers: [LoginStore],
+      providers: [
+        provideStore({ adapt: adaptReducer }),
+        { provide: DesktopUserService, useValue: mockUserService },
+        { provide: DesktopToasterService, useValue: mockToastService },
+      ],
     });
-    // store = TestBed.inject(LoginStore);
     fixture = TestBed.createComponent(DesktopLoginComponent);
 
+    // updateComponent();
     component = fixture.componentInstance;
-
     fixture.detectChanges();
     compiled = fixture.nativeElement;
+
+    userService = TestBed.inject<DesktopUserService>(DesktopUserService);
+    toastService = TestBed.inject<DesktopToasterService>(DesktopToasterService);
+    stateSpy = subscribeSpyTo(component.store.state$);
   });
 
   it('Should be defined', () => expect(component).toBeTruthy());
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  // For some reason the spy doesn't work
-  // describe('When onLoginFormSubmit is called', () => {
-  // it('Should call the login function from the component store', () => {
-  //   const storeSpy = jest.spyOn(store, 'login');
-  //   component.onLoginFormSubmit();
+  describe('When the form fields are changed', () => {
+    it('Should update the store after the debounce time has passed', fakeAsync(() => {
+      const newState = {
+        ...component.initialState,
+        form: {
+          keepSession: false,
+          password: 'pass',
+          username: 'user',
+        },
+      };
 
-  //   expect(store.login).toHaveBeenCalledTimes(1);
-  // });
-  // });
+      component.form.patchValue(newState.form);
+      tick(1000);
+      expect(stateSpy.getLastValue()).toEqual(newState);
+    }));
+  });
+
+  // TODO: Add form validation before sending and error processing
+  describe('When the login button is pressed', () => {
+    let userSpy: SubscriberSpy<Action<any, string>>;
+    let toastSpy: SubscriberSpy<Action<any, string>>;
+    let loginBttn: HTMLElement;
+
+    beforeEach(() => {
+      userSpy = subscribeSpyTo(userService.login$);
+      toastSpy = subscribeSpyTo(toastService.addError$);
+      loginBttn = fixture.debugElement.nativeElement.querySelector('#Login-button > button');
+    });
+
+    describe('With an invalid form', () => {
+      beforeEach(() => {
+        component.form.patchValue({ username: '', keepSession: false, password: '' });
+        loginBttn.click();
+      });
+
+      it('Should not call the user service', () => expect(userSpy.receivedNext()).toBeFalsy());
+
+      it('Should send an error toast', () => expect(toastSpy.receivedNext()).toBeTruthy());
+    });
+
+    describe('With a valid form', () => {
+      it('Should next the userservice', () => {
+        component.form.patchValue({ username: 'user', keepSession: false, password: 'pass' });
+        loginBttn.click();
+        expect(userSpy.receivedNext()).toBe(true);
+      });
+    });
+  });
+
+  describe('When the userService nexts the onLoginError$ pipe', () => {
+    beforeEach(() => fakeFire.next({ payload: '', type: '[User Service] Login.error$' }));
+
+    it('Should clear the form', () => expect(stateSpy.getLastValue()).toBe(component.initialState));
+
+    it('Should set the form components to dirty', () => {
+      updateComponent();
+      expect(fixture.debugElement.query(By.css('#form-username')).classes['ng-dirty']).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('#form-password')).classes['ng-dirty']).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('#form-keep')).classes['ng-dirty']).toBeTruthy();
+    });
+  });
 });

@@ -15,55 +15,37 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@towech-finance/authentication/dto": ["libs/authentication/dto/src/index.ts"],
-      "@towech-finance/authentication/http/signage": [
-        "libs/authentication/http/signage/src/index.ts"
-      ],
-      "@towech-finance/authentication/mocks": ["libs/authentication/mocks/src/index.ts"],
-      "@towech-finance/authentication/passport": ["libs/authentication/passport/src/index.ts"],
-      "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src/index.ts"],
-      "@towech-finance/authentication/shell/feature": [
-        "libs/authentication/shell/feature/src/index.ts"
-      ],
-      "@towech-finance/authentication/tokens": ["libs/authentication/tokens/src/index.ts"],
-      "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src/index.ts"],
-      "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src/index.ts"],
-      "@towech-finance/desktop/login/ui/form": ["libs/desktop/login/ui/form/src/index.ts"],
-      "@towech-finance/desktop/mocks": ["libs/desktop/mocks/src/index.ts"],
-      "@towech-finance/desktop/navbar/feature": ["libs/desktop/navbar/feature/src/index.ts"],
-      "@towech-finance/desktop/navbar/ui/item": ["libs/desktop/navbar/ui/item/src/index.ts"],
-      "@towech-finance/desktop/settings/feature": ["libs/desktop/settings/feature/src/index.ts"],
-      "@towech-finance/desktop/shell/data-access/authentication": [
-        "libs/desktop/shell/data-access/authentication/src/index.ts"
-      ],
-      "@towech-finance/desktop/shell/data-access/user-state": [
-        "libs/desktop/shell/data-access/user-state/src/index.ts"
-      ],
-      "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src/index.ts"],
-      "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src/index.ts"],
-      "@towech-finance/desktop/shell/utils/environments": [
-        "libs/desktop/shell/utils/environments/src/index.ts"
-      ],
-      "@towech-finance/desktop/shell/utils/guards": [
-        "libs/desktop/shell/utils/guards/src/index.ts"
-      ],
-      "@towech-finance/desktop/toasts/data-access": [
-        "libs/desktop/toasts/data-access/src/index.ts"
-      ],
-      "@towech-finance/desktop/toasts/feature/error-handler": [
-        "libs/desktop/toasts/feature/error-handler/src/index.ts"
-      ],
-      "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src/index.ts"],
-      "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src/index.ts"],
-      "@towech-finance/shared/features/i18n-nest": ["libs/shared/features/i18n-nest/src/index.ts"],
-      "@towech-finance/shared/features/logger": ["libs/shared/features/logger/src/index.ts"],
-      "@towech-finance/shared/features/mongo": ["libs/shared/features/mongo/src/index.ts"],
-      "@towech-finance/shared/ui/button": ["libs/shared/ui/button/src/index.ts"],
-      "@towech-finance/shared/ui/checkbox": ["libs/shared/ui/checkbox/src/index.ts"],
-      "@towech-finance/shared/ui/input": ["libs/shared/ui/input/src/index.ts"],
-      "@towech-finance/shared/ui/themes": ["libs/shared/ui/themes/src/index.ts"],
-      "@towech-finance/shared/utils/models": ["libs/shared/utils/models/src/index.ts"],
-      "@towech-finance/shared/utils/pipes": ["libs/shared/utils/pipes/src/index.ts"]
+      "@towech-finance/authentication/dto": ["libs/authentication/dto/src"],
+      "@towech-finance/authentication/http/signage": ["libs/authentication/http/signage/src"],
+      "@towech-finance/authentication/mocks": ["libs/authentication/mocks/src"],
+      "@towech-finance/authentication/passport": ["libs/authentication/passport/src"],
+      "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src"],
+      "@towech-finance/authentication/shell/feature": ["libs/authentication/shell/feature/src"],
+      "@towech-finance/authentication/tokens": ["libs/authentication/tokens/src"],
+      "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src"],
+      "@towech-finance/desktop/environment": ["libs/desktop/environment/src/index.ts"],
+      "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src"],
+      "@towech-finance/desktop/navbar/feature": ["libs/desktop/navbar/feature/src"],
+      "@towech-finance/desktop/navbar/ui/item": ["libs/desktop/navbar/ui/item/src"],
+      "@towech-finance/desktop/settings/feature": ["libs/desktop/settings/feature/src"],
+      "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src"],
+      "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src"],
+      "@towech-finance/desktop/toasts/data-access": ["libs/desktop/toasts/data-access/src"],
+      "@towech-finance/desktop/toasts/error": ["libs/desktop/toasts/feature/error-handler/src"],
+      "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src"],
+      "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src"],
+      "@towech-finance/desktop/toasts/utils": ["libs/desktop/toasts/utils/src/index.ts"],
+      "@towech-finance/desktop/user/data-access": ["libs/desktop/user/data-access/src"],
+      "@towech-finance/desktop/user/guards": ["libs/desktop/user/feature/guards/src"],
+      "@towech-finance/shared/feature/i18n-nest": ["libs/shared/feature/i18n-nest/src"],
+      "@towech-finance/shared/feature/logger": ["libs/shared/feature/logger/src"],
+      "@towech-finance/shared/feature/mongo": ["libs/shared/feature/mongo/src"],
+      "@towech-finance/shared/ui/button": ["libs/shared/ui/button/src"],
+      "@towech-finance/shared/ui/checkbox": ["libs/shared/ui/checkbox/src"],
+      "@towech-finance/shared/ui/input": ["libs/shared/ui/input/src"],
+      "@towech-finance/shared/ui/themes": ["libs/shared/ui/themes/src"],
+      "@towech-finance/shared/utils/models": ["libs/shared/utils/models/src"],
+      "@towech-finance/shared/utils/pipes": ["libs/shared/utils/pipes/src"]
     }
   },
   "exclude": ["node_modules", "tmp"]

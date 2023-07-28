@@ -5,13 +5,16 @@
  */
 // Libraries
 import { NgClass } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-// Services
 import {
-  DesktopToast,
-  DesktopToasterService,
-  ToastTypes,
-} from '@towech-finance/desktop/toasts/data-access';
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+// Services
+import { DesktopToast, ToastTypes } from '@towech-finance/desktop/toasts/utils';
 // Animations
 import {
   colorTransition,
@@ -36,20 +39,20 @@ import {
   animations: [colorTransition, messageBodyTransition, messageTextTransition],
 })
 export class DesktopToastUIComponent implements AfterContentInit {
+  private DEFAULTDURATION = 3000;
   @Input() public toast?: DesktopToast;
-
-  public constructor(private readonly toastService: DesktopToasterService) {}
+  @Output() public dismiss = new EventEmitter<string>();
 
   public ngAfterContentInit(): void {
     if (!this.toast) return;
 
-    setTimeout(() => this.hide(), this.toast.duration || 3000);
+    setTimeout(() => this.hide(), this.toast.duration || this.DEFAULTDURATION);
   }
 
   public hide(): void {
     if (!this.toast) return;
 
-    this.toastService.dismiss(this.toast.id);
+    this.dismiss.next(this.toast.id);
   }
 
   public getTypeClass(): Record<string, boolean> {

@@ -2,94 +2,91 @@
 
 exports[`Desktop Login Component Must match the snapshot 1`] = `
 <div
-  id="root1"
+  id="root3"
 >
-  <towech-finance-toaster>
-    <div
-      class="desktop-toaster"
-    >
-      
-    </div>
-  </towech-finance-toaster>
   <div
     class="login-container"
   >
     <h1>
       Login
     </h1>
-    <towech-finance-login-form>
-      <form
-        class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-        novalidate=""
+    <form
+      class="ng-untouched ng-pristine ng-invalid"
+      novalidate=""
+    >
+      <towech-finance-shared-input
+        class="ng-untouched ng-pristine ng-invalid"
+        formcontrolname="username"
+        id="form-username"
+        label="Username"
       >
-        <towech-finance-shared-input
-          class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-          label="Username"
-        >
-          <div
-            class="input_component"
-          >
-            <input
-              placeholder=" "
-              type="text"
-            />
-            <label>
-              Username
-            </label>
-          </div>
-        </towech-finance-shared-input>
-        <towech-finance-shared-input
-          class="ngrx-forms-invalid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-          label="Password"
-          type="password"
-        >
-          <div
-            class="input_component"
-          >
-            <input
-              placeholder=" "
-              type="password"
-            />
-            <label>
-              Password
-            </label>
-          </div>
-        </towech-finance-shared-input>
         <div
-          class="bottom-row"
+          class="input_component"
         >
-          <towech-finance-checkbox
-            class="ngrx-forms-valid ngrx-forms-pristine ngrx-forms-untouched ngrx-forms-unsubmitted"
-            label="Keep Session"
+          <input
+            placeholder=" "
+            type="text"
+          />
+          <label>
+            Username
+          </label>
+        </div>
+      </towech-finance-shared-input>
+      <towech-finance-shared-input
+        class="ng-untouched ng-pristine ng-invalid"
+        formcontrolname="password"
+        id="form-password"
+        label="Password"
+        type="password"
+      >
+        <div
+          class="input_component"
+        >
+          <input
+            placeholder=" "
+            type="password"
+          />
+          <label>
+            Password
+          </label>
+        </div>
+      </towech-finance-shared-input>
+      <div
+        class="bottom-row"
+      >
+        <towech-finance-checkbox
+          class="ng-untouched ng-pristine ng-valid"
+          formcontrolname="keepSession"
+          id="form-keep"
+          label="Keep Session"
+        >
+          <div
+            class="checkbox"
           >
-            <div
-              class="checkbox"
+            <input
+              id="form-keep"
+              type="checkbox"
+            />
+            <label
+              for="form-keep"
             >
-              <input
-                id="towech-checkbox"
-                type="checkbox"
-              />
-              <label
-                for="towech-checkbox"
-              >
-                Keep Session
-              </label>
-            </div>
-          </towech-finance-checkbox>
-          <towech-finance-button
+              Keep Session
+            </label>
+          </div>
+        </towech-finance-checkbox>
+        <towech-finance-button
+          id="Login-button"
+          type="submit"
+        >
+          <button
+            class="accent"
             type="submit"
           >
-            <button
-              class="accent"
-              type="submit"
-            >
-              Login
-            </button>
-          </towech-finance-button>
-        </div>
-      </form>
-    </towech-finance-login-form>
+            Login
+          </button>
+        </towech-finance-button>
+      </div>
+    </form>
   </div>
-  
 </div>
 `;

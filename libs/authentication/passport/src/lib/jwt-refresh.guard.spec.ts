@@ -5,7 +5,7 @@ import { JwtRefreshGuard, JwtRefreshStrategy } from './jwt-refresh.guard';
 // Mocks
 import { AuthUserRepoMock } from '@towech-finance/authentication/mocks';
 import { plainUserStub, userStub } from '@towech-finance/authentication/repos/user';
-import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/features/i18n-nest';
+import { SharedFeaturesI18nJestModule } from '@towech-finance/shared/feature/i18n-nest';
 // Services
 import { ConfigService } from '@nestjs/config';
 import { I18nService } from 'nestjs-i18n';

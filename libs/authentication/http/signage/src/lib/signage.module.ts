@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 // Modules
 import { AuthenticationReposUserModule } from '@towech-finance/authentication/repos/user';
 import { AuthenticationPassportModule } from '@towech-finance/authentication/passport';
-import { SharedFeaturesLoggerModule } from '@towech-finance/shared/features/logger';
+import { SharedFeaturesLoggerModule } from '@towech-finance/shared/feature/logger';
 // Controllers
 import { SignageController } from './signage.controller';
 import { AuthenticationTokensModule } from '@towech-finance/authentication/tokens';

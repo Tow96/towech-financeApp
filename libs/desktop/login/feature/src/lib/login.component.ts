@@ -4,38 +4,167 @@
  * Login Feature component
  */
 // Libraries
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-// Modules
-import { AsyncPipe, NgIf } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Directive,
+  Input,
+} from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Source, toSource } from '@state-adapt/rxjs';
+import { createAdapter } from '@state-adapt/core';
+import { adaptNgrx } from '@state-adapt/ngrx';
+import { debounceTime, tap } from 'rxjs';
+// Services
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { DesktopToasterService } from '@towech-finance/desktop/toasts/data-access';
 // Components
-import { DesktopToasterComponent } from '@towech-finance/desktop/toasts/tray';
-import { LoginFormComponent } from '@towech-finance/desktop/login/ui/form';
-// NGRX
-import { LoginStore } from './login.store';
+import { ButtonComponent } from '@towech-finance/shared/ui/button';
+import { SharedCheckboxComponent } from '@towech-finance/shared/ui/checkbox';
+import { SharedInputComponent } from '@towech-finance/shared/ui/input';
+// Models
+import { LoginUser } from '@towech-finance/shared/utils/models';
+
+// TODO: Move this into its own library when more forms are created -----------
+export type IForm<T> = {
+  [K in keyof T]: AbstractControl<T[K] | null>;
+};
+
+@Directive({
+  selector: '[patchFormGroupValues]', // eslint-disable-line @angular-eslint/directive-selector
+  standalone: true,
+})
+export class PatchFormGroupValuesDirective<T> {
+  @Input() public formGroup?: FormGroup<IForm<T>>;
+  @Input()
+  public set patchFormGroupValues(val: T | undefined) {
+    if (!this.formGroup || !val) return;
+    this.formGroup.patchValue(val, { emitEvent: false });
+  }
+}
+// ----------------------------------------------------------------------------
+type state = {
+  form: LoginUser;
+  loading: boolean;
+};
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-dashboard',
   styleUrls: ['./login.component.scss'],
-  providers: [LoginStore],
-  imports: [AsyncPipe, NgIf, DesktopToasterComponent, LoginFormComponent],
+  imports: [
+    AsyncPipe,
+    ReactiveFormsModule,
+    PatchFormGroupValuesDirective,
+    SharedInputComponent,
+    ButtonComponent,
+    SharedCheckboxComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <towech-finance-toaster></towech-finance-toaster>
-    <div class="login-container" *ngIf="store.form$ | async as form">
+    <div class="login-container">
       <h1>Login</h1>
-      <towech-finance-login-form
-        [form]="form"
-        (submitted)="onLoginFormSubmit()"
-        (updated)="store.handleFormAction($event)">
-      </towech-finance-login-form>
+      <form
+        [formGroup]="form"
+        [patchFormGroupValues]="store.form$ | async"
+        (submit)="login$.next()">
+        <towech-finance-shared-input id="form-username" label="Username" formControlName="username">
+        </towech-finance-shared-input>
+        <towech-finance-shared-input
+          id="form-password"
+          type="password"
+          label="Password"
+          formControlName="password">
+        </towech-finance-shared-input>
+        <div class="bottom-row">
+          <towech-finance-checkbox
+            id="form-keep"
+            label="Keep Session"
+            formControlName="keepSession">
+          </towech-finance-checkbox>
+          <towech-finance-button type="submit" id="Login-button">Login</towech-finance-button>
+        </div>
+      </form>
     </div>
   `,
 })
 export class DesktopLoginComponent {
-  public constructor(public readonly store: LoginStore) {}
+  private storeName = 'login';
+  public initialState: state = {
+    form: {
+      keepSession: false,
+      password: '',
+      username: '',
+    },
+    loading: false,
+  };
 
-  public onLoginFormSubmit() {
-    this.store.login();
+  public form = new FormGroup<IForm<LoginUser | null>>({
+    keepSession: new FormControl(this.initialState.form.keepSession),
+    password: new FormControl(this.initialState.form.password, {
+      validators: [Validators.required],
+    }),
+    username: new FormControl(this.initialState.form.username, {
+      validators: [Validators.required],
+    }),
+  });
+
+  // Sources ------------------------------------------------------------------
+  public login$ = new Source<void>('[Login Page] Trigger Login');
+
+  // Pipes --------------------------------------------------------------------
+  private formChanges$ = this.form.valueChanges.pipe(
+    debounceTime(150),
+    toSource('[Login Page] Form change')
+  );
+  private loginFail$ = this.user.onLoginError$.pipe(tap(() => this.invalidateForm()));
+
+  // Adapter ------------------------------------------------------------------
+  private adapter = createAdapter<state>()({
+    clear: () => this.initialState,
+    changeForm: (state, form) => ({ ...state, form }),
+    login: state => this.triggerLogin(state),
+    selectors: {
+      form: state => state.form,
+    },
+  });
+
+  // Store --------------------------------------------------------------------
+  public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
+    clear: this.loginFail$,
+    changeForm: this.formChanges$,
+    login: this.login$,
+  });
+
+  // Helpers ------------------------------------------------------------------
+  private triggerLogin(state: state): state {
+    // Triggers the pipe generic pipe instead of having an specific login pipe in the userservice to avoid circular imports
+    if (this.form.invalid)
+      this.toasts.addError$.next({ message: 'Please provide username and password' });
+    else this.user.login$.next(state.form);
+
+    return state;
   }
+
+  private invalidateForm() {
+    const controls = this.form.controls!; // We created the form, we can trust that it exists
+
+    const formKeys = Object.keys(controls);
+    formKeys.forEach(key => controls[key as keyof LoginUser].markAsDirty());
+    this.changeRef.markForCheck(); // Manual change since we're using onPush
+  }
+
+  public constructor(
+    public readonly toasts: DesktopToasterService,
+    public readonly user: DesktopUserService,
+    private readonly changeRef: ChangeDetectorRef
+  ) {}
 }

@@ -11,7 +11,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app/app.module';
 // Services
-import { PidWinstonLogger } from '@towech-finance/shared/features/logger';
+import { PidWinstonLogger } from '@towech-finance/shared/feature/logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
 import { TrimPipe } from '@towech-finance/shared/utils/pipes';

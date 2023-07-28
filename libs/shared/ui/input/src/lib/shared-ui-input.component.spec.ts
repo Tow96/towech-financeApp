@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
 import { SharedInputComponent } from './shared-ui-input.component';
-import { NGRX_FORM_VIEW_ADAPTER } from 'ngrx-forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('Shared Input Component', () => {
   let component: SharedInputComponent;
@@ -21,34 +21,34 @@ describe('Shared Input Component', () => {
 
   it('Should be defined', () => expect(component).toBeTruthy());
 
-  it('Should implement the NGRX_FORM_VIEW_ADAPTER', () => {
-    expect(fixture.debugElement.injector.get(NGRX_FORM_VIEW_ADAPTER)).toBeTruthy();
+  it('Should implement the NG_VALUE_ACCESSOR', () => {
+    expect(fixture.debugElement.injector.get(NG_VALUE_ACCESSOR)).toBeTruthy();
   });
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  it('The changed and touched functions must do nothing at start', () => {
-    expect(component.changed('t')).toBeUndefined();
-    expect(component.touched()).toBeUndefined();
+  it('The customChanged and customTouched functions must do nothing at start', () => {
+    expect(component.customChanged('t')).toBeUndefined();
+    expect(component.customTouched()).toBeUndefined();
   });
 
   describe('When setViewValue is called', () => {
     it('Should update the value', () => {
       const newValue = 'This is a test value';
 
-      component.setViewValue(newValue);
+      component.writeValue(newValue);
       expect(component.value).toBe(newValue);
     });
   });
 
   describe('When setOnChangeCallback is called', () => {
-    it('Should update the changed function', () => {
+    it('Should update the customChanged function', () => {
       const newChanged = (value: string) => {
         console.log(value);
       };
 
-      component.setOnChangeCallback(newChanged);
-      expect(component.changed).toBe(newChanged);
+      component.registerOnChange(newChanged);
+      expect(component.customChanged).toBe(newChanged);
     });
   });
 
@@ -58,26 +58,26 @@ describe('Shared Input Component', () => {
         console.log('NEW FUNCTION');
       };
 
-      component.setOnTouchedCallback(newTouched);
-      expect(component.touched).toBe(newTouched);
+      component.registerOnTouched(newTouched);
+      expect(component.customTouched).toBe(newTouched);
     });
   });
 
   describe('When setIsDisabled is called', () => {
     it('Should set the disabled value', () => {
-      component.setIsDisabled(true);
+      component.setDisabledState(true);
       expect(component.disabled).toBe(true);
-      component.setIsDisabled(false);
+      component.setDisabledState(false);
       expect(component.disabled).toBe(false);
     });
   });
 
   describe('When on change is called', () => {
-    it('Should call the changed function with the new value', () => {
+    it('Should call the customChanged function with the new value', () => {
       const newValue = 'updatedValue';
       const event = { target: { value: newValue } } as any;
 
-      const spy = jest.spyOn(component, 'changed');
+      const spy = jest.spyOn(component, 'customChanged');
 
       component.onChange(event);
 

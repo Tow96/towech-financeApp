@@ -2,7 +2,7 @@
 
 exports[`Desktop Navbar Must match the snapshot 1`] = `
 <div
-  id="root0"
+  id="root1"
 >
   <div
     class="nav-wrapper"
@@ -13,6 +13,7 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
       >
         <towech-finance-navbar-item
           icon="bars"
+          id="navbar-menu"
           label="Close"
         >
           <button>
@@ -58,7 +59,9 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
         <div
           class="contents__main"
         >
-          <towech-finance-navbar-item>
+          <towech-finance-navbar-item
+            id="navbar-0"
+          >
             <button
               disabled=""
             >
@@ -87,7 +90,9 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
               </div>
             </button>
           </towech-finance-navbar-item>
-          <towech-finance-navbar-item>
+          <towech-finance-navbar-item
+            id="navbar-1"
+          >
             <button>
               <div>
                 <fa-icon
@@ -121,6 +126,7 @@ exports[`Desktop Navbar Must match the snapshot 1`] = `
         />
         <div>
           <towech-finance-navbar-item
+            id="logout"
             label="Logout"
           >
             <button>

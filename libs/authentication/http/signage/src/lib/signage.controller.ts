@@ -13,7 +13,7 @@ import {
 // Services
 import { AuthenticationUserService } from '@towech-finance/authentication/repos/user';
 import { AuthenticationTokenService } from '@towech-finance/authentication/tokens';
-import { LogId, PidWinstonLogger } from '@towech-finance/shared/features/logger';
+import { LogId, PidWinstonLogger } from '@towech-finance/shared/feature/logger';
 // Models
 import { Response, CookieOptions } from 'express';
 import { CreateUserDto, LoginDto } from '@towech-finance/authentication/dto';

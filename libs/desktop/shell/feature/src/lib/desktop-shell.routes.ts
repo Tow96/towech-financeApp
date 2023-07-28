@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { LayoutComponent } from '@towech-finance/desktop/shell/ui/layout';
-import { AuthGuard, NoAuthGuard } from '@towech-finance/desktop/shell/utils/guards';
+import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@towech-finance/desktop/user/guards';
 
 export const desktopShellRoutes: Route[] = [
   {
@@ -18,12 +18,12 @@ export const desktopShellRoutes: Route[] = [
           (await import('@towech-finance/desktop/settings/feature')).SettingsFeatureComponent,
       },
     ],
-    canActivate: [AuthGuard],
+    canActivate: [DesktopUserAuthGuard],
   },
   {
     path: 'login',
     loadComponent: async () =>
       (await import('@towech-finance/desktop/login/feature')).DesktopLoginComponent,
-    canActivate: [NoAuthGuard],
+    canActivate: [DesktopUserNoAuthGuard],
   },
 ];

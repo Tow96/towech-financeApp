@@ -1,0 +1,39 @@
+<div class="nav-wrapper">
+  <nav [ngClass]="getNavClass((store.isCollapsed$ | async) || false)">
+    <!-- Menu toggle + header -->
+    <div class="header">
+      <towech-finance-navbar-item
+        id="navbar-menu"
+        (clicked)="toggleCollapse$.next()"
+        label="Close"
+        [collapsed]="(store.isCollapsed$ | async) || false"
+        icon="bars"></towech-finance-navbar-item>
+      <div class="title">
+        <h1>Header</h1>
+      </div>
+    </div>
+    <!-- Menu contents -->
+    <div class="contents">
+      <div class="nav__divider desk__only"></div>
+      <div class="contents__main">
+        <towech-finance-navbar-item
+          *ngFor="let item of store.items$ | async; let i = index"
+          [id]="setItemId(i)"
+          [label]="item.title"
+          [collapsed]="(store.isCollapsed$ | async) || false"
+          [icon]="item.icon"
+          [active]="isRouteActive(item.route)"
+          (clicked)="navigateTo$.next(item.route)"></towech-finance-navbar-item>
+      </div>
+      <!-- Logout -->
+      <div class="nav__divider"></div>
+      <div>
+        <towech-finance-navbar-item
+          id="logout"
+          (clicked)="user.logout$.next()"
+          label="Logout"
+          [collapsed]="(store.isCollapsed$ | async) || false"></towech-finance-navbar-item>
+      </div>
+    </div>
+  </nav>
+</div>

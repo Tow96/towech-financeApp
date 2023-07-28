@@ -19,12 +19,6 @@ export default {
     'jest-preset-angular/build/serializers/html-comment',
   ],
   coverageDirectory: '../../../../../coverage/libs/desktop/toasts/feature/tray',
-  collectCoverageFrom: [
-    '**/*.(t|j)s',
-    '!**/*.module.ts',
-    '!**/index.ts',
-    '!**/jest.config.ts',
-    '!**/mocks/**',
-  ],
+  collectCoverageFrom: ['**/*.ts', '!**/index.ts', '!**/jest.config.ts'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
 };

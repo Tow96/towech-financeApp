@@ -5,91 +5,89 @@
  */
 // Libraries
 import { Component, ElementRef, HostListener } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
+import { createAdapter } from '@state-adapt/core';
+import { adaptNgrx } from '@state-adapt/ngrx';
+import { Source } from '@state-adapt/rxjs';
 // Modules
-import { NgClass, NgFor } from '@angular/common';
-// NGRX
-import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+// Services
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
 // Components
 import { DesktopNavbarItemComponent } from '@towech-finance/desktop/navbar/ui/item';
 // Models
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { tap } from 'rxjs';
 
 interface NavIcon {
   title: string;
   icon: IconProp;
   route: string;
 }
+interface state {
+  collapsed: boolean;
+  items: NavIcon[];
+}
 
 @Component({
   standalone: true,
   selector: 'towech-finance-webclient-navbar',
-  imports: [DesktopNavbarItemComponent, NgFor, NgClass],
+  imports: [AsyncPipe, DesktopNavbarItemComponent, NgFor, NgClass, NgIf],
   styleUrls: ['./desktop-navbar-feature.component.scss'],
-  template: `
-    <div class="nav-wrapper">
-      <nav [ngClass]="getNavClass()">
-        <!-- Menu toggle + header -->
-        <div class="header">
-          <towech-finance-navbar-item
-            (clicked)="onToggleCollapse()"
-            label="Close"
-            [collapsed]="collapsed"
-            icon="bars"></towech-finance-navbar-item>
-          <div class="title">
-            <h1>Header</h1>
-          </div>
-        </div>
-        <!-- Menu contents -->
-        <div class="contents">
-          <div class="nav__divider desk__only"></div>
-          <div class="contents__main">
-            <towech-finance-navbar-item
-              *ngFor="let item of items"
-              [label]="item.title"
-              [collapsed]="collapsed"
-              [icon]="item.icon"
-              [active]="isRouteActive(item.route)"
-              (clicked)="navigateTo(item.route)"></towech-finance-navbar-item>
-          </div>
-          <!-- Logout -->
-          <div class="nav__divider"></div>
-          <div>
-            <towech-finance-navbar-item
-              (clicked)="onLogoutClick()"
-              label="Logout"
-              [collapsed]="collapsed"></towech-finance-navbar-item>
-          </div>
-        </div>
-      </nav>
-    </div>
-  `,
+  templateUrl: `./desktop-navbar-feature.component.html`,
 })
 export class DesktopNavbarComponent {
-  public items: NavIcon[] = [
-    { title: 'Transactions', icon: 'money-check-dollar', route: '' },
-    { title: 'Settings', icon: 'gear', route: 'settings' },
-  ];
-  public collapsed = true;
+  private storeName = 'navbar';
+  private initialState: state = {
+    collapsed: true,
+    items: [
+      { title: 'Transactions', icon: 'money-check-dollar', route: '' },
+      { title: 'Settings', icon: 'gear', route: 'settings' },
+    ],
+  };
 
-  public constructor(
-    private readonly store: Store,
-    private readonly router: Router,
-    public eRef: ElementRef
-  ) {}
+  // Listeners ----------------------------------------------------------------
+  @HostListener('document:click', ['$event'])
+  public clickListener(event: PointerEvent): void {
+    const refContainsTarget: boolean = this.eRef.nativeElement.contains(event.target);
+    const refIsDeployed = this.eRef.nativeElement.querySelector('.deployed') !== null;
 
-  public onLogoutClick(): void {
-    this.store.dispatch(UserActions.logout());
+    if (refIsDeployed && !refContainsTarget) this.forceCollapse$.next();
   }
 
-  public onToggleCollapse(): void {
-    this.collapsed = !this.collapsed;
+  // Sources ------------------------------------------------------------------
+  private forceCollapse$ = new Source<void>('[Navbar] Collapse drawer');
+  public toggleCollapse$ = new Source<void>('[Navbar] Toggle drawer');
+  public navigateTo$ = new Source<string>('[Navbar] Navigate to');
+
+  // Pipes --------------------------------------------------------------------
+  private handleNavigate$ = this.navigateTo$.pipe(
+    tap(({ payload }) => this.router.navigate([payload]))
+  );
+
+  // Adapter ------------------------------------------------------------------
+  private adapter = createAdapter<state>()({
+    forceCollapse: state => ({ ...state, collapsed: true }),
+    toggleCollapse: state => ({ ...state, collapsed: !state.collapsed }),
+    selectors: {
+      isCollapsed: state => state.collapsed,
+      items: state => state.items,
+    },
+  });
+
+  // Store --------------------------------------------------------------------
+  public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
+    forceCollapse: [this.forceCollapse$, this.handleNavigate$],
+    toggleCollapse: this.toggleCollapse$,
+  });
+
+  // Helpers ------------------------------------------------------------------
+  public setItemId(index: number): string {
+    return `${this.storeName}-${index}`;
   }
 
-  public navigateTo(route: string): void {
-    this.router.navigate([route]);
-    this.collapsed = true;
+  public getNavClass(collapsed: boolean): Record<string, boolean> {
+    return { deployed: !collapsed };
   }
 
   public isRouteActive(route: string): boolean {
@@ -97,16 +95,9 @@ export class DesktopNavbarComponent {
     return route === currentRoute;
   }
 
-  @HostListener('document:click', ['$event'])
-  public clickListener(event: PointerEvent): void {
-    if (!this.eRef.nativeElement.contains(event.target)) {
-      this.collapsed = true;
-    }
-  }
-
-  public getNavClass(): Record<string, boolean> {
-    return {
-      deployed: !this.collapsed,
-    };
-  }
+  public constructor(
+    private readonly router: Router,
+    public readonly user: DesktopUserService,
+    public eRef: ElementRef
+  ) {}
 }

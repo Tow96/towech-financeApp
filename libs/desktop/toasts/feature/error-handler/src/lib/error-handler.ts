@@ -29,7 +29,7 @@ export class DesktopGlobalErrorToastClass implements ErrorHandler {
     }
 
     const toastService = this.injector.get<DesktopToasterService>(DesktopToasterService);
-    toastService.addError(message);
+    toastService.addError$.next({ message });
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }

@@ -2,24 +2,41 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested elements
 import { DesktopNavbarComponent } from './desktop-navbar-feature.component';
-import { Store, StoreModule } from '@ngrx/store';
-import { UserActions } from '@towech-finance/desktop/shell/data-access/user-state';
+// Mocks
 import { provideRouter } from '@angular/router';
+import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { provideStore } from '@ngrx/store';
+import { adaptReducer } from '@state-adapt/core';
+import { Source } from '@state-adapt/rxjs';
+
+const mockValues = {
+  logout$: new Source('Test Logout'),
+};
 
 describe('Desktop Navbar', () => {
   let component: DesktopNavbarComponent;
   let fixture: ComponentFixture<DesktopNavbarComponent>;
   let compiled: HTMLElement;
-  let store: Store;
+  let service: DesktopUserService;
   let router: Router;
+  let spy: SubscriberSpy<any>;
+
+  it('', () => {
+    expect(1).toBeTruthy();
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), BrowserAnimationsModule],
-      providers: [provideRouter([{ path: 'test', component: DesktopNavbarComponent }])],
+      imports: [BrowserAnimationsModule],
+      providers: [
+        provideStore({ adapt: adaptReducer }),
+        provideRouter([{ path: 'test', component: DesktopNavbarComponent }]),
+        { provide: DesktopUserService, useValue: mockValues },
+      ],
     });
     fixture = TestBed.createComponent(DesktopNavbarComponent);
     component = fixture.componentInstance;
@@ -27,105 +44,84 @@ describe('Desktop Navbar', () => {
     fixture.detectChanges();
     compiled = fixture.nativeElement;
 
-    store = TestBed.inject(Store);
+    service = TestBed.inject(DesktopUserService);
     router = TestBed.inject(Router);
   });
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  describe('onLogoutClick', () => {
-    it('Should dispatch a logout action', () => {
-      const spy = jest.spyOn(store, 'dispatch');
-      component.onLogoutClick();
+  describe('When logout button is clicked', () => {
+    it('Should next a logout event', () => {
+      spy = subscribeSpyTo(service.logout$);
 
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(UserActions.logout());
+      const logoutBttn = fixture.debugElement.nativeElement.querySelector('#logout > button');
+      logoutBttn.click();
+      expect(spy.receivedNext()).toBe(true);
     });
   });
 
-  describe('onToggleCollapse', () => {
-    it('Should toggle the value of the collapsed variable', () => {
-      component.collapsed = false;
-      component.onToggleCollapse();
-      expect(component.collapsed).toBe(true);
-      component.onToggleCollapse();
-      expect(component.collapsed).toBe(false);
+  describe('When menu button is clicked', () => {
+    it('Should toggle the collapse state', () => {
+      spy = subscribeSpyTo(component.store.isCollapsed$);
+
+      const menuBttn = fixture.debugElement.nativeElement.querySelector('#navbar-menu > button');
+      menuBttn.click();
+      expect(spy.getLastValue()).toBe(false);
+      menuBttn.click();
+      expect(spy.getLastValue()).toBe(true);
     });
   });
 
-  describe('navigateTo', () => {
-    it('Should navigate to the correct screen', () => {
-      jest.clearAllMocks();
-      const spy = jest.spyOn(router, 'navigate');
-      component.navigateTo('test');
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['test']);
-    });
-
-    it('Should collapse the menu if it is open', () => {
-      component.collapsed = false;
-      component.navigateTo('test');
-      expect(component.collapsed).toBe(true);
-    });
-  });
-
-  describe('isRouteActive', () => {
-    describe('When it is called with the same route as the current', () => {
-      it('Should return true', () => {
-        expect(component.isRouteActive('')).toBe(true);
-      });
-    });
-
-    describe('When it is called with a different route as the current', () => {
-      it('Should return true', () => {
-        expect(component.isRouteActive('test')).toBe(false);
-      });
-    });
-  });
-
-  describe('When onOutside click is called', () => {
+  describe('When a click happens and the navbar is deployed', () => {
     let clickedTarget: any;
+
+    beforeEach(() => {
+      spy = subscribeSpyTo(component.store.isCollapsed$);
+
+      if (spy.getLastValue()) component.toggleCollapse$.next();
+
+      fixture.detectChanges();
+      compiled = fixture.nativeElement;
+    });
 
     describe('When clicking inside the navbar', () => {
       it('Should do nothing', () => {
         clickedTarget = compiled.children[0];
-        component.collapsed = true;
         component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect((component.collapsed = true));
-
-        component.collapsed = false;
-        component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect((component.collapsed = false));
+        expect(spy.getLastValue()).toBe(false);
       });
     });
 
     describe('When clicking outside the navbar', () => {
       it('Should close the navbar', () => {
         clickedTarget = document.createElement('p');
-        component.collapsed = true;
         component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect((component.collapsed = true));
-
-        component.collapsed = false;
-        component.clickListener({ target: clickedTarget } as PointerEvent);
-        expect((component.collapsed = true));
+        expect(spy.getLastValue()).toBe(true);
       });
     });
   });
 
-  describe('When getNavClass is called', () => {
-    it('Should return the correct classes', () => {
-      component.collapsed = true;
-      let result = component.getNavClass();
-      expect(result).toEqual({
-        deployed: false,
-      });
+  describe('When a navbar icon is clicked', () => {
+    let routeSpy: jest.SpyInstance;
+    let bttn: HTMLElement;
 
-      component.collapsed = false;
-      result = component.getNavClass();
-      expect(result).toEqual({
-        deployed: true,
-      });
+    beforeEach(() => {
+      bttn = fixture.debugElement.nativeElement.querySelector('#navbar-1 > button');
+      spy = subscribeSpyTo(component.store.isCollapsed$);
+      routeSpy = jest.spyOn(router, 'navigate');
+
+      if (spy.getLastValue()) component.toggleCollapse$.next();
+
+      bttn.click();
+    });
+
+    it('Should navigate to the correct screen', () => {
+      expect(routeSpy).toHaveBeenCalledTimes(1);
+      expect(routeSpy).toHaveBeenCalledWith(['settings']);
+    });
+
+    it('Should collapse the menu', () => {
+      expect(spy.getLastValue()).toBe(true);
     });
   });
 });

@@ -22,11 +22,11 @@ describe('NavBar Item', () => {
 
   it('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
 
-  describe('onBttnClick', () => {
-    it('Should dispatch an event', () => {
+  describe('When the item is clicked', () => {
+    it('Should next the clicked event', () => {
       const clickEvent = subscribeSpyTo(component.clicked);
-
-      component.onBttnClick();
+      const button = fixture.debugElement.nativeElement.querySelector('button');
+      button.click();
 
       expect(clickEvent.receivedNext()).toBe(true);
     });
