@@ -1,15 +1,15 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
-import { DesktopSharedUiButtonComponent } from './shared-ui-button.component';
+import { DesktopButtonComponent } from './button.component';
 
 describe('Button Component', () => {
-  let component: DesktopSharedUiButtonComponent;
-  let fixture: ComponentFixture<DesktopSharedUiButtonComponent>;
+  let component: DesktopButtonComponent;
+  let fixture: ComponentFixture<DesktopButtonComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DesktopSharedUiButtonComponent);
+    fixture = TestBed.createComponent(DesktopButtonComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

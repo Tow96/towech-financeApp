@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 // TODO: Testing
 @Component({
@@ -18,8 +18,8 @@ import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/d
     </div>
   `,
 })
-export class DesktopFeatureDashboardShellComponent {
-  public constructor(private readonly toastService: DesktopSharedDataAccessToasterService) {}
+export class DesktopDashboardComponent {
+  public constructor(private readonly toastService: DesktopToasterService) {}
 
   public msg() {
     this.toastService.addAccent$.next({ message: 'pesto' });

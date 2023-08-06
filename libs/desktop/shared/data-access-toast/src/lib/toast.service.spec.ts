@@ -2,14 +2,14 @@
 import { TestBed } from '@angular/core/testing';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested elements
-import { DesktopSharedDataAccessToasterService } from './desktop-toaster.service';
+import { DesktopToasterService } from './toast.service';
 // Mocks
 import { provideStore } from '@ngrx/store';
 import { adaptReducer } from '@state-adapt/core';
 // Models
 import { DesktopToast, ToastTypes } from '@finance/desktop/shared/utils-types';
 
-let service: DesktopSharedDataAccessToasterService;
+let service: DesktopToasterService;
 const TOASTDURATION = 2000;
 
 describe('Toaster-Service', () => {
@@ -27,7 +27,7 @@ describe('Toaster-Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideStore({ adapt: adaptReducer })] });
-    service = TestBed.inject(DesktopSharedDataAccessToasterService);
+    service = TestBed.inject(DesktopToasterService);
     spy = subscribeSpyTo(service.toasts.state$);
   });
 

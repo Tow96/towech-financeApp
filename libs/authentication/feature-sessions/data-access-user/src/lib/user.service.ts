@@ -14,7 +14,7 @@ import { UserDocument } from './utils/user.schema';
 import { UserModel, UserRoles } from '@finance/shared/utils-types';
 
 @Injectable()
-export class AuthenticationFeatureSessionsDataAccessUserService extends BaseRepository<UserDocument> {
+export class AuthenticationSessionsUserService extends BaseRepository<UserDocument> {
   private REFRESH_TOKEN_MAX_COUNT = 5;
   private convertUserDocToUser(input: UserDocument | null): UserModel | null {
     if (input === null) return null;

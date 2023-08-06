@@ -2,7 +2,7 @@
 import { Test } from '@nestjs/testing';
 import * as jwt from 'jsonwebtoken';
 // Tested elements
-import { AuthenticationFeatureSessionsDataAccessJwtService } from './jwt.service';
+import { AuthenticationSessionsJwtService } from './jwt.service';
 // Mocks
 import { plainUserStub } from '@finance/authentication/shared/utils-testing';
 // Services
@@ -13,7 +13,7 @@ describe('JWT Service', () => {
   const authTokenSecret = 'testAuthToken';
   const refreshTokenSecret = 'testRefreshToken';
   const OLD_ENV = process.env;
-  let tokenService: AuthenticationFeatureSessionsDataAccessJwtService;
+  let tokenService: AuthenticationSessionsJwtService;
   let result: any;
 
   const validateExpiration = (token: string) => {
@@ -32,11 +32,11 @@ describe('JWT Service', () => {
     process.env['REFRESH_SINGLE_TOKEN_EXPIRATION'] = '1h';
 
     const moduleRef = await Test.createTestingModule({
-      providers: [AuthenticationFeatureSessionsDataAccessJwtService, JwtService, ConfigService],
+      providers: [AuthenticationSessionsJwtService, JwtService, ConfigService],
     }).compile();
 
-    tokenService = moduleRef.get<AuthenticationFeatureSessionsDataAccessJwtService>(
-      AuthenticationFeatureSessionsDataAccessJwtService
+    tokenService = moduleRef.get<AuthenticationSessionsJwtService>(
+      AuthenticationSessionsJwtService
     );
   });
 

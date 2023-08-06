@@ -13,7 +13,7 @@ import { DesktopToast, NewToast, ToastTypes } from '@finance/desktop/shared/util
 import * as uuid from 'uuid';
 
 @Injectable({ providedIn: 'root' })
-export class DesktopSharedDataAccessToasterService {
+export class DesktopToasterService {
   private storeName = 'toast-tray';
   private initialState: DesktopToast[] = [];
 

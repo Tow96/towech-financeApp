@@ -8,7 +8,7 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 // Services
-import { AuthenticationFeatureSessionsDataAccessUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Models
 import { UserModel } from '@finance/shared/utils-types';
 import { StrategyNames } from '../utils/strategy.names';
@@ -16,9 +16,7 @@ import { validateWithI18n } from '../utils/i18n';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {
-  public constructor(
-    private readonly userRepo: AuthenticationFeatureSessionsDataAccessUserService
-  ) {
+  public constructor(private readonly userRepo: AuthenticationSessionsUserService) {
     super();
   }
 

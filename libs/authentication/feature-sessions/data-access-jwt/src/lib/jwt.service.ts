@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RefreshToken, UserModel } from '@finance/shared/utils-types';
 
 @Injectable()
-export class AuthenticationFeatureSessionsDataAccessJwtService {
+export class AuthenticationSessionsJwtService {
   public constructor(
     private readonly jwt: JwtService,
     private readonly config: ConfigService

@@ -4,10 +4,10 @@ import { Test } from '@nestjs/testing';
 import { JwtRefreshGuard, JwtRefreshStrategy } from './jwt-refresh.guard';
 // Mocks
 import {
-  AuthenticationFeatureSessionsDataAccessUserServiceMock,
+  AuthenticationSessionsUserServiceMock,
   plainUserStub,
   userStub,
-  AuthenticationSharedI18nTestingModule,
+  AuthenticationI18nTestingModule,
 } from '@finance/authentication/shared/utils-testing';
 import { generateI18nMockExecutionContext } from '../utils/i18n';
 // Services
@@ -28,11 +28,11 @@ describe('jwt-refresh.guard', () => {
     process.env['REFRESH_TOKEN_SECRET'] = 'pesto';
 
     const moduleRef = await Test.createTestingModule({
-      imports: [AuthenticationSharedI18nTestingModule],
+      imports: [AuthenticationI18nTestingModule],
       providers: [
         JwtRefreshGuard,
         JwtRefreshStrategy,
-        AuthenticationFeatureSessionsDataAccessUserServiceMock,
+        AuthenticationSessionsUserServiceMock,
         ConfigService,
       ],
     }).compile();

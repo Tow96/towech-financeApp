@@ -1,16 +1,16 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
-import { DesktopSharedUICheckboxComponent } from './checkbox.component';
+import { DesktopCheckboxComponent } from './checkbox.component';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('Shared Input Component', () => {
-  let component: DesktopSharedUICheckboxComponent;
-  let fixture: ComponentFixture<DesktopSharedUICheckboxComponent>;
+  let component: DesktopCheckboxComponent;
+  let fixture: ComponentFixture<DesktopCheckboxComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DesktopSharedUICheckboxComponent);
+    fixture = TestBed.createComponent(DesktopCheckboxComponent);
     component = fixture.componentInstance;
     // component.type = 'text';
     component.label = 'TEST';

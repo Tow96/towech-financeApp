@@ -7,16 +7,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgFor, AsyncPipe } from '@angular/common';
 // Services
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 // Components
-import { DesktopSharedUiToastComponent } from '@finance/desktop/core/ui-toast';
+import { DesktopToastComponent } from '@finance/desktop/core/ui-toast';
 // Animations
 import { toastTransition } from './tray.animations';
 
 @Component({
   standalone: true,
-  selector: 'finance-toaster',
-  imports: [AsyncPipe, NgFor, DesktopSharedUiToastComponent],
+  selector: 'finance-toast-tray',
+  imports: [AsyncPipe, NgFor, DesktopToastComponent],
   styles: [
     `
       .desktop-toaster {
@@ -45,6 +45,6 @@ import { toastTransition } from './tray.animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [toastTransition],
 })
-export class DesktopSharedFeatureToastTrayComponent {
-  public constructor(public readonly service: DesktopSharedDataAccessToasterService) {}
+export class DesktopToastTrayComponent {
+  public constructor(public readonly service: DesktopToasterService) {}
 }

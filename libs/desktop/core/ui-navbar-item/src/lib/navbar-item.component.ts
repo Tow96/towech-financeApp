@@ -21,7 +21,7 @@ import { menuTransitions } from './navbar-item.animations';
 
 @Component({
   standalone: true,
-  selector: 'towech-finance-navbar-item',
+  selector: 'finance-navbar-item',
   imports: [FontAwesomeModule, NgIf],
   styleUrls: [`navbar-item.component.scss`],
   template: `

@@ -1,16 +1,16 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
-import { DesktopSharedUIInputComponent } from './input.component';
+import { DesktopInputComponent } from './input.component';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 describe('Shared Input Component', () => {
-  let component: DesktopSharedUIInputComponent;
-  let fixture: ComponentFixture<DesktopSharedUIInputComponent>;
+  let component: DesktopInputComponent;
+  let fixture: ComponentFixture<DesktopInputComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DesktopSharedUIInputComponent);
+    fixture = TestBed.createComponent(DesktopInputComponent);
     component = fixture.componentInstance;
     component.type = 'text';
     component.label = 'TEST';

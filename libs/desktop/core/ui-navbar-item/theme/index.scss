@@ -6,7 +6,7 @@
   $primary: map.get($colors, primary);
   $accent: map.get($colors, accent);
 
-  towech-finance-navbar-item {
+  finance-navbar-item {
     button {
       color: core.get-palette-hue-contrast($primary, 500);
     }

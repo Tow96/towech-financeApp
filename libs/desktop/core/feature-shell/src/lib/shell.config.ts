@@ -10,13 +10,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Services
 import { provideRouter } from '@angular/router';
 import { devOnlyModulesImport } from '@finance/desktop/core/utils-imports';
-import { DesktopGlobalErrorToast } from '@finance/desktop/core/utils-interceptors';
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopErrorInterceptor } from '@finance/desktop/core/utils-interceptors';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 import { provideHttpClient } from '@angular/common/http';
 // Routes
 import { desktopShellRoutes } from './desktop-shell.routes';
 // Environment
-import { provideDesktopSharedEnvironment } from '@finance/desktop/shared/utils-environments';
+import { provideDesktopEnvironment } from '@finance/desktop/shared/utils-environments';
 import { provideStore } from '@ngrx/store';
 // State Adapt
 import { adaptReducer } from '@state-adapt/core';
@@ -25,7 +25,7 @@ import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@finance/desktop/c
 export const DesktopShellConfig: ApplicationConfig = {
   providers: [
     // Environment
-    provideDesktopSharedEnvironment(),
+    provideDesktopEnvironment(),
     // Old Modules
     importProvidersFrom([BrowserAnimationsModule]),
     // Http
@@ -35,9 +35,9 @@ export const DesktopShellConfig: ApplicationConfig = {
     // Routes
     provideRouter(desktopShellRoutes),
     // Global Toaster
-    DesktopGlobalErrorToast,
+    DesktopErrorInterceptor,
     // User
-    DesktopSharedDataAccessUserService,
+    DesktopUserService,
     DesktopUserAuthGuard,
     DesktopUserNoAuthGuard,
     // DEV ONLY

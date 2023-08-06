@@ -6,16 +6,16 @@
 // Libraries
 import { Routes } from '@nestjs/core';
 // Modules
-import { AuthenticationFeatureSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
+import { AuthenticationSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
 
-export enum AuthenticationCoreFeatureShellPaths {
+export enum AuthenticationShellPaths {
   DOCUMENTATION = 'docs',
   SIGNING = '',
 }
 
-export const AuthenticationCoreFeatureShellRoutes: Routes = [
+export const AuthenticationShellRoutes: Routes = [
   {
-    path: AuthenticationCoreFeatureShellPaths.SIGNING,
-    module: AuthenticationFeatureSessionsHttpModule,
+    path: AuthenticationShellPaths.SIGNING,
+    module: AuthenticationSessionsHttpModule,
   },
 ];

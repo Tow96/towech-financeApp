@@ -12,9 +12,12 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 // Services
 import { ConfigService } from '@nestjs/config';
-import { LogId, PidWinstonLogger } from '@finance/authentication/shared/feature-logger';
-import { AuthenticationFeatureSessionsDataAccessUserService } from '@finance/authentication/feature-sessions/data-access-user';
-import { AuthenticationFeatureSessionsDataAccessJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
+import {
+  LogId,
+  AuthenticationPidWinstonLogger,
+} from '@finance/authentication/shared/feature-logger';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
 // Guards
 import {
   JwtAuthAdminGuard,
@@ -41,7 +44,7 @@ enum COOKIES {
 
 @Controller()
 @ApiTags('')
-export class AuthenticationFeatureSessionsHttpController {
+export class AuthenticationSessionsHttpController {
   // TODO: I18n
   @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
@@ -131,9 +134,9 @@ export class AuthenticationFeatureSessionsHttpController {
   }
 
   public constructor(
-    private readonly user: AuthenticationFeatureSessionsDataAccessUserService,
-    private readonly tokens: AuthenticationFeatureSessionsDataAccessJwtService,
-    private readonly logger: PidWinstonLogger,
+    private readonly user: AuthenticationSessionsUserService,
+    private readonly tokens: AuthenticationSessionsJwtService,
+    private readonly logger: AuthenticationPidWinstonLogger,
     private readonly config: ConfigService
   ) {}
 }

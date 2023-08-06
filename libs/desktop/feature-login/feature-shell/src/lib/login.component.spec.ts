@@ -6,15 +6,15 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 // Services
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 // Tested elements
 import { DesktopLoginComponent, PatchFormGroupValuesDirective } from './login.component';
 // Mocks
 import {
   fakeUserServiceFire,
-  DesktopSharedDataAccessToasterServiceMock,
-  DesktopSharedDataAccessUserServiceMock,
+  DesktopToasterServiceMock,
+  DesktopUserServiceMock,
 } from '@finance/desktop/shared/utils-testing';
 import { provideStore } from '@ngrx/store';
 import { Action, adaptReducer } from '@state-adapt/core';
@@ -76,8 +76,8 @@ describe('Patch form Directive', () => {
 describe('Desktop Login Component', () => {
   let component: DesktopLoginComponent;
   let fixture: ComponentFixture<DesktopLoginComponent>;
-  let userService: DesktopSharedDataAccessUserService;
-  let toastService: DesktopSharedDataAccessToasterService;
+  let userService: DesktopUserService;
+  let toastService: DesktopToasterService;
   let compiled: HTMLElement;
   let stateSpy: SubscriberSpy<any>;
 
@@ -92,8 +92,8 @@ describe('Desktop Login Component', () => {
     TestBed.configureTestingModule({
       providers: [
         provideStore({ adapt: adaptReducer }),
-        DesktopSharedDataAccessToasterServiceMock,
-        DesktopSharedDataAccessUserServiceMock,
+        DesktopToasterServiceMock,
+        DesktopUserServiceMock,
       ],
     });
     fixture = TestBed.createComponent(DesktopLoginComponent);
@@ -102,12 +102,8 @@ describe('Desktop Login Component', () => {
     fixture.detectChanges();
     compiled = fixture.nativeElement;
 
-    userService = TestBed.inject<DesktopSharedDataAccessUserService>(
-      DesktopSharedDataAccessUserService
-    );
-    toastService = TestBed.inject<DesktopSharedDataAccessToasterService>(
-      DesktopSharedDataAccessToasterService
-    );
+    userService = TestBed.inject<DesktopUserService>(DesktopUserService);
+    toastService = TestBed.inject<DesktopToasterService>(DesktopToasterService);
     stateSpy = subscribeSpyTo(component.store.state$);
   });
 

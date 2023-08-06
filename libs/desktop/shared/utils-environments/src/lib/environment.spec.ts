@@ -1,5 +1,5 @@
 // Tested elements
-import { APP_CONFIG, provideEnvironment } from './environment.service';
+import { APP_CONFIG, provideDesktopEnvironment } from './environment.service';
 import { environment as base } from './environment';
 import { environment as prd } from './environment.prod';
 
@@ -16,7 +16,7 @@ describe('environments', () => {
 
 describe('environment service', () => {
   it('Should get a provider containing the service', () => {
-    expect(provideEnvironment()).toEqual({
+    expect(provideDesktopEnvironment()).toEqual({
       provide: APP_CONFIG,
       useValue: base,
     });

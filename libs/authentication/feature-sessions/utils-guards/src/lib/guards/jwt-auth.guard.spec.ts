@@ -2,9 +2,9 @@
 import { Test } from '@nestjs/testing';
 // Mocks
 import {
-  AuthenticationFeatureSessionsDataAccessUserServiceMock,
+  AuthenticationSessionsUserServiceMock,
   plainUserStub,
-  AuthenticationSharedI18nTestingModule,
+  AuthenticationI18nTestingModule,
 } from '@finance/authentication/shared/utils-testing';
 import { generateI18nMockExecutionContext } from '../utils/i18n';
 // Tested elements
@@ -26,11 +26,11 @@ describe('jwt-auth.guard', () => {
     process.env['AUTH_TOKEN_SECRET'] = 'pesto';
 
     const moduleRef = await Test.createTestingModule({
-      imports: [AuthenticationSharedI18nTestingModule],
+      imports: [AuthenticationI18nTestingModule],
       providers: [
         JwtAuthGuard,
         JwtAuthStrategy,
-        AuthenticationFeatureSessionsDataAccessUserServiceMock,
+        AuthenticationSessionsUserServiceMock,
         ConfigService,
       ],
     }).compile();

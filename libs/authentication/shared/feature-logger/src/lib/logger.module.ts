@@ -6,15 +6,15 @@
 // Libraries
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 // Services
-import { PidWinstonLogger } from './pid-winston.logger';
+import { AuthenticationPidWinstonLogger } from './pid-winston.logger';
 // Utils
 import { LogIdMiddleware } from './utils/log-id.middleware';
 
 @Module({
-  providers: [PidWinstonLogger],
-  exports: [PidWinstonLogger],
+  providers: [AuthenticationPidWinstonLogger],
+  exports: [AuthenticationPidWinstonLogger],
 })
-export class SharedFeaturesLoggerModule implements NestModule {
+export class AuthenticationLoggerModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
     consumer.apply(LogIdMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }

@@ -34,7 +34,7 @@ import { colorTransition, messageBodyTransition, messageTextTransition } from '.
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [colorTransition, messageBodyTransition, messageTextTransition],
 })
-export class DesktopSharedUiToastComponent implements AfterContentInit {
+export class DesktopToastComponent implements AfterContentInit {
   private DEFAULTDURATION = 3000;
   @Input() public toast?: DesktopToast;
   @Output() public dismiss = new EventEmitter<string>();

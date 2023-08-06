@@ -6,12 +6,12 @@
 // Libraries
 import { Module } from '@nestjs/common';
 // Providers
-import { AuthenticationFeatureSessionsDataAccessJwtService } from './jwt.service';
+import { AuthenticationSessionsJwtService } from './jwt.service';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [JwtModule],
-  providers: [AuthenticationFeatureSessionsDataAccessJwtService],
-  exports: [AuthenticationFeatureSessionsDataAccessJwtService],
+  providers: [AuthenticationSessionsJwtService],
+  exports: [AuthenticationSessionsJwtService],
 })
-export class AuthenticationFeatureSessionsDataAccessJwtModule {}
+export class AuthenticationSessionsJwtModule {}

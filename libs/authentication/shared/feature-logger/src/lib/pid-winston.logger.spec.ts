@@ -1,7 +1,7 @@
 import { describe } from 'node:test';
-import { PidWinstonLogger } from './pid-winston.logger';
+import { AuthenticationPidWinstonLogger } from './pid-winston.logger';
 
-let pidLogger: PidWinstonLogger;
+let pidLogger: AuthenticationPidWinstonLogger;
 const OLD_ENV = process.env;
 
 describe('Pid winstom logger', () => {
@@ -18,14 +18,14 @@ describe('Pid winstom logger', () => {
 
       it('Should return a message containing a pid when called with an object containing a pid', () => {
         info.pid = '000';
-        expect(PidWinstonLogger.getFormattedOutput(info)).toBe(
+        expect(AuthenticationPidWinstonLogger.getFormattedOutput(info)).toBe(
           `${info.timestamp} {pid: ${info.pid}} [UNNAMED APP] ${info.level}: ${info.message}`
         );
       });
 
       it('Should return a message without pid when called with an object without pid', () => {
         info.pid = undefined;
-        expect(PidWinstonLogger.getFormattedOutput(info)).toBe(
+        expect(AuthenticationPidWinstonLogger.getFormattedOutput(info)).toBe(
           `${info.timestamp} [UNNAMED APP] ${info.level}: ${info.message}`
         );
       });
@@ -33,7 +33,7 @@ describe('Pid winstom logger', () => {
 
     describe('When format is called', () => {
       it('Should return something', () => {
-        const msg = PidWinstonLogger.format().transform({
+        const msg = AuthenticationPidWinstonLogger.format().transform({
           level: 'debug',
           message: 'test message',
         });
@@ -52,18 +52,18 @@ describe('Pid winstom logger', () => {
 
       test('With DISABLE_LOGGING as not true, it should return three transports', () => {
         process.env['DISABLE_LOGGING'] = undefined;
-        expect(PidWinstonLogger.transports().length).toBe(3);
+        expect(AuthenticationPidWinstonLogger.transports().length).toBe(3);
       });
 
       test('With DISABLE_LOGGING as true, it should return one transport', () => {
         process.env['DISABLE_LOGGING'] = 'true';
-        expect(PidWinstonLogger.transports().length).toBe(1);
+        expect(AuthenticationPidWinstonLogger.transports().length).toBe(1);
       });
     });
   });
 
   describe('Regular methods', () => {
-    beforeEach(() => (pidLogger = new PidWinstonLogger()));
+    beforeEach(() => (pidLogger = new AuthenticationPidWinstonLogger()));
 
     test('When pidError is called, it should call Error with a pid', () => {
       jest.spyOn(pidLogger, 'error');

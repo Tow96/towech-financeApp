@@ -24,12 +24,12 @@ import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { debounceTime, tap } from 'rxjs';
 // Services
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 // Components
-import { DesktopSharedUiButtonComponent } from '@finance/desktop/shared/ui-button';
-import { DesktopSharedUICheckboxComponent } from '@finance/desktop/shared/ui-checkbox';
-import { DesktopSharedUIInputComponent } from '@finance/desktop/shared/ui-input';
+import { DesktopButtonComponent } from '@finance/desktop/shared/ui-button';
+import { DesktopCheckboxComponent } from '@finance/desktop/shared/ui-checkbox';
+import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
 // Models
 import { LoginUser } from '@finance/shared/utils-types';
 
@@ -64,9 +64,9 @@ type state = {
     AsyncPipe,
     ReactiveFormsModule,
     PatchFormGroupValuesDirective,
-    DesktopSharedUiButtonComponent,
-    DesktopSharedUICheckboxComponent,
-    DesktopSharedUIInputComponent,
+    DesktopButtonComponent,
+    DesktopCheckboxComponent,
+    DesktopInputComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -160,8 +160,8 @@ export class DesktopLoginComponent {
   }
 
   public constructor(
-    public readonly toasts: DesktopSharedDataAccessToasterService,
-    public readonly user: DesktopSharedDataAccessUserService,
+    public readonly toasts: DesktopToasterService,
+    public readonly user: DesktopUserService,
     private readonly changeRef: ChangeDetectorRef
   ) {}
 }

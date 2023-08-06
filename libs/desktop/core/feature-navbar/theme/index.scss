@@ -6,7 +6,7 @@
   $primary: map.get($colors, primary);
   $accent: map.get($colors, accent);
 
-  towech-finance-webclient-navbar {
+  finance-navbar {
     .nav-wrapper {
       nav {
         background-color: core.get-palette-hue($primary, 500);

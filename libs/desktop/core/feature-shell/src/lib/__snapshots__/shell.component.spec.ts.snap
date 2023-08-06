@@ -4,12 +4,12 @@ exports[`Desktop Shell Component Must match the snapshot 1`] = `
 <div
   id="root1"
 >
-  <towech-finance-toaster>
+  <finance-toast-tray>
     <div
       class="desktop-toaster"
     >
       
     </div>
-  </towech-finance-toaster>
+  </finance-toast-tray>
 </div>
 `;

@@ -9,7 +9,7 @@ import 'winston-daily-rotate-file';
 import * as winston from 'winston';
 
 @Injectable()
-export class PidWinstonLogger extends Logger {
+export class AuthenticationPidWinstonLogger extends Logger {
   public static logsFolder = `${__dirname}/../logs`;
 
   /**
@@ -63,7 +63,7 @@ export class PidWinstonLogger extends Logger {
   public static format(): winston.Logform.Format {
     return winston.format.combine(
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
-      winston.format.printf(info => PidWinstonLogger.getFormattedOutput(info))
+      winston.format.printf(info => AuthenticationPidWinstonLogger.getFormattedOutput(info))
     );
   }
 
@@ -90,7 +90,7 @@ export class PidWinstonLogger extends Logger {
       level: 'silly',
       format: winston.format.combine(
         winston.format.colorize({ all: true }),
-        PidWinstonLogger.format()
+        AuthenticationPidWinstonLogger.format()
       ),
     });
 
@@ -100,18 +100,18 @@ export class PidWinstonLogger extends Logger {
     const errorLogTransport = new winston.transports.DailyRotateFile({
       level: 'warn',
       maxFiles: '30d',
-      filename: `${PidWinstonLogger.logsFolder}/error_%DATE%.log`,
+      filename: `${AuthenticationPidWinstonLogger.logsFolder}/error_%DATE%.log`,
       datePattern: 'YYYYMMDD',
-      format: PidWinstonLogger.format(),
+      format: AuthenticationPidWinstonLogger.format(),
       zippedArchive: true,
     });
 
     const combinedLogTransport = new winston.transports.DailyRotateFile({
       level: 'verbose',
       maxFiles: '30d',
-      filename: `${PidWinstonLogger.logsFolder}/combined_%DATE%.log`,
+      filename: `${AuthenticationPidWinstonLogger.logsFolder}/combined_%DATE%.log`,
       datePattern: 'YYYYMMDD',
-      format: PidWinstonLogger.format(),
+      format: AuthenticationPidWinstonLogger.format(),
       zippedArchive: true,
     });
 

@@ -2,7 +2,7 @@
 import { Provider } from '@nestjs/common';
 import { jest } from '@jest/globals';
 // Service
-import { AuthenticationFeatureSessionsDataAccessJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
 // stubs
 import { singleTokenStub, userStub } from './user.stub';
 
@@ -14,7 +14,7 @@ const mockValues = {
   })),
 };
 
-export const AuthenticationFeatureSessionsDataAccessJwtServiceMock: Provider = {
-  provide: AuthenticationFeatureSessionsDataAccessJwtService,
+export const AuthenticationSessionsJwtServiceMock: Provider = {
+  provide: AuthenticationSessionsJwtService,
   useValue: mockValues,
 };

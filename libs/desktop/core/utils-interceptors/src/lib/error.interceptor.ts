@@ -4,7 +4,7 @@
  * Global error handler that includes toasts
  */
 import { ErrorHandler, Injectable, Injector, Provider } from '@angular/core';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 export enum messages {
   UNKNOWN = 'Unknown error',
@@ -12,7 +12,7 @@ export enum messages {
 }
 
 @Injectable()
-export class DesktopGlobalErrorToastClass implements ErrorHandler {
+export class DesktopErrorInterceptorClass implements ErrorHandler {
   public constructor(private readonly injector: Injector) {}
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -28,15 +28,13 @@ export class DesktopGlobalErrorToastClass implements ErrorHandler {
       if (error.message) message = error.message;
     }
 
-    const toastService = this.injector.get<DesktopSharedDataAccessToasterService>(
-      DesktopSharedDataAccessToasterService
-    );
+    const toastService = this.injector.get<DesktopToasterService>(DesktopToasterService);
     toastService.addError$.next({ message });
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
-export const DesktopGlobalErrorToast: Provider = {
+export const DesktopErrorInterceptor: Provider = {
   provide: ErrorHandler,
-  useClass: DesktopGlobalErrorToastClass,
+  useClass: DesktopErrorInterceptorClass,
 };

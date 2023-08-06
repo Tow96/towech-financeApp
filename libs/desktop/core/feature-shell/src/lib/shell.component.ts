@@ -5,23 +5,23 @@
  */
 // Libraries
 import { Component, OnDestroy } from '@angular/core';
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 import { Subscription } from 'rxjs';
 // Components
-import { DesktopSharedFeatureToastTrayComponent } from '@finance/desktop/core/feature-toast-tray';
+import { DesktopToastTrayComponent } from '@finance/desktop/core/feature-toast-tray';
 
 @Component({
   standalone: true,
   selector: 'towech-finance-shell',
-  imports: [DesktopSharedFeatureToastTrayComponent],
-  template: `<finance-toaster></finance-toaster>`,
+  imports: [DesktopToastTrayComponent],
+  template: `<finance-toast-tray></finance-toast-tray>`,
 })
 export class DesktopShellComponent implements OnDestroy {
   private userSubscription: Subscription;
 
   // This ensures some state does not get destroyed if it looses all subscriptions
   // Use only if really needed
-  public constructor(private user: DesktopSharedDataAccessUserService) {
+  public constructor(private user: DesktopUserService) {
     this.userSubscription = user.store.state$.subscribe();
   }
 

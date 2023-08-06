@@ -3,24 +3,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
+import { provideStore } from '@ngrx/store';
+import { adaptReducer } from '@state-adapt/core';
+import { Source } from '@state-adapt/rxjs';
 // Tested elements
 import { DesktopNavbarComponent } from './navbar.component';
 // Mocks
 import { provideRouter } from '@angular/router';
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
-import { provideStore } from '@ngrx/store';
-import { adaptReducer } from '@state-adapt/core';
-import { Source } from '@state-adapt/rxjs';
-
-const mockValues = {
-  logout$: new Source('Test Logout'),
-};
+import { DesktopUserServiceMock } from '@finance/desktop/shared/utils-testing';
+// Services
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 
 describe('Desktop Navbar', () => {
   let component: DesktopNavbarComponent;
   let fixture: ComponentFixture<DesktopNavbarComponent>;
   let compiled: HTMLElement;
-  let service: DesktopSharedDataAccessUserService;
+  let service: DesktopUserService;
   let router: Router;
   let spy: SubscriberSpy<any>;
 
@@ -35,7 +33,7 @@ describe('Desktop Navbar', () => {
       providers: [
         provideStore({ adapt: adaptReducer }),
         provideRouter([{ path: 'test', component: DesktopNavbarComponent }]),
-        { provide: DesktopSharedDataAccessUserService, useValue: mockValues },
+        DesktopUserServiceMock,
       ],
     });
     fixture = TestBed.createComponent(DesktopNavbarComponent);
@@ -44,7 +42,7 @@ describe('Desktop Navbar', () => {
     fixture.detectChanges();
     compiled = fixture.nativeElement;
 
-    service = TestBed.inject(DesktopSharedDataAccessUserService);
+    service = TestBed.inject(DesktopUserService);
     router = TestBed.inject(Router);
   });
 

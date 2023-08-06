@@ -11,23 +11,23 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app/app.module';
 // Services
-import { PidWinstonLogger } from '@finance/authentication/shared/feature-logger';
+import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/feature-logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
-import { TrimPipe } from '@finance/authentication/core/utils-pipes';
+import { AuthenticationTrimPipe } from '@finance/authentication/core/utils-pipes';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger({
-      transports: PidWinstonLogger.transports(),
+      transports: AuthenticationPidWinstonLogger.transports(),
     }),
   });
   const configService = app.get(ConfigService);
   const isProd = configService.get('NODE_ENV') === 'production';
 
   // Adds the body trimming pipe
-  app.useGlobalPipes(new TrimPipe());
+  app.useGlobalPipes(new AuthenticationTrimPipe());
 
   // TODO: i18n update when it is ready
   app.useGlobalPipes(new I18nValidationPipe({ transform: true }));

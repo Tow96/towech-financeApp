@@ -3,6 +3,6 @@ import { environment } from './environment';
 
 export const APP_CONFIG = new InjectionToken('Application config');
 
-export const provideDesktopSharedEnvironment = (): Provider => {
+export const provideDesktopEnvironment = (): Provider => {
   return { provide: APP_CONFIG, useValue: environment };
 };

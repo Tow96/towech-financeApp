@@ -7,17 +7,14 @@ import {
 } from '@angular/common/http/testing';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested elements
-import { DesktopSharedDataAccessUserService, Status } from './user.service';
+import { DesktopUserService, Status } from './user.service';
 // Services
-import {
-  environment,
-  provideDesktopSharedEnvironment,
-} from '@finance/desktop/shared/utils-environments';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { environment, provideDesktopEnvironment } from '@finance/desktop/shared/utils-environments';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 // Mocks
 import { provideStore } from '@ngrx/store';
 import { adaptReducer } from '@state-adapt/core';
-import { DesktopSharedDataAccessToasterServiceMock } from '@finance/desktop/shared/utils-testing';
+import { DesktopToasterServiceMock } from '@finance/desktop/shared/utils-testing';
 // Models
 import { LoginUser, UserModel, UserRoles } from '@finance/shared/utils-types';
 import { Router } from '@angular/router';
@@ -49,11 +46,11 @@ const isLogged = (input: any, loaded: boolean, logged: boolean) => {
 };
 
 describe('Desktop User Service', () => {
-  let service: DesktopSharedDataAccessUserService;
+  let service: DesktopUserService;
   let httpController: HttpTestingController;
   let state: SubscriberSpy<any>;
   let httpCall: TestRequest;
-  let toastService: DesktopSharedDataAccessToasterService;
+  let toastService: DesktopToasterService;
   let toastSpy: SubscriberSpy<any>;
   let router: Router;
   let routerSpy: jest.SpyInstance<any>;
@@ -64,17 +61,15 @@ describe('Desktop User Service', () => {
       imports: [HttpClientTestingModule],
       providers: [
         provideStore({ adapt: adaptReducer }),
-        DesktopSharedDataAccessUserService,
-        provideDesktopSharedEnvironment(),
-        DesktopSharedDataAccessToasterServiceMock,
+        DesktopUserService,
+        provideDesktopEnvironment(),
+        DesktopToasterServiceMock,
       ],
     });
     httpController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(DesktopSharedDataAccessUserService);
+    service = TestBed.inject<DesktopUserService>(DesktopUserService);
     state = subscribeSpyTo(service.store.state$);
-    toastService = TestBed.inject<DesktopSharedDataAccessToasterService>(
-      DesktopSharedDataAccessToasterService
-    );
+    toastService = TestBed.inject<DesktopToasterService>(DesktopToasterService);
     toastSpy = subscribeSpyTo(toastService.addError$);
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');

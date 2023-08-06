@@ -7,13 +7,13 @@
 import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 // Modules
-import { AuthenticationFeatureSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
-import { AuthenticationSharedFeatureI18nModule } from '@finance/authentication/shared/feature-i18n';
-import { AuthenticationSharedDataAccessMongoModule } from '@finance/authentication/shared/data-access-mongo';
+import { AuthenticationSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
+import { AuthenticationI18nModule } from '@finance/authentication/shared/feature-i18n';
+import { AuthenticationMongoModule } from '@finance/authentication/shared/data-access-mongo';
 import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
 // Misc
-import { AuthenticationCoreFeatureShellRoutes } from './shell.routes';
+import { AuthenticationShellRoutes } from './shell.routes';
 
 @Module({
   imports: [
@@ -38,11 +38,11 @@ import { AuthenticationCoreFeatureShellRoutes } from './shell.routes';
       }),
     }),
     // Routes and controllers
-    RouterModule.register(AuthenticationCoreFeatureShellRoutes),
-    AuthenticationFeatureSessionsHttpModule,
+    RouterModule.register(AuthenticationShellRoutes),
+    AuthenticationSessionsHttpModule,
     // Misc
-    AuthenticationSharedDataAccessMongoModule,
-    AuthenticationSharedFeatureI18nModule,
+    AuthenticationMongoModule,
+    AuthenticationI18nModule,
   ],
 })
 export class AuthenticationCoreFeatureShellModule {}

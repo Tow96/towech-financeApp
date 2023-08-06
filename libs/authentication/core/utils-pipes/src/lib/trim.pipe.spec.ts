@@ -1,4 +1,4 @@
-import { TrimPipe } from './trim.pipe';
+import { AuthenticationTrimPipe } from './trim.pipe';
 
 const stubTrimPipe = () => {
   return {
@@ -13,11 +13,11 @@ const stubTrimPipe = () => {
 
 describe('Trim Pipe', () => {
   let values: any;
-  let trimPipe: TrimPipe;
+  let trimPipe: AuthenticationTrimPipe;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    trimPipe = new TrimPipe();
+    trimPipe = new AuthenticationTrimPipe();
   });
 
   describe('When the trim pipe receives anything of a type different to body', () => {

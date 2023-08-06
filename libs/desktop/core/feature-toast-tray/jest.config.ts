@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'desktop-core-feature-toast-tray',
-  preset: '../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/libs/desktop/core/feature-toast-tray',
   collectCoverageFrom: ['**/*.ts', '!**/index.ts', '!**/jest.config.ts'],

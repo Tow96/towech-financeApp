@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 // Modules
-import { AuthenticationFeatureSessionsDataAccessUserModule } from '@finance/authentication/feature-sessions/data-access-user';
-import { AuthenticationFeatureSessionsDataAccessJwtModule } from '@finance/authentication/feature-sessions/data-access-jwt';
+import { AuthenticationSessionsUserModule } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsJwtModule } from '@finance/authentication/feature-sessions/data-access-jwt';
 import { AuthenticationFeatureSessionsUtilsGuardsModule } from '@finance/authentication/feature-sessions/utils-guards';
-import { SharedFeaturesLoggerModule } from '@finance/authentication/shared/feature-logger';
+import { AuthenticationLoggerModule } from '@finance/authentication/shared/feature-logger';
 // Controllers
-import { AuthenticationFeatureSessionsHttpController } from './http.controller';
+import { AuthenticationSessionsHttpController } from './http.controller';
 
 @Module({
-  controllers: [AuthenticationFeatureSessionsHttpController],
+  controllers: [AuthenticationSessionsHttpController],
   imports: [
-    SharedFeaturesLoggerModule,
-    AuthenticationFeatureSessionsDataAccessUserModule,
-    AuthenticationFeatureSessionsDataAccessJwtModule,
+    AuthenticationLoggerModule,
+    AuthenticationSessionsUserModule,
+    AuthenticationSessionsJwtModule,
     AuthenticationFeatureSessionsUtilsGuardsModule,
   ],
 })
-export class AuthenticationFeatureSessionsHttpModule {}
+export class AuthenticationSessionsHttpModule {}

@@ -12,7 +12,7 @@ import { Source } from '@state-adapt/rxjs';
 // Modules
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 // Services
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 // Components
 import { DesktopNavbarItemComponent } from '@finance/desktop/core/ui-navbar-item';
 // Models
@@ -31,7 +31,7 @@ interface state {
 
 @Component({
   standalone: true,
-  selector: 'towech-finance-webclient-navbar',
+  selector: 'finance-navbar',
   imports: [AsyncPipe, DesktopNavbarItemComponent, NgFor, NgClass, NgIf],
   styleUrls: ['navbar.component.scss'],
   templateUrl: `navbar.component.html`,
@@ -97,7 +97,7 @@ export class DesktopNavbarComponent {
 
   public constructor(
     private readonly router: Router,
-    public readonly user: DesktopSharedDataAccessUserService,
+    public readonly user: DesktopUserService,
     public eRef: ElementRef
   ) {}
 }

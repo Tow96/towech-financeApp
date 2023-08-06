@@ -12,4 +12,4 @@ import { Component } from '@angular/core';
   imports: [],
   template: `<p>DesktopFeatureSettingsShellComponent works</p>`,
 })
-export class DesktopFeatureSettingsShellComponent {}
+export class DesktopSettingsComponent {}

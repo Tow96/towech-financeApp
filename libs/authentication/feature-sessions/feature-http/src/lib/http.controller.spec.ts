@@ -4,13 +4,13 @@ import { HttpException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import * as httpMock from 'node-mocks-http';
 // Tested elements
-import { AuthenticationFeatureSessionsHttpController } from './http.controller';
+import { AuthenticationSessionsHttpController } from './http.controller';
 import { ConfigService } from '@nestjs/config';
 // Mocks
 import {
-  PidWinstonLoggerMock,
-  AuthenticationFeatureSessionsDataAccessUserServiceMock,
-  AuthenticationFeatureSessionsDataAccessJwtServiceMock,
+  AuthenticationPidWinstonLoggerMock,
+  AuthenticationSessionsUserServiceMock,
+  AuthenticationSessionsJwtServiceMock,
   plainUserStub,
   refreshArrStub,
 } from '@finance/authentication/shared/utils-testing';
@@ -18,24 +18,24 @@ import {
 import { UserRoles } from '@finance/shared/utils-types';
 
 describe('feature-sessions-http', () => {
-  let controller: AuthenticationFeatureSessionsHttpController;
+  let controller: AuthenticationSessionsHttpController;
   let result: any;
   let res: any;
 
   beforeEach(async () => {
     jest.clearAllMocks();
     const moduleRef = await Test.createTestingModule({
-      controllers: [AuthenticationFeatureSessionsHttpController],
+      controllers: [AuthenticationSessionsHttpController],
       providers: [
         ConfigService,
-        PidWinstonLoggerMock,
-        AuthenticationFeatureSessionsDataAccessUserServiceMock,
-        AuthenticationFeatureSessionsDataAccessJwtServiceMock,
+        AuthenticationPidWinstonLoggerMock,
+        AuthenticationSessionsUserServiceMock,
+        AuthenticationSessionsJwtServiceMock,
       ],
     }).compile();
 
-    controller = moduleRef.get<AuthenticationFeatureSessionsHttpController>(
-      AuthenticationFeatureSessionsHttpController
+    controller = moduleRef.get<AuthenticationSessionsHttpController>(
+      AuthenticationSessionsHttpController
     );
   });
 

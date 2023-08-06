@@ -14,7 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DesktopSharedUICheckboxComponent),
+      useExisting: forwardRef(() => DesktopCheckboxComponent),
       multi: true,
     },
   ],
@@ -25,7 +25,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     </div>
   `,
 })
-export class DesktopSharedUICheckboxComponent implements ControlValueAccessor {
+export class DesktopCheckboxComponent implements ControlValueAccessor {
   @Input() public label = '';
   @Input() public id = 'towech-checkbox';
   public value = false;

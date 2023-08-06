@@ -2,7 +2,7 @@
 import { Provider } from '@nestjs/common';
 import { jest } from '@jest/globals';
 // Services
-import { AuthenticationFeatureSessionsDataAccessUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Stubs
 import { passwordStub, plainAdminStub, plainUserStub, userStub } from './user.stub';
 // Models
@@ -42,7 +42,7 @@ const mockValues = {
   }),
 };
 
-export const AuthenticationFeatureSessionsDataAccessUserServiceMock: Provider = {
-  provide: AuthenticationFeatureSessionsDataAccessUserService,
+export const AuthenticationSessionsUserServiceMock: Provider = {
+  provide: AuthenticationSessionsUserService,
   useValue: mockValues,
 };

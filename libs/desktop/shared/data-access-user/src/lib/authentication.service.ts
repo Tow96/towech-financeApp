@@ -10,7 +10,7 @@ import { toRequestSource } from '@state-adapt/rxjs';
 import { catchError, Observable, map, throwError, tap } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 // Services
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 import { Router } from '@angular/router';
 import { APP_CONFIG, environment } from '@finance/desktop/shared/utils-environments';
 import { LoginUser, UserModel } from '@finance/shared/utils-types';
@@ -70,7 +70,7 @@ export class DesktopAuthenticationService {
   public constructor(
     protected readonly http: HttpClient,
     protected readonly router: Router,
-    protected readonly toast: DesktopSharedDataAccessToasterService,
+    protected readonly toast: DesktopToasterService,
     @Inject(APP_CONFIG) protected readonly env: typeof environment
   ) {}
 }

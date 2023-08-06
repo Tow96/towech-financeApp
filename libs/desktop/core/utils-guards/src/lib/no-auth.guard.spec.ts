@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
 // Tested elements
 import { DesktopUserNoAuthGuard } from './no-auth.guard';
 // Services
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 
 const mockState = (value: boolean) => ({
   store: {
@@ -26,7 +26,7 @@ describe('No Auth Guard', () => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
       providers: [
-        { provide: DesktopSharedDataAccessUserService, useValue: mockState(value) },
+        { provide: DesktopUserService, useValue: mockState(value) },
         DesktopUserNoAuthGuard,
       ],
       imports: [RouterTestingModule.withRoutes([{ path: 'login', redirectTo: '' }])],

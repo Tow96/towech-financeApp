@@ -31,4 +31,4 @@ import { I18nModule } from 'nestjs-i18n';
     }),
   ],
 })
-export class AuthenticationSharedFeatureI18nModule {}
+export class AuthenticationI18nModule {}

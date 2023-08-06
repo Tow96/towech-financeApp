@@ -7,7 +7,7 @@
 import { Injectable, PipeTransform, ArgumentMetadata } from '@nestjs/common';
 
 @Injectable()
-export class TrimPipe implements PipeTransform {
+export class AuthenticationTrimPipe implements PipeTransform {
   private isObj(obj: any): boolean {
     return typeof obj === 'object' && obj !== null;
   }

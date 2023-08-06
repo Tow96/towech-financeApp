@@ -14,7 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DesktopSharedUIInputComponent),
+      useExisting: forwardRef(() => DesktopInputComponent),
       multi: true,
     },
   ],
@@ -31,7 +31,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     </div>
   `,
 })
-export class DesktopSharedUIInputComponent implements ControlValueAccessor {
+export class DesktopInputComponent implements ControlValueAccessor {
   @Input() public type: 'text' | 'password' = 'text';
   @Input() public label = '';
   public value = '';

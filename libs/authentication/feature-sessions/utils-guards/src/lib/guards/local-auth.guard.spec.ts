@@ -4,10 +4,10 @@ import { Test } from '@nestjs/testing';
 import { LocalAuthGuard, LocalStrategy } from './local-auth.guard';
 // Mocks
 import {
-  AuthenticationFeatureSessionsDataAccessUserServiceMock,
+  AuthenticationSessionsUserServiceMock,
   plainUserStub,
   passwordStub,
-  AuthenticationSharedI18nTestingModule,
+  AuthenticationI18nTestingModule,
 } from '@finance/authentication/shared/utils-testing';
 import { generateI18nMockExecutionContext } from '../utils/i18n';
 // Models
@@ -25,12 +25,8 @@ describe('local-auth.guard', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     const moduleRef = await Test.createTestingModule({
-      imports: [AuthenticationSharedI18nTestingModule],
-      providers: [
-        LocalAuthGuard,
-        LocalStrategy,
-        AuthenticationFeatureSessionsDataAccessUserServiceMock,
-      ],
+      imports: [AuthenticationI18nTestingModule],
+      providers: [LocalAuthGuard, LocalStrategy, AuthenticationSessionsUserServiceMock],
     }).compile();
 
     localStrat = moduleRef.get<LocalStrategy>(LocalStrategy);

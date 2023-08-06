@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 // Tested elements
 import { UserDocument } from './utils/user.schema';
-import { AuthenticationFeatureSessionsDataAccessUserService } from './user.service';
+import { AuthenticationSessionsUserService } from './user.service';
 // Models
 import { UserModel } from '@finance/shared/utils-types';
 // Mocks
@@ -21,7 +21,7 @@ class MockUserModel extends MockModel<UserDocument> {
 }
 // ----------------------------------------------------------------------------
 describe('User Service', () => {
-  let service: AuthenticationFeatureSessionsDataAccessUserService;
+  let service: AuthenticationSessionsUserService;
   let response: any;
   let spy: jest.SpyInstance<any>;
 
@@ -36,13 +36,11 @@ describe('User Service', () => {
     jest.clearAllMocks();
     const moduleRef = await Test.createTestingModule({
       providers: [
-        AuthenticationFeatureSessionsDataAccessUserService,
+        AuthenticationSessionsUserService,
         { provide: getModelToken(UserDocument.name), useClass: MockUserModel },
       ],
     }).compile();
-    service = moduleRef.get<AuthenticationFeatureSessionsDataAccessUserService>(
-      AuthenticationFeatureSessionsDataAccessUserService
-    );
+    service = moduleRef.get<AuthenticationSessionsUserService>(AuthenticationSessionsUserService);
   });
 
   describe('When getAll is called', () => {

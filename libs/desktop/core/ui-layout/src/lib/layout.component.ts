@@ -12,7 +12,7 @@ import { DesktopNavbarComponent } from '@finance/desktop/core/feature-navbar';
 // TODO: Add Testing
 @Component({
   standalone: true,
-  selector: 'towech-finance-webclient-layout',
+  selector: 'finance-layout',
   imports: [DesktopNavbarComponent, RouterOutlet],
   styles: [
     `
@@ -32,11 +32,11 @@ import { DesktopNavbarComponent } from '@finance/desktop/core/feature-navbar';
   ],
   template: `
     <div class="layout">
-      <towech-finance-webclient-navbar></towech-finance-webclient-navbar>
+      <finance-navbar></finance-navbar>
       <div class="layout__contents">
         <router-outlet></router-outlet>
       </div>
     </div>
   `,
 })
-export class LayoutComponent {}
+export class DesktopLayoutComponent {}

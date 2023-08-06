@@ -3,19 +3,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 // Tested Elements
-import { DesktopSharedUiToastComponent } from './toast.component';
+import { DesktopToastComponent } from './toast.component';
 // Stubs
 import { stubAccentToast } from '@finance/desktop/shared/utils-testing';
 
 describe('Toast Component', () => {
   let compiled: HTMLElement;
-  let component: DesktopSharedUiToastComponent;
-  let fixture: ComponentFixture<DesktopSharedUiToastComponent>;
+  let component: DesktopToastComponent;
+  let fixture: ComponentFixture<DesktopToastComponent>;
   let spy: SubscriberSpy<string>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [BrowserAnimationsModule] });
-    fixture = TestBed.createComponent(DesktopSharedUiToastComponent);
+    fixture = TestBed.createComponent(DesktopToastComponent);
     component = fixture.componentInstance;
 
     component.toast = stubAccentToast();

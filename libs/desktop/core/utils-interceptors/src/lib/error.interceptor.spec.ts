@@ -1,7 +1,7 @@
 // Libraries
 import { subscribeSpyTo, SubscriberSpy } from '@hirez_io/observer-spy';
 // Tested elements
-import { DesktopGlobalErrorToastClass, messages } from './error.interceptor';
+import { DesktopErrorInterceptorClass, messages } from './error.interceptor';
 // Services
 import { NewToast } from '@finance/desktop/shared/utils-types';
 import { Source } from '@state-adapt/rxjs';
@@ -16,7 +16,7 @@ describe('Toast error handler', () => {
   let spy: SubscriberSpy<any>;
   beforeEach(() => {
     jest.clearAllMocks();
-    handler = new DesktopGlobalErrorToastClass({ get: () => mockService });
+    handler = new DesktopErrorInterceptorClass({ get: () => mockService });
     spy = subscribeSpyTo(mockService.addError$);
   });
 

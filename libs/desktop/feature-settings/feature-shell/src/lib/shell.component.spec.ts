@@ -1,15 +1,15 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
-import { DesktopFeatureSettingsShellComponent } from './shell.component';
+import { DesktopSettingsComponent } from './shell.component';
 
 describe('Desktop Settings Page', () => {
-  let component: DesktopFeatureSettingsShellComponent;
-  let fixture: ComponentFixture<DesktopFeatureSettingsShellComponent>;
+  let component: DesktopSettingsComponent;
+  let fixture: ComponentFixture<DesktopSettingsComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DesktopFeatureSettingsShellComponent);
+    fixture = TestBed.createComponent(DesktopSettingsComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

@@ -9,7 +9,7 @@ import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 // Services
 import { ConfigService } from '@nestjs/config';
-import { AuthenticationFeatureSessionsDataAccessUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Models
 import { RefreshToken } from '@finance/shared/utils-types';
 import { Request } from 'express';
@@ -19,7 +19,7 @@ import { validateWithI18n } from '../utils/i18n';
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames.REFRESH) {
   public constructor(
-    private readonly userRepo: AuthenticationFeatureSessionsDataAccessUserService,
+    private readonly userRepo: AuthenticationSessionsUserService,
     private readonly configService: ConfigService
   ) {
     super({

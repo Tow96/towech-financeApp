@@ -2,7 +2,7 @@
 import { Provider } from '@nestjs/common';
 import { jest } from '@jest/globals';
 // Services
-import { PidWinstonLogger } from '@finance/authentication/shared/feature-logger';
+import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/feature-logger';
 
 const mockValues = {
   pidError: jest.fn(),
@@ -17,7 +17,7 @@ const mockValues = {
   debug: jest.fn(),
 };
 
-export const PidWinstonLoggerMock: Provider = {
-  provide: PidWinstonLogger,
+export const AuthenticationPidWinstonLoggerMock: Provider = {
+  provide: AuthenticationPidWinstonLogger,
   useValue: mockValues,
 };

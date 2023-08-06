@@ -2,22 +2,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Tested Elements
-import { DesktopSharedFeatureToastTrayComponent } from './tray.component';
+import { DesktopToastTrayComponent } from './tray.component';
 // Mocks
-import { DesktopSharedDataAccessToasterServiceMock } from '@finance/desktop/shared/utils-testing';
+import { DesktopToasterServiceMock } from '@finance/desktop/shared/utils-testing';
 
 describe('Desktop Toaster', () => {
-  let component: DesktopSharedFeatureToastTrayComponent;
-  let fixture: ComponentFixture<DesktopSharedFeatureToastTrayComponent>;
+  let component: DesktopToastTrayComponent;
+  let fixture: ComponentFixture<DesktopToastTrayComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule],
-      providers: [DesktopSharedDataAccessToasterServiceMock],
+      providers: [DesktopToasterServiceMock],
     });
 
-    fixture = TestBed.createComponent(DesktopSharedFeatureToastTrayComponent);
+    fixture = TestBed.createComponent(DesktopToastTrayComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

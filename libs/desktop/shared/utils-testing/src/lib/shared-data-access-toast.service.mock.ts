@@ -1,5 +1,5 @@
 import { of } from 'rxjs';
-import { DesktopSharedDataAccessToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 import {
   stubAccentToast,
@@ -16,7 +16,7 @@ const mockValues = {
   },
 };
 
-export const DesktopSharedDataAccessToasterServiceMock = {
-  provide: DesktopSharedDataAccessToasterService,
+export const DesktopToasterServiceMock = {
+  provide: DesktopToasterService,
   useValue: mockValues,
 };

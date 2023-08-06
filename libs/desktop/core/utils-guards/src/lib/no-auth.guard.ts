@@ -8,13 +8,13 @@ import { Injectable } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
 // Services
 import { Router } from '@angular/router';
-import { DesktopSharedDataAccessUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 
 @Injectable()
 export class DesktopUserNoAuthGuard {
   public constructor(
     private readonly router: Router,
-    private readonly user: DesktopSharedDataAccessUserService // private readonly store: Store // private readonly router: Router,
+    private readonly user: DesktopUserService // private readonly store: Store // private readonly router: Router,
   ) {}
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {

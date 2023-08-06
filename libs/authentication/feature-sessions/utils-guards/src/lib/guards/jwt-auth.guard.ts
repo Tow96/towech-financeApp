@@ -9,7 +9,7 @@ import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 // Services
 import { ConfigService } from '@nestjs/config';
-import { AuthenticationFeatureSessionsDataAccessUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Models
 import { UserModel } from '@finance/shared/utils-types';
 import { StrategyNames } from '../utils/strategy.names';
@@ -18,7 +18,7 @@ import { validateWithI18n } from '../utils/i18n';
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH) {
   public constructor(
-    private readonly userRepo: AuthenticationFeatureSessionsDataAccessUserService,
+    private readonly userRepo: AuthenticationSessionsUserService,
     private readonly configService: ConfigService
   ) {
     super({

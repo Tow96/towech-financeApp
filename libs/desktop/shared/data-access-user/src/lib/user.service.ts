@@ -34,7 +34,7 @@ export interface state {
 }
 
 @Injectable()
-export class DesktopSharedDataAccessUserService extends DesktopAuthenticationService {
+export class DesktopUserService extends DesktopAuthenticationService {
   private storeName = 'user';
   private initialState: state = {
     data: null,
