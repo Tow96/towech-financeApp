@@ -1,0 +1,16 @@
+/** base.schema.ts
+ * Copyright (c) 2022, Towechlabs
+ *
+ * Basic Mongo Schema
+ */
+import { Prop, Schema } from '@nestjs/mongoose';
+import { SchemaTypes, Types } from 'mongoose';
+
+@Schema()
+export abstract class BaseSchema {
+  @Prop({ type: SchemaTypes.ObjectId })
+  public _id: Types.ObjectId = new Types.ObjectId();
+
+  @Prop({ type: Date, required: true })
+  public createdAt: Date = new Date();
+}

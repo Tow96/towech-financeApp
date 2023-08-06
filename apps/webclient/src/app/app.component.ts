@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DesktopShellComponent } from '@towech-finance/desktop/shell/feature';
-// import { DesktopUserService } from '@towech-finance/desktop/user/data-access';
+import { DesktopShellComponent } from '@finance/desktop/core/feature-shell';
 
 @Component({
   standalone: true,

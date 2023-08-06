@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "towech-finance",
+  "npmScope": "finance",
   "affected": {
     "defaultBase": "master"
   },

@@ -1,0 +1,28 @@
+@use 'sass:map';
+@use 'libs/desktop/core/ui-theme' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $primary: map.get($colors, primary);
+  $accent: map.get($colors, accent);
+
+  towech-finance-navbar-item {
+    button {
+      color: core.get-palette-hue-contrast($primary, 500);
+    }
+    button:hover {
+      background-color: core.get-palette-hue($primary, 400);
+    }
+    button:active {
+      background-color: core.get-palette-hue($primary, 600);
+    }
+    button:focus-visible {
+      background-color: core.get-palette-hue($primary, 400);
+    }
+
+    button:disabled {
+      color: core.get-palette-hue($accent, 500);
+      background-color: transparent;
+    }
+  }
+}

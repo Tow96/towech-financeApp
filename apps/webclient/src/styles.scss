@@ -1,14 +1,15 @@
 @use 'sass:map';
 @use './styles/themes/gold-night/index' as theme;
-@use 'libs/shared/ui/themes' as core;
+@use 'libs/desktop/core/ui-theme' as core;
 
 // Components ---------------------------
-@use 'libs/desktop/toasts/ui/theme' as toaster;
-@use 'libs/shared/ui/input/theme' as inputs;
-@use 'libs/shared/ui/checkbox/theme' as checkbox;
-@use 'libs/shared/ui/button/theme' as buttons;
-@use 'libs/desktop/login/ui/theme' as login;
-@use 'libs/desktop/navbar/ui/theme' as navbar;
+@use 'libs/desktop/core/ui-toast/theme' as toasts;
+@use 'libs/desktop/shared/ui-input/theme' as inputs;
+@use 'libs/desktop/shared/ui-checkbox/theme' as checkbox;
+@use 'libs/desktop/shared/ui-button/theme' as buttons;
+@use 'libs/desktop/feature-login/ui/theme' as login;
+@use 'libs/desktop/core/feature-navbar/theme' as navbar;
+@use 'libs/desktop/core/ui-navbar-item/theme' as navbar-items;
 // --------------------------------------
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
@@ -23,9 +24,10 @@
 @include buttons.color(theme.$gold-night-theme);
 @include checkbox.color(theme.$gold-night-theme);
 @include inputs.color(theme.$gold-night-theme);
+@include toasts.color(theme.$gold-night-theme);
+@include navbar-items.color(theme.$gold-night-theme);
 // Features --------------------------------------------
 @include navbar.color(theme.$gold-night-theme);
-@include toaster.color(theme.$gold-night-theme);
 // Pages -----------------------------------------------
 @include login.color(theme.$gold-night-theme);
 

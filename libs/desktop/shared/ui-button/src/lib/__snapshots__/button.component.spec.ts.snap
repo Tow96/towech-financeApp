@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button Component Must match the snapshot 1`] = `
+<div
+  id="root1"
+>
+  <button
+    class="accent"
+    type="button"
+  />
+</div>
+`;

@@ -11,10 +11,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app/app.module';
 // Services
-import { PidWinstonLogger } from '@towech-finance/shared/feature/logger';
+import { PidWinstonLogger } from '@finance/authentication/shared/feature-logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
-import { TrimPipe } from '@towech-finance/shared/utils/pipes';
+import { TrimPipe } from '@finance/authentication/core/utils-pipes';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {

@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Desktop Login Component Must match the snapshot 1`] = `
+<div
+  id="root3"
+>
+  <div
+    class="login-container"
+  >
+    <h1>
+      Login
+    </h1>
+    <form
+      class="ng-untouched ng-pristine ng-invalid"
+      novalidate=""
+    >
+      <finance-input
+        class="ng-untouched ng-pristine ng-invalid"
+        formcontrolname="username"
+        id="form-username"
+        label="Username"
+      >
+        <div
+          class="input_component"
+        >
+          <input
+            placeholder=" "
+            type="text"
+          />
+          <label>
+            Username
+          </label>
+        </div>
+      </finance-input>
+      <finance-input
+        class="ng-untouched ng-pristine ng-invalid"
+        formcontrolname="password"
+        id="form-password"
+        label="Password"
+        type="password"
+      >
+        <div
+          class="input_component"
+        >
+          <input
+            placeholder=" "
+            type="password"
+          />
+          <label>
+            Password
+          </label>
+        </div>
+      </finance-input>
+      <div
+        class="bottom-row"
+      >
+        <finance-checkbox
+          class="ng-untouched ng-pristine ng-valid"
+          formcontrolname="keepSession"
+          id="form-keep"
+          label="Keep Session"
+        >
+          <div
+            class="checkbox"
+          >
+            <input
+              id="form-keep"
+              type="checkbox"
+            />
+            <label
+              for="form-keep"
+            >
+              Keep Session
+            </label>
+          </div>
+        </finance-checkbox>
+        <finance-button
+          id="Login-button"
+          type="submit"
+        >
+          <button
+            class="accent"
+            type="submit"
+          >
+            Login
+          </button>
+        </finance-button>
+      </div>
+    </form>
+  </div>
+</div>
+`;

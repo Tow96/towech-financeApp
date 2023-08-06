@@ -15,37 +15,63 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@towech-finance/authentication/dto": ["libs/authentication/dto/src"],
-      "@towech-finance/authentication/http/signage": ["libs/authentication/http/signage/src"],
-      "@towech-finance/authentication/mocks": ["libs/authentication/mocks/src"],
-      "@towech-finance/authentication/passport": ["libs/authentication/passport/src"],
-      "@towech-finance/authentication/repos/user": ["libs/authentication/repos/user/src"],
-      "@towech-finance/authentication/shell/feature": ["libs/authentication/shell/feature/src"],
-      "@towech-finance/authentication/tokens": ["libs/authentication/tokens/src"],
-      "@towech-finance/desktop/dashboard/feature": ["libs/desktop/dashboard/feature/src"],
-      "@towech-finance/desktop/environment": ["libs/desktop/environment/src/index.ts"],
-      "@towech-finance/desktop/login/feature": ["libs/desktop/login/feature/src"],
-      "@towech-finance/desktop/navbar/feature": ["libs/desktop/navbar/feature/src"],
-      "@towech-finance/desktop/navbar/ui/item": ["libs/desktop/navbar/ui/item/src"],
-      "@towech-finance/desktop/settings/feature": ["libs/desktop/settings/feature/src"],
-      "@towech-finance/desktop/shell/feature": ["libs/desktop/shell/feature/src"],
-      "@towech-finance/desktop/shell/ui/layout": ["libs/desktop/shell/ui/layout/src"],
-      "@towech-finance/desktop/toasts/data-access": ["libs/desktop/toasts/data-access/src"],
-      "@towech-finance/desktop/toasts/error": ["libs/desktop/toasts/feature/error-handler/src"],
-      "@towech-finance/desktop/toasts/tray": ["libs/desktop/toasts/feature/tray/src"],
-      "@towech-finance/desktop/toasts/ui": ["libs/desktop/toasts/ui/src"],
-      "@towech-finance/desktop/toasts/utils": ["libs/desktop/toasts/utils/src/index.ts"],
-      "@towech-finance/desktop/user/data-access": ["libs/desktop/user/data-access/src"],
-      "@towech-finance/desktop/user/guards": ["libs/desktop/user/feature/guards/src"],
-      "@towech-finance/shared/feature/i18n-nest": ["libs/shared/feature/i18n-nest/src"],
-      "@towech-finance/shared/feature/logger": ["libs/shared/feature/logger/src"],
-      "@towech-finance/shared/feature/mongo": ["libs/shared/feature/mongo/src"],
-      "@towech-finance/shared/ui/button": ["libs/shared/ui/button/src"],
-      "@towech-finance/shared/ui/checkbox": ["libs/shared/ui/checkbox/src"],
-      "@towech-finance/shared/ui/input": ["libs/shared/ui/input/src"],
-      "@towech-finance/shared/ui/themes": ["libs/shared/ui/themes/src"],
-      "@towech-finance/shared/utils/models": ["libs/shared/utils/models/src"],
-      "@towech-finance/shared/utils/pipes": ["libs/shared/utils/pipes/src"]
+      "@finance/authentication/core/shell": ["libs/authentication/core/feature-shell/src"],
+      "@finance/authentication/core/utils-pipes": ["libs/authentication/core/utils-pipes/src"],
+      "@finance/authentication/feature-sessions/data-access-jwt": [
+        "libs/authentication/feature-sessions/data-access-jwt/src"
+      ],
+      "@finance/authentication/feature-sessions/data-access-user": [
+        "libs/authentication/feature-sessions/data-access-user/src"
+      ],
+      "@finance/authentication/feature-sessions/feature-http": [
+        "libs/authentication/feature-sessions/feature-http/src"
+      ],
+      "@finance/authentication/feature-sessions/utils-dto": [
+        "libs/authentication/feature-sessions/utils-dto/src"
+      ],
+      "@finance/authentication/feature-sessions/utils-guards": [
+        "libs/authentication/feature-sessions/utils-guards/src"
+      ],
+      "@finance/authentication/shared/data-access-mongo": [
+        "libs/authentication/shared/data-access-mongo/src"
+      ],
+      "@finance/authentication/shared/feature-i18n": [
+        "libs/authentication/shared/feature-i18n/src"
+      ],
+      "@finance/authentication/shared/feature-logger": [
+        "libs/authentication/shared/feature-logger/src"
+      ],
+      "@finance/authentication/shared/utils-testing": [
+        "libs/authentication/shared/utils-testing/src"
+      ],
+      "@finance/desktop/core/feature-navbar": ["libs/desktop/core/feature-navbar/src"],
+      "@finance/desktop/core/feature-shell": ["libs/desktop/core/feature-shell/src"],
+      "@finance/desktop/core/feature-toast-tray": ["libs/desktop/core/feature-toast-tray/src"],
+      "@finance/desktop/core/ui-layout": ["libs/desktop/core/ui-layout/src"],
+      "@finance/desktop/core/ui-navbar-item": ["libs/desktop/core/ui-navbar-item/src"],
+      "@finance/desktop/core/ui-theme": ["libs/desktop/core/ui-theme/src"],
+      "@finance/desktop/core/ui-toast": ["libs/desktop/core/ui-toast/src"],
+      "@finance/desktop/core/utils-guards": ["libs/desktop/core/utils-guards/src"],
+      "@finance/desktop/core/utils-imports": ["libs/desktop/core/utils-imports/src"],
+      "@finance/desktop/core/utils-interceptors": ["libs/desktop/core/utils-interceptors/src"],
+      "@finance/desktop/feature-dashboard/shell": [
+        "libs/desktop/feature-dashboard/feature-shell/src"
+      ],
+      "@finance/desktop/feature-login/feature-shell": [
+        "libs/desktop/feature-login/feature-shell/src"
+      ],
+      "@finance/desktop/feature-settings/shell": [
+        "libs/desktop/feature-settings/feature-shell/src"
+      ],
+      "@finance/desktop/shared/data-access-toast": ["libs/desktop/shared/data-access-toast/src"],
+      "@finance/desktop/shared/data-access-user": ["libs/desktop/shared/data-access-user/src"],
+      "@finance/desktop/shared/ui-button": ["libs/desktop/shared/ui-button/src"],
+      "@finance/desktop/shared/ui-checkbox": ["libs/desktop/shared/ui-checkbox/src"],
+      "@finance/desktop/shared/ui-input": ["libs/desktop/shared/ui-input/src"],
+      "@finance/desktop/shared/utils-environments": ["libs/desktop/shared/utils-environments/src"],
+      "@finance/desktop/shared/utils-testing": ["libs/desktop/shared/utils-testing/src"],
+      "@finance/desktop/shared/utils-types": ["libs/desktop/shared/utils-types/src"],
+      "@finance/shared/utils-types": ["libs/shared/utils-types/src"]
     }
   },
   "exclude": ["node_modules", "tmp"]

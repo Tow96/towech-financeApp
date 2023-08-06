@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AuthenticationShellFeatureModule } from '@towech-finance/authentication/shell/feature';
+import { AuthenticationCoreFeatureShellModule } from '@finance/authentication/core/shell';
 
 @Module({
-  imports: [AuthenticationShellFeatureModule],
+  imports: [AuthenticationCoreFeatureShellModule],
 })
 export class AppModule {}

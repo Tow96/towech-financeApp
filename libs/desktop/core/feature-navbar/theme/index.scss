@@ -1,0 +1,24 @@
+@use 'sass:map';
+@use 'libs/desktop/core/ui-theme' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $primary: map.get($colors, primary);
+  $accent: map.get($colors, accent);
+
+  towech-finance-webclient-navbar {
+    .nav-wrapper {
+      nav {
+        background-color: core.get-palette-hue($primary, 500);
+
+        .nav__divider {
+          border-top: 2px solid core.get-palette-hue($primary, 700);
+        }
+
+        .contents {
+          background-color: inherit;
+        }
+      }
+    }
+  }
+}
