@@ -50,7 +50,10 @@ export class DesktopUserService extends DesktopAuthenticationService {
   // Helpers -------------------------------------------------------
   private handleLogin = splitRequestSources(
     Actions.LOGIN,
-    this.login$.pipe(exhaustMap(action => this.callLogin(action.payload, Actions.LOGIN)))
+    this.login$.pipe(
+      exhaustMap(action => this.callLogin(action.payload, Actions.LOGIN)),
+      share()
+    )
   );
   private handleRefresh = splitRequestSources(
     Actions.REFRESH,
@@ -105,6 +108,7 @@ export class DesktopUserService extends DesktopAuthenticationService {
         loaded: user.status === Status.COMPLETED || user.status === Status.FAILED,
         logged: user.data !== null,
       }),
+      status: user => user.status,
     },
   });
 

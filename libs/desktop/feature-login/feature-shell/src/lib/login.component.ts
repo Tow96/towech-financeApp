@@ -11,7 +11,7 @@ import {
   Directive,
   Input,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
   AbstractControl,
   FormControl,
@@ -51,11 +51,6 @@ export class PatchFormGroupValuesDirective<T> {
   }
 }
 // ----------------------------------------------------------------------------
-type state = {
-  form: LoginUser;
-  loading: boolean;
-};
-
 @Component({
   standalone: true,
   selector: 'finance-login',
@@ -67,10 +62,12 @@ type state = {
     DesktopButtonComponent,
     DesktopCheckboxComponent,
     DesktopInputComponent,
+    NgIf,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="login-container">
+      <div class="lds-dual-ring"></div>
       <h1>Login</h1>
       <form
         [formGroup]="form"
@@ -85,8 +82,7 @@ type state = {
           formControlName="password">
         </finance-input>
         <div class="bottom-row">
-          <finance-checkbox id="form-keep" label="Keep Session" formControlName="keepSession">
-          </finance-checkbox>
+          <finance-checkbox label="Keep Session" formControlName="keepSession"> </finance-checkbox>
           <finance-button type="submit" id="Login-button">Login</finance-button>
         </div>
       </form>
@@ -95,21 +91,18 @@ type state = {
 })
 export class DesktopLoginComponent {
   private storeName = 'login';
-  public initialState: state = {
-    form: {
-      keepSession: false,
-      password: '',
-      username: '',
-    },
-    loading: false,
+  public initialState: LoginUser = {
+    keepSession: false,
+    password: '',
+    username: '',
   };
 
   public form = new FormGroup<IForm<LoginUser | null>>({
-    keepSession: new FormControl(this.initialState.form.keepSession),
-    password: new FormControl(this.initialState.form.password, {
+    keepSession: new FormControl(this.initialState.keepSession),
+    password: new FormControl(this.initialState.password, {
       validators: [Validators.required],
     }),
-    username: new FormControl(this.initialState.form.username, {
+    username: new FormControl(this.initialState.username, {
       validators: [Validators.required],
     }),
   });
@@ -125,12 +118,12 @@ export class DesktopLoginComponent {
   private loginFail$ = this.user.onLoginError$.pipe(tap(() => this.invalidateForm()));
 
   // Adapter ------------------------------------------------------------------
-  private adapter = createAdapter<state>()({
+  private adapter = createAdapter<LoginUser>()({
     clear: () => this.initialState,
-    changeForm: (state, form) => ({ ...state, form }),
+    changeForm: (state, form) => ({ ...state, ...form }),
     login: state => this.triggerLogin(state),
     selectors: {
-      form: state => state.form,
+      form: state => state,
     },
   });
 
@@ -142,11 +135,11 @@ export class DesktopLoginComponent {
   });
 
   // Helpers ------------------------------------------------------------------
-  private triggerLogin(state: state): state {
+  private triggerLogin(state: LoginUser): LoginUser {
     // Triggers the pipe generic pipe instead of having an specific login pipe in the userservice to avoid circular imports
     if (this.form.invalid)
       this.toasts.addError$.next({ message: 'Please provide username and password' });
-    else this.user.login$.next(state.form);
+    else this.user.login$.next(state);
 
     return state;
   }

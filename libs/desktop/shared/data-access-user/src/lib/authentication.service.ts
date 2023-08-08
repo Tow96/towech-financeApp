@@ -29,8 +29,10 @@ export class DesktopAuthenticationService {
     token,
   });
 
-  private processError<T>(err: Record<string, T>) {
-    return throwError(() => err['error']);
+  private processError(err: Record<string, any>) {
+    const e = err['error'];
+    e['message'] = e['message'] || 'Unexpected error';
+    return throwError(() => e);
   }
 
   protected postWithCredentials<Payload, Response>(
