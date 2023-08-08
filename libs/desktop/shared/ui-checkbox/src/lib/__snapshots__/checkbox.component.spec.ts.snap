@@ -8,11 +8,11 @@ exports[`Shared Input Component Must match the snapshot 1`] = `
     class="checkbox"
   >
     <input
-      id="towech-checkbox"
+      id="TEST"
       type="checkbox"
     />
     <label
-      for="towech-checkbox"
+      for="TEST"
     >
       TEST
     </label>

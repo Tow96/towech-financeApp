@@ -20,14 +20,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
   template: `
     <div class="checkbox">
-      <input [id]="id" type="checkbox" [checked]="value" (input)="onChange($event)" />
-      <label [for]="id">{{ label }}</label>
+      <input type="checkbox" [id]="label" [checked]="value" (input)="onChange($event)" />
+      <label [for]="label">{{ label }}</label>
     </div>
   `,
 })
 export class DesktopCheckboxComponent implements ControlValueAccessor {
   @Input() public label = '';
-  @Input() public id = 'towech-checkbox';
   public value = false;
   public disabled = false;
   public customTouched = (): void => {};
@@ -46,8 +45,8 @@ export class DesktopCheckboxComponent implements ControlValueAccessor {
   }
 
   public onChange(event: Event): void {
-    const value = (<HTMLInputElement>event.target).checked;
-    this.customChanged(value);
+    this.value = (<HTMLInputElement>event.target).checked;
+    this.customChanged((<HTMLInputElement>event.target).checked);
   }
 
   public writeValue(value: boolean): void {

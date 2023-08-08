@@ -8,8 +8,10 @@ describe('Shared Input Component', () => {
   let component: DesktopCheckboxComponent;
   let fixture: ComponentFixture<DesktopCheckboxComponent>;
   let compiled: HTMLElement;
+  let spy: jest.SpyInstance<any>;
 
   beforeEach(() => {
+    jest.clearAllMocks();
     fixture = TestBed.createComponent(DesktopCheckboxComponent);
     component = fixture.componentInstance;
     // component.type = 'text';
@@ -26,12 +28,12 @@ describe('Shared Input Component', () => {
   it('Should implement the NG_VALUE_ACCESSOR', () =>
     expect(fixture.debugElement.injector.get(NG_VALUE_ACCESSOR)).toBeTruthy());
 
-  it('The changed and customTouched functions must do nothing at start', () => {
+  it('The changed and customTouched functions must do nothing when declared', () => {
     expect(component.customChanged(false)).toBeUndefined();
     expect(component.customTouched()).toBeUndefined();
   });
 
-  describe('When setViewValue is called', () => {
+  describe('When writeValue is called', () => {
     it('Should update the value', () => {
       component.writeValue(true);
       expect(component.value).toBe(true);
@@ -73,17 +75,36 @@ describe('Shared Input Component', () => {
   });
 
   describe('When on change is called', () => {
-    it('Should call the changed function with the new value', () => {
-      const event = { target: { checked: true } } as any;
+    let event: any;
 
-      const spy = jest.spyOn(component, 'customChanged');
+    beforeEach(() => {
+      event = { target: { checked: true } } as any;
+      spy = jest.spyOn(component, 'customChanged');
       component.onChange(event);
-      expect(spy).toHaveBeenCalledWith(true);
-
-      jest.clearAllMocks();
-      event.target.checked = false;
-      component.onChange(event);
-      expect(spy).toHaveBeenCalledWith(false);
     });
+    it('Should call the customChanged function', () =>
+      expect(spy).toHaveBeenCalledWith(event.target.checked));
+  });
+
+  describe('When the checkbox is clicked', () => {
+    beforeEach(() => {
+      spy = jest.spyOn(component, 'onChange');
+      component.value = false;
+      const checkbox = fixture.debugElement.nativeElement.querySelector('input');
+      checkbox.click();
+    });
+
+    it('Should call the onChange function', () => expect(spy).toHaveBeenCalled());
+  });
+
+  describe('When the label is clicked', () => {
+    beforeEach(() => {
+      spy = jest.spyOn(component, 'onChange');
+      component.value = false;
+      const label = fixture.debugElement.nativeElement.querySelector('label');
+      label.click();
+    });
+
+    it('Should call the onChange function', () => expect(spy).toHaveBeenCalled());
   });
 });

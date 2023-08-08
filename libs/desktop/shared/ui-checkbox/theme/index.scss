@@ -22,12 +22,13 @@
         inset rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
     }
 
-    input:focus + label {
+    input:focus + label,
+    label:active {
       color: core.get-palette-hue($accent, 500);
     }
   }
 
-  towech-finance-checkbox.ngrx-forms-invalid.ngrx-forms-dirty .checkbox {
+  finance-checkbox.ngrx-forms-invalid.ngrx-forms-dirty .checkbox {
     input:focus-visible {
       box-shadow:
         0 0 0 0.1rem rgba($color: core.get-palette-hue($error, 300), $alpha: 0.5),
@@ -38,7 +39,8 @@
       color: core.get-palette-hue($error, 500);
     }
 
-    input:focus + label {
+    input:focus + label,
+    label:active {
       color: core.get-palette-hue($error, 500);
     }
   }

@@ -35,10 +35,13 @@
     cursor: pointer;
     font-weight: 500;
     font-size: 15px;
-    transition: font-weight, color 120ms ease-in;
+    transition:
+      font-weight,
+      color 120ms ease-in;
   }
 
-  input:focus + label {
+  input:focus + label,
+  label:active {
     text-decoration: underline dotted;
     text-underline-offset: 3px;
     font-weight: 700;
