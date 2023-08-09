@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'desktop-shared-ui-input',
+  displayName: 'desktop-shared-ui-spinner',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/desktop/shared/ui-input',
+  coverageDirectory: '../../../../coverage/libs/desktop/shared/ui-spinner',
   collectCoverageFrom: ['**/*.ts', '!**/index.ts', '!**/jest.config.ts'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
   transform: {
