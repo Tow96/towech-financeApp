@@ -1,12 +1,12 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nx"],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
@@ -19,30 +19,26 @@
             ]
           }
         ],
-        "max-depth": [
-          "error",
-          {
-            "max": 2
-          }
-        ],
-        "max-nested-callbacks": [
-          "error",
-          {
-            "max": 1
-          }
-        ],
-        "@typescript-eslint/explicit-member-accessibility": "error"
+        "@typescript-eslint/explicit-member-accessibility": "error",
+        "max-depth": ["error", { "max": 2 }],
+        "max-nested-callbacks": ["error", { "max": 1 }]
       }
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.cy.ts"],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.mock.ts"],
       "env": {
         "jest": true
       },
       "rules": {
         "max-depth": "off",
         "max-nested-callbacks": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
+        "@nx/enforce-module-boundaries": "off"
       }
     }
   ]

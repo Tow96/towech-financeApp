@@ -40,8 +40,8 @@
               "with": "libs/desktop/shared/utils-environments/src/lib/environment.prod.ts"
             },
             {
-              "replace": "libs/desktop/shell/feature/imports/dev-only.modules.ts",
-              "with": "libs/desktop/shell/feature/imports/dev-only.modules.prod.ts"
+              "replace": "libs/desktop/core/utils-imports/src/lib/dev-only.modules.ts",
+              "with": "libs/desktop/core/utils-imports/src/lib/dev-only.modules.prod.ts"
             }
           ]
         },

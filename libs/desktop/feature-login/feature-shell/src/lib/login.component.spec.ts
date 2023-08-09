@@ -115,14 +115,12 @@ describe('Desktop Login Component', () => {
     it('Should update the store after the debounce time has passed', fakeAsync(() => {
       const newState = {
         ...component.initialState,
-        form: {
-          keepSession: false,
-          password: 'pass',
-          username: 'user',
-        },
+        keepSession: false,
+        password: 'pass',
+        username: 'user',
       };
 
-      component.form.patchValue(newState.form);
+      component.form.patchValue(newState);
       tick(1000);
       expect(stateSpy.getLastValue()).toEqual(newState);
     }));

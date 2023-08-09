@@ -29,11 +29,13 @@ export class DesktopAuthenticationService {
     token,
   });
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   private processError(err: Record<string, any>) {
     const e = err['error'];
     e['message'] = e['message'] || 'Unexpected error';
     return throwError(() => e);
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   protected postWithCredentials<Payload, Response>(
     url: string,

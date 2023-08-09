@@ -88,7 +88,7 @@ export class PatchFormGroupValuesDirective<T> {
             formControlName="password">
           </finance-input>
           <div class="bottom-row">
-            <finance-checkbox label="Keep Session" formControlName="keepSession">
+            <finance-checkbox id="form-keep" label="Keep Session" formControlName="keepSession">
             </finance-checkbox>
             <finance-button type="submit" id="Login-button">Login</finance-button>
           </div>
