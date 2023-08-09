@@ -24,12 +24,13 @@ import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
 import { debounceTime, tap } from 'rxjs';
 // Services
-import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
+import { DesktopUserService, Status } from '@finance/desktop/shared/data-access-user';
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 // Components
 import { DesktopButtonComponent } from '@finance/desktop/shared/ui-button';
 import { DesktopCheckboxComponent } from '@finance/desktop/shared/ui-checkbox';
 import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
+import { DesktopSpinner } from '@finance/desktop/shared/ui-spinner';
 // Models
 import { LoginUser } from '@finance/shared/utils-types';
 
@@ -62,30 +63,37 @@ export class PatchFormGroupValuesDirective<T> {
     DesktopButtonComponent,
     DesktopCheckboxComponent,
     DesktopInputComponent,
+    DesktopSpinner,
     NgIf,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="login-container">
-      <div class="lds-dual-ring"></div>
-      <h1>Login</h1>
-      <form
-        [formGroup]="form"
-        [patchFormGroupValues]="store.form$ | async"
-        (submit)="login$.next()">
-        <finance-input id="form-username" label="Username" formControlName="username">
-        </finance-input>
-        <finance-input
-          id="form-password"
-          type="password"
-          label="Password"
-          formControlName="password">
-        </finance-input>
-        <div class="bottom-row">
-          <finance-checkbox label="Keep Session" formControlName="keepSession"> </finance-checkbox>
-          <finance-button type="submit" id="Login-button">Login</finance-button>
-        </div>
-      </form>
+    <div class="login">
+      <finance-spinner
+        *ngIf="isLoading(user.store.status$ | async)"
+        class="login__spinner"
+        size="5rem"></finance-spinner>
+      <div class="login__container">
+        <h1>Login</h1>
+        <form
+          [formGroup]="form"
+          [patchFormGroupValues]="store.form$ | async"
+          (submit)="login$.next()">
+          <finance-input id="form-username" label="Username" formControlName="username">
+          </finance-input>
+          <finance-input
+            id="form-password"
+            type="password"
+            label="Password"
+            formControlName="password">
+          </finance-input>
+          <div class="bottom-row">
+            <finance-checkbox label="Keep Session" formControlName="keepSession">
+            </finance-checkbox>
+            <finance-button type="submit" id="Login-button">Login</finance-button>
+          </div>
+        </form>
+      </div>
     </div>
   `,
 })
@@ -150,6 +158,11 @@ export class DesktopLoginComponent {
     const formKeys = Object.keys(controls);
     formKeys.forEach(key => controls[key as keyof LoginUser].markAsDirty());
     this.changeRef.markForCheck(); // Manual change since we're using onPush
+  }
+
+  public isLoading(status: Status | null): boolean {
+    if (status === null) return false;
+    return status === Status.IN_PROGRESS;
   }
 
   public constructor(

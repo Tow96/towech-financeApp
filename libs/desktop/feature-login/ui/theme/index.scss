@@ -9,8 +9,12 @@
   // $error: map.get($colors, error);
   // $warn: map.get($colors, warning);
 
-  finance-login .login-container {
+  finance-login .login__container {
     background-color: core.get-palette-hue($primary, 500);
     color: core.get-palette-hue-contrast($primary, 500);
+  }
+
+  finance-login .login__spinner {
+    background-color: rgba($color: core.get-palette-hue($primary, 500), $alpha: 0.6);
   }
 }
