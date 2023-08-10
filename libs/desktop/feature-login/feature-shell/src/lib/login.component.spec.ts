@@ -126,7 +126,6 @@ describe('Desktop Login Component', () => {
     }));
   });
 
-  // TODO: Add form validation before sending and error processing
   describe('When the login button is pressed', () => {
     let userSpy: SubscriberSpy<Action<any, string>>;
     let toastSpy: SubscriberSpy<Action<any, string>>;
