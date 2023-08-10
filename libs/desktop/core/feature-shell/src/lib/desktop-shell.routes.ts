@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { DesktopLayoutComponent } from '@finance/desktop/core/ui-layout';
+import { DesktopLayoutComponent } from '@finance/desktop/core/layout';
 import { DesktopUserAuthGuard, DesktopUserNoAuthGuard } from '@finance/desktop/core/utils-guards';
 
 export const desktopShellRoutes: Route[] = [
@@ -10,20 +10,19 @@ export const desktopShellRoutes: Route[] = [
       {
         path: '',
         loadComponent: async () =>
-          (await import('@finance/desktop/feature-dashboard/shell')).DesktopDashboardComponent,
+          (await import('@finance/desktop/dashboard/shell')).DesktopDashboardComponent,
       },
       {
         path: 'settings',
         loadComponent: async () =>
-          (await import('@finance/desktop/feature-settings/shell')).DesktopSettingsComponent,
+          (await import('@finance/desktop/settings/shell')).DesktopSettingsComponent,
       },
     ],
     canActivate: [DesktopUserAuthGuard],
   },
   {
     path: 'login',
-    loadComponent: async () =>
-      (await import('@finance/desktop/feature-login/feature-shell')).DesktopLoginComponent,
+    loadComponent: async () => (await import('@finance/desktop/login/shell')).DesktopLoginComponent,
     canActivate: [DesktopUserNoAuthGuard],
   },
 ];

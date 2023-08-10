@@ -1,7 +1,7 @@
 {
-  "name": "desktop-core-ui-layout",
+  "name": "desktop-core-feature-layout",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/desktop/core/ui-layout/src",
+  "sourceRoot": "libs/desktop/core/feature-layout/src",
   "prefix": "finance",
   "tags": [],
   "projectType": "library",
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/desktop/core/ui-layout/jest.config.ts",
+        "jestConfig": "libs/desktop/core/feature-layout/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -25,8 +25,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/desktop/core/ui-layout/**/*.ts",
-          "libs/desktop/core/ui-layout/**/*.html"
+          "libs/desktop/core/feature-layout/**/*.ts",
+          "libs/desktop/core/feature-layout/**/*.html"
         ]
       }
     }

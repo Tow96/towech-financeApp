@@ -44,25 +44,19 @@
       "@finance/authentication/shared/utils-testing": [
         "libs/authentication/shared/utils-testing/src"
       ],
-      "@finance/desktop/core/feature-navbar": ["libs/desktop/core/feature-navbar/src"],
-      "@finance/desktop/core/feature-shell": ["libs/desktop/core/feature-shell/src"],
-      "@finance/desktop/core/feature-toast-tray": ["libs/desktop/core/feature-toast-tray/src"],
-      "@finance/desktop/core/ui-layout": ["libs/desktop/core/ui-layout/src"],
+      "@finance/desktop/core/layout": ["libs/desktop/core/feature-layout/src"],
+      "@finance/desktop/core/navbar": ["libs/desktop/core/feature-navbar/src"],
+      "@finance/desktop/core/shell": ["libs/desktop/core/feature-shell/src"],
+      "@finance/desktop/core/toast-tray": ["libs/desktop/core/feature-toast-tray/src"],
       "@finance/desktop/core/ui-navbar-item": ["libs/desktop/core/ui-navbar-item/src"],
       "@finance/desktop/core/ui-theme": ["libs/desktop/core/ui-theme/src"],
       "@finance/desktop/core/ui-toast": ["libs/desktop/core/ui-toast/src"],
       "@finance/desktop/core/utils-guards": ["libs/desktop/core/utils-guards/src"],
       "@finance/desktop/core/utils-imports": ["libs/desktop/core/utils-imports/src"],
       "@finance/desktop/core/utils-interceptors": ["libs/desktop/core/utils-interceptors/src"],
-      "@finance/desktop/feature-dashboard/shell": [
-        "libs/desktop/feature-dashboard/feature-shell/src"
-      ],
-      "@finance/desktop/feature-login/feature-shell": [
-        "libs/desktop/feature-login/feature-shell/src"
-      ],
-      "@finance/desktop/feature-settings/shell": [
-        "libs/desktop/feature-settings/feature-shell/src"
-      ],
+      "@finance/desktop/dashboard/shell": ["libs/desktop/feature-dashboard/feature-shell/src"],
+      "@finance/desktop/login/shell": ["libs/desktop/feature-login/feature-shell/src"],
+      "@finance/desktop/settings/shell": ["libs/desktop/feature-settings/feature-shell/src"],
       "@finance/desktop/shared/data-access-toast": ["libs/desktop/shared/data-access-toast/src"],
       "@finance/desktop/shared/data-access-user": ["libs/desktop/shared/data-access-user/src"],
       "@finance/desktop/shared/ui-button": ["libs/desktop/shared/ui-button/src"],

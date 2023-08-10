@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DesktopShellComponent } from '@finance/desktop/core/feature-shell';
+import { DesktopShellComponent } from '@finance/desktop/core/shell';
 
 @Component({
   standalone: true,

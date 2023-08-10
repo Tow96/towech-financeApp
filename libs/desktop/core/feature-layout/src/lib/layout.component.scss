@@ -1,0 +1,29 @@
+.layout {
+  --content-margin: 1em;
+  display: flex;
+
+  .layout__contents {
+    position: relative;
+    flex: 1;
+    margin: var(--content-margin);
+  }
+  finance-spinner {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    position: absolute;
+    margin: calc(-1 * var(--content-margin));
+    width: calc(100% + 2 * var(--content-margin));
+  }
+
+  @media screen and (max-width: 30em) {
+    flex-direction: column;
+
+    .layout__contents {
+      finance-spinner {
+        height: calc(100vh - 70px);
+      }
+    }
+  }
+}

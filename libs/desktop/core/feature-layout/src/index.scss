@@ -1,0 +1,13 @@
+@use 'sass:map';
+@use 'libs/desktop/core/ui-theme' as core;
+
+@mixin color($theme) {
+  $colors: map.get($theme, color);
+  $background: map.get($colors, background);
+
+  finance-layout {
+    finance-spinner {
+      background-color: $background;
+    }
+  }
+}

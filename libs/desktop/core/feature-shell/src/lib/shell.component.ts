@@ -8,7 +8,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 import { Subscription } from 'rxjs';
 // Components
-import { DesktopToastTrayComponent } from '@finance/desktop/core/feature-toast-tray';
+import { DesktopToastTrayComponent } from '@finance/desktop/core/toast-tray';
 
 @Component({
   standalone: true,
