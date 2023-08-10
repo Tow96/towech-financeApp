@@ -13,7 +13,7 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { debounceTime, filter, map } from 'rxjs';
 // Components
 import { DesktopNavbarComponent } from '@finance/desktop/core/navbar';
 import { DesktopSpinnerComponent } from '@finance/desktop/shared/ui-spinner';
@@ -44,6 +44,7 @@ export class DesktopLayoutComponent {
         e instanceof NavigationCancel ||
         e instanceof NavigationError
     ),
+    debounceTime(20),
     map(e => e instanceof NavigationStart)
   );
 
