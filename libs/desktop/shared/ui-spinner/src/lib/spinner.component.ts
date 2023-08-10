@@ -47,7 +47,7 @@ import { Component, Input, HostBinding } from '@angular/core';
 
   template: ` <div class="lds-dual-ring"></div> `,
 })
-export class DesktopSpinner {
+export class DesktopSpinnerComponent {
   @HostBinding('style.--spinner-size')
   @Input()
   public size = '30px';

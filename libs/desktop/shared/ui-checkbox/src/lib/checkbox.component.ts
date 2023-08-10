@@ -29,8 +29,8 @@ export class DesktopCheckboxComponent implements ControlValueAccessor {
   @Input() public label = '';
   public value = false;
   public disabled = false;
-  public customTouched = (): void => {};
-  public customChanged = (_: boolean): void => {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+  public customTouched = (): void => {}; // eslint-disable-line
+  public customChanged = (_: boolean): void => {}; // eslint-disable-line
 
   public registerOnChange(fn: (v: boolean) => void): void {
     this.customChanged = fn;

@@ -30,7 +30,7 @@ import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast
 import { DesktopButtonComponent } from '@finance/desktop/shared/ui-button';
 import { DesktopCheckboxComponent } from '@finance/desktop/shared/ui-checkbox';
 import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
-import { DesktopSpinner } from '@finance/desktop/shared/ui-spinner';
+import { DesktopSpinnerComponent } from '@finance/desktop/shared/ui-spinner';
 // Models
 import { LoginUser } from '@finance/shared/utils-types';
 
@@ -63,7 +63,7 @@ export class PatchFormGroupValuesDirective<T> {
     DesktopButtonComponent,
     DesktopCheckboxComponent,
     DesktopInputComponent,
-    DesktopSpinner,
+    DesktopSpinnerComponent,
     NgIf,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -153,7 +153,8 @@ export class DesktopLoginComponent {
   }
 
   private invalidateForm() {
-    const controls = this.form.controls!; // We created the form, we can trust that it exists
+    // We created the form, we can trust that it exists
+    const controls = this.form.controls!; // eslint-disable-line
 
     const formKeys = Object.keys(controls);
     formKeys.forEach(key => controls[key as keyof LoginUser].markAsDirty());

@@ -1,15 +1,15 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Tested elements
-import { DesktopSpinner } from './spinner.component';
+import { DesktopSpinnerComponent } from './spinner.component';
 
 describe('desktop-spinner', () => {
-  let component: DesktopSpinner;
-  let fixture: ComponentFixture<DesktopSpinner>;
+  let component: DesktopSpinnerComponent;
+  let fixture: ComponentFixture<DesktopSpinnerComponent>;
   let compiled: HTMLElement;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DesktopSpinner);
+    fixture = TestBed.createComponent(DesktopSpinnerComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

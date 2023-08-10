@@ -29,14 +29,14 @@ export class CreateUserDto implements CreateUser {
     message: i18nValidationMessage('validation.MIN_LENGTH', { parameter: 'name', count: 3 }),
   })
   @ApiProperty({ description: 'Name of the new user', required: true })
-  public name: string = '';
+  public name = '';
 
   @IsEmail({}, { message: i18nValidationMessage('validation.INVALID_MAIL', { parameter: 'mail' }) })
   @ApiProperty({
     description: 'Email address of the user, it is also used as the username',
     required: true,
   })
-  public mail: string = '';
+  public mail = '';
 
   @IsOptional()
   @Transform(({ value }) => convertToRole(value))

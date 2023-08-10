@@ -1,14 +1,9 @@
 // Libraries
-import { Provider } from '@nestjs/common';
 import { jest } from '@jest/globals';
-// Services
-import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Stubs
 import { passwordStub, plainAdminStub, plainUserStub, userStub } from './user.stub';
-// Models
-import { UserRoles } from '@finance/shared/utils-types';
 
-const mockValues = {
+export const AuthenticationSessionsUserServiceMock = {
   getByEmail: jest.fn((mail: string) => {
     if (mail === plainUserStub().mail) return plainUserStub();
     return null;
@@ -20,7 +15,7 @@ const mockValues = {
     return null;
   }),
 
-  register: jest.fn((name: string, password: string, mail: string, role: UserRoles) => {
+  register: jest.fn((name: string, password: string, mail: string /*role: UserRoles*/) => {
     if (mail.toString() !== plainUserStub().mail) throw new Error('ERROR');
     return plainUserStub();
   }),
@@ -40,9 +35,4 @@ const mockValues = {
 
     return valid ? plainUserStub() : null;
   }),
-};
-
-export const AuthenticationSessionsUserServiceMock: Provider = {
-  provide: AuthenticationSessionsUserService,
-  useValue: mockValues,
 };

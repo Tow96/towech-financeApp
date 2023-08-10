@@ -13,6 +13,7 @@ import { generateI18nMockExecutionContext } from '../utils/i18n';
 // Services
 import { ConfigService } from '@nestjs/config';
 import { I18nService } from 'nestjs-i18n';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Models
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { RefreshToken } from '@finance/shared/utils-types';
@@ -32,7 +33,10 @@ describe('jwt-refresh.guard', () => {
       providers: [
         JwtRefreshGuard,
         JwtRefreshStrategy,
-        AuthenticationSessionsUserServiceMock,
+        {
+          provide: AuthenticationSessionsUserService,
+          useValue: AuthenticationSessionsUserServiceMock,
+        },
         ConfigService,
       ],
     }).compile();

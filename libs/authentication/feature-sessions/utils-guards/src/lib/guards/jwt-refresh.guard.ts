@@ -35,16 +35,18 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames
   }
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any*/
 @Injectable()
 export class JwtRefreshGuard extends AuthGuard(StrategyNames.REFRESH) {
   public override handleRequest<UserModel>(
-    err: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    err: any,
     user: UserModel | false,
-    info: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    info: any,
     context: ExecutionContext,
-    status?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+    status?: any
   ): UserModel {
     validateWithI18n(user as Record<string, any>, context);
     return super.handleRequest(err, user, info, context, status);
   }
 }
+/* eslint-enable */

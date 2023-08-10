@@ -31,14 +31,18 @@
     },
     {
       "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.mock.ts"],
-      "env": {
-        "jest": true
-      },
+      "env": { "jest": true },
       "rules": {
         "max-depth": "off",
         "max-nested-callbacks": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@nx/enforce-module-boundaries": "off"
+        "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    },
+    {
+      "files": ["*.cy.ts"],
+      "rules": {
+        "max-nested-callbacks": "off"
       }
     }
   ]

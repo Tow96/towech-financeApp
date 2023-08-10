@@ -92,8 +92,8 @@ describe('Desktop Login Component', () => {
     TestBed.configureTestingModule({
       providers: [
         provideStore({ adapt: adaptReducer }),
-        DesktopToasterServiceMock,
-        DesktopUserServiceMock,
+        { provide: DesktopToasterService, useValue: DesktopToasterServiceMock },
+        { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });
     fixture = TestBed.createComponent(DesktopLoginComponent);

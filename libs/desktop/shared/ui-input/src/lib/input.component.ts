@@ -36,8 +36,8 @@ export class DesktopInputComponent implements ControlValueAccessor {
   @Input() public label = '';
   public value = '';
   public disabled = false;
-  public customTouched = (): void => {};
-  public customChanged = (_: string): void => {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+  public customTouched = (): void => {}; // eslint-disable-line
+  public customChanged = (_: string): void => {}; // eslint-disable-line
 
   public registerOnChange(fn: (v: string) => void): void {
     this.customChanged = fn;

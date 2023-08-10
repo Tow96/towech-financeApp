@@ -17,15 +17,15 @@ export class LoginDto implements LoginUser {
     message: i18nValidationMessage('validation.INVALID_STRING', { parameter: 'username' }),
   })
   @ApiProperty({ required: true })
-  public username: string = '';
+  public username = '';
 
   @IsString({
     message: i18nValidationMessage('validation.INVALID_STRING', { parameter: 'password' }),
   })
   @ApiProperty({ required: true })
-  public password: string = '';
+  public password = '';
 
   @IsBoolean()
   @ApiProperty({ description: 'True if the session is not temporary', required: true })
-  public keepSession: boolean = false;
+  public keepSession = false;
 }

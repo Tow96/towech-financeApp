@@ -15,6 +15,7 @@ import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { UserModel } from '@finance/shared/utils-types';
 // Services
 import { I18nService } from 'nestjs-i18n';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 
 describe('local-auth.guard', () => {
   let localStrat: LocalStrategy;
@@ -26,7 +27,14 @@ describe('local-auth.guard', () => {
     jest.clearAllMocks();
     const moduleRef = await Test.createTestingModule({
       imports: [AuthenticationI18nTestingModule],
-      providers: [LocalAuthGuard, LocalStrategy, AuthenticationSessionsUserServiceMock],
+      providers: [
+        LocalAuthGuard,
+        LocalStrategy,
+        {
+          provide: AuthenticationSessionsUserService,
+          useValue: AuthenticationSessionsUserServiceMock,
+        },
+      ],
     }).compile();
 
     localStrat = moduleRef.get<LocalStrategy>(LocalStrategy);

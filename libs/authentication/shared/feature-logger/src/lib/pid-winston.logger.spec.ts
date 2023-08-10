@@ -1,4 +1,3 @@
-import { describe } from 'node:test';
 import { AuthenticationPidWinstonLogger } from './pid-winston.logger';
 
 let pidLogger: AuthenticationPidWinstonLogger;

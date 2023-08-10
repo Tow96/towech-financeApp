@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpException,
   HttpStatus,
@@ -121,6 +120,7 @@ export class AuthenticationSessionsHttpController {
     const password = Math.random().toString(36).substring(2, 10);
     this.logger.pidDebug(logId, password);
 
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     try {
       const newUser = await this.user.register(user.name, password, user.mail, user.role);
       this.logger.pidLog(logId, `Registered new user with id ${newUser._id}`);
@@ -131,6 +131,7 @@ export class AuthenticationSessionsHttpController {
     } catch (e: any) {
       throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    /* eslint-enable */
   }
 
   public constructor(

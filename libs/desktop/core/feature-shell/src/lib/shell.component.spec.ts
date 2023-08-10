@@ -6,7 +6,6 @@ import { adaptReducer } from '@state-adapt/core';
 import { DesktopShellComponent } from './shell.component';
 // Services
 import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
-// Mocks
 import { DesktopUserServiceMock } from '@finance/desktop/shared/utils-testing';
 
 describe('Desktop Shell Component', () => {
@@ -16,7 +15,10 @@ describe('Desktop Shell Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DesktopUserServiceMock, provideStore({ adapt: adaptReducer })],
+      providers: [
+        provideStore({ adapt: adaptReducer }),
+        { provide: DesktopUserService, useValue: DesktopUserServiceMock },
+      ],
     });
     fixture = TestBed.createComponent(DesktopShellComponent);
     component = fixture.componentInstance;

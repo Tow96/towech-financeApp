@@ -37,15 +37,17 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
   }
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any*/
 export class JwtAuthAdminGuard extends AuthGuard(StrategyNames.AUTH_ADMIN) {
   public override handleRequest<UserModel>(
-    err: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    err: any,
     user: false | UserModel,
-    info: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    info: any,
     context: ExecutionContext,
-    status?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+    status?: any
   ): UserModel {
     validateWithI18n(user as Record<string, any>, context);
     return super.handleRequest(err, user, info, context, status);
   }
 }
+/* eslint-enable */

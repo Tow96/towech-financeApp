@@ -63,7 +63,7 @@ describe('Desktop User Service', () => {
         provideStore({ adapt: adaptReducer }),
         DesktopUserService,
         provideDesktopEnvironment(),
-        DesktopToasterServiceMock,
+        { provide: DesktopToasterService, useValue: DesktopToasterServiceMock },
       ],
     });
     httpController = TestBed.inject(HttpTestingController);

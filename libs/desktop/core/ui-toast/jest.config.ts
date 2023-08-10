@@ -3,7 +3,7 @@ export default {
   displayName: 'desktop-core-ui-toast',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/desktop/core/ui-toast',
+  coverageDirectory: '../../../../coverage/libs/desktop/core/ui-toast',
   collectCoverageFrom: ['**/*.ts', '!**/index.ts', '!**/jest.config.ts'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
   transform: {
