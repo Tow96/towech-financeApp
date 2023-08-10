@@ -5,10 +5,9 @@
  */
 // Libraries
 import { Component, ElementRef, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
-import { createAdapter } from '@state-adapt/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { adaptNgrx } from '@state-adapt/ngrx';
-import { Source } from '@state-adapt/rxjs';
+import { Source, toSource } from '@state-adapt/rxjs';
 // Modules
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 // Services
@@ -16,18 +15,9 @@ import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 // Components
 import { DesktopNavbarItemComponent } from '@finance/desktop/core/ui-navbar-item';
 // Models
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { tap } from 'rxjs';
-
-interface NavIcon {
-  title: string;
-  icon: IconProp;
-  route: string;
-}
-interface state {
-  collapsed: boolean;
-  items: NavIcon[];
-}
+import { filter, map, tap } from 'rxjs';
+// Utils
+import { adapter, getTitleFromRoute, navContents, state } from './utils';
 
 @Component({
   standalone: true,
@@ -40,10 +30,8 @@ export class DesktopNavbarComponent {
   private storeName = 'navbar';
   private initialState: state = {
     collapsed: true,
-    items: [
-      { title: 'Transactions', icon: 'money-check-dollar', route: '' },
-      { title: 'Settings', icon: 'gear', route: 'settings' },
-    ],
+    items: navContents,
+    title: getTitleFromRoute(navContents, this.router.url.slice(1)),
   };
 
   // Listeners ----------------------------------------------------------------
@@ -64,32 +52,26 @@ export class DesktopNavbarComponent {
   private handleNavigate$ = this.navigateTo$.pipe(
     tap(({ payload }) => this.router.navigate([payload]))
   );
-
-  // Adapter ------------------------------------------------------------------
-  private adapter = createAdapter<state>()({
-    forceCollapse: state => ({ ...state, collapsed: true }),
-    toggleCollapse: state => ({ ...state, collapsed: !state.collapsed }),
-    selectors: {
-      isCollapsed: state => state.collapsed,
-      items: state => state.items,
-    },
-  });
+  private changeTitle$ = this.router.events.pipe(
+    filter(nav => nav instanceof NavigationEnd),
+    map((nav: any) => nav.url.substring(1)), // eslint-disable-line @typescript-eslint/no-explicit-any
+    toSource('[Navbar] Change Title')
+  );
 
   // Store --------------------------------------------------------------------
-  public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
+  public store = adaptNgrx([this.storeName, this.initialState, adapter], {
+    changeTitle$: this.changeTitle$,
     forceCollapse: [this.forceCollapse$, this.handleNavigate$],
     toggleCollapse: this.toggleCollapse$,
   });
 
-  // Helpers ------------------------------------------------------------------
-  public setItemId(index: number): string {
-    return `${this.storeName}-${index}`;
+  // HTML Helpers -------------------------------------------------------------
+  public setItemId(route: string): string {
+    return `${this.storeName}-${route}`;
   }
-
   public getNavClass(collapsed: boolean): Record<string, boolean> {
     return { deployed: !collapsed };
   }
-
   public isRouteActive(route: string): boolean {
     const currentRoute = this.router.url.slice(1);
     return route === currentRoute;

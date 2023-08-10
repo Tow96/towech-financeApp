@@ -8,10 +8,11 @@ import { adaptReducer } from '@state-adapt/core';
 // Tested elements
 import { DesktopNavbarComponent } from './navbar.component';
 // Mocks
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { DesktopUserServiceMock } from '@finance/desktop/shared/utils-testing';
 // Services
 import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
+import { navContents } from './utils';
 
 describe('Desktop Navbar', () => {
   let component: DesktopNavbarComponent;
@@ -21,17 +22,18 @@ describe('Desktop Navbar', () => {
   let router: Router;
   let spy: SubscriberSpy<any>;
 
-  it('', () => {
-    expect(1).toBeTruthy();
-  });
-
   beforeEach(() => {
     jest.clearAllMocks();
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule],
+      imports: [
+        BrowserAnimationsModule,
+        RouterTestingModule.withRoutes([
+          ...navContents.map(x => ({ path: x.route, component: DesktopNavbarComponent })),
+          { path: 'fake', component: DesktopNavbarComponent },
+        ]),
+      ],
       providers: [
         provideStore({ adapt: adaptReducer }),
-        provideRouter([{ path: 'test', component: DesktopNavbarComponent }]),
         { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });
@@ -103,8 +105,10 @@ describe('Desktop Navbar', () => {
     let bttn: HTMLElement;
 
     beforeEach(() => {
-      bttn = fixture.debugElement.nativeElement.querySelector('#navbar-1 > button');
-      spy = subscribeSpyTo(component.store.isCollapsed$);
+      bttn = fixture.debugElement.nativeElement.querySelector(
+        `#navbar-${navContents[1].route} > button`
+      );
+      spy = subscribeSpyTo(component.store.state$);
       routeSpy = jest.spyOn(router, 'navigate');
 
       if (spy.getLastValue()) component.toggleCollapse$.next();
@@ -114,11 +118,15 @@ describe('Desktop Navbar', () => {
 
     it('Should navigate to the correct screen', () => {
       expect(routeSpy).toHaveBeenCalledTimes(1);
-      expect(routeSpy).toHaveBeenCalledWith(['settings']);
+      expect(routeSpy).toHaveBeenCalledWith([navContents[1].route]);
     });
 
     it('Should collapse the menu', () => {
-      expect(spy.getLastValue()).toBe(true);
+      expect(spy.getLastValue().collapsed).toBe(true);
+    });
+
+    it('Should update the title', () => {
+      expect(spy.getLastValue().title).toBe(navContents[1].title);
     });
   });
 });

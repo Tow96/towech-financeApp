@@ -9,7 +9,7 @@
         [collapsed]="(store.isCollapsed$ | async) || false"
         icon="bars"></finance-navbar-item>
       <div class="title">
-        <h1>Header</h1>
+        <h1>{{ store.currentTitle$ | async }}</h1>
       </div>
     </div>
     <!-- Menu contents -->
@@ -17,8 +17,8 @@
       <div class="nav__divider desk__only"></div>
       <div class="contents__main">
         <finance-navbar-item
-          *ngFor="let item of store.items$ | async; let i = index"
-          [id]="setItemId(i)"
+          *ngFor="let item of store.items$ | async"
+          [id]="setItemId(item.route)"
           [label]="item.title"
           [collapsed]="(store.isCollapsed$ | async) || false"
           [icon]="item.icon"
