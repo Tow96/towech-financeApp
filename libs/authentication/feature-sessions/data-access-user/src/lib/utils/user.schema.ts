@@ -13,19 +13,19 @@ import { UserRoles } from '@finance/shared/utils-types';
 @Schema({ versionKey: false, collection: 'users' })
 export class UserDocument extends BaseSchema {
   @Prop({ type: String, required: true })
-  public name: string = '';
+  public name = '';
 
   @Prop({ type: String, required: true })
-  public mail: string = '';
+  public mail = '';
 
   @Prop({ type: String, required: true })
-  public password: string = '';
+  public password = '';
 
   @Prop({ type: String, required: true })
   public role: UserRoles = UserRoles.USER;
 
   @Prop({ type: Boolean, default: false })
-  public accountConfirmed: boolean = false;
+  public accountConfirmed = false;
 
   @Prop({ type: Array, default: [] })
   public refreshTokens: string[] = [];

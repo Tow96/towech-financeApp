@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { provideStore } from '@ngrx/store';
 import { adaptReducer } from '@state-adapt/core';
-import { Source } from '@state-adapt/rxjs';
 // Tested elements
 import { DesktopNavbarComponent } from './navbar.component';
 // Mocks
@@ -33,7 +32,7 @@ describe('Desktop Navbar', () => {
       providers: [
         provideStore({ adapt: adaptReducer }),
         provideRouter([{ path: 'test', component: DesktopNavbarComponent }]),
-        DesktopUserServiceMock,
+        { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });
     fixture = TestBed.createComponent(DesktopNavbarComponent);

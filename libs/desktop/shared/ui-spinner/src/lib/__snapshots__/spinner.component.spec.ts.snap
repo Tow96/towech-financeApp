@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`desktop-spinner Must match the snapshot 1`] = `
+<div
+  id="root1"
+  style="--spinner-size: 30px;"
+>
+  <div
+    class="lds-dual-ring"
+  />
+</div>
+`;

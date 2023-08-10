@@ -68,6 +68,7 @@
       "@finance/desktop/shared/ui-button": ["libs/desktop/shared/ui-button/src"],
       "@finance/desktop/shared/ui-checkbox": ["libs/desktop/shared/ui-checkbox/src"],
       "@finance/desktop/shared/ui-input": ["libs/desktop/shared/ui-input/src"],
+      "@finance/desktop/shared/ui-spinner": ["libs/desktop/shared/ui-spinner/src"],
       "@finance/desktop/shared/utils-environments": ["libs/desktop/shared/utils-environments/src"],
       "@finance/desktop/shared/utils-testing": ["libs/desktop/shared/utils-testing/src"],
       "@finance/desktop/shared/utils-types": ["libs/desktop/shared/utils-types/src"],

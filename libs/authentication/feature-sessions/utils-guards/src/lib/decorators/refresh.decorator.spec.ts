@@ -15,7 +15,7 @@ describe('refresh.decorator', () => {
 
   function getParamDecoratorFactory(decorator: any) {
     class TestDecorator {
-      public test(@decorator() value: any) {}
+      public test(@decorator() value: any) {} // eslint-disable-line
     }
 
     const args = Reflect.getMetadata(ROUTE_ARGS_METADATA, TestDecorator, 'test');

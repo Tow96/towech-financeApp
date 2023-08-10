@@ -20,7 +20,7 @@ describe('user.decorator', () => {
 
   beforeEach(() => {
     class TestDecorator {
-      public test(@User() value: any) {}
+      public test(@User() value: any) {} // eslint-disable-line
     }
     const args = Reflect.getMetadata(ROUTE_ARGS_METADATA, TestDecorator, 'test');
     factory = args[Object.keys(args)[0]].factory;

@@ -92,8 +92,8 @@ describe('Desktop Login Component', () => {
     TestBed.configureTestingModule({
       providers: [
         provideStore({ adapt: adaptReducer }),
-        DesktopToasterServiceMock,
-        DesktopUserServiceMock,
+        { provide: DesktopToasterService, useValue: DesktopToasterServiceMock },
+        { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });
     fixture = TestBed.createComponent(DesktopLoginComponent);
@@ -115,20 +115,17 @@ describe('Desktop Login Component', () => {
     it('Should update the store after the debounce time has passed', fakeAsync(() => {
       const newState = {
         ...component.initialState,
-        form: {
-          keepSession: false,
-          password: 'pass',
-          username: 'user',
-        },
+        keepSession: false,
+        password: 'pass',
+        username: 'user',
       };
 
-      component.form.patchValue(newState.form);
+      component.form.patchValue(newState);
       tick(1000);
       expect(stateSpy.getLastValue()).toEqual(newState);
     }));
   });
 
-  // TODO: Add form validation before sending and error processing
   describe('When the login button is pressed', () => {
     let userSpy: SubscriberSpy<Action<any, string>>;
     let toastSpy: SubscriberSpy<Action<any, string>>;

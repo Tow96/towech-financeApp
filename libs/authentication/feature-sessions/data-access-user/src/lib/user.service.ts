@@ -26,7 +26,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
       input.accountConfirmed
     );
   }
-
   /**
    * Fetches all users
    * @returns {UserDocument[]} An array of users
@@ -34,7 +33,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
   public async getAll(): Promise<UserModel[]> {
     return (await this.find({})).map(user => this.convertUserDocToUser(user) || ({} as UserModel));
   }
-
   /**
    * Fetches a user by matching the email
    * @param {string} mail - The user document
@@ -44,7 +42,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
     const user = await this.findOne({ mail });
     return this.convertUserDocToUser(user);
   }
-
   /**
    * Fetches a user by matching the id
    * @param {ObjectId | string} id - The user id
@@ -53,7 +50,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
   public async getById(id: Types.ObjectId | string): Promise<UserModel | null> {
     return this.convertUserDocToUser(await super.findById(id));
   }
-
   /**
    * Registers a new user to the database
    * @param {string} name
@@ -71,7 +67,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
     const userExists = await this.findOne({ mail });
     if (userExists !== null) throw new Error('validation.REGISTERED_MAIL');
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
-
     const newUser = await this.create({
       accountConfirmed: false,
       mail,
@@ -80,10 +75,8 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
       role,
       refreshTokens: [],
     });
-
-    return this.convertUserDocToUser(newUser)!;
+    return this.convertUserDocToUser(newUser)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
   }
-
   /**
    * Clears the tokens from a user
    * @param {string} id - Id of the user
@@ -92,7 +85,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
   public async removeRefreshToken(id: string, token: string | null): Promise<void> {
     const user = await super.findById(id);
     if (!user) return;
-
     const refreshTokens = !token
       ? []
       : user.refreshTokens.filter(x => !bcrypt.compareSync(token, x));
@@ -100,10 +92,8 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
       !token || bcrypt.compareSync(token, user.singleSessionToken || '')
         ? undefined
         : user.singleSessionToken;
-
     this.findByIdAndUpdate(id, { refreshTokens, singleSessionToken });
   }
-
   // TODO: Make this fully testeable
   /**
    * Adds a refresh token to the user, the token is hashed inside the database
@@ -114,20 +104,16 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
   public async storeRefreshToken(id: string, token: string, keepSession = false): Promise<void> {
     const user = await this.findById(id);
     if (!user) return;
-
     const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
-
     if (keepSession) {
       if (user.refreshTokens.length >= this.REFRESH_TOKEN_MAX_COUNT) user.refreshTokens.shift();
       user.refreshTokens.push(hashedToken);
     } else user.singleSessionToken = hashedToken;
-
     await this.findByIdAndUpdate(id, {
       refreshTokens: user.refreshTokens,
       singleSessionToken: user.singleSessionToken,
     });
   }
-
   /**
    * Checks if a user/password pair is valid
    * @param {string} id - Id if the user
@@ -136,11 +122,9 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
    */
   public async validatePassword(id: string, password: string): Promise<boolean> {
     const user = await this.findById(id);
-
     if (!user) return false;
     return bcrypt.compare(password, user.password);
   }
-
   /**
    * Checks if a user/refreshtoken pair is valid
    * @param {string} id - Id if the user
@@ -150,7 +134,6 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
   public async validateRefreshToken(id: string, token: string): Promise<UserModel | null> {
     const user = await this.findById(id);
     if (!user) return null;
-
     let valid = bcrypt.compareSync(token, user.singleSessionToken || '');
     for (let i = 0; i < user.refreshTokens.length; i++) {
       if (bcrypt.compareSync(token, user.refreshTokens[i])) {
@@ -158,10 +141,8 @@ export class AuthenticationSessionsUserService extends BaseRepository<UserDocume
         break;
       }
     }
-
     return valid ? this.convertUserDocToUser(user) : null;
   }
-
   public constructor(
     @InjectModel(UserDocument.name) public override readonly model: Model<UserDocument>
   ) {

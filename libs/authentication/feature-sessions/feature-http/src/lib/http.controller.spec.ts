@@ -16,6 +16,10 @@ import {
 } from '@finance/authentication/shared/utils-testing';
 // Models
 import { UserRoles } from '@finance/shared/utils-types';
+// Services
+import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/feature-logger';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
 
 describe('feature-sessions-http', () => {
   let controller: AuthenticationSessionsHttpController;
@@ -28,9 +32,15 @@ describe('feature-sessions-http', () => {
       controllers: [AuthenticationSessionsHttpController],
       providers: [
         ConfigService,
-        AuthenticationPidWinstonLoggerMock,
-        AuthenticationSessionsUserServiceMock,
-        AuthenticationSessionsJwtServiceMock,
+        { provide: AuthenticationPidWinstonLogger, useValue: AuthenticationPidWinstonLoggerMock },
+        {
+          provide: AuthenticationSessionsUserService,
+          useValue: AuthenticationSessionsUserServiceMock,
+        },
+        {
+          provide: AuthenticationSessionsJwtService,
+          useValue: AuthenticationSessionsJwtServiceMock,
+        },
       ],
     }).compile();
 

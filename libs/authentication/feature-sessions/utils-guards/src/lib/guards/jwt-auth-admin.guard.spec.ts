@@ -13,6 +13,7 @@ import { JwtAuthAdminStrategy, JwtAuthAdminGuard } from './jwt-auth-admin.guard'
 // Services
 import { ConfigService } from '@nestjs/config';
 import { I18nService } from 'nestjs-i18n';
+import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
 // Models
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { UserModel } from '@finance/shared/utils-types';
@@ -30,7 +31,10 @@ describe('jwt auth admin guard', () => {
       providers: [
         JwtAuthAdminGuard,
         JwtAuthAdminStrategy,
-        AuthenticationSessionsUserServiceMock,
+        {
+          provide: AuthenticationSessionsUserService,
+          useValue: AuthenticationSessionsUserServiceMock,
+        },
         ConfigService,
       ],
     }).compile();

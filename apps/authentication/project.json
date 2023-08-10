@@ -14,6 +14,7 @@
         "outputPath": "dist/apps/authentication",
         "main": "apps/authentication/src/main.ts",
         "tsConfig": "apps/authentication/tsconfig.app.json",
+        "generatePackageJson": true,
         "assets": [
           "apps/authentication/src/assets",
           { "glob": "**/*", "input": "apps/authentication/src/i18n/", "output": "i18n" }

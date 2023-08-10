@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DesktopToastTrayComponent } from './tray.component';
 // Mocks
 import { DesktopToasterServiceMock } from '@finance/desktop/shared/utils-testing';
+// Services
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 describe('Desktop Toaster', () => {
   let component: DesktopToastTrayComponent;
@@ -14,7 +16,7 @@ describe('Desktop Toaster', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule],
-      providers: [DesktopToasterServiceMock],
+      providers: [{ provide: DesktopToasterService, useValue: DesktopToasterServiceMock }],
     });
 
     fixture = TestBed.createComponent(DesktopToastTrayComponent);

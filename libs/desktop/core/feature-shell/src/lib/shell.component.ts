@@ -12,7 +12,7 @@ import { DesktopToastTrayComponent } from '@finance/desktop/core/feature-toast-t
 
 @Component({
   standalone: true,
-  selector: 'towech-finance-shell',
+  selector: 'finance-shell',
   imports: [DesktopToastTrayComponent],
   template: `<finance-toast-tray></finance-toast-tray>`,
 })
