@@ -14,7 +14,7 @@
     color: core.get-palette-hue-contrast($primary, 500);
   }
 
-  finance-login .login__spinner {
+  finance-login finance-spinner {
     background-color: rgba($color: core.get-palette-hue($primary, 500), $alpha: 0.6);
   }
 }

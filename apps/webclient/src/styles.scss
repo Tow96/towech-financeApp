@@ -2,16 +2,17 @@
 @use './styles/themes/gold-night/index' as theme;
 @use 'libs/desktop/core/ui-theme' as core;
 
-// Components ---------------------------
+// Features -------------------------------------------------------------------
+@use 'libs/desktop/core/feature-layout/src' as layout;
+@use 'libs/desktop/core/feature-navbar/theme' as navbar;
+@use 'libs/desktop/core/ui-navbar-item/theme' as navbar-items;
 @use 'libs/desktop/core/ui-toast/theme' as toasts;
+@use 'libs/desktop/feature-login/feature-shell/src' as login;
+// Shared ---------------------------------------------------------------------
 @use 'libs/desktop/shared/ui-input/theme' as inputs;
 @use 'libs/desktop/shared/ui-checkbox/theme' as checkbox;
 @use 'libs/desktop/shared/ui-button/theme' as buttons;
-@use 'libs/desktop/feature-login/ui/theme' as login;
-@use 'libs/desktop/core/feature-navbar/theme' as navbar;
-@use 'libs/desktop/core/feature-layout/src' as layout;
-@use 'libs/desktop/core/ui-navbar-item/theme' as navbar-items;
-// --------------------------------------
+// ----------------------------------------------------------------------------
 
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
 
@@ -21,17 +22,16 @@
 
 // Core
 @include core.color(theme.$gold-night-theme);
-// Components -----------------------------------------
+// Features -------------------------------------------------------------------
+@include layout.color(theme.$gold-night-theme);
+@include navbar.color(theme.$gold-night-theme);
+@include navbar-items.color(theme.$gold-night-theme);
+@include toasts.color(theme.$gold-night-theme);
+@include login.color(theme.$gold-night-theme);
+// Shared ---------------------------------------------------------------------
 @include buttons.color(theme.$gold-night-theme);
 @include checkbox.color(theme.$gold-night-theme);
 @include inputs.color(theme.$gold-night-theme);
-@include toasts.color(theme.$gold-night-theme);
-@include navbar-items.color(theme.$gold-night-theme);
-// Features --------------------------------------------
-@include layout.color(theme.$gold-night-theme);
-@include navbar.color(theme.$gold-night-theme);
-// Pages -----------------------------------------------
-@include login.color(theme.$gold-night-theme);
 
 webclient-root {
   z-index: 1;
