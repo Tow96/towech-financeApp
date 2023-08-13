@@ -45,12 +45,16 @@
         "libs/authentication/shared/utils-testing/src"
       ],
       "@finance/desktop/core/layout": ["libs/desktop/core/feature-layout/src"],
-      "@finance/desktop/core/navbar": ["libs/desktop/core/feature-navbar/src"],
+      "@finance/desktop/core/navbar/shell": ["libs/desktop/core/feature-navbar/feature-shell/src"],
+      "@finance/desktop/core/navbar/ui-item": ["libs/desktop/core/feature-navbar/ui-item/src"],
       "@finance/desktop/core/shell": ["libs/desktop/core/feature-shell/src"],
-      "@finance/desktop/core/toast-tray": ["libs/desktop/core/feature-toast-tray/src"],
-      "@finance/desktop/core/ui-navbar-item": ["libs/desktop/core/ui-navbar-item/src"],
+      "@finance/desktop/core/toast-tray": [
+        "libs/desktop/core/feature-toast-tray/feature-shell/src"
+      ],
+      "@finance/desktop/core/toast-tray/ui-toast": [
+        "libs/desktop/core/feature-toast-tray/ui-toast/src"
+      ],
       "@finance/desktop/core/ui-theme": ["libs/desktop/core/ui-theme/src"],
-      "@finance/desktop/core/ui-toast": ["libs/desktop/core/ui-toast/src"],
       "@finance/desktop/core/utils-guards": ["libs/desktop/core/utils-guards/src"],
       "@finance/desktop/core/utils-imports": ["libs/desktop/core/utils-imports/src"],
       "@finance/desktop/core/utils-interceptors": ["libs/desktop/core/utils-interceptors/src"],

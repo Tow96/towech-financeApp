@@ -15,7 +15,7 @@ import {
 } from '@angular/router';
 import { debounceTime, filter, map } from 'rxjs';
 // Components
-import { DesktopNavbarComponent } from '@finance/desktop/core/navbar';
+import { DesktopNavbarComponent } from '@finance/desktop/core/navbar/shell';
 import { DesktopSpinnerComponent } from '@finance/desktop/shared/ui-spinner';
 import { AsyncPipe, NgIf } from '@angular/common';
 
