@@ -10,15 +10,21 @@ import { adaptNgrx } from '@state-adapt/ngrx';
 import { toSource } from '@state-adapt/rxjs';
 import { Observable, debounceTime } from 'rxjs';
 // Types
-import { FormType, IForm } from './types';
+import { IForm } from './types';
 
-// TODO fix types for initial state and form
-export class StateAdaptFormService<T> {
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-explicit-any*/
+export class StateAdaptFormService<T extends Record<string, any>> {
+  private formChanges$;
   private initialState: T;
-  public form: FormGroup<IForm<T>>;
-  public store;
 
-  private formChanges$: Observable<Action<FormType<any>, string>>; // eslint-disable-line
+  public store;
+  public form: FormGroup<IForm<T>>;
+  public invalidateForm() {
+    const controls = this.form.controls!;
+    const formKeys = Object.keys(controls);
+    formKeys.forEach(key => controls[key as keyof T].markAsDirty());
+  }
+
   private adapter = createAdapter<T>()({
     clear: () => this.initialState,
     change: (state, form) => ({ ...state, ...form }),
@@ -38,16 +44,18 @@ export class StateAdaptFormService<T> {
    */
   public constructor(
     name: string,
-    clear: Observable<Action<void, string>>,
-    submit: Observable<Action<any, string>>, // eslint-disable-line
-    initialState: any, // eslint-disable-line
+    clear: Observable<Action<any, string>>,
+    submit: Observable<Action<any, string>>,
+    initialState: T,
     validators: Record<string, ValidatorFn[]> = {}
   ) {
     this.initialState = initialState;
 
     const holder: IForm<T> = {} as IForm<T>;
-    Object.keys(initialState).forEach(key => {
-      holder![key as keyof T] = new FormControl(initialState[key], { validators: validators[key] }); // eslint-disable-line
+    Object.keys(this.initialState).forEach(key => {
+      holder![key as keyof T] = new FormControl(initialState[key], {
+        validators: validators[key],
+      });
     });
     this.form = new FormGroup<IForm<T>>(holder);
 
@@ -58,8 +66,9 @@ export class StateAdaptFormService<T> {
 
     this.store = adaptNgrx([name, initialState, this.adapter], {
       clear,
-      change: this.formChanges$,
+      change: this.formChanges$ as any,
       submit,
     });
   }
 }
+/* eslint-enable */

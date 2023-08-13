@@ -80,7 +80,7 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
     const document = await this.model.findOne(filterQuery, {}, { lean: true });
 
     if (!document) return null;
-    return document;
+    return document as TDocument;
   }
 
   /**

@@ -6,10 +6,9 @@
 // Libraries
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 // Services
 import {
-  IForm,
   StateAdaptFormService,
   PatchFormGroupValuesDirective,
 } from '@finance/desktop/shared/data-access-form';
@@ -47,7 +46,7 @@ import { LoginUser } from '@finance/shared/utils-types';
       *ngIf="formState"
       [formGroup]="formState.form"
       [patchFormGroupValues]="formState.store.form$ | async"
-      (submit)="submitted.next(formState.form)">
+      (submit)="submitted.next()">
       <finance-input id="form-username" label="Username" formControlName="username">
       </finance-input>
       <finance-input id="form-password" type="password" label="Password" formControlName="password">
@@ -62,5 +61,5 @@ import { LoginUser } from '@finance/shared/utils-types';
 })
 export class DesktopLoginShellUiFormComponent {
   @Input() formState: StateAdaptFormService<LoginUser> | null = null;
-  @Output() submitted = new EventEmitter<FormGroup<IForm<LoginUser>>>();
+  @Output() submitted = new EventEmitter<void>();
 }
