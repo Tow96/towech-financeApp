@@ -11,12 +11,9 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 // Services
 import { ConfigService } from '@nestjs/config';
-import {
-  LogId,
-  AuthenticationPidWinstonLogger,
-} from '@finance/authentication/shared/feature-logger';
-import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
-import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
+import { LogId, AuthenticationPidWinstonLogger } from '@finance/authentication/shared/logger';
+import { AuthenticationSessionsUserService } from '@finance/authentication/sessions/data-access-user';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/sessions/data-access-jwt';
 // Guards
 import {
   JwtAuthAdminGuard,
@@ -24,9 +21,9 @@ import {
   LocalAuthGuard,
   Refresh,
   User,
-} from '@finance/authentication/feature-sessions/utils-guards';
+} from '@finance/authentication/sessions/utils-guards';
 // Models
-import { CreateUserDto, LoginDto } from '@finance/authentication/feature-sessions/utils-dto';
+import { CreateUserDto, LoginDto } from '@finance/authentication/sessions/utils-dto';
 import { AuthToken, RefreshToken, UserModel } from '@finance/shared/utils-types';
 import { Response, CookieOptions } from 'express';
 

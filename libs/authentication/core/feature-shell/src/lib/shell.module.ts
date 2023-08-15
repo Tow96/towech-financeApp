@@ -7,8 +7,8 @@
 import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 // Modules
-import { AuthenticationSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
-import { AuthenticationI18nModule } from '@finance/authentication/shared/feature-i18n';
+import { AuthenticationSessionsHttpModule } from '@finance/authentication/sessions/http';
+import { AuthenticationI18nModule } from '@finance/authentication/shared/i18n';
 import { AuthenticationMongoModule } from '@finance/authentication/shared/data-access-mongo';
 import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';

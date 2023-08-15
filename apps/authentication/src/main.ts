@@ -11,7 +11,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app/app.module';
 // Services
-import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/feature-logger';
+import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/logger';
 import { ConfigService } from '@nestjs/config';
 // Pipes
 import { AuthenticationTrimPipe } from '@finance/authentication/core/utils-pipes';

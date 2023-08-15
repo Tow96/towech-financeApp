@@ -9,7 +9,7 @@ import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 // Services
 import { ConfigService } from '@nestjs/config';
-import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
+import { AuthenticationSessionsUserService } from '@finance/authentication/sessions/data-access-user';
 // Models
 import { RefreshToken } from '@finance/shared/utils-types';
 import { Request } from 'express';

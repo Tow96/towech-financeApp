@@ -6,7 +6,7 @@
 // Libraries
 import { Routes } from '@nestjs/core';
 // Modules
-import { AuthenticationSessionsHttpModule } from '@finance/authentication/feature-sessions/feature-http';
+import { AuthenticationSessionsHttpModule } from '@finance/authentication/sessions/http';
 
 export enum AuthenticationShellPaths {
   DOCUMENTATION = 'docs',
