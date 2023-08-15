@@ -9,17 +9,17 @@ import { ConfigService } from '@nestjs/config';
 // Mocks
 import {
   AuthenticationPidWinstonLoggerMock,
-  AuthenticationSessionsUserServiceMock,
   AuthenticationSessionsJwtServiceMock,
+  AuthenticationUserServiceMock,
   plainUserStub,
   refreshArrStub,
 } from '@finance/authentication/shared/utils-testing';
 // Models
 import { UserRoles } from '@finance/shared/utils-types';
 // Services
-import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/feature-logger';
-import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
-import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
+import { AuthenticationPidWinstonLogger } from '@finance/authentication/shared/logger';
+import { AuthenticationUserService } from '@finance/authentication/shared/data-access-user';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/sessions/data-access-jwt';
 
 describe('feature-sessions-http', () => {
   let controller: AuthenticationSessionsHttpController;
@@ -33,10 +33,7 @@ describe('feature-sessions-http', () => {
       providers: [
         ConfigService,
         { provide: AuthenticationPidWinstonLogger, useValue: AuthenticationPidWinstonLoggerMock },
-        {
-          provide: AuthenticationSessionsUserService,
-          useValue: AuthenticationSessionsUserServiceMock,
-        },
+        { provide: AuthenticationUserService, useValue: AuthenticationUserServiceMock },
         {
           provide: AuthenticationSessionsJwtService,
           useValue: AuthenticationSessionsJwtServiceMock,

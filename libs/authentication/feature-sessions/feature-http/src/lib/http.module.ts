@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 // Modules
-import { AuthenticationSessionsUserModule } from '@finance/authentication/sessions/data-access-user';
 import { AuthenticationSessionsJwtModule } from '@finance/authentication/sessions/data-access-jwt';
-import { AuthenticationFeatureSessionsUtilsGuardsModule } from '@finance/authentication/sessions/utils-guards';
+import { AuthenticationUserModule } from '@finance/authentication/shared/data-access-user';
+import { AuthenticationUtilsGuardsModule } from '@finance/authentication/shared/utils-guards';
 import { AuthenticationLoggerModule } from '@finance/authentication/shared/logger';
 // Controllers
 import { AuthenticationSessionsHttpController } from './http.controller';
@@ -11,9 +11,9 @@ import { AuthenticationSessionsHttpController } from './http.controller';
   controllers: [AuthenticationSessionsHttpController],
   imports: [
     AuthenticationLoggerModule,
-    AuthenticationSessionsUserModule,
+    AuthenticationUserModule,
     AuthenticationSessionsJwtModule,
-    AuthenticationFeatureSessionsUtilsGuardsModule,
+    AuthenticationUtilsGuardsModule,
   ],
 })
 export class AuthenticationSessionsHttpModule {}

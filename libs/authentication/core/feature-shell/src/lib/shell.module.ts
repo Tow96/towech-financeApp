@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
 // Misc
 import { AuthenticationShellRoutes } from './shell.routes';
+import { AuthenticationUserHttpModule } from '@finance/authentication/user/http';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AuthenticationShellRoutes } from './shell.routes';
     // Routes and controllers
     RouterModule.register(AuthenticationShellRoutes),
     AuthenticationSessionsHttpModule,
+    AuthenticationUserHttpModule,
     // Misc
     AuthenticationMongoModule,
     AuthenticationI18nModule,

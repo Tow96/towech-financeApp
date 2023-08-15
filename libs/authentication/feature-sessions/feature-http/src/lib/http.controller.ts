@@ -12,8 +12,8 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 // Services
 import { ConfigService } from '@nestjs/config';
 import { LogId, AuthenticationPidWinstonLogger } from '@finance/authentication/shared/logger';
-import { AuthenticationSessionsUserService } from '@finance/authentication/sessions/data-access-user';
 import { AuthenticationSessionsJwtService } from '@finance/authentication/sessions/data-access-jwt';
+import { AuthenticationUserService } from '@finance/authentication/shared/data-access-user';
 // Guards
 import {
   JwtAuthAdminGuard,
@@ -21,7 +21,7 @@ import {
   LocalAuthGuard,
   Refresh,
   User,
-} from '@finance/authentication/sessions/utils-guards';
+} from '@finance/authentication/shared/utils-guards';
 // Models
 import { CreateUserDto, LoginDto } from '@finance/authentication/sessions/utils-dto';
 import { AuthToken, RefreshToken, UserModel } from '@finance/shared/utils-types';
@@ -38,10 +38,10 @@ enum COOKIES {
   REFRESH = 'jid',
 }
 
+// TODO: I18n
 @Controller()
 @ApiTags('')
 export class AuthenticationSessionsHttpController {
-  // TODO: I18n
   @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
   @ApiOperation({ summary: 'Creates the authToken and the refreshToken cookie for a user' })
@@ -76,7 +76,6 @@ export class AuthenticationSessionsHttpController {
     return { token: authToken };
   }
 
-  // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.LOGOUT)
   @HttpCode(204)
@@ -93,7 +92,6 @@ export class AuthenticationSessionsHttpController {
     res.clearCookie(COOKIES.REFRESH);
   }
 
-  // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.REFRESH)
   @ApiOperation({ summary: 'Reads the refreshToken cookie to generate a new authToken' })
@@ -106,7 +104,6 @@ export class AuthenticationSessionsHttpController {
     return { token };
   }
 
-  // TODO: I18n
   @UseGuards(JwtAuthAdminGuard)
   @Post(SIGNAGE_ROUTES.REGISTER)
   @ApiOperation({ summary: 'Registers a new user to the application, only admins can call it' })
@@ -132,7 +129,7 @@ export class AuthenticationSessionsHttpController {
   }
 
   public constructor(
-    private readonly user: AuthenticationSessionsUserService,
+    private readonly user: AuthenticationUserService,
     private readonly tokens: AuthenticationSessionsJwtService,
     private readonly logger: AuthenticationPidWinstonLogger,
     private readonly config: ConfigService

@@ -17,29 +17,26 @@
     "paths": {
       "@finance/authentication/core/shell": ["libs/authentication/core/feature-shell/src"],
       "@finance/authentication/core/utils-pipes": ["libs/authentication/core/utils-pipes/src"],
-      "@finance/authentication/feature-sessions/data-access-jwt": [
+      "@finance/authentication/sessions/data-access-jwt": [
         "libs/authentication/feature-sessions/data-access-jwt/src"
       ],
-      "@finance/authentication/feature-sessions/data-access-user": [
-        "libs/authentication/feature-sessions/data-access-user/src"
-      ],
-      "@finance/authentication/feature-sessions/feature-http": [
+      "@finance/authentication/sessions/http": [
         "libs/authentication/feature-sessions/feature-http/src"
       ],
-      "@finance/authentication/feature-sessions/utils-dto": [
+      "@finance/authentication/sessions/utils-dto": [
         "libs/authentication/feature-sessions/utils-dto/src"
       ],
-      "@finance/authentication/feature-sessions/utils-guards": [
-        "libs/authentication/feature-sessions/utils-guards/src"
-      ],
+      "@finance/authentication/user/http": ["libs/authentication/feature-user/feature-http/src"],
       "@finance/authentication/shared/data-access-mongo": [
         "libs/authentication/shared/data-access-mongo/src"
       ],
-      "@finance/authentication/shared/feature-i18n": [
-        "libs/authentication/shared/feature-i18n/src"
+      "@finance/authentication/shared/data-access-user": [
+        "libs/authentication/shared/data-access-user/src"
       ],
-      "@finance/authentication/shared/feature-logger": [
-        "libs/authentication/shared/feature-logger/src"
+      "@finance/authentication/shared/i18n": ["libs/authentication/shared/feature-i18n/src"],
+      "@finance/authentication/shared/logger": ["libs/authentication/shared/feature-logger/src"],
+      "@finance/authentication/shared/utils-guards": [
+        "libs/authentication/shared/utils-guards/src"
       ],
       "@finance/authentication/shared/utils-testing": [
         "libs/authentication/shared/utils-testing/src"
