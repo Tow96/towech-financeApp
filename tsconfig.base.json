@@ -17,6 +17,9 @@
     "paths": {
       "@finance/authentication/core/shell": ["libs/authentication/core/feature-shell/src"],
       "@finance/authentication/core/utils-pipes": ["libs/authentication/core/utils-pipes/src"],
+      "@finance/authentication/feature-user/utils-dto": [
+        "libs/authentication/feature-user/utils-dto/src/index.ts"
+      ],
       "@finance/authentication/sessions/data-access-jwt": [
         "libs/authentication/feature-sessions/data-access-jwt/src"
       ],
@@ -26,7 +29,6 @@
       "@finance/authentication/sessions/utils-dto": [
         "libs/authentication/feature-sessions/utils-dto/src"
       ],
-      "@finance/authentication/user/http": ["libs/authentication/feature-user/feature-http/src"],
       "@finance/authentication/shared/data-access-mongo": [
         "libs/authentication/shared/data-access-mongo/src"
       ],
@@ -41,6 +43,7 @@
       "@finance/authentication/shared/utils-testing": [
         "libs/authentication/shared/utils-testing/src"
       ],
+      "@finance/authentication/user/http": ["libs/authentication/feature-user/feature-http/src"],
       "@finance/desktop/core/layout": ["libs/desktop/core/feature-layout/src"],
       "@finance/desktop/core/navbar/shell": ["libs/desktop/core/feature-navbar/feature-shell/src"],
       "@finance/desktop/core/navbar/ui-item": ["libs/desktop/core/feature-navbar/ui-item/src"],

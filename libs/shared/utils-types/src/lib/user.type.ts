@@ -21,3 +21,7 @@ export class UserModel {
     this.role = role;
   }
 }
+
+export type CreateUser = Pick<UserModel, 'name' | 'mail' | 'role'>;
+
+export type EditUser = Partial<Pick<UserModel, 'name' | 'mail'>>;

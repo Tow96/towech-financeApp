@@ -1,4 +1,4 @@
-import { FilterQuery, Types } from 'mongoose';
+import { FilterQuery, Types, UpdateQuery } from 'mongoose';
 
 class MockBase {
   public _id: Types.ObjectId;
@@ -32,8 +32,10 @@ export abstract class MockModel<T extends MockBase> {
   async findById(id: Types.ObjectId | string): Promise<T | null> {
     return id.toString() === this.entityStub._id.toString() ? this.entityStub : null;
   }
-  async findByIdAndUpdate(id: Types.ObjectId | string): Promise<T | null> {
-    return id.toString() === this.entityStub._id.toString() ? this.entityStub : null;
+  async findByIdAndUpdate(id: Types.ObjectId | string, data: UpdateQuery<T>): Promise<T | null> {
+    return id.toString() === this.entityStub._id.toString()
+      ? { ...this.entityStub, ...data }
+      : null;
   }
   async findByIdAndDelete(id: Types.ObjectId | string): Promise<T | null> {
     return id.toString() === this.entityStub._id.toString() ? this.entityStub : null;

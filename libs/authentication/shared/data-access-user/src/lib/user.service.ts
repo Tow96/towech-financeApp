@@ -11,8 +11,11 @@ import { Model, Types } from 'mongoose';
 import { BaseRepository } from '@finance/authentication/shared/data-access-mongo';
 // Models
 import { UserDocument } from './utils/user.schema';
-import { UserModel, UserRoles } from '@finance/shared/utils-types';
+import { EditUser, UserModel, UserRoles } from '@finance/shared/utils-types';
 
+type ID = Types.ObjectId | string;
+
+// TODO: Use mongoose calls to avoid double db calls
 @Injectable()
 export class AuthenticationUserService extends BaseRepository<UserDocument> {
   private REFRESH_TOKEN_MAX_COUNT = 5;
@@ -25,6 +28,26 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
       input.role,
       input.accountConfirmed
     );
+  }
+  private async emailIsUnique(mail: string): Promise<boolean> {
+    const userExists = await this.findOne({ mail });
+    return userExists === null;
+  }
+
+  async edit(id: ID, data: EditUser): Promise<UserModel | null> {
+    const cleanData: EditUser = { name: data.name, mail: data.mail };
+    const originalUser = await this.findById(id);
+    if (!originalUser) return null;
+
+    let accountConfirmed = originalUser.accountConfirmed;
+    if (cleanData.mail && cleanData.mail !== originalUser.mail) {
+      if (!(await this.emailIsUnique(cleanData.mail)))
+        throw new Error('validation.REGISTERED_MAIL');
+      accountConfirmed = false;
+    }
+
+    const updatedUser = await this.findByIdAndUpdate(id, { ...cleanData, accountConfirmed });
+    return this.convertUserDocToUser(updatedUser);
   }
   /**
    * Fetches all users
@@ -47,7 +70,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {ObjectId | string} id - The user id
    * @returns {UserModel | null} The retrieved user, null if not found
    */
-  public async getById(id: Types.ObjectId | string): Promise<UserModel | null> {
+  public async getById(id: ID): Promise<UserModel | null> {
     return this.convertUserDocToUser(await super.findById(id));
   }
   /**
@@ -64,8 +87,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     mail: string,
     role: UserRoles = UserRoles.USER
   ): Promise<UserModel> {
-    const userExists = await this.findOne({ mail });
-    if (userExists !== null) throw new Error('validation.REGISTERED_MAIL');
+    if (!(await this.emailIsUnique(mail))) throw new Error('validation.REGISTERED_MAIL');
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
     const newUser = await this.create({
       accountConfirmed: false,
@@ -82,7 +104,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} id - Id of the user
    * @param {string | null} token - Token that will be removed, if null all tokens are removed
    */
-  public async removeRefreshToken(id: string, token: string | null): Promise<void> {
+  public async removeRefreshToken(id: ID, token: string | null): Promise<void> {
     const user = await super.findById(id);
     if (!user) return;
     const refreshTokens = !token
@@ -101,7 +123,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} token - Token that will be added
    * @param keepSession - Flag that indicates if the token is a singleSessionToken or a regular token
    */
-  public async storeRefreshToken(id: string, token: string, keepSession = false): Promise<void> {
+  public async storeRefreshToken(id: ID, token: string, keepSession = false): Promise<void> {
     const user = await this.findById(id);
     if (!user) return;
     const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
@@ -120,7 +142,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} password - Plaintext password of the user
    * @returns A boolean indicating validity
    */
-  public async validatePassword(id: string, password: string): Promise<boolean> {
+  public async validatePassword(id: ID, password: string): Promise<boolean> {
     const user = await this.findById(id);
     if (!user) return false;
     return bcrypt.compare(password, user.password);
@@ -131,7 +153,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} token - Refresh token
    * @returns A boolean indicating validity
    */
-  public async validateRefreshToken(id: string, token: string): Promise<UserModel | null> {
+  public async validateRefreshToken(id: ID, token: string): Promise<UserModel | null> {
     const user = await this.findById(id);
     if (!user) return null;
     let valid = bcrypt.compareSync(token, user.singleSessionToken || '');

@@ -2,8 +2,20 @@
 import { jest } from '@jest/globals';
 // Stubs
 import { passwordStub, plainAdminStub, plainUserStub, userStub } from './user.stub';
+import { UserModel } from '@finance/shared/utils-types';
 
 export const AuthenticationUserServiceMock = {
+  edit: jest.fn((id: string, data: UserModel) => {
+    if (id === plainUserStub()._id)
+      return {
+        ...plainUserStub(),
+        ...data,
+        accountConfirmed:
+          plainUserStub().mail === data.mail ? plainUserStub().accountConfirmed : false,
+      };
+    return null;
+  }),
+
   getByEmail: jest.fn((mail: string) => {
     if (mail === plainUserStub().mail) return plainUserStub();
     return null;

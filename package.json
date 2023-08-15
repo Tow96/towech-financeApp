@@ -88,7 +88,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/jest": "^29.4.0",
-    "@types/node": "16.11.7",
+    "@types/node": "18.7.1",
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.35",
     "@types/uuid": "^9.0.1",

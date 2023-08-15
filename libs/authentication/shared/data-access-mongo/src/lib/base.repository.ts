@@ -41,10 +41,13 @@ export abstract class BaseRepository<TDocument extends BaseSchema> {
   /**
    * Searches the database for an id that matches and updates it
    * @param {Types.ObjectId | string} id The id of the desired document
-   * @param {UpdateQuery<TDocument>} update The contents that should be updated
+   * @param {UpdateQuery<TDocument> | TDocument} update The contents that should be updated
    * @returns The updated document or null if not found
    */
-  protected async findByIdAndUpdate(id: Types.ObjectId | string, update: UpdateQuery<TDocument>) {
+  protected async findByIdAndUpdate(
+    id: Types.ObjectId | string,
+    update: UpdateQuery<TDocument> | TDocument
+  ) {
     const document = await this.model.findByIdAndUpdate(id, update, {
       lean: true,
       upsert: true,

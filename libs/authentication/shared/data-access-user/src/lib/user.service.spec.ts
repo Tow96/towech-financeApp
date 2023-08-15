@@ -43,6 +43,32 @@ describe('User Service', () => {
     service = moduleRef.get<AuthenticationUserService>(AuthenticationUserService);
   });
 
+  it('Should have a valid schema', () => expect(new UserDocument()).toBeTruthy());
+
+  describe('When edit is called', () => {
+    it('Should return null if the user does not exist', async () =>
+      expect(await service.edit('unexistent', {})).toBe(null));
+
+    describe('When the user exists', () => {
+      const data = { name: 'new name', mail: 'newmail@provider.com', role: 'admin' };
+
+      beforeEach(async () => (response = await service.edit(userStub()._id, data)));
+
+      it('Should only update the specified data', async () =>
+        expect(response).toEqual({
+          ...plainUserStub(),
+          name: 'new name',
+          mail: 'newmail@provider.com',
+          accountConfirmed: false,
+        }));
+
+      it('Should throw when the email is already registered', async () =>
+        await expect(
+          service.register(userStub().name, userStub().password, userStub().mail)
+        ).rejects.toThrow());
+    });
+  });
+
   describe('When getAll is called', () => {
     it('Should return an array', async () => {
       response = await service.getAll();

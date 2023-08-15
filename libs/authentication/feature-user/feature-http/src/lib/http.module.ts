@@ -8,10 +8,6 @@ import { AuthenticationUserHttpController } from './http.controller';
 
 @Module({
   controllers: [AuthenticationUserHttpController],
-  providers: [
-    AuthenticationLoggerModule,
-    AuthenticationUserModule,
-    AuthenticationUtilsGuardsModule,
-  ],
+  imports: [AuthenticationLoggerModule, AuthenticationUserModule, AuthenticationUtilsGuardsModule],
 })
 export class AuthenticationUserHttpModule {}
