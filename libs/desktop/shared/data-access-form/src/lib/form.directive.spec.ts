@@ -12,13 +12,13 @@ import { PatchFormGroupValuesDirective } from './form.directive';
   template: ` <form [formGroup]="form" [patchFormGroupValues]="patcher$ | async"></form> `,
 })
 class TestComponent {
-  public form = new FormGroup({
+  form = new FormGroup({
     user: new FormControl(''),
     pass: new FormControl(''),
   });
 
-  public patch = new EventEmitter<{ user: string; pass: string }>();
-  public patcher$ = this.patch.pipe();
+  patch = new EventEmitter<{ user: string; pass: string }>();
+  patcher$ = this.patch.pipe();
 }
 
 describe('Patch form Directive', () => {

@@ -13,10 +13,10 @@ export enum messages {
 
 @Injectable()
 export class DesktopErrorInterceptorClass implements ErrorHandler {
-  public constructor(private readonly injector: Injector) {}
+  constructor(private readonly injector: Injector) {}
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  public handleError(error: any): void {
+  handleError(error: any): void {
     let message = messages.UNKNOWN;
 
     if (error) {

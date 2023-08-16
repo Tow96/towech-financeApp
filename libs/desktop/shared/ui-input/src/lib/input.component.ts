@@ -32,31 +32,31 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   `,
 })
 export class DesktopInputComponent implements ControlValueAccessor {
-  @Input() public type: 'text' | 'password' = 'text';
-  @Input() public label = '';
-  public value = '';
-  public disabled = false;
-  public customTouched = (): void => {}; // eslint-disable-line
-  public customChanged = (_: string): void => {}; // eslint-disable-line
+  @Input() type: 'text' | 'password' = 'text';
+  @Input() label = '';
+  value = '';
+  disabled = false;
+  customTouched = (): void => {}; // eslint-disable-line
+  customChanged = (_: string): void => {}; // eslint-disable-line
 
-  public registerOnChange(fn: (v: string) => void): void {
+  registerOnChange(fn: (v: string) => void): void {
     this.customChanged = fn;
   }
 
-  public registerOnTouched(fn: () => void): void {
+  registerOnTouched(fn: () => void): void {
     this.customTouched = fn;
   }
 
-  public setDisabledState(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-  public onChange(event: Event): void {
+  onChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).value;
     this.customChanged(value);
   }
 
-  public writeValue(value: string): void {
+  writeValue(value: string): void {
     this.value = value;
   }
 }

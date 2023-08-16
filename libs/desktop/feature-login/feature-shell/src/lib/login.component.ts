@@ -38,7 +38,7 @@ import { LoginUser } from '@finance/shared/utils-types';
 })
 export class DesktopLoginComponent {
   // Pipes/Sources ------------------------------------------------------------
-  public login$ = new Source<void>('[Login Page] Trigger Login');
+  login$ = new Source<void>('[Login Page] Trigger Login');
   private onLogin$ = this.login$.pipe(
     tap(() => {
       // Triggers the pipe generic pipe instead of having an specific login pipe in the userservice to avoid circular imports
@@ -54,8 +54,8 @@ export class DesktopLoginComponent {
     })
   );
   // State --------------------------------------------------------------------
-  public initialState: LoginUser = { keepSession: false, password: '', username: '' };
-  public formState = new StateAdaptFormService(
+  initialState: LoginUser = { keepSession: false, password: '', username: '' };
+  formState = new StateAdaptFormService(
     'login-form',
     this.loginFail$,
     this.onLogin$,
@@ -63,14 +63,14 @@ export class DesktopLoginComponent {
     { password: [Validators.required], username: [Validators.required] }
   );
   // HTML Helpers -------------------------------------------------------------
-  public isLoading(status: Status | null): boolean {
+  isLoading(status: Status | null): boolean {
     if (status === null) return false;
     return status === Status.IN_PROGRESS;
   }
 
-  public constructor(
-    public readonly toasts: DesktopToasterService,
-    public readonly user: DesktopUserService,
+  constructor(
+    readonly toasts: DesktopToasterService,
+    readonly user: DesktopUserService,
     private readonly changeRef: ChangeDetectorRef
   ) {}
 }

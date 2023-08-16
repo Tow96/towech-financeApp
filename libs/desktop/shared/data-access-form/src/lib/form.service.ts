@@ -17,9 +17,9 @@ export class StateAdaptFormService<T extends Record<string, any>> {
   private formChanges$;
   private initialState: T;
 
-  public store;
-  public form: FormGroup<IForm<T>>;
-  public invalidateForm() {
+  store;
+  form: FormGroup<IForm<T>>;
+  invalidateForm() {
     const controls = this.form.controls!;
     const formKeys = Object.keys(controls);
     formKeys.forEach(key => controls[key as keyof T].markAsDirty());
@@ -42,7 +42,7 @@ export class StateAdaptFormService<T extends Record<string, any>> {
    * @param {any} initialState - The base state of the service
    * @param {Record<string, ValidatorFn[]} validators - Object indicating which properties of the initialState contain which validators
    */
-  public constructor(
+  constructor(
     name: string,
     clear: Observable<Action<any, string>>,
     submit: Observable<Action<any, string>>,

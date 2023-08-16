@@ -53,7 +53,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * Fetches all users
    * @returns {UserDocument[]} An array of users
    */
-  public async getAll(): Promise<UserModel[]> {
+  async getAll(): Promise<UserModel[]> {
     return (await this.find({})).map(user => this.convertUserDocToUser(user) || ({} as UserModel));
   }
   /**
@@ -61,7 +61,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} mail - The user document
    * @returns {UserModel | null} The retrieved user, null if not found
    */
-  public async getByEmail(mail: string): Promise<UserModel | null> {
+  async getByEmail(mail: string): Promise<UserModel | null> {
     const user = await this.findOne({ mail });
     return this.convertUserDocToUser(user);
   }
@@ -70,7 +70,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {ObjectId | string} id - The user id
    * @returns {UserModel | null} The retrieved user, null if not found
    */
-  public async getById(id: ID): Promise<UserModel | null> {
+  async getById(id: ID): Promise<UserModel | null> {
     return this.convertUserDocToUser(await super.findById(id));
   }
   /**
@@ -81,7 +81,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {UserRoles} role - Defaults to USER
    * @returns {UserModel} The new user
    */
-  public async register(
+  async register(
     name: string,
     password: string,
     mail: string,
@@ -104,7 +104,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} id - Id of the user
    * @param {string | null} token - Token that will be removed, if null all tokens are removed
    */
-  public async removeRefreshToken(id: ID, token: string | null): Promise<void> {
+  async removeRefreshToken(id: ID, token: string | null): Promise<void> {
     const user = await super.findById(id);
     if (!user) return;
     const refreshTokens = !token
@@ -123,7 +123,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} token - Token that will be added
    * @param keepSession - Flag that indicates if the token is a singleSessionToken or a regular token
    */
-  public async storeRefreshToken(id: ID, token: string, keepSession = false): Promise<void> {
+  async storeRefreshToken(id: ID, token: string, keepSession = false): Promise<void> {
     const user = await this.findById(id);
     if (!user) return;
     const hashedToken = bcrypt.hashSync(token, bcrypt.genSaltSync());
@@ -142,7 +142,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} password - Plaintext password of the user
    * @returns A boolean indicating validity
    */
-  public async validatePassword(id: ID, password: string): Promise<boolean> {
+  async validatePassword(id: ID, password: string): Promise<boolean> {
     const user = await this.findById(id);
     if (!user) return false;
     return bcrypt.compare(password, user.password);
@@ -153,7 +153,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
    * @param {string} token - Refresh token
    * @returns A boolean indicating validity
    */
-  public async validateRefreshToken(id: ID, token: string): Promise<UserModel | null> {
+  async validateRefreshToken(id: ID, token: string): Promise<UserModel | null> {
     const user = await this.findById(id);
     if (!user) return null;
     let valid = bcrypt.compareSync(token, user.singleSessionToken || '');
@@ -165,9 +165,7 @@ export class AuthenticationUserService extends BaseRepository<UserDocument> {
     }
     return valid ? this.convertUserDocToUser(user) : null;
   }
-  public constructor(
-    @InjectModel(UserDocument.name) public override readonly model: Model<UserDocument>
-  ) {
+  constructor(@InjectModel(UserDocument.name) override readonly model: Model<UserDocument>) {
     super(model);
   }
 }

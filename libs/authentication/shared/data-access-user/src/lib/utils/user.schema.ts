@@ -13,28 +13,28 @@ import { UserRoles } from '@finance/shared/utils-types';
 @Schema({ versionKey: false, collection: 'users' })
 export class UserDocument extends BaseSchema {
   @Prop({ type: String, required: true })
-  public name = '';
+  name = '';
 
   @Prop({ type: String, required: true })
-  public mail = '';
+  mail = '';
 
   @Prop({ type: String, required: true })
-  public password = '';
+  password = '';
 
   @Prop({ type: String, required: true })
-  public role: UserRoles = UserRoles.USER;
+  role: UserRoles = UserRoles.USER;
 
   @Prop({ type: Boolean, default: false })
-  public accountConfirmed = false;
+  accountConfirmed = false;
 
   @Prop({ type: Array, default: [] })
-  public refreshTokens: string[] = [];
+  refreshTokens: string[] = [];
 
   @Prop({ type: String, required: false })
-  public singleSessionToken?: string;
+  singleSessionToken?: string;
 
   @Prop({ type: String, required: false })
-  public resetToken?: string;
+  resetToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);

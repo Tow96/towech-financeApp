@@ -13,6 +13,6 @@ import { Component, Input } from '@angular/core';
   template: `<button [className]="color" [type]="type"><ng-content></ng-content></button>`,
 })
 export class DesktopButtonComponent {
-  @Input() public type: 'button' | 'menu' | 'reset' | 'submit' = 'button';
-  @Input() public color: 'accent' | 'success' | 'error' | 'warning' = 'accent';
+  @Input() type: 'button' | 'menu' | 'reset' | 'submit' = 'button';
+  @Input() color: 'accent' | 'success' | 'error' | 'warning' = 'accent';
 }

@@ -46,5 +46,5 @@ import { toastTransition } from './tray.animations';
   animations: [toastTransition],
 })
 export class DesktopToastTrayComponent {
-  public constructor(public readonly service: DesktopToasterService) {}
+  constructor(readonly service: DesktopToasterService) {}
 }

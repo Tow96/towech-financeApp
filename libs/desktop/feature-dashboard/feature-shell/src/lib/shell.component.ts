@@ -19,15 +19,15 @@ import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast
   `,
 })
 export class DesktopDashboardComponent {
-  public constructor(private readonly toastService: DesktopToasterService) {}
+  constructor(private readonly toastService: DesktopToasterService) {}
 
-  public msg() {
+  msg() {
     this.toastService.addAccent$.next({ message: 'pesto' });
     this.toastService.addError$.next({ message: 'pesto' });
     this.toastService.addSuccess$.next({ message: 'pesto' });
     this.toastService.addWarning$.next({ message: 'pesto' });
   }
-  public err() {
+  err() {
     throw new Error('THIS IS A TEST');
   }
 }

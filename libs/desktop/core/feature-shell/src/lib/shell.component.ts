@@ -21,11 +21,11 @@ export class DesktopShellComponent implements OnDestroy {
 
   // This ensures some state does not get destroyed if it looses all subscriptions
   // Use only if really needed
-  public constructor(private user: DesktopUserService) {
+  constructor(private user: DesktopUserService) {
     this.userSubscription = user.store.state$.subscribe();
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
   }
 }

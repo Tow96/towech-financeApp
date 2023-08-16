@@ -37,13 +37,13 @@ import { menuTransitions } from './navbar-item.animations';
   animations: [menuTransitions],
 })
 export class DesktopNavbarItemComponent {
-  @Input() public label = '';
-  @Input() public icon: IconProp = 'right-from-bracket';
-  @Input() public collapsed = true;
-  @Input() public active = false;
-  @Output() public clicked = new EventEmitter<void>();
+  @Input() label = '';
+  @Input() icon: IconProp = 'right-from-bracket';
+  @Input() collapsed = true;
+  @Input() active = false;
+  @Output() clicked = new EventEmitter<void>();
 
-  public constructor(private readonly library: FaIconLibrary) {
+  constructor(private readonly library: FaIconLibrary) {
     library.addIcons(faBars, faRightFromBracket, faGear, faMoneyCheckDollar);
   }
 }

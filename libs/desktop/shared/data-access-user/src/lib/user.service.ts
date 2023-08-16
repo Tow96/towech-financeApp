@@ -43,9 +43,9 @@ export class DesktopUserService extends DesktopAuthenticationService {
   };
 
   // Sources ---------------------------------------------------------
-  public login$ = new Source<LoginUser>(Actions.LOGIN);
-  public logout$ = new Source<void>(Actions.LOGOUT);
-  public refresh$ = new Source<void>(Actions.REFRESH);
+  login$ = new Source<LoginUser>(Actions.LOGIN);
+  logout$ = new Source<void>(Actions.LOGOUT);
+  refresh$ = new Source<void>(Actions.REFRESH);
 
   // Helpers -------------------------------------------------------
   private handleLogin = splitRequestSources(
@@ -75,7 +75,7 @@ export class DesktopUserService extends DesktopAuthenticationService {
   );
 
   private onLoginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
-  public onLoginError$ = this.handleLogin.error$.pipe(
+  onLoginError$ = this.handleLogin.error$.pipe(
     tap(error => this.toast.addError$.next({ message: error.payload.message })),
     share()
   );
@@ -113,7 +113,7 @@ export class DesktopUserService extends DesktopAuthenticationService {
   });
 
   // Store ---------------------------------------------------------
-  public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
+  store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
     set: this.initialLoad$,
     clearUser: [this.onRefreshError$, this.onLogoutSuccess$, this.onLogoutError$],
     setUser: [this.onLoginSuccess$, this.onRefreshSucess$],

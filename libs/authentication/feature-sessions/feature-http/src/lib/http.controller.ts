@@ -45,7 +45,7 @@ export class AuthenticationSessionsHttpController {
   @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
   @ApiOperation({ summary: 'Creates the authToken and the refreshToken cookie for a user' })
-  public async login(
+  async login(
     @User() user: UserModel,
     @Body() body: LoginDto,
     @LogId() logId: string,
@@ -80,7 +80,7 @@ export class AuthenticationSessionsHttpController {
   @Post(SIGNAGE_ROUTES.LOGOUT)
   @HttpCode(204)
   @ApiOperation({ summary: 'Deregisters and removes a refreshToken cookie for a user' })
-  public async logout(
+  async logout(
     @Refresh() { id, user }: RefreshToken,
     @LogId() logId: string,
     @Res({ passthrough: true }) res: Response
@@ -95,10 +95,7 @@ export class AuthenticationSessionsHttpController {
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.REFRESH)
   @ApiOperation({ summary: 'Reads the refreshToken cookie to generate a new authToken' })
-  public async refresh(
-    @Refresh() { user }: RefreshToken,
-    @LogId() logId: string
-  ): Promise<AuthToken> {
+  async refresh(@Refresh() { user }: RefreshToken, @LogId() logId: string): Promise<AuthToken> {
     this.logger.pidLog(logId, `Generating new token for user: ${user._id}`);
     const token = this.tokens.generateAuthToken(user);
     return { token };
@@ -108,7 +105,7 @@ export class AuthenticationSessionsHttpController {
   @Post(SIGNAGE_ROUTES.REGISTER)
   @ApiOperation({ summary: 'Registers a new user to the application, only admins can call it' })
   @ApiBearerAuth('access-token')
-  public async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
+  async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
     this.logger.pidLog(logId, `Registering new user under email ${user.mail}`);
 
     const password = Math.random().toString(36).substring(2, 10);
@@ -128,7 +125,7 @@ export class AuthenticationSessionsHttpController {
     /* eslint-enable */
   }
 
-  public constructor(
+  constructor(
     private readonly user: AuthenticationUserService,
     private readonly tokens: AuthenticationSessionsJwtService,
     private readonly logger: AuthenticationPidWinstonLogger,

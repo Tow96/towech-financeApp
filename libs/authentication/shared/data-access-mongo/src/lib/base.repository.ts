@@ -8,7 +8,7 @@ import { BaseSchema } from './base.schema';
 
 export abstract class BaseRepository<TDocument extends BaseSchema> {
   // Hides the model so it cannot be used without parameters
-  public constructor(protected readonly model: Model<TDocument>) {}
+  constructor(protected readonly model: Model<TDocument>) {}
 
   /**
    * Creates a new document inside a database, will automatically add an _id and a create date

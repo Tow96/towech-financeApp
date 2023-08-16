@@ -17,7 +17,7 @@ import { validateWithI18n } from '../utils/i18n';
 
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH) {
-  public constructor(
+  constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {
@@ -28,7 +28,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, StrategyNames.AU
     });
   }
 
-  public async validate(payload: UserModel): Promise<UserModel | false> {
+  async validate(payload: UserModel): Promise<UserModel | false> {
     const user = await this.userRepo.getById(payload._id);
     if (!user) return false;
     return user;
@@ -37,7 +37,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, StrategyNames.AU
 
 /* eslint-disable  @typescript-eslint/no-explicit-any*/
 export class JwtAuthGuard extends AuthGuard(StrategyNames.AUTH) {
-  public override handleRequest<UserModel>(
+  override handleRequest<UserModel>(
     err: any,
     user: UserModel | false,
     info: any,

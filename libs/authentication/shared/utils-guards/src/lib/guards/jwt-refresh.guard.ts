@@ -18,7 +18,7 @@ import { validateWithI18n } from '../utils/i18n';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames.REFRESH) {
-  public constructor(
+  constructor(
     private readonly userRepo: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {
@@ -28,7 +28,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames
       secretOrKey: configService.get<string>('REFRESH_TOKEN_SECRET'),
     });
   }
-  public async validate(payload: RefreshToken): Promise<RefreshToken | false> {
+  async validate(payload: RefreshToken): Promise<RefreshToken | false> {
     const user = await this.userRepo.validateRefreshToken(payload.user._id, payload.id);
     if (!user) return false;
     return { id: payload.id, user };
@@ -38,7 +38,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, StrategyNames
 /* eslint-disable  @typescript-eslint/no-explicit-any*/
 @Injectable()
 export class JwtRefreshGuard extends AuthGuard(StrategyNames.REFRESH) {
-  public override handleRequest<UserModel>(
+  override handleRequest<UserModel>(
     err: any,
     user: UserModel | false,
     info: any,

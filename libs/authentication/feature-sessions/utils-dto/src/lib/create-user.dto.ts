@@ -29,14 +29,14 @@ export class CreateUserDto implements CreateUser {
     message: i18nValidationMessage('validation.MIN_LENGTH', { parameter: 'name', count: 3 }),
   })
   @ApiProperty({ description: 'Name of the new user', required: true })
-  public name = '';
+  name = '';
 
   @IsEmail({}, { message: i18nValidationMessage('validation.INVALID_MAIL', { parameter: 'mail' }) })
   @ApiProperty({
     description: 'Email address of the user, it is also used as the username',
     required: true,
   })
-  public mail = '';
+  mail = '';
 
   @IsOptional()
   @Transform(({ value }) => convertToRole(value))
@@ -45,5 +45,5 @@ export class CreateUserDto implements CreateUser {
     description: 'Role that the new user will take, defaults to USER',
     required: false,
   })
-  public role: UserRoles = UserRoles.USER;
+  role: UserRoles = UserRoles.USER;
 }

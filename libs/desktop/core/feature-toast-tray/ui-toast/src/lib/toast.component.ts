@@ -36,22 +36,22 @@ import { colorTransition, messageBodyTransition, messageTextTransition } from '.
 })
 export class DesktopToastComponent implements AfterContentInit {
   private DEFAULTDURATION = 3000;
-  @Input() public toast?: DesktopToast;
-  @Output() public dismiss = new EventEmitter<string>();
+  @Input() toast?: DesktopToast;
+  @Output() dismiss = new EventEmitter<string>();
 
-  public ngAfterContentInit(): void {
+  ngAfterContentInit(): void {
     if (!this.toast) return;
 
     setTimeout(() => this.hide(), this.toast.duration || this.DEFAULTDURATION);
   }
 
-  public hide(): void {
+  hide(): void {
     if (!this.toast) return;
 
     this.dismiss.next(this.toast.id);
   }
 
-  public getTypeClass(): Record<string, boolean> {
+  getTypeClass(): Record<string, boolean> {
     return {
       color: true,
       error: this.toast?.type === ToastTypes.ERROR,

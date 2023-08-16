@@ -12,9 +12,9 @@ import { IForm } from './types';
   standalone: true,
 })
 export class PatchFormGroupValuesDirective<T> {
-  @Input() public formGroup?: FormGroup<IForm<T>>;
+  @Input() formGroup?: FormGroup<IForm<T>>;
   @Input()
-  public set patchFormGroupValues(val: T | undefined) {
+  set patchFormGroupValues(val: T | undefined) {
     if (!this.formGroup || !val) return;
     this.formGroup.patchValue(val, { emitEvent: false });
   }

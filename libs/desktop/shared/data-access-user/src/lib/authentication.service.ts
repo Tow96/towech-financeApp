@@ -71,7 +71,7 @@ export class DesktopAuthenticationService {
     );
   }
 
-  public constructor(
+  constructor(
     protected readonly http: HttpClient,
     protected readonly router: Router,
     protected readonly toast: DesktopToasterService,

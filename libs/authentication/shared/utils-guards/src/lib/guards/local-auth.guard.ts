@@ -16,11 +16,11 @@ import { validateWithI18n } from '../utils/i18n';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCAL) {
-  public constructor(private readonly userRepo: AuthenticationUserService) {
+  constructor(private readonly userRepo: AuthenticationUserService) {
     super();
   }
 
-  public async validate(email: string, password: string): Promise<UserModel | false> {
+  async validate(email: string, password: string): Promise<UserModel | false> {
     const user = await this.userRepo.getByEmail(email);
     if (!user) return false;
 
@@ -33,7 +33,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, StrategyNames.LOCA
 /* eslint-disable  @typescript-eslint/no-explicit-any*/
 @Injectable()
 export class LocalAuthGuard extends AuthGuard(StrategyNames.LOCAL) {
-  public override handleRequest<UserModel>(
+  override handleRequest<UserModel>(
     err: any,
     user: UserModel | false,
     info: any,

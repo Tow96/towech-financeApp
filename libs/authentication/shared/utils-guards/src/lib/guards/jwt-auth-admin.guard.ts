@@ -18,7 +18,7 @@ import { validateWithI18n } from '../utils/i18n';
 
 @Injectable()
 export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNames.AUTH_ADMIN) {
-  public constructor(
+  constructor(
     private readonly user: AuthenticationUserService,
     private readonly configService: ConfigService
   ) {
@@ -29,7 +29,7 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
     });
   }
 
-  public async validate(payload: UserModel): Promise<UserModel | false> {
+  async validate(payload: UserModel): Promise<UserModel | false> {
     const user = await this.user.getById(payload._id);
 
     if (!user || user.role !== UserRoles.ADMIN) return false;
@@ -39,7 +39,7 @@ export class JwtAuthAdminStrategy extends PassportStrategy(Strategy, StrategyNam
 
 /* eslint-disable  @typescript-eslint/no-explicit-any*/
 export class JwtAuthAdminGuard extends AuthGuard(StrategyNames.AUTH_ADMIN) {
-  public override handleRequest<UserModel>(
+  override handleRequest<UserModel>(
     err: any,
     user: false | UserModel,
     info: any,

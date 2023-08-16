@@ -36,7 +36,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   `,
 })
 export class DesktopLayoutComponent {
-  public isRouterLoading$ = this.router.events.pipe(
+  isRouterLoading$ = this.router.events.pipe(
     filter(
       e =>
         e instanceof NavigationStart ||
@@ -48,5 +48,5 @@ export class DesktopLayoutComponent {
     map(e => e instanceof NavigationStart)
   );
 
-  public constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) {}
 }

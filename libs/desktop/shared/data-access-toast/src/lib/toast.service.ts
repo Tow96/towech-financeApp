@@ -18,11 +18,11 @@ export class DesktopToasterService {
   private initialState: DesktopToast[] = [];
 
   // Pipes --------------------------------------------------------------------
-  public addAccent$ = new Source<NewToast>('[Toast Service] Add Accent Toast');
-  public addError$ = new Source<NewToast>('[Toast Service] Add Error Toast');
-  public addSuccess$ = new Source<NewToast>('[Toast Service] Add Success Toast');
-  public addWarning$ = new Source<NewToast>('[Toast Service] Add Warning Toast');
-  public dismiss$ = new Source<string>('[Toast Service] Dismiss Toast');
+  addAccent$ = new Source<NewToast>('[Toast Service] Add Accent Toast');
+  addError$ = new Source<NewToast>('[Toast Service] Add Error Toast');
+  addSuccess$ = new Source<NewToast>('[Toast Service] Add Success Toast');
+  addWarning$ = new Source<NewToast>('[Toast Service] Add Warning Toast');
+  dismiss$ = new Source<string>('[Toast Service] Dismiss Toast');
 
   // Adapter ------------------------------------------------------------------
   private toastAdapter = createAdapter<DesktopToast[]>()({
@@ -34,7 +34,7 @@ export class DesktopToasterService {
   });
 
   // Store --------------------------------------------------------------------
-  public toasts = adaptNgrx([this.storeName, this.initialState, this.toastAdapter], {
+  toasts = adaptNgrx([this.storeName, this.initialState, this.toastAdapter], {
     addAccent: this.addAccent$,
     addError: this.addError$,
     addSuccess: this.addSuccess$,

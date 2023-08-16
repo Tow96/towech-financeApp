@@ -1,8 +1,8 @@
 import { FilterQuery, Types, UpdateQuery } from 'mongoose';
 
 class MockBase {
-  public _id: Types.ObjectId;
-  public createdAt: Date;
+  _id: Types.ObjectId;
+  createdAt: Date;
 
   constructor(id: string) {
     this._id = new Types.ObjectId(id);

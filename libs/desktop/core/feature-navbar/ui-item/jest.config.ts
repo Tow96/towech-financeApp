@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
   displayName: 'desktop-core-feature-navbar-ui-item',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/desktop/core/feature-navbar/ui-item',
+  coverageDirectory: '../../../../../coverage/libs/desktop/core/feature-navbar/ui-item',
   collectCoverageFrom: ['**/*.ts', '!**/index.ts', '!**/jest.config.ts'],
   coverageReporters: ['html', 'text', 'text-summary', 'cobertura', 'lcov', 'json'],
   transform: {

@@ -50,5 +50,5 @@ import { Component, Input, HostBinding } from '@angular/core';
 export class DesktopSpinnerComponent {
   @HostBinding('style.--spinner-size')
   @Input()
-  public size = '30px';
+  size = '30px';
 }

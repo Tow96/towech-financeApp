@@ -36,7 +36,7 @@ export class DesktopNavbarComponent {
 
   // Listeners ----------------------------------------------------------------
   @HostListener('document:click', ['$event'])
-  public clickListener(event: PointerEvent): void {
+  clickListener(event: PointerEvent): void {
     const refContainsTarget: boolean = this.eRef.nativeElement.contains(event.target);
     const refIsDeployed = this.eRef.nativeElement.querySelector('.deployed') !== null;
 
@@ -45,8 +45,8 @@ export class DesktopNavbarComponent {
 
   // Sources ------------------------------------------------------------------
   private forceCollapse$ = new Source<void>('[Navbar] Collapse drawer');
-  public toggleCollapse$ = new Source<void>('[Navbar] Toggle drawer');
-  public navigateTo$ = new Source<string>('[Navbar] Navigate to');
+  toggleCollapse$ = new Source<void>('[Navbar] Toggle drawer');
+  navigateTo$ = new Source<string>('[Navbar] Navigate to');
 
   // Pipes --------------------------------------------------------------------
   private handleNavigate$ = this.navigateTo$.pipe(
@@ -59,27 +59,27 @@ export class DesktopNavbarComponent {
   );
 
   // Store --------------------------------------------------------------------
-  public store = adaptNgrx([this.storeName, this.initialState, adapter], {
+  store = adaptNgrx([this.storeName, this.initialState, adapter], {
     changeTitle$: this.changeTitle$,
     forceCollapse: [this.forceCollapse$, this.handleNavigate$],
     toggleCollapse: this.toggleCollapse$,
   });
 
   // HTML Helpers -------------------------------------------------------------
-  public setItemId(route: string): string {
+  setItemId(route: string): string {
     return `${this.storeName}-${route}`;
   }
-  public getNavClass(collapsed: boolean): Record<string, boolean> {
+  getNavClass(collapsed: boolean): Record<string, boolean> {
     return { deployed: !collapsed };
   }
-  public isRouteActive(route: string): boolean {
+  isRouteActive(route: string): boolean {
     const currentRoute = this.router.url.slice(1);
     return route === currentRoute;
   }
 
-  public constructor(
+  constructor(
+    private readonly eRef: ElementRef,
     private readonly router: Router,
-    public readonly user: DesktopUserService,
-    public eRef: ElementRef
+    readonly user: DesktopUserService
   ) {}
 }
