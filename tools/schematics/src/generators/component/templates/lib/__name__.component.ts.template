@@ -1,0 +1,15 @@
+/** <%= name %>.component.ts
+ * Copyright (c) <%= year %>, Towechlabs
+ *
+ *  <%= description %>
+ */
+ // Libraries
+import { Component } from '@angular/core';
+
+@Component({
+  standalone: true,
+  selector: 'finance-<%= fullName.join('-') %>',
+  imports: [],
+  template: `<p><%= compName %>Component works</p>`,
+})
+export class <%= compName %>Component {}

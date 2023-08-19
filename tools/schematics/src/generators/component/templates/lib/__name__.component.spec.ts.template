@@ -1,0 +1,24 @@
+// Libraries
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+// Tested elements
+import { <%= compName %> } from './<%= name %>.component';
+
+describe('<%= compName %>', () => {
+  let component: <%= compName %>;
+  let fixture: ComponentFixture<<%= compName %>>;
+  let compiled: HTMLElement;
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(<%= compName %>);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    compiled = fixture.nativeElement;
+  });
+
+  it('Should be defined', () => expect(component).toBeTruthy());
+
+  it.skip('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
+
+  //TEST GOES HERE
+});

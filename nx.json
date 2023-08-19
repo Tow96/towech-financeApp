@@ -45,6 +45,9 @@
     },
     "@nx/angular:component": {
       "style": "scss"
+    },
+    "@finance/schematics:component": {
+      "style": "scss"
     }
   }
 }

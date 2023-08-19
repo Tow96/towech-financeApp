@@ -74,6 +74,7 @@
       "@finance/desktop/shared/utils-environments": ["libs/desktop/shared/utils-environments/src"],
       "@finance/desktop/shared/utils-testing": ["libs/desktop/shared/utils-testing/src"],
       "@finance/desktop/shared/utils-types": ["libs/desktop/shared/utils-types/src"],
+      "@finance/schematics": ["tools/schematics/src/index.ts"],
       "@finance/shared/utils-types": ["libs/shared/utils-types/src"]
     }
   },
