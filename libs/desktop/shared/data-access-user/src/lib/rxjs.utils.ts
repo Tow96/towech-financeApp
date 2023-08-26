@@ -27,6 +27,24 @@ export function toSuccessSource<A>(typePrefix: Prefix) {
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export function catchToastAndRedirectSource<P>(
+  typePrefix: Prefix,
+  destination: string,
+  defaultMsg = 'Unexpected Error',
+  router = inject(Router),
+  toast = inject(DesktopToasterService)
+) {
+  return (source$: Observable<P>): Observable<P | Action<any, `${Prefix}.error$`>> =>
+    source$.pipe(
+      catchError(e =>
+        of(toast.addError$.next({ message: e.message || defaultMsg })).pipe(
+          navigateTo(destination, router),
+          toSource(`${typePrefix}.error$`)
+        )
+      )
+    );
+}
+
 export function catchAndToastSource<P>(
   typePrefix: Prefix,
   defaultMsg = 'Unexpected Error',

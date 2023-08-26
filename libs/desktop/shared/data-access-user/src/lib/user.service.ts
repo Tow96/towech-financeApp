@@ -18,7 +18,7 @@ import { adapter, initialState } from './user.adapter';
 import { LoginUser } from '@finance/shared/utils-types';
 import { Status } from './types';
 // Pipes
-import { loginCall, logoutCall, refresh$ } from './auth.api';
+import { loginCall, logoutCall, postRefresh$, refreshCall } from './auth.api';
 import { customSplit } from './api.utils';
 
 export enum Actions {
@@ -37,7 +37,7 @@ export class DesktopUserService {
   refresh$ = new Source<void>(Actions.REFRESH);
 
   // Helpers -------------------------------------------------------
-  private initialLoad$ = refresh$().pipe(
+  private initialLoad$ = postRefresh$().pipe(
     map(res => ({ data: res.user, token: res.token, status: Status.COMPLETED })),
     catchError(() => of({ ...initialState, status: Status.FAILED })),
     toSource('[User Service] initial load')
@@ -45,6 +45,7 @@ export class DesktopUserService {
 
   onLogin = customSplit(Actions.LOGIN, this.login$.pipe(loginCall(Actions.LOGIN)));
   onLogout = customSplit(Actions.LOGOUT, this.logout$.pipe(logoutCall(Actions.LOGOUT)));
+  onRefresh = customSplit(Actions.REFRESH, this.refresh$.pipe(refreshCall(Actions.REFRESH)));
 
   // private onRefreshSucess$ = this.handleRefresh.success$.pipe();
   // private onRefreshError$ = this.handleRefresh.error$.pipe(
@@ -57,11 +58,11 @@ export class DesktopUserService {
   // Store ---------------------------------------------------------
   store = adaptNgrx([this.storeName, initialState, adapter], {
     set: this.initialLoad$,
-    clearUser: [this.onLogout.error$, this.onLogout.success$],
-    setUser: this.onLogin.success$,
-    setStatusComplete: [this.onLogin.success$, this.onLogout.success$],
-    setStatusFailed: [this.onLogin.error$, this.onLogout.error$],
-    setStatusInProgress: [this.login$],
+    clearUser: [this.onLogout.error$, this.onLogout.success$, this.onRefresh.error$],
+    setUser: [this.onLogin.success$, this.onRefresh.success$],
+    setStatusComplete: [this.onLogin.success$, this.onLogout.success$, this.onRefresh.success$],
+    setStatusFailed: [this.onLogin.error$, this.onLogout.error$, this.onRefresh.error$],
+    setStatusInProgress: [this.login$, this.refresh$],
   });
 
   constructor(

@@ -29,8 +29,10 @@ const stubLogin = (): LoginUser => ({
   username: 'mail@provider.com',
 });
 
-const stubToken = (): string =>
+const stubTokenInitial = (): string =>
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJwZXN0byIsImFjY291bnRDb25maXJtZWQiOmZhbHNlLCJtYWlsIjoibWFpbEBwcm92aWRlci5jb20iLCJuYW1lIjoidXNlciIsInJvbGUiOiJ1c2VyIn0.7_4_hjpF-Tw5Xta00TUMwG7O395OE7IUMp0GsfaQoqw';
+const stubTokenRefresh = (): string =>
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJwZXN0byIsImFjY291bnRDb25maXJtZWQiOmZhbHNlLCJtYWlsIjoibWFpbEBwcm92aWRlci5jb20iLCJuYW1lIjoidXNlciIsInJvbGUiOiJ1c2VyIn0.xJ-dAVNJy7eC3X9Q6dhJ6LAgVFuPuQB93X111ynthE8';
 
 const stubUser = (): UserModel => ({
   _id: 'pesto',
@@ -93,10 +95,10 @@ describe('Desktop User Service', () => {
     it('Should call the authentication microservice', () =>
       expect(httpCall.request.method).toEqual('POST'));
     it('Should SET a completed state when the microservice returns successful', () => {
-      httpCall.flush({ token: stubToken() });
+      httpCall.flush({ token: stubTokenInitial() });
       expect(state$.getLastValue()).toEqual({
         data: stubUser(),
-        token: stubToken(),
+        token: stubTokenInitial(),
         status: Status.COMPLETED,
       });
     });
@@ -120,7 +122,7 @@ describe('Desktop User Service', () => {
       expect(status$.getLastValue()).toEqual(Status.IN_PROGRESS));
 
     describe('When the authentication microservice answers with a successful response', () => {
-      beforeEach(() => httpCall.flush({ token: stubToken() }));
+      beforeEach(() => httpCall.flush({ token: stubTokenInitial() }));
 
       it('Should change the store status to completed', () =>
         expect(status$.getLastValue()).toEqual(Status.COMPLETED));
@@ -128,7 +130,7 @@ describe('Desktop User Service', () => {
         expect(state$.getLastValue()).toEqual(
           expect.objectContaining({
             data: stubUser(),
-            token: stubToken(),
+            token: stubTokenInitial(),
           })
         ));
       it('Should change the isLoggedIn selector to be true', () =>
@@ -182,47 +184,49 @@ describe('Desktop User Service', () => {
     });
   });
 
-  // describe('When the refresh pipe is nexted', () => {
-  //   beforeEach(() => {
-  //     service.refresh$.next();
-  //     // Gets the latest one since the setup calls the first one
-  //     httpCall = httpController.match(`${environment.authenticationServiceUrl}/refresh`)[1];
-  //   });
+  describe('When the refresh pipe is nexted', () => {
+    beforeEach(() => {
+      // Flush the SET refresh call
+      httpController
+        .expectOne(`${environment.authenticationServiceUrl}/refresh`)
+        .flush({ token: stubTokenInitial() });
 
-  //   it('Should call the authentication microservice', () =>
-  //     expect(httpCall.request.method).toEqual('POST'));
+      service.refresh$.next();
+      httpCall = httpController.expectOne(`${environment.authenticationServiceUrl}/refresh`);
+    });
 
-  //   describe('When the authentication microservice answers with a successful response', () => {
-  //     beforeEach(() => httpCall.flush({ token: stubToken() }));
+    it('Should call the authentication microservice', () =>
+      expect(httpCall.request.method).toEqual('POST'));
+    it('Should set the status to in progress', () =>
+      expect(status$.getLastValue()).toBe(Status.IN_PROGRESS));
 
-  //     it('Should change the store status to completed', () =>
-  //       expect(status$.getLastValue()).toEqual(
-  //         expect.objectContaining({ status: Status.COMPLETED })
-  //       ));
+    describe('When the authentication microservice answers with a successful response', () => {
+      beforeEach(() => httpCall.flush({ token: stubTokenRefresh() }));
 
-  //     it('Should update the state to contain the updated user', () =>
-  //       expect(state$.getLastValue()).toEqual(
-  //         expect.objectContaining({
-  //           data: stubUser(),
-  //           token: stubToken(),
-  //         })
-  //       ));
-  //   });
+      it('Should change the store status to completed', () =>
+        expect(status$.getLastValue()).toBe(Status.COMPLETED));
+      it('Should update the state to contain the updated user', () =>
+        expect(state$.getLastValue()).toEqual(
+          expect.objectContaining({
+            data: stubUser(),
+            token: stubTokenRefresh(),
+          })
+        ));
+    });
 
-  //   describe('When the authentication microservice answers with an error', () => {
-  //     beforeEach(() => httpCall.flush(stubError(), stubErrorOpts()));
+    describe('When the authentication microservice answers with an error', () => {
+      beforeEach(() => httpCall.flush(stubError(), stubErrorOpts()));
 
-  //     it('Should update the store status to failed', () =>
-  //       expect(state.getLastValue()).toEqual(expect.objectContaining({ status: Status.FAILED })));
-
-  //     it('Should remove the user from the state', () =>
-  //       expect(state.getLastValue()).toEqual(expect.objectContaining({ data: null, token: null })));
-
-  //     it('Should send an error to the toast service', () =>
-  //       expect(toastSpy.receivedNext()).toBeTruthy());
-
-  //     it('Should redirect to the login screen', () =>
-  //       expect(routerSpy).toHaveBeenCalledWith(['login']));
-  //   });
-  // });
+      it('Should update the store status to failed', () =>
+        expect(status$.getLastValue()).toBe(Status.FAILED));
+      it('Should remove the user from the state', () =>
+        expect(state$.getLastValue()).toEqual(
+          expect.objectContaining({ data: null, token: null })
+        ));
+      it('Should send an error to the toast service', () =>
+        expect(toastSpy.receivedNext()).toBeTruthy());
+      it('Should redirect to the login screen', () =>
+        expect(routerSpy).toHaveBeenCalledWith(['login']));
+    });
+  });
 });
