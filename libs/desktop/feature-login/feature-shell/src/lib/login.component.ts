@@ -47,7 +47,7 @@ export class DesktopLoginComponent {
       else this.user.login$.next(this.formState.form.value as LoginUser);
     })
   );
-  private loginFail$ = this.user.onLoginError$.pipe(
+  private loginFail$ = this.user.onLogout.error$.pipe(
     tap(() => {
       this.formState.invalidateForm();
       this.changeRef.markForCheck(); // Manual change since we're using onPush

@@ -5,42 +5,31 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import { createAdapter } from '@state-adapt/core';
 import { adaptNgrx } from '@state-adapt/ngrx';
-import { Source, splitRequestSources, toSource } from '@state-adapt/rxjs';
-import { exhaustMap, map, share, tap } from 'rxjs';
+import { Source, toSource } from '@state-adapt/rxjs';
+import { catchError, map, of } from 'rxjs';
 // Services
-import { DesktopAuthenticationService } from './authentication.service';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
+// State adapt
+import { adapter, initialState } from './user.adapter';
 // Models
-import { LoginUser, UserModel } from '@finance/shared/utils-types';
+import { LoginUser } from '@finance/shared/utils-types';
+import { Status } from './types';
+// Pipes
+import { loginCall, logoutCall, refresh$ } from './auth.api';
+import { customSplit } from './api.utils';
 
-enum Actions {
+export enum Actions {
   LOGIN = '[User Service] Login',
   LOGOUT = '[User Service] Logout',
   REFRESH = '[User Service] Refresh',
 }
 
-export enum Status {
-  INIT = 'initialized',
-  IN_PROGRESS = 'in progress',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-}
-
-export interface state {
-  data: UserModel | null;
-  status: Status;
-  token: string | null;
-}
-
 @Injectable()
-export class DesktopUserService extends DesktopAuthenticationService {
+export class DesktopUserService {
   private storeName = 'user';
-  private initialState: state = {
-    data: null,
-    status: Status.INIT,
-    token: null,
-  };
 
   // Sources ---------------------------------------------------------
   login$ = new Source<LoginUser>(Actions.LOGIN);
@@ -48,77 +37,36 @@ export class DesktopUserService extends DesktopAuthenticationService {
   refresh$ = new Source<void>(Actions.REFRESH);
 
   // Helpers -------------------------------------------------------
-  private handleLogin = splitRequestSources(
-    Actions.LOGIN,
-    this.login$.pipe(
-      exhaustMap(action => this.callLogin(action.payload, Actions.LOGIN)),
-      share()
-    )
-  );
-  private handleRefresh = splitRequestSources(
-    Actions.REFRESH,
-    this.refresh$.pipe(exhaustMap(() => this.callRefresh(Actions.REFRESH)))
-  );
-  private handleLogout = splitRequestSources(
-    Actions.LOGOUT,
-    this.logout$.pipe(exhaustMap(() => this.callLogout(Actions.LOGOUT)))
-  );
-
-  // Pipes ------------------------------------------------------------
-  private initialLoad$ = this.callRefresh('').pipe(
-    map(({ payload, type }) => {
-      if (type === '.success$')
-        return { data: payload.user, token: payload.token, status: Status.COMPLETED };
-      return { ...this.initialState, status: Status.FAILED };
-    }),
+  private initialLoad$ = refresh$().pipe(
+    map(res => ({ data: res.user, token: res.token, status: Status.COMPLETED })),
+    catchError(() => of({ ...initialState, status: Status.FAILED })),
     toSource('[User Service] initial load')
   );
 
-  private onLoginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
-  onLoginError$ = this.handleLogin.error$.pipe(
-    tap(error => this.toast.addError$.next({ message: error.payload.message })),
-    share()
-  );
+  onLogin = customSplit(Actions.LOGIN, this.login$.pipe(loginCall(Actions.LOGIN)));
+  onLogout = customSplit(Actions.LOGOUT, this.logout$.pipe(logoutCall(Actions.LOGOUT)));
 
-  private onRefreshSucess$ = this.handleRefresh.success$.pipe();
-  private onRefreshError$ = this.handleRefresh.error$.pipe(
-    tap(error => {
-      this.router.navigate(['login']);
-      this.toast.addError$.next({ message: error.payload.message });
-    })
-  );
-
-  private onLogoutSuccess$ = this.handleLogout.success$.pipe(
-    tap(() => this.router.navigate(['login']))
-  );
-  private onLogoutError$ = this.handleLogout.error$.pipe(
-    tap(() => this.router.navigate(['login'])),
-    tap(({ payload }) => this.toast.addError$.next({ message: payload }))
-  );
-
-  // Adapter -------------------------------------------------------
-  private adapter = createAdapter<state>()({
-    clearUser: state => ({ ...state, data: null, token: null }),
-    setUser: (state, value): state => ({ ...state, data: value.user, token: value.token }),
-    setStatusComplete: state => ({ ...state, status: Status.COMPLETED }),
-    setStatusFailed: state => ({ ...state, status: Status.FAILED }),
-    setStatusInProgress: state => ({ ...state, status: Status.IN_PROGRESS }),
-    selectors: {
-      isLoggedIn: user => ({
-        loaded: user.status === Status.COMPLETED || user.status === Status.FAILED,
-        logged: user.data !== null,
-      }),
-      status: user => user.status,
-    },
-  });
+  // private onRefreshSucess$ = this.handleRefresh.success$.pipe();
+  // private onRefreshError$ = this.handleRefresh.error$.pipe(
+  //   tap(error => {
+  //     this.router.navigate(['login']);
+  //     this.toast.addError$.next({ message: error.payload.message });
+  //   })
+  // );
 
   // Store ---------------------------------------------------------
-  store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
+  store = adaptNgrx([this.storeName, initialState, adapter], {
     set: this.initialLoad$,
-    clearUser: [this.onRefreshError$, this.onLogoutSuccess$, this.onLogoutError$],
-    setUser: [this.onLoginSuccess$, this.onRefreshSucess$],
-    setStatusComplete: [this.onLoginSuccess$, this.onRefreshSucess$, this.onLogoutSuccess$],
-    setStatusFailed: [this.onLoginError$, this.onRefreshError$, this.onLogoutError$],
-    setStatusInProgress: this.login$,
+    clearUser: [this.onLogout.error$, this.onLogout.success$],
+    setUser: this.onLogin.success$,
+    setStatusComplete: [this.onLogin.success$, this.onLogout.success$],
+    setStatusFailed: [this.onLogin.error$, this.onLogout.error$],
+    setStatusInProgress: [this.login$],
   });
+
+  constructor(
+    protected readonly http: HttpClient,
+    protected readonly toast: DesktopToasterService,
+    protected readonly router: Router
+  ) {}
 }
