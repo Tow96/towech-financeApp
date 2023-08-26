@@ -4,17 +4,16 @@
  * Contains the functions to communicate with the authentication microservice
  */
 // Libraries
+import { HttpClient } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '@finance/desktop/shared/utils-environments';
 import { LoginUser, UserModel } from '@finance/shared/utils-types';
-import { postWithCredentials } from './api.utils';
-import { HttpClient } from '@angular/common/http';
-import { Observable, exhaustMap, map } from 'rxjs';
 import jwtDecode from 'jwt-decode';
-import { catchErrorSource, toRequestSource } from '@state-adapt/rxjs';
-import { Action } from '@state-adapt/core';
-import { Router } from '@angular/router';
-import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
-import { inject } from '@angular/core';
+import { Observable, exhaustMap, map } from 'rxjs';
+// Pipes
+import { toRequestSource } from '@state-adapt/rxjs';
+import { postWithCredentials } from './api.utils';
 import {
   Prefix,
   PrefixOutputs,
@@ -23,6 +22,10 @@ import {
   navigateTo,
   toSuccessSource,
 } from './rxjs.utils';
+// Models
+import { Action } from '@state-adapt/core';
+// Services
+import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 type TokenResponse = {
   token: string;
