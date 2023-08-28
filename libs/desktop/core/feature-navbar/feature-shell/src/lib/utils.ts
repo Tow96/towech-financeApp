@@ -1,5 +1,5 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { createAdapter } from '@state-adapt/core';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 // Types ----------------------------------------------------------------------
 export type NavIcon = {
@@ -13,25 +13,20 @@ export type state = {
   title: string;
 };
 
-// Constants ------------------------------------------------------------------
-export const adapter = createAdapter<state>()({
-  changeTitle$: (state, route: string) => ({
-    ...state,
-    title: getTitleFromRoute(state.items, route),
-  }),
-  forceCollapse: state => ({ ...state, collapsed: true }),
-  toggleCollapse: state => ({ ...state, collapsed: !state.collapsed }),
-  selectors: {
-    isCollapsed: state => state.collapsed,
-    items: state => state.items,
-    currentTitle: state => state.title,
+// NGRX -----------------------------------------------------------------------
+export const navBarActions = createActionGroup({
+  source: 'Navbar',
+  events: {
+    forceCollapse: emptyProps(),
+    toggleCollapse: emptyProps(),
+    changeTitle: props<{ payload: string }>(),
   },
 });
-
-export const getTitleFromRoute = (items: NavIcon[], route: string): string =>
-  items.find(x => x.route === route)!.title; // eslint-disable-line
 
 export const navContents: NavIcon[] = [
   { title: 'Transactions', icon: 'money-check-dollar', route: '' },
   { title: 'Settings', icon: 'gear', route: 'settings' },
 ];
+
+export const getTitleFromRoute = (items: NavIcon[], route: string): string =>
+  items.find(x => x.route === route)!.title; // eslint-disable-line

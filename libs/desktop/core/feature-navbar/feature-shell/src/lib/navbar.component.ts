@@ -4,20 +4,17 @@
  * Navbar for the complete app
  */
 // Libraries
-import { Component, ElementRef, HostListener } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { adaptNgrx } from '@state-adapt/ngrx';
-import { Source, toSource } from '@state-adapt/rxjs';
+import { Component, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 // Modules
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 // Services
 import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 // Components
 import { DesktopNavbarItemComponent } from '@finance/desktop/core/navbar/ui-item';
-// Models
-import { filter, map, tap } from 'rxjs';
 // Utils
-import { adapter, getTitleFromRoute, navContents, state } from './utils';
+import { getTitleFromRoute, navBarActions, navContents, state } from './utils';
+import { ReducerManager, Store, createFeature, createReducer, on } from '@ngrx/store';
 
 @Component({
   standalone: true,
@@ -26,13 +23,24 @@ import { adapter, getTitleFromRoute, navContents, state } from './utils';
   styleUrls: ['navbar.component.scss'],
   templateUrl: `navbar.component.html`,
 })
-export class DesktopNavbarComponent {
-  private storeName = 'navbar';
+export class DesktopNavbarComponent implements OnDestroy {
   private initialState: state = {
     collapsed: true,
     items: navContents,
     title: getTitleFromRoute(navContents, this.router.url.slice(1)),
   };
+  private state = createFeature({
+    name: 'navbar',
+    reducer: createReducer(
+      this.initialState,
+      on(navBarActions.toggleCollapse, state => ({ ...state, collapsed: !state.collapsed })),
+      on(navBarActions.forceCollapse, state => ({ ...state, collapsed: true })),
+      on(navBarActions.changeTitle, (state, { payload }) => ({
+        ...state,
+        title: getTitleFromRoute(state.items, payload),
+      }))
+    ),
+  });
 
   // Listeners ----------------------------------------------------------------
   @HostListener('document:click', ['$event'])
@@ -40,34 +48,28 @@ export class DesktopNavbarComponent {
     const refContainsTarget: boolean = this.eRef.nativeElement.contains(event.target);
     const refIsDeployed = this.eRef.nativeElement.querySelector('.deployed') !== null;
 
-    if (refIsDeployed && !refContainsTarget) this.forceCollapse$.next();
+    if (refIsDeployed && !refContainsTarget) this.forceCollapse();
   }
 
   // Sources ------------------------------------------------------------------
-  private forceCollapse$ = new Source<void>('[Navbar] Collapse drawer');
-  toggleCollapse$ = new Source<void>('[Navbar] Toggle drawer');
-  navigateTo$ = new Source<string>('[Navbar] Navigate to');
+  private forceCollapse = () => this.ngrx.dispatch(navBarActions.forceCollapse());
+  toggleCollapse = () => this.ngrx.dispatch(navBarActions.toggleCollapse());
+  selectTitle = (payload: string) => this.ngrx.dispatch(navBarActions.changeTitle({ payload }));
+  // TODO: Make this an effect
+  navigateTo = (route: string) => {
+    this.selectTitle(route);
+    this.router.navigate([route]);
+    this.forceCollapse();
+  };
 
-  // Pipes --------------------------------------------------------------------
-  private handleNavigate$ = this.navigateTo$.pipe(
-    tap(({ payload }) => this.router.navigate([payload]))
-  );
-  private changeTitle$ = this.router.events.pipe(
-    filter(nav => nav instanceof NavigationEnd),
-    map((nav: any) => nav.url.substring(1)), // eslint-disable-line @typescript-eslint/no-explicit-any
-    toSource('[Navbar] Change Title')
-  );
-
-  // Store --------------------------------------------------------------------
-  store = adaptNgrx([this.storeName, this.initialState, adapter], {
-    changeTitle$: this.changeTitle$,
-    forceCollapse: [this.forceCollapse$, this.handleNavigate$],
-    toggleCollapse: this.toggleCollapse$,
-  });
+  // Selectors ----------------------------------------------------------------
+  isCollapsed$ = this.ngrx.select(this.state.selectCollapsed);
+  items$ = this.ngrx.select(this.state.selectItems);
+  title$ = this.ngrx.select(this.state.selectTitle);
 
   // HTML Helpers -------------------------------------------------------------
   setItemId(route: string): string {
-    return `${this.storeName}-${route}`;
+    return `${this.state.name}-${route}`;
   }
   getNavClass(collapsed: boolean): Record<string, boolean> {
     return { deployed: !collapsed };
@@ -78,8 +80,15 @@ export class DesktopNavbarComponent {
   }
 
   constructor(
+    private readonly ngrx: Store,
     private readonly eRef: ElementRef,
     private readonly router: Router,
-    readonly user: DesktopUserService
-  ) {}
+    readonly user: DesktopUserService,
+    private readonly reducers: ReducerManager
+  ) {
+    reducers.addReducer(this.state.name, this.state.reducer);
+  }
+  ngOnDestroy(): void {
+    this.reducers.removeReducer(this.state.name);
+  }
 }

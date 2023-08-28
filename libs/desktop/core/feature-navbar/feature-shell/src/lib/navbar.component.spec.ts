@@ -2,9 +2,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { subscribeSpyTo } from '@hirez_io/observer-spy';
+import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { provideStore } from '@ngrx/store';
-import { adaptReducer } from '@state-adapt/core';
 // Tested elements
 import { DesktopNavbarComponent } from './navbar.component';
 // Mocks
@@ -33,7 +32,7 @@ describe('Desktop Navbar', () => {
         ]),
       ],
       providers: [
-        provideStore({ adapt: adaptReducer }),
+        provideStore(),
         { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });
@@ -61,7 +60,7 @@ describe('Desktop Navbar', () => {
 
   describe('When menu button is clicked', () => {
     it('Should toggle the collapse state', () => {
-      spy = subscribeSpyTo(component.store.isCollapsed$);
+      spy = subscribeSpyTo(component.isCollapsed$);
 
       const menuBttn = fixture.debugElement.nativeElement.querySelector('#navbar-menu > button');
       menuBttn.click();
@@ -75,9 +74,9 @@ describe('Desktop Navbar', () => {
     let clickedTarget: any;
 
     beforeEach(() => {
-      spy = subscribeSpyTo(component.store.isCollapsed$);
+      spy = subscribeSpyTo(component.isCollapsed$);
 
-      if (spy.getLastValue()) component.toggleCollapse$.next();
+      if (spy.getLastValue()) component.toggleCollapse();
 
       fixture.detectChanges();
       compiled = fixture.nativeElement;
@@ -90,7 +89,6 @@ describe('Desktop Navbar', () => {
         expect(spy.getLastValue()).toBe(false);
       });
     });
-
     describe('When clicking outside the navbar', () => {
       it('Should close the navbar', () => {
         clickedTarget = document.createElement('p');
@@ -103,15 +101,18 @@ describe('Desktop Navbar', () => {
   describe('When a navbar icon is clicked', () => {
     let routeSpy: jest.SpyInstance;
     let bttn: HTMLElement;
+    let collapsed: SubscriberSpy<boolean>;
+    let title: SubscriberSpy<string>;
 
     beforeEach(() => {
       bttn = fixture.debugElement.nativeElement.querySelector(
         `#navbar-${navContents[1].route} > button`
       );
-      spy = subscribeSpyTo(component.store.state$);
+      collapsed = subscribeSpyTo(component.isCollapsed$);
+      title = subscribeSpyTo(component.title$);
       routeSpy = jest.spyOn(router, 'navigate');
 
-      if (spy.getLastValue()) component.toggleCollapse$.next();
+      if (spy.getLastValue()) component.toggleCollapse();
 
       bttn.click();
     });
@@ -120,13 +121,11 @@ describe('Desktop Navbar', () => {
       expect(routeSpy).toHaveBeenCalledTimes(1);
       expect(routeSpy).toHaveBeenCalledWith([navContents[1].route]);
     });
-
     it('Should collapse the menu', () => {
-      expect(spy.getLastValue().collapsed).toBe(true);
+      expect(collapsed.getLastValue()).toBe(true);
     });
-
     it('Should update the title', () => {
-      expect(spy.getLastValue().title).toBe(navContents[1].title);
+      expect(title.getLastValue()).toBe(navContents[1].title);
     });
   });
 });
