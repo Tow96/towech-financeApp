@@ -8,89 +8,74 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@finance/desktop/shared/utils-environments';
-import { LoginUser, UserModel } from '@finance/shared/utils-types';
+import { LoginUser } from '@finance/shared/utils-types';
 import jwtDecode from 'jwt-decode';
 import { Observable, exhaustMap, map } from 'rxjs';
 // Pipes
-import { toRequestSource } from '@state-adapt/rxjs';
 import { postWithCredentials } from './api.utils';
-import {
-  Prefix,
-  PrefixOutputs,
-  catchAndToastSource,
-  catchToastAndRedirectSource,
-  navigateTo,
-  toSuccessSource,
-} from './rxjs.utils';
+import { catchAndRedirectAction, navigateTo, toAction, toApiResponse } from './rxjs.utils';
 // Models
-import { Action } from '@state-adapt/core';
+import { Action } from '@ngrx/store';
 // Services
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
+import { DecodedUser } from './types';
+import { loginActions, logoutActions, refreshActions } from './user.actions';
 
 type TokenResponse = {
   token: string;
 };
 type UserResponse = {
-  user: UserModel;
+  user: DecodedUser;
   token: string;
 };
 
 // Variables ------------------------------------------------------------------
-const ROOTURL = environment.authenticationServiceUrl;
+const ROOTURL = environment.apiUrl;
 
 export function loginCall(
-  typePrefix: Prefix,
   http = inject(HttpClient),
-  toast = inject(DesktopToasterService),
-  router = inject(Router)
+  router = inject(Router),
+  toasts = inject(DesktopToasterService)
 ) {
-  return (
-    source$: Observable<Action<LoginUser>>
-  ): Observable<Action<UserResponse, PrefixOutputs>> =>
+  return (source$: Observable<{ type: string; payload: LoginUser }>): Observable<Action> =>
     source$.pipe(
       exhaustMap(action =>
         postWithCredentials<TokenResponse>(`${ROOTURL}/login`, action.payload, http).pipe(
           navigateTo('', router),
           toUserResponse(),
-          toSuccessSource(typePrefix),
-          catchAndToastSource(typePrefix, 'Unable to Log In', toast)
+          toApiResponse(loginActions, 'Unable to Log In', toasts)
         )
       )
     );
 }
 
-export function logoutCall(typePrefix: Prefix, http = inject(HttpClient), router = inject(Router)) {
-  return (source$: Observable<unknown>): Observable<Action<unknown, PrefixOutputs>> =>
+export function logoutCall(http = inject(HttpClient), router = inject(Router)) {
+  return (source$: Observable<unknown>): Observable<Action> =>
     source$.pipe(
       exhaustMap(() =>
-        postWithCredentials(`${ROOTURL}/logout`, null, http).pipe(toRequestSource(typePrefix))
+        postWithCredentials(`${ROOTURL}/logout`, null, http).pipe(
+          toApiResponse(logoutActions, 'Could not logout')
+        )
       ),
       navigateTo('login', router)
     );
 }
 
-export function refreshCall(
-  typePrefix: Prefix,
-  http = inject(HttpClient),
-  toasts = inject(DesktopToasterService),
-  router = inject(Router)
-) {
-  return (source$: Observable<unknown>): Observable<Action<UserResponse, PrefixOutputs>> =>
+export function refreshCall(http = inject(HttpClient), router = inject(Router)) {
+  return (source$: Observable<unknown>): Observable<Action> =>
     source$.pipe(
       exhaustMap(() =>
-        postRefresh$(http).pipe(
-          toSuccessSource(typePrefix),
-          catchToastAndRedirectSource(typePrefix, 'login', 'Session expired', router, toasts)
+        postWithCredentials<TokenResponse>(`${ROOTURL}/refresh`, null, http).pipe(
+          toUserResponse(),
+          toAction(refreshActions.success),
+          catchAndRedirectAction(refreshActions.failure, 'login', 'Session expired', router)
         )
       )
     );
 }
 
-export const postRefresh$ = (http = inject(HttpClient)): Observable<UserResponse> =>
-  postWithCredentials<TokenResponse>(`${ROOTURL}/refresh`, null, http).pipe(toUserResponse());
-
 // Helpers ---------------------------------------------------------------------
 function toUserResponse() {
   return (source$: Observable<TokenResponse>): Observable<UserResponse> =>
-    source$.pipe(map(res => ({ user: jwtDecode<UserModel>(res.token), token: res.token })));
+    source$.pipe(map(res => ({ user: jwtDecode<DecodedUser>(res.token), token: res.token })));
 }

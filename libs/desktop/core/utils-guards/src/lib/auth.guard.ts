@@ -16,7 +16,7 @@ export class DesktopUserAuthGuard {
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
   canActivate(): Observable<boolean> {
-    return this.user.store.isLoggedIn$.pipe(
+    return this.user.isLoggedIn$.pipe(
       filter(isLoggedIn => isLoggedIn.loaded),
       map(isLoggedIn => {
         if (!isLoggedIn.logged) this.router.navigate(['login']);

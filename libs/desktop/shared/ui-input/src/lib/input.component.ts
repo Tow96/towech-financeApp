@@ -7,6 +7,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+// TODO: Make value change testing
 @Component({
   standalone: true,
   selector: 'finance-input',

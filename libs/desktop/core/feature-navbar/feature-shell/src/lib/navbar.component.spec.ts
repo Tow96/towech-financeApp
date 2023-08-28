@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
+import { subscribeSpyTo } from '@hirez_io/observer-spy';
 import { provideStore } from '@ngrx/store';
 import { adaptReducer } from '@state-adapt/core';
 // Tested elements
@@ -20,7 +20,7 @@ describe('Desktop Navbar', () => {
   let compiled: HTMLElement;
   let service: DesktopUserService;
   let router: Router;
-  let spy: SubscriberSpy<any>;
+  let spy: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -51,11 +51,11 @@ describe('Desktop Navbar', () => {
 
   describe('When logout button is clicked', () => {
     it('Should next a logout event', () => {
-      spy = subscribeSpyTo(service.logout$);
+      spy = jest.spyOn(service, 'logout');
 
       const logoutBttn = fixture.debugElement.nativeElement.querySelector('#logout > button');
       logoutBttn.click();
-      expect(spy.receivedNext()).toBe(true);
+      expect(spy).toHaveBeenCalled();
     });
   });
 

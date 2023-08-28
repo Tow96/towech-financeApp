@@ -4,32 +4,22 @@
  * UI for the login form
  */
 // Libraries
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-// Services
-import {
-  StateAdaptFormService,
-  PatchFormGroupValuesDirective,
-} from '@finance/desktop/shared/data-access-form';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 // Components
 import { DesktopButtonComponent } from '@finance/desktop/shared/ui-button';
 import { DesktopCheckboxComponent } from '@finance/desktop/shared/ui-checkbox';
 import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
 // Types
-import { LoginUser } from '@finance/shared/utils-types';
 
 @Component({
   standalone: true,
   selector: 'finance-login-form',
   imports: [
-    AsyncPipe,
     DesktopButtonComponent,
     DesktopCheckboxComponent,
     DesktopInputComponent,
     ReactiveFormsModule,
-    NgIf,
-    PatchFormGroupValuesDirective,
   ],
   styles: [
     `
@@ -42,12 +32,8 @@ import { LoginUser } from '@finance/shared/utils-types';
     `,
   ],
   template: `
-    <form
-      *ngIf="formState"
-      [formGroup]="formState.form"
-      [patchFormGroupValues]="formState.store.form$ | async"
-      (submit)="submitted.next()">
-      <finance-input id="form-username" label="Username" formControlName="username">
+    <form [formGroup]="form" (submit)="submitted.next()">
+      <finance-input data-test-id="username" label="Username" formControlName="username">
       </finance-input>
       <finance-input id="form-password" type="password" label="Password" formControlName="password">
       </finance-input>
@@ -60,6 +46,13 @@ import { LoginUser } from '@finance/shared/utils-types';
   `,
 })
 export class DesktopLoginShellUiFormComponent {
-  @Input() formState: StateAdaptFormService<LoginUser> | null = null;
   @Output() submitted = new EventEmitter<void>();
+
+  form = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+    keepSession: [false],
+  });
+
+  constructor(private readonly fb: FormBuilder) {}
 }

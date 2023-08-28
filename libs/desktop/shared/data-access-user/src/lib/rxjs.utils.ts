@@ -5,58 +5,86 @@
  */
 // Libraries
 import { inject } from '@angular/core';
-import { Action } from '@state-adapt/core';
-import { Observable, catchError, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 // Services
 import { Router } from '@angular/router';
+import { ActionCreator, Creator, createAction, props } from '@ngrx/store';
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
-// Pipes
-import { toSource } from '@state-adapt/rxjs';
 
-export type Prefix = string;
-export type PrefixOutputs = `${Prefix}.success$` | `${Prefix}.error$` | `${Prefix}.cached$`;
+export interface ApiPayload<T> {
+  payload: T;
+}
+export interface ApiAction<T> extends ApiPayload<T> {
+  type: string;
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO: Use empty props if genric is undefined or unknown
+export function createApiCallActions<D, S>(source: string, type: string) {
+  return {
+    do: createAction(`[${source}] ${type}`, props<ApiPayload<D>>()),
+    success: createAction(`[${source}] ${type} success`, props<ApiPayload<S>>()),
+    failure: createAction(`[${source}] ${type} failure`, props<ApiPayload<string>>()),
+  };
+}
 
 export function navigateTo<A>(path: string, router = inject(Router)) {
   return (source$: Observable<A>): Observable<A> =>
     source$.pipe(tap(() => router.navigate([path])));
 }
-
-export function toSuccessSource<A>(typePrefix: Prefix) {
-  return (source$: Observable<A>): Observable<Action<A, `${Prefix}.success$`>> =>
-    source$.pipe(toSource(`${typePrefix}.success$`));
+export function toastError<T>(
+  e: any,
+  defaultMsg = 'Unexpected Error',
+  toaster?: DesktopToasterService
+) {
+  return (source$: Observable<T>): Observable<T> =>
+    source$.pipe(
+      tap(() => {
+        if (toaster) toaster.addError$.next({ message: e.message || defaultMsg });
+      })
+    );
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function catchToastAndRedirectSource<P>(
-  typePrefix: Prefix,
+export function toAction<T>(action: ActionCreator<string, Creator<any[], ApiAction<T>>>) {
+  return (source$: Observable<T>): Observable<ApiAction<T>> =>
+    source$.pipe(map(res => action({ payload: res })));
+}
+
+export function catchAction(
+  action: ActionCreator<string, any>,
+  defaultMsg?: string,
+  toaster?: DesktopToasterService
+) {
+  return (source$: Observable<any>): Observable<ApiAction<string>> =>
+    source$.pipe(
+      catchError(e =>
+        of(action({ payload: e.message || defaultMsg })).pipe(toastError(e, defaultMsg, toaster))
+      )
+    );
+}
+
+export function toApiResponse<T>(
+  action: { success: ActionCreator<string, any>; failure: ActionCreator<string, any> },
+  defaultMsg?: string,
+  toastOnError?: DesktopToasterService
+) {
+  return (source$: Observable<T>): Observable<ApiAction<T | string>> =>
+    source$.pipe(toAction(action.success), catchAction(action.failure, defaultMsg, toastOnError));
+}
+
+export function catchAndRedirectAction(
+  action: ActionCreator<string, any>,
   destination: string,
-  defaultMsg = 'Unexpected Error',
-  router = inject(Router),
-  toast = inject(DesktopToasterService)
+  defaultMsg?: string,
+  router = inject(Router)
 ) {
-  return (source$: Observable<P>): Observable<P | Action<any, `${Prefix}.error$`>> =>
+  return (source$: Observable<any>): Observable<ApiAction<string>> =>
     source$.pipe(
       catchError(e =>
-        of(toast.addError$.next({ message: e.message || defaultMsg })).pipe(
-          navigateTo(destination, router),
-          toSource(`${typePrefix}.error$`)
+        of(action({ payload: e.message || defaultMsg })).pipe(
+          toastError(e, defaultMsg),
+          navigateTo(destination, router)
         )
       )
     );
 }
-
-export function catchAndToastSource<P>(
-  typePrefix: Prefix,
-  defaultMsg = 'Unexpected Error',
-  toast = inject(DesktopToasterService)
-) {
-  return (source$: Observable<P>): Observable<P | Action<any, `${Prefix}.error$`>> =>
-    source$.pipe(
-      catchError(e =>
-        of(toast.addError$.next({ message: e.message || defaultMsg })).pipe(
-          toSource(`${typePrefix}.error$`)
-        )
-      )
-    );
-}
-/* eslind-enable */

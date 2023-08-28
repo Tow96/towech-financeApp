@@ -4,9 +4,7 @@
  * Component that handles the shell's features, such as permanent subscriptions
  */
 // Libraries
-import { Component, OnDestroy } from '@angular/core';
-import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 // Components
 import { DesktopToastTrayComponent } from '@finance/desktop/core/toast-tray';
 
@@ -16,16 +14,5 @@ import { DesktopToastTrayComponent } from '@finance/desktop/core/toast-tray';
   imports: [DesktopToastTrayComponent],
   template: `<finance-toast-tray></finance-toast-tray>`,
 })
-export class DesktopShellComponent implements OnDestroy {
-  private userSubscription: Subscription;
-
-  // This ensures some state does not get destroyed if it looses all subscriptions
-  // Use only if really needed
-  constructor(private user: DesktopUserService) {
-    this.userSubscription = user.store.state$.subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
-  }
-}
+// TODO: fix
+export class DesktopShellComponent {}

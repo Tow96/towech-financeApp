@@ -30,7 +30,7 @@
       <div>
         <finance-navbar-item
           id="logout"
-          (clicked)="user.logout$.next()"
+          (clicked)="user.logout()"
           label="Logout"
           [collapsed]="(store.isCollapsed$ | async) || false"></finance-navbar-item>
       </div>

@@ -5,13 +5,9 @@
  */
 // Libraries
 import { inject } from '@angular/core';
-import { Action } from '@state-adapt/core';
-import { splitSources } from '@state-adapt/rxjs';
 import { Observable, catchError } from 'rxjs';
 // Services
 import { HttpClient } from '@angular/common/http';
-// Types
-import { Prefix, PrefixOutputs } from './rxjs.utils';
 
 // Variables ------------------------------------------------------------------
 const headers = { Accept: 'application/json' };
@@ -36,22 +32,3 @@ function processError<R>() {
       })
     );
 }
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function customSplit<A extends Action<any, PrefixOutputs>>(
-  prefix: Prefix,
-  obs$: Observable<A>
-): {
-  success$: Observable<
-    A extends Action<infer P, `${Prefix}.success$`> ? Action<P, `${Prefix}.success$`> : never
-  >;
-  cached$: Observable<Action<void, `${Prefix}.cached$`>>;
-  error$: Observable<Action<string, `${Prefix}.error$`>>;
-} {
-  return splitSources(obs$, {
-    success$: `${prefix}.success$`,
-    error$: `${prefix}.error$`,
-    cached$: `${prefix}.cached$`,
-  }) as any;
-}
-/* eslint-enable */
