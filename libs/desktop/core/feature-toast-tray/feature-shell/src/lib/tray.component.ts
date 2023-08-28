@@ -36,9 +36,9 @@ import { toastTransition } from './tray.animations';
     <div class="desktop-toaster">
       <finance-toast
         @toast
-        *ngFor="let toast of service.toasts.state$ | async"
+        *ngFor="let toast of service.tray$ | async"
         [toast]="toast"
-        (dismiss)="service.dismiss$.next($event)">
+        (dismiss)="service.dismiss($event)">
       </finance-toast>
     </div>
   `,

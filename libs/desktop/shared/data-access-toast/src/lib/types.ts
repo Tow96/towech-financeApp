@@ -1,4 +1,9 @@
-import { ToastTypes } from './toast-types.enum';
+export enum ToastTypes {
+  ACCENT = 'accent',
+  ERROR = 'error',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+}
 
 export type DesktopToast = {
   id: string;

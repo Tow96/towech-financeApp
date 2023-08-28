@@ -6,6 +6,7 @@ import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { DesktopToastComponent } from './toast.component';
 // Stubs
 import { stubAccentToast } from '@finance/desktop/shared/utils-testing';
+import { DesktopToast } from '@finance/desktop/shared/data-access-toast';
 
 describe('Toast Component', () => {
   let compiled: HTMLElement;
@@ -18,7 +19,7 @@ describe('Toast Component', () => {
     fixture = TestBed.createComponent(DesktopToastComponent);
     component = fixture.componentInstance;
 
-    component.toast = stubAccentToast();
+    component.toast = stubAccentToast() as DesktopToast;
     fixture.detectChanges();
     compiled = fixture.nativeElement;
 

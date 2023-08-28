@@ -59,7 +59,7 @@ describe('Desktop User Service', () => {
   let user$: SubscriberSpy<UserModel | null>;
   let token$: SubscriberSpy<string | null>;
   let routerSpy: jest.SpyInstance<any>;
-  let toastSpy: SubscriberSpy<any>;
+  let toastSpy: jest.SpyInstance<any>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -77,7 +77,7 @@ describe('Desktop User Service', () => {
     router = TestBed.inject(Router);
     toastService = TestBed.inject<DesktopToasterService>(DesktopToasterService);
 
-    toastSpy = subscribeSpyTo(toastService.addError$);
+    toastSpy = jest.spyOn(toastService, 'addError');
     routerSpy = jest.spyOn(router, 'navigate');
     status$ = subscribeSpyTo(service.status$);
     user$ = subscribeSpyTo(service.value$);
@@ -119,7 +119,7 @@ describe('Desktop User Service', () => {
       it('Should change the isLoggedIn selector to be true', () =>
         isLogged(subscribeSpyTo(service.isLoggedIn$).getLastValue(), true, true));
       it('Should redirect to the dashboard', () => expect(routerSpy).toHaveBeenCalledWith(['']));
-      it('Should not send a toast', () => expect(toastSpy.receivedNext()).toBeFalsy());
+      it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
 
     describe('When the authentication microservice answers with an error', () => {
@@ -130,7 +130,7 @@ describe('Desktop User Service', () => {
       it('Should change the isLoggedIn selector to be false', () =>
         isLogged(subscribeSpyTo(service.isLoggedIn$).getLastValue(), true, false));
       it('Should send an error to the toast service', () =>
-        expect(toastSpy.receivedNext()).toBeTruthy());
+        expect(toastSpy).toHaveBeenCalledTimes(1));
       it('Should stay on the same page', () => expect(routerSpy).toHaveBeenCalledTimes(0));
     });
   });
@@ -158,7 +158,7 @@ describe('Desktop User Service', () => {
       it('Should update the user', () => expect(user$.getLastValue()).toEqual(stubUser()));
       it('Should update the token', () => expect(token$.getLastValue()).toBe(stubTokenRefresh()));
       it('Should stay on the same page', () => expect(routerSpy).toHaveBeenCalledTimes(0));
-      it('Should not send a toast', () => expect(toastSpy.receivedNext()).toBeFalsy());
+      it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
 
     describe('When the authentication microservice answers with an error', () => {
@@ -170,7 +170,7 @@ describe('Desktop User Service', () => {
       it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
       it('Should navigate to the login screen', () =>
         expect(routerSpy).toHaveBeenCalledWith(['login']));
-      it('Should not send a toast', () => expect(toastSpy.receivedNext()).toBeFalsy());
+      it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
   });
 
@@ -197,7 +197,7 @@ describe('Desktop User Service', () => {
       it('Should remove the user', () => expect(user$.getLastValue()).toBe(null));
       it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
       it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
-      it('Should not send a toast', () => expect(toastSpy.receivedNext()).toBeFalsy());
+      it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
 
     describe('When the authentication microservice answers with an error', () => {
@@ -208,7 +208,7 @@ describe('Desktop User Service', () => {
       it('Should remove the user', () => expect(user$.getLastValue()).toBe(null));
       it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
       it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
-      it('Should not send a toast', () => expect(toastSpy.receivedNext()).toBeFalsy());
+      it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
   });
 });

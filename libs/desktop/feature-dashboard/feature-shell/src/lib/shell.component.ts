@@ -22,10 +22,10 @@ export class DesktopDashboardComponent {
   constructor(private readonly toastService: DesktopToasterService) {}
 
   msg() {
-    this.toastService.addAccent$.next({ message: 'pesto' });
-    this.toastService.addError$.next({ message: 'pesto' });
-    this.toastService.addSuccess$.next({ message: 'pesto' });
-    this.toastService.addWarning$.next({ message: 'pesto' });
+    this.toastService.addAccent('pesto');
+    this.toastService.addError('pesto');
+    this.toastService.addSuccess('pesto');
+    this.toastService.addWarning('pesto');
   }
   err() {
     throw new Error('THIS IS A TEST');

@@ -14,7 +14,7 @@ import {
   Output,
 } from '@angular/core';
 // Services
-import { DesktopToast, ToastTypes } from '@finance/desktop/shared/utils-types';
+import { DesktopToast, ToastTypes } from '@finance/desktop/shared/data-access-toast';
 // Animations
 import { colorTransition, messageBodyTransition, messageTextTransition } from './toast.animations';
 

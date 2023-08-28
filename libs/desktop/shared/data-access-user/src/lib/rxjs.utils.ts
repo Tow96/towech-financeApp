@@ -40,7 +40,7 @@ export function toastError<T>(
   return (source$: Observable<T>): Observable<T> =>
     source$.pipe(
       tap(() => {
-        if (toaster) toaster.addError$.next({ message: e.message || defaultMsg });
+        if (toaster) toaster.addError(e.message || defaultMsg);
       })
     );
 }

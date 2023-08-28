@@ -29,7 +29,7 @@ export class DesktopErrorInterceptorClass implements ErrorHandler {
     }
 
     const toastService = this.injector.get<DesktopToasterService>(DesktopToasterService);
-    toastService.addError$.next({ message });
+    toastService.addError(message);
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }

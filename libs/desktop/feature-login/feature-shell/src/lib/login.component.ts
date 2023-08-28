@@ -38,8 +38,7 @@ export class DesktopLoginComponent {
   }
 
   validateAndSubmit() {
-    if (this.formComponent.form.invalid)
-      return this.toasts.addError$.next({ message: 'Complete the fields' });
+    if (this.formComponent.form.invalid) return this.toasts.addError('Complete the fields');
 
     this.user.login(this.formComponent.form.value);
   }
