@@ -31,6 +31,10 @@ export class DesktopUserService {
         loaded: state.status === Status.COMPLETED || state.status === Status.FAILED,
         logged: state.data !== null,
       })),
+      tokenExp: createSelector(selectUserState, state => ({
+        value: state.token,
+        expired: new Date().getTime() > (state.data?.exp || 0) * 1000,
+      })),
     }),
   });
 
@@ -42,7 +46,7 @@ export class DesktopUserService {
   // Selectors ----------------------------------------------------------------
   status$ = this.ngrx.select(this.state.selectStatus);
   value$ = this.ngrx.select(this.state.selectData);
-  token$ = this.ngrx.select(this.state.selectToken);
+  token$ = this.ngrx.select(this.state.tokenExp);
   isLoggedIn$ = this.ngrx.select(this.state.isLoggedIn);
 
   constructor(private readonly ngrx: Store, private readonly effects: EffectSources) {

@@ -57,7 +57,7 @@ describe('Desktop User Service', () => {
   let httpCall: TestRequest;
   let status$: SubscriberSpy<Status>;
   let user$: SubscriberSpy<UserModel | null>;
-  let token$: SubscriberSpy<string | null>;
+  let token$: SubscriberSpy<{ value: string | null; expired: boolean }>;
   let routerSpy: jest.SpyInstance<any>;
   let toastSpy: jest.SpyInstance<any>;
 
@@ -115,7 +115,7 @@ describe('Desktop User Service', () => {
         expect(status$.getLastValue()).toEqual(Status.COMPLETED));
       it('Should update the user', () => expect(user$.getLastValue()).toEqual(stubUser()));
       it('Should update the token', () =>
-        expect(token$.getLastValue()).toEqual(stubTokenInitial()));
+        expect(token$.getLastValue()).toEqual({ expired: true, value: stubTokenInitial() }));
       it('Should change the isLoggedIn selector to be true', () =>
         isLogged(subscribeSpyTo(service.isLoggedIn$).getLastValue(), true, true));
       it('Should redirect to the dashboard', () => expect(routerSpy).toHaveBeenCalledWith(['']));
@@ -156,7 +156,8 @@ describe('Desktop User Service', () => {
       it('Should change the store status to completed', () =>
         expect(status$.getLastValue()).toBe(Status.COMPLETED));
       it('Should update the user', () => expect(user$.getLastValue()).toEqual(stubUser()));
-      it('Should update the token', () => expect(token$.getLastValue()).toBe(stubTokenRefresh()));
+      it('Should update the token', () =>
+        expect(token$.getLastValue()).toEqual({ expired: true, value: stubTokenRefresh() }));
       it('Should stay on the same page', () => expect(routerSpy).toHaveBeenCalledTimes(0));
       it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
@@ -167,7 +168,8 @@ describe('Desktop User Service', () => {
       it('Should update the store status to failed', () =>
         expect(status$.getLastValue()).toBe(Status.FAILED));
       it('Should remove the user', () => expect(user$.getLastValue()).toBe(null));
-      it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
+      it('Should remove the token', () =>
+        expect(token$.getLastValue()).toEqual({ expired: true, value: null }));
       it('Should navigate to the login screen', () =>
         expect(routerSpy).toHaveBeenCalledWith(['login']));
       it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
@@ -195,7 +197,8 @@ describe('Desktop User Service', () => {
       it('Should change the store status to completed', () =>
         expect(status$.getLastValue()).toEqual(Status.COMPLETED));
       it('Should remove the user', () => expect(user$.getLastValue()).toBe(null));
-      it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
+      it('Should remove the token', () =>
+        expect(token$.getLastValue()).toEqual({ expired: true, value: null }));
       it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
       it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
@@ -206,7 +209,8 @@ describe('Desktop User Service', () => {
       it('Should change the store status to failed', () =>
         expect(status$.getLastValue()).toBe(Status.FAILED));
       it('Should remove the user', () => expect(user$.getLastValue()).toBe(null));
-      it('Should remove the token', () => expect(token$.getLastValue()).toBe(null));
+      it('Should remove the token', () =>
+        expect(token$.getLastValue()).toEqual({ expired: true, value: null }));
       it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
       it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
     });
