@@ -1,4 +1,4 @@
-import { LoginUser } from '@finance/shared/utils-types';
+import { EditUser, LoginUser, UserModel } from '@finance/shared/utils-types';
 import { UserResponse } from './types';
 import { createApiCallActions } from './rxjs.utils';
 

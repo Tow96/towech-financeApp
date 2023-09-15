@@ -13,7 +13,8 @@ import { Store, createFeature, createSelector } from '@ngrx/store';
 import { loginActions, logoutActions, refreshActions } from './user.actions';
 import { reducer } from './user.reducer';
 import { EffectSources } from '@ngrx/effects';
-import { loginEffect, logoutEffect, refreshEffect } from './user.effects';
+import * as userEffects from './user.effects';
+// import { loginEffect, logoutEffect, refreshEffect } from './user.effects';
 
 export enum Actions {
   LOGIN = '[User Service] Login',
@@ -51,7 +52,7 @@ export class DesktopUserService {
 
   constructor(private readonly ngrx: Store, private readonly effects: EffectSources) {
     ngrx.addReducer(this.state.name, this.state.reducer);
-    effects.addEffects([loginEffect, logoutEffect, refreshEffect]);
+    effects.addEffects(userEffects);
     this.refresh();
   }
 }

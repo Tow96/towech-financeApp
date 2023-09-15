@@ -12,7 +12,7 @@ import { environment } from '@finance/desktop/shared/utils-environments';
 import { DesktopUserService } from './user.service';
 
 const getAuthReq = (req: HttpRequest<unknown>, token: string | null): HttpRequest<unknown> => {
-  const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+  const authReq = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   return authReq;
 };
 const needsToken = (req: HttpRequest<unknown>): boolean => {
@@ -26,16 +26,18 @@ const needsToken = (req: HttpRequest<unknown>): boolean => {
 
 /* eslint-disable max-nested-callbacks */
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
-  const user = inject(DesktopUserService);
-  if (!needsToken(req)) return next(req);
+  try {
+    const user = inject(DesktopUserService);
+    if (!needsToken(req)) return next(req);
 
-  user.refresh(); // TODO: fire only if expired
-  return user.token$.pipe(
-    filter(token => !token.expired),
-    first(),
-    mergeMap(token => {
-      console.log(token);
-      return next(getAuthReq(req, token.value));
-    })
-  );
+    user.refresh(); // TODO: fire only if expired
+    return user.token$.pipe(
+      filter(token => !token.expired),
+      first(),
+      mergeMap(token => next(getAuthReq(req, token.value)))
+    );
+  } catch {
+    console.warn('DesktopUserService not yet available');
+    return next(req);
+  }
 };

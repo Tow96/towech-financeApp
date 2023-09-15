@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { environment } from '@finance/desktop/shared/utils-environments';
 import { LoginUser } from '@finance/shared/utils-types';
 import jwtDecode from 'jwt-decode';
-import { Observable, exhaustMap, map } from 'rxjs';
+import { Observable, exhaustMap, firstValueFrom, map, tap } from 'rxjs';
 // Pipes
 import { postWithCredentials } from './api.utils';
 import { catchAndRedirectAction, navigateTo, toAction, toApiResponse } from './rxjs.utils';
@@ -62,7 +62,7 @@ export function logoutCall(http = inject(HttpClient), router = inject(Router)) {
 }
 
 export function refreshCall(http = inject(HttpClient), router = inject(Router)) {
-  return (source$: Observable<unknown>): Observable<Action> =>
+  return (source$: Observable<unknown>) =>
     source$.pipe(
       exhaustMap(() =>
         postWithCredentials<TokenResponse>(`${ROOTURL}/refresh`, null, http).pipe(
