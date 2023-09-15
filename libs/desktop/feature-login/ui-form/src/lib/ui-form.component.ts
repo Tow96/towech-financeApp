@@ -4,7 +4,7 @@
  * UI for the login form
  */
 // Libraries
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 // Components
 import { DesktopButtonComponent } from '@finance/desktop/shared/ui-button';
@@ -13,6 +13,7 @@ import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
 // Types
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-login-form',
   imports: [

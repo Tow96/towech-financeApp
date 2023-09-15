@@ -4,7 +4,7 @@
  * Component that represents the menuitems
  */
 // Libraries
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 // Modules
 import { NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -20,6 +20,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { menuTransitions } from './navbar-item.animations';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-navbar-item',
   imports: [FontAwesomeModule, NgIf],

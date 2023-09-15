@@ -4,12 +4,12 @@
  *  <%= description %>
  */
  // Libraries
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-<%= fullName.join('-') %>',
-  imports: [],
   template: `<p><%= compName %>Component works</p>`,
 })
 export class <%= compName %>Component {}

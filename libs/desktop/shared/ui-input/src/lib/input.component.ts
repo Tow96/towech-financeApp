@@ -4,11 +4,12 @@
  * Custom UI for inputs, includes connection to ngrx-forms
  */
 // Libraries
-import { Component, forwardRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 // TODO: Make value change testing
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-input',
   styleUrls: ['input.component.scss'],

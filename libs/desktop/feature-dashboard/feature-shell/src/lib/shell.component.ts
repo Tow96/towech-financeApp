@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 // TODO: Testing
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-dashboard',
   styles: [

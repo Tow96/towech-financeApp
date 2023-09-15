@@ -4,7 +4,13 @@
  * Navbar for the complete app
  */
 // Libraries
-import { Component, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 // Modules
 import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
@@ -17,6 +23,7 @@ import { getTitleFromRoute, navBarActions, navContents, state } from './utils';
 import { ReducerManager, Store, createFeature, createReducer, on } from '@ngrx/store';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-navbar',
   imports: [AsyncPipe, DesktopNavbarItemComponent, NgFor, NgClass, NgIf],

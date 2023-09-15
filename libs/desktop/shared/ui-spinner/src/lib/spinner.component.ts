@@ -5,9 +5,10 @@
  * The animation was obtained from: https://loading.io/css/
  */
 
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-spinner',
   imports: [],

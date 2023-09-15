@@ -4,9 +4,10 @@
  * Custom Button Component
  */
 // Libraries
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-button',
   styleUrls: ['button.component.scss'],

@@ -4,7 +4,7 @@
  * Main component for the whole application, holds the components that appear globally
  */
 // Libraries
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -20,6 +20,7 @@ import { DesktopSpinnerComponent } from '@finance/desktop/shared/ui-spinner';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-layout',
   imports: [AsyncPipe, NgIf, DesktopSpinnerComponent, DesktopNavbarComponent, RouterModule],
@@ -28,8 +29,10 @@ import { AsyncPipe, NgIf } from '@angular/common';
     <div class="layout">
       <finance-navbar></finance-navbar>
       <div class="layout__contents">
-        <!-- <div *ngIf="isRouterLoading$ | async">a</div> -->
-        <finance-spinner size="8rem" *ngIf="isRouterLoading$ | async"></finance-spinner>
+        <finance-spinner
+          data-test-id="nav-spinner"
+          size="8rem"
+          *ngIf="isRouterLoading$ | async"></finance-spinner>
         <router-outlet></router-outlet>
       </div>
     </div>

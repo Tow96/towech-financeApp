@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { environment } from '@finance/desktop/shared/utils-environments';
 import { LoginUser } from '@finance/shared/utils-types';
 import jwtDecode from 'jwt-decode';
-import { Observable, exhaustMap, firstValueFrom, map, tap } from 'rxjs';
+import { Observable, exhaustMap, map } from 'rxjs';
 // Pipes
 import { postWithCredentials } from './api.utils';
 import { catchAndRedirectAction, navigateTo, toAction, toApiResponse } from './rxjs.utils';
