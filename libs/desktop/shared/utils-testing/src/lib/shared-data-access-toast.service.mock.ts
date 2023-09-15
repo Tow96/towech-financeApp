@@ -9,5 +9,6 @@ import {
 
 export const DesktopToasterServiceMock = {
   addError: () => {}, //eslint-disable-line
+  addWarning: () => {}, //eslint-disable-line
   tray$: of([stubWarningToast(), stubSuccessToast(), stubErrorToast(), stubAccentToast()]),
 };

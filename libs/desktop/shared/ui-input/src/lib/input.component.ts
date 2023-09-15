@@ -7,7 +7,6 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-// TODO: Make value change testing
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -44,20 +43,16 @@ export class DesktopInputComponent implements ControlValueAccessor {
   registerOnChange(fn: (v: string) => void): void {
     this.customChanged = fn;
   }
-
   registerOnTouched(fn: () => void): void {
     this.customTouched = fn;
   }
-
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
-
   onChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).value;
     this.customChanged(value);
   }
-
   writeValue(value: string): void {
     this.value = value;
   }

@@ -36,12 +36,23 @@ import { DesktopInputComponent } from '@finance/desktop/shared/ui-input';
     <form [formGroup]="form" (submit)="submitted.next()">
       <finance-input data-test-id="username" label="Username" formControlName="username">
       </finance-input>
-      <finance-input id="form-password" type="password" label="Password" formControlName="password">
+      <finance-input
+        data-test-id="password"
+        id="form-password"
+        type="password"
+        label="Password"
+        formControlName="password">
       </finance-input>
       <div class="login__bottom-row">
-        <finance-checkbox id="form-keep" label="Keep Session" formControlName="keepSession">
+        <finance-checkbox
+          data-test-id="keep-session"
+          id="form-keep"
+          label="Keep Session"
+          formControlName="keepSession">
         </finance-checkbox>
-        <finance-button type="submit" id="Login-button">Login</finance-button>
+        <finance-button data-test-id="submit-bttn" type="submit" id="Login-button">
+          Login
+        </finance-button>
       </div>
     </form>
   `,
