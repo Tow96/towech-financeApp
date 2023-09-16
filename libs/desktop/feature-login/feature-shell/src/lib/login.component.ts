@@ -40,7 +40,6 @@ export class DesktopLoginComponent {
   }
 
   validateAndSubmit() {
-    console.log(this.formComponent);
     if (this.formComponent.form.invalid) return this.toasts.addError('Complete the fields');
 
     this.user.login(this.formComponent.form.value);
