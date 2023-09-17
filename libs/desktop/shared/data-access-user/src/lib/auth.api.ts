@@ -19,6 +19,7 @@ import { Action } from '@ngrx/store';
 // Services
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 import { DecodedUser } from './types';
+// Actions
 import { loginActions, logoutActions, refreshActions } from './user.actions';
 
 type TokenResponse = {

@@ -17,7 +17,7 @@ import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast
 // Mocks
 import { DesktopToasterServiceMock } from '@finance/desktop/shared/utils-testing';
 // Models
-import { LoginUser, UserModel, UserRoles } from '@finance/shared/utils-types';
+import { EditUser, LoginUser, UserModel, UserRoles } from '@finance/shared/utils-types';
 import { Status } from './types';
 
 // TODO move this to utils-testing
@@ -87,7 +87,7 @@ describe('Desktop User Service', () => {
   it('Should be defined', () => expect(service).toBeTruthy());
   // it('Should have null initial values', () => {
   //   expect(user$.getFirstValue()).toBe(null);
-  //   expect(token$.getFirstValue()).toBe(null);
+  //   expect(token$.getFirstValue()).toEqual({ expired: true, value: null });
   //   expect(status$.getFirstValue()).toBe(Status.INIT);
   // });
   it('Should call the refresh endpoint when initiated', () => {
@@ -95,7 +95,7 @@ describe('Desktop User Service', () => {
     expect(httpCall.request.method).toEqual('POST');
   });
 
-  describe('When the login is called', () => {
+  describe('When login is called', () => {
     beforeEach(() => {
       service.login(stubLogin());
       httpCall = httpController.expectOne(`${environment.apiUrl}/login`);
@@ -135,7 +135,7 @@ describe('Desktop User Service', () => {
     });
   });
 
-  describe('When refresh pipe is called', () => {
+  describe('When refresh is called', () => {
     beforeEach(() => {
       // Flush the SET refresh call
       httpController
@@ -176,7 +176,7 @@ describe('Desktop User Service', () => {
     });
   });
 
-  describe('When the logout is called', () => {
+  describe('When logout is called', () => {
     beforeEach(() => {
       // Flush the SET refresh call
       httpController
@@ -213,6 +213,52 @@ describe('Desktop User Service', () => {
         expect(token$.getLastValue()).toEqual({ expired: true, value: null }));
       it('Should redirect to login', () => expect(routerSpy).toHaveBeenCalledWith(['login']));
       it('Should not send a toast', () => expect(toastSpy).toHaveBeenCalledTimes(0));
+    });
+  });
+
+  describe('When edit is called', () => {
+    const updateUser: EditUser = { mail: 'newMail@provider.com', name: 'NAME' };
+    beforeEach(() => {
+      // Flush the SET refresh call
+      httpController
+        .expectOne(`${environment.apiUrl}/refresh`)
+        .flush({ token: stubTokenInitial() });
+      service.edit(updateUser);
+      httpCall = httpController.expectOne(`${environment.apiUrl}/user`);
+    });
+
+    it('Should change the store status to in progress', () =>
+      expect(status$.getLastValue()).toEqual(Status.IN_PROGRESS));
+    it('Should call the authentication microservice', () =>
+      expect(httpCall.request.method).toEqual('PATCH'));
+
+    describe('When the endpoint answers with a successfully', () => {
+      beforeEach(() => {
+        httpCall.flush({ ...stubUser(), ...updateUser });
+        toastSpy = jest.spyOn(toastService, 'addSuccess');
+      });
+
+      it('Should change the store status to completed', () =>
+        expect(status$.getLastValue()).toEqual(Status.COMPLETED));
+      it('Should update the user', () =>
+        expect(user$.getLastValue()).toEqual({
+          ...stubUser(),
+          ...updateUser,
+          exp: expect.any(Number),
+          iat: expect.any(Number),
+        }));
+      it('Should send a success toast', () => expect(toastSpy).toHaveBeenCalledTimes(1));
+    });
+
+    describe('When the endpoint errors', () => {
+      beforeEach(() => {
+        httpCall.flush(stubError(), stubErrorOpts());
+        toastSpy = jest.spyOn(toastService, 'addError');
+      });
+
+      it('Should change the store status to failed', () =>
+        expect(status$.getLastValue()).toBe(Status.FAILED));
+      it('Should send an error toast', () => expect(toastSpy).toHaveBeenCalledTimes(1));
     });
   });
 });

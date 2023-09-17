@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginActions, logoutActions, refreshActions } from './user.actions';
+import { editActions, loginActions, logoutActions, refreshActions } from './user.actions';
 import { loginCall, logoutCall, refreshCall } from './auth.api';
+import { editCall } from './user.api';
 
 export const loginEffect = createEffect(
   (actions$ = inject(Actions)) => actions$.pipe(ofType(loginActions.do), loginCall()),
@@ -15,5 +16,10 @@ export const logoutEffect = createEffect(
 
 export const refreshEffect = createEffect(
   (actions$ = inject(Actions)) => actions$.pipe(ofType(refreshActions.do), refreshCall()),
+  { functional: true }
+);
+
+export const editEffect = createEffect(
+  (actions$ = inject(Actions)) => actions$.pipe(ofType(editActions.do), editCall()),
   { functional: true }
 );

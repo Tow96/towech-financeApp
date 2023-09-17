@@ -5,22 +5,16 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-// Models
-import { LoginUser } from '@finance/shared/utils-types';
-import { Status } from './types';
-// Pipes
-import { Store, createFeature, createSelector } from '@ngrx/store';
-import { loginActions, logoutActions, refreshActions } from './user.actions';
-import { reducer } from './user.reducer';
 import { EffectSources } from '@ngrx/effects';
-import * as userEffects from './user.effects';
-// import { loginEffect, logoutEffect, refreshEffect } from './user.effects';
-
-export enum Actions {
-  LOGIN = '[User Service] Login',
-  LOGOUT = '[User Service] Logout',
-  REFRESH = '[User Service] Refresh',
-}
+import { Store, createFeature, createSelector } from '@ngrx/store';
+import { reducer } from './user.reducer';
+// Models
+import { EditUser, LoginUser } from '@finance/shared/utils-types';
+import { Status } from './types';
+// Actions
+import { editActions, loginActions, logoutActions, refreshActions } from './user.actions';
+// Effects
+import * as UserEffects from './user.effects';
 
 @Injectable()
 export class DesktopUserService {
@@ -43,6 +37,7 @@ export class DesktopUserService {
   login = (payload: Partial<LoginUser>) => this.ngrx.dispatch(loginActions.do({ payload }));
   logout = () => this.ngrx.dispatch(logoutActions.do({ payload: undefined }));
   refresh = () => this.ngrx.dispatch(refreshActions.do({ payload: undefined }));
+  edit = (payload: EditUser) => this.ngrx.dispatch(editActions.do({ payload }));
 
   // Selectors ----------------------------------------------------------------
   status$ = this.ngrx.select(this.state.selectStatus);
@@ -52,7 +47,7 @@ export class DesktopUserService {
 
   constructor(private readonly ngrx: Store, private readonly effects: EffectSources) {
     ngrx.addReducer(this.state.name, this.state.reducer);
-    effects.addEffects(userEffects);
+    effects.addEffects(UserEffects);
     this.refresh();
   }
 }

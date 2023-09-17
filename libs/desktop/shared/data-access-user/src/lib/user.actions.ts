@@ -1,4 +1,4 @@
-import { LoginUser } from '@finance/shared/utils-types';
+import { EditUser, LoginUser, UserModel } from '@finance/shared/utils-types';
 import { UserResponse } from './types';
 import { createApiCallActions } from './rxjs.utils';
 
@@ -11,3 +11,4 @@ export const refreshActions = createApiCallActions<unknown, UserResponse>(
   'User Service',
   'Refresh'
 );
+export const editActions = createApiCallActions<EditUser, UserModel>('Settings Page', 'Edit User');

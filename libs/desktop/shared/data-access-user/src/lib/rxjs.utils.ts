@@ -44,7 +44,9 @@ export function toastError<T>(
       })
     );
 }
-
+export function toastSuccess<T>(msg: string, toast: DesktopToasterService) {
+  return (source$: Observable<T>): Observable<T> => source$.pipe(tap(() => toast.addSuccess(msg)));
+}
 export function toAction<T>(action: ActionCreator<string, Creator<any[], ApiAction<T>>>) {
   return (source$: Observable<T>): Observable<ApiAction<T>> =>
     source$.pipe(map(res => action({ payload: res })));

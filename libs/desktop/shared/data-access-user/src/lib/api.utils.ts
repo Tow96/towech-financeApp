@@ -15,10 +15,18 @@ const headers = { Accept: 'application/json' };
 // Http calls -----------------------------------------------------------------
 export function postWithCredentials<Response>(
   url: string,
-  body?: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+  body?: unknown,
   http = inject(HttpClient)
 ): Observable<Response> {
   return http.post<Response>(url, body, { headers, withCredentials: true }).pipe(processError());
+}
+
+export function patch<Response>(
+  url: string,
+  body?: unknown,
+  http = inject(HttpClient)
+): Observable<Response> {
+  return http.patch<Response>(url, body, { headers }).pipe(processError());
 }
 
 // Helper functions -----------------------------------------------------------
