@@ -62,6 +62,7 @@
       "@finance/desktop/feature-login/ui-form": ["libs/desktop/feature-login/ui-form/src/index.ts"],
       "@finance/desktop/login/shell": ["libs/desktop/feature-login/feature-shell/src"],
       "@finance/desktop/settings/shell": ["libs/desktop/feature-settings/feature-shell/src"],
+      "@finance/desktop/settings/ui-user-form": ["libs/desktop/feature-settings/ui-user-form/src"],
       "@finance/desktop/shared/data-access-toast": ["libs/desktop/shared/data-access-toast/src"],
       "@finance/desktop/shared/data-access-user": ["libs/desktop/shared/data-access-user/src"],
       "@finance/desktop/shared/ui-button": ["libs/desktop/shared/ui-button/src"],
