@@ -11,12 +11,9 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 // Services
 import { ConfigService } from '@nestjs/config';
-import {
-  LogId,
-  AuthenticationPidWinstonLogger,
-} from '@finance/authentication/shared/feature-logger';
-import { AuthenticationSessionsUserService } from '@finance/authentication/feature-sessions/data-access-user';
-import { AuthenticationSessionsJwtService } from '@finance/authentication/feature-sessions/data-access-jwt';
+import { LogId, AuthenticationPidWinstonLogger } from '@finance/authentication/shared/logger';
+import { AuthenticationSessionsJwtService } from '@finance/authentication/sessions/data-access-jwt';
+import { AuthenticationUserService } from '@finance/authentication/shared/data-access-user';
 // Guards
 import {
   JwtAuthAdminGuard,
@@ -24,9 +21,9 @@ import {
   LocalAuthGuard,
   Refresh,
   User,
-} from '@finance/authentication/feature-sessions/utils-guards';
+} from '@finance/authentication/shared/utils-guards';
 // Models
-import { CreateUserDto, LoginDto } from '@finance/authentication/feature-sessions/utils-dto';
+import { CreateUserDto, LoginDto } from '@finance/authentication/sessions/utils-dto';
 import { AuthToken, RefreshToken, UserModel } from '@finance/shared/utils-types';
 import { Response, CookieOptions } from 'express';
 
@@ -41,14 +38,14 @@ enum COOKIES {
   REFRESH = 'jid',
 }
 
+// TODO: I18n
 @Controller()
 @ApiTags('')
 export class AuthenticationSessionsHttpController {
-  // TODO: I18n
   @UseGuards(LocalAuthGuard)
   @Post(SIGNAGE_ROUTES.LOGIN)
   @ApiOperation({ summary: 'Creates the authToken and the refreshToken cookie for a user' })
-  public async login(
+  async login(
     @User() user: UserModel,
     @Body() body: LoginDto,
     @LogId() logId: string,
@@ -79,12 +76,11 @@ export class AuthenticationSessionsHttpController {
     return { token: authToken };
   }
 
-  // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.LOGOUT)
   @HttpCode(204)
   @ApiOperation({ summary: 'Deregisters and removes a refreshToken cookie for a user' })
-  public async logout(
+  async logout(
     @Refresh() { id, user }: RefreshToken,
     @LogId() logId: string,
     @Res({ passthrough: true }) res: Response
@@ -96,25 +92,20 @@ export class AuthenticationSessionsHttpController {
     res.clearCookie(COOKIES.REFRESH);
   }
 
-  // TODO: I18n
   @UseGuards(JwtRefreshGuard)
   @Post(SIGNAGE_ROUTES.REFRESH)
   @ApiOperation({ summary: 'Reads the refreshToken cookie to generate a new authToken' })
-  public async refresh(
-    @Refresh() { user }: RefreshToken,
-    @LogId() logId: string
-  ): Promise<AuthToken> {
+  async refresh(@Refresh() { user }: RefreshToken, @LogId() logId: string): Promise<AuthToken> {
     this.logger.pidLog(logId, `Generating new token for user: ${user._id}`);
     const token = this.tokens.generateAuthToken(user);
     return { token };
   }
 
-  // TODO: I18n
   @UseGuards(JwtAuthAdminGuard)
   @Post(SIGNAGE_ROUTES.REGISTER)
   @ApiOperation({ summary: 'Registers a new user to the application, only admins can call it' })
   @ApiBearerAuth('access-token')
-  public async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
+  async register(@Body() user: CreateUserDto, @LogId() logId: string): Promise<UserModel> {
     this.logger.pidLog(logId, `Registering new user under email ${user.mail}`);
 
     const password = Math.random().toString(36).substring(2, 10);
@@ -134,8 +125,8 @@ export class AuthenticationSessionsHttpController {
     /* eslint-enable */
   }
 
-  public constructor(
-    private readonly user: AuthenticationSessionsUserService,
+  constructor(
+    private readonly user: AuthenticationUserService,
     private readonly tokens: AuthenticationSessionsJwtService,
     private readonly logger: AuthenticationPidWinstonLogger,
     private readonly config: ConfigService

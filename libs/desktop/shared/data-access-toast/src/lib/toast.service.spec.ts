@@ -5,12 +5,10 @@ import { SubscriberSpy, subscribeSpyTo } from '@hirez_io/observer-spy';
 import { DesktopToasterService } from './toast.service';
 // Mocks
 import { provideStore } from '@ngrx/store';
-import { adaptReducer } from '@state-adapt/core';
 // Models
-import { DesktopToast, ToastTypes } from '@finance/desktop/shared/utils-types';
+import { DesktopToast, ToastTypes } from './types';
 
 let service: DesktopToasterService;
-const TOASTDURATION = 2000;
 
 describe('Toaster-Service', () => {
   let message: string;
@@ -20,50 +18,49 @@ describe('Toaster-Service', () => {
     expect((result || [])[0]).toEqual({
       id: expect.any(String),
       message,
-      duration: TOASTDURATION,
       type,
     });
   }
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideStore({ adapt: adaptReducer })] });
+    TestBed.configureTestingModule({ providers: [provideStore()] });
     service = TestBed.inject(DesktopToasterService);
-    spy = subscribeSpyTo(service.toasts.state$);
+    spy = subscribeSpyTo(service.tray$);
   });
 
   it('Should exist', () => expect(service).toBeTruthy());
 
-  describe('When addAccent$ is called', () => {
+  describe('When addAccent is called', () => {
     it('Should add the toast to the tray', () => {
       message = 'This is an accent';
-      service.addAccent$.next({ message, duration: TOASTDURATION });
+      service.addAccent(message);
 
       checkToast(spy.getLastValue(), ToastTypes.ACCENT);
     });
   });
 
-  describe('When addError$ is called', () => {
+  describe('When addError is called', () => {
     it('Should add the toast to the tray', () => {
       message = 'This is an error';
-      service.addError$.next({ message, duration: TOASTDURATION });
+      service.addError(message);
 
       checkToast(spy.getLastValue(), ToastTypes.ERROR);
     });
   });
 
-  describe('When addSucess$ is called', () => {
+  describe('When addSucess is called', () => {
     it('Should add the toast to the tray', () => {
       message = 'This is a success';
-      service.addSuccess$.next({ message, duration: TOASTDURATION });
+      service.addSuccess(message);
 
       checkToast(spy.getLastValue(), ToastTypes.SUCCESS);
     });
   });
 
-  describe('When addWarning$ is called', () => {
+  describe('When addWarning is called', () => {
     it('Should add the toast to the tray', () => {
       message = 'This is a warning';
-      service.addWarning$.next({ message, duration: TOASTDURATION });
+      service.addWarning(message);
 
       checkToast(spy.getLastValue(), ToastTypes.WARNING);
     });
@@ -71,13 +68,13 @@ describe('Toaster-Service', () => {
 
   describe('When dismiss is called', () => {
     it('Should remove only the dismissed value', () => {
-      service.addAccent$.next({ message: 'ADD TEST1', duration: 200 });
-      service.addAccent$.next({ message: 'ADD TEST2', duration: 200 });
-      service.addAccent$.next({ message: 'ADD TEST3', duration: 200 });
-      service.addAccent$.next({ message: 'ADD TEST4', duration: 200 });
+      service.addAccent('ADD TEST1');
+      service.addAccent('ADD TEST2');
+      service.addAccent('ADD TEST3');
+      service.addAccent('ADD TEST4');
 
       const prior = spy.getLastValue() || [];
-      service.dismiss$.next(prior[2].id);
+      service.dismiss(prior[2].id);
 
       const result = spy.getLastValue();
       expect(result?.length).toBe(prior.length - 1);

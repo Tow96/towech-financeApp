@@ -30,7 +30,7 @@ export class AuthenticationTrimPipe implements PipeTransform {
     return values;
   }
 
-  public transform(values: any, { type }: ArgumentMetadata) {
+  transform(values: any, { type }: ArgumentMetadata) {
     if (!(this.isObj(values) && type === 'body')) return values;
 
     return this.trim(values);

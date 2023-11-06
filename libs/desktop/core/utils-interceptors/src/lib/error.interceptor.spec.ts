@@ -1,23 +1,23 @@
-// Libraries
-import { subscribeSpyTo, SubscriberSpy } from '@hirez_io/observer-spy';
 // Tested elements
 import { DesktopErrorInterceptorClass, messages } from './error.interceptor';
-// Services
-import { NewToast } from '@finance/desktop/shared/utils-types';
-import { Source } from '@state-adapt/rxjs';
 
-const ACTIONTYPE = '[Toast Service] Add Error Toast';
 const mockService = {
-  addError$: new Source<NewToast>(ACTIONTYPE),
+  addError: jest.fn,
 };
 
 describe('Toast error handler', () => {
   let handler: any;
-  let spy: SubscriberSpy<any>;
+  let spy: jest.SpyInstance;
+
+  function validateToast(message: string) {
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(message);
+  }
+
   beforeEach(() => {
     jest.clearAllMocks();
     handler = new DesktopErrorInterceptorClass({ get: () => mockService });
-    spy = subscribeSpyTo(mockService.addError$);
+    spy = jest.spyOn(mockService, 'addError');
   });
 
   it('Should exist', () => expect(handler).toBeTruthy());
@@ -25,44 +25,28 @@ describe('Toast error handler', () => {
   describe('When the handler is called without anything', () => {
     it('Should call the toast service with an unkwnon error', () => {
       handler.handleError();
-      expect(spy.receivedNext()).toBe(true);
-      expect(spy.getLastValue()).toEqual({
-        type: ACTIONTYPE,
-        payload: { message: messages.UNKNOWN },
-      });
+      validateToast(messages.UNKNOWN);
     });
   });
 
   describe('When the handler is called with an  empty object', () => {
     it('Should call the toast service wiht the default message', () => {
       handler.handleError({});
-      expect(spy.receivedNext()).toBe(true);
-      expect(spy.getLastValue()).toEqual({
-        type: ACTIONTYPE,
-        payload: { message: messages.DEFAULT },
-      });
+      validateToast(messages.DEFAULT);
     });
   });
 
   describe('When the handler is called with a sync message', () => {
     it('Should call the toast service with the message', () => {
       handler.handleError({ message: 'TEST' });
-      expect(spy.receivedNext()).toBe(true);
-      expect(spy.getLastValue()).toEqual({
-        type: ACTIONTYPE,
-        payload: { message: 'TEST' },
-      });
+      validateToast('TEST');
     });
   });
 
   describe('When the handler is called with an async message', () => {
     it('Should call the toast service with the message', () => {
       handler.handleError({ rejection: { message: 'TEST' } });
-      expect(spy.receivedNext()).toBe(true);
-      expect(spy.getLastValue()).toEqual({
-        type: ACTIONTYPE,
-        payload: { message: 'TEST' },
-      });
+      validateToast('TEST');
     });
   });
 });

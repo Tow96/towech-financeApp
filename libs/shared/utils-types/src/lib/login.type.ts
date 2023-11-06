@@ -1,5 +1,5 @@
 export type LoginUser = {
-  username: string;
-  password: string;
-  keepSession: boolean;
+  username: string | null;
+  password: string | null;
+  keepSession: boolean | null;
 };

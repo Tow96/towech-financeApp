@@ -14,17 +14,14 @@ import { RefreshToken, UserModel } from '@finance/shared/utils-types';
 
 @Injectable()
 export class AuthenticationSessionsJwtService {
-  public constructor(
-    private readonly jwt: JwtService,
-    private readonly config: ConfigService
-  ) {}
+  constructor(private readonly jwt: JwtService, private readonly config: ConfigService) {}
 
   /** generateAuthToken
    * Creates an authToken
    * @param {UserModel} user The user for which the token will be created
    * @returns The Token
    */
-  public generateAuthToken(user: UserModel): string {
+  generateAuthToken(user: UserModel): string {
     const expiresIn = this.config.get<string>('AUTH_TOKEN_EXPIRATION');
     const secret = this.config.get<string>('AUTH_TOKEN_SECRET');
     return this.jwt.sign({ ...user }, { expiresIn, secret });
@@ -36,7 +33,7 @@ export class AuthenticationSessionsJwtService {
    * @param keepSession boolean that indicates which type of refresh token is created
    * @returns The token
    */
-  public generateRefreshToken(user: UserModel, keepSession = false): { token: string; id: string } {
+  generateRefreshToken(user: UserModel, keepSession = false): { token: string; id: string } {
     const secret = this.config.get<string>('REFRESH_TOKEN_SECRET');
     const expiresIn = keepSession
       ? this.config.get<string>('REFRESH_TOKEN_EXPIRATION')

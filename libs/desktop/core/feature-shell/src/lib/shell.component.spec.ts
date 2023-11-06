@@ -1,7 +1,6 @@
 // Libraries
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideStore } from '@ngrx/store';
-import { adaptReducer } from '@state-adapt/core';
 // Tested elements
 import { DesktopShellComponent } from './shell.component';
 // Services
@@ -16,7 +15,7 @@ describe('Desktop Shell Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideStore({ adapt: adaptReducer }),
+        provideStore(),
         { provide: DesktopUserService, useValue: DesktopUserServiceMock },
       ],
     });

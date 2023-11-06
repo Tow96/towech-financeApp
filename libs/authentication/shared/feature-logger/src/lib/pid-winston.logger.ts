@@ -10,14 +10,14 @@ import * as winston from 'winston';
 
 @Injectable()
 export class AuthenticationPidWinstonLogger extends Logger {
-  public static logsFolder = `${__dirname}/../logs`;
+  static logsFolder = `${__dirname}/../logs`;
 
   /**
    * Calls an error log with a pid
    * @param {string} pid The id of the log
    * @param {string} message The message of the log
    */
-  public pidError(pid: string, message: string, stack?: string, context?: string) {
+  pidError(pid: string, message: string, stack?: string, context?: string) {
     return this.error({ pid, message }, stack, context);
   }
 
@@ -26,7 +26,7 @@ export class AuthenticationPidWinstonLogger extends Logger {
    * @param {string} pid The id of the log
    * @param {string} message The message of the log
    */
-  public pidWarn(pid: string, message: string) {
+  pidWarn(pid: string, message: string) {
     return this.warn({ pid, message });
   }
 
@@ -35,7 +35,7 @@ export class AuthenticationPidWinstonLogger extends Logger {
    * @param {string} pid The id of the log
    * @param {string} message The message of the log
    */
-  public pidLog(pid: string, message: string) {
+  pidLog(pid: string, message: string) {
     return this.log({ pid, message });
   }
 
@@ -44,7 +44,7 @@ export class AuthenticationPidWinstonLogger extends Logger {
    * @param {string} pid The id of the log
    * @param {string} message The message of the log
    */
-  public pidVerbose(pid: string, message: string) {
+  pidVerbose(pid: string, message: string) {
     return this.verbose({ pid, message });
   }
 
@@ -53,21 +53,21 @@ export class AuthenticationPidWinstonLogger extends Logger {
    * @param {string} pid The id of the log
    * @param {string} message The message of the log
    */
-  public pidDebug(pid: string, message: string) {
+  pidDebug(pid: string, message: string) {
     return this.debug({ pid, message });
   }
 
   /**
    * @returns {winston.Logform.Format} The format of the logs
    */
-  public static format(): winston.Logform.Format {
+  static format(): winston.Logform.Format {
     return winston.format.combine(
       winston.format.timestamp({ format: 'YYYY/MM/DD HH:mm:ss' }),
       winston.format.printf(info => AuthenticationPidWinstonLogger.getFormattedOutput(info))
     );
   }
 
-  public static getFormattedOutput(info: winston.Logform.TransformableInfo): string {
+  static getFormattedOutput(info: winston.Logform.TransformableInfo): string {
     const timestamp = info['timestamp'];
     const pid = `${info['pid'] ? ' {pid: ' + info['pid'] + '}' : ''}`;
     const name = `[${process.env['NAME'] || 'UNNAMED APP'}]`;
@@ -80,7 +80,7 @@ export class AuthenticationPidWinstonLogger extends Logger {
   /**
    * @returns {winston.Logform.Format} The transports that will be used
    */
-  public static transports(): winston.transport[] {
+  static transports(): winston.transport[] {
     const silent =
       process.env['DISABLE_LOGGING'] === undefined
         ? false

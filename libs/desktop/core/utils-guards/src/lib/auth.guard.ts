@@ -12,14 +12,11 @@ import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 
 @Injectable()
 export class DesktopUserAuthGuard {
-  public constructor(
-    private readonly router: Router,
-    private readonly user: DesktopUserService
-  ) {}
+  constructor(private readonly router: Router, private readonly user: DesktopUserService) {}
 
   // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-  public canActivate(): Observable<boolean> {
-    return this.user.store.isLoggedIn$.pipe(
+  canActivate(): Observable<boolean> {
+    return this.user.isLoggedIn$.pipe(
       filter(isLoggedIn => isLoggedIn.loaded),
       map(isLoggedIn => {
         if (!isLoggedIn.logged) this.router.navigate(['login']);

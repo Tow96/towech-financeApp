@@ -9,8 +9,8 @@ import { SchemaTypes, Types } from 'mongoose';
 @Schema()
 export abstract class BaseSchema {
   @Prop({ type: SchemaTypes.ObjectId })
-  public _id: Types.ObjectId = new Types.ObjectId();
+  _id: Types.ObjectId = new Types.ObjectId();
 
   @Prop({ type: Date, required: true })
-  public createdAt: Date = new Date();
+  createdAt: Date = new Date();
 }

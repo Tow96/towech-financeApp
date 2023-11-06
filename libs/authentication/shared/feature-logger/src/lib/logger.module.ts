@@ -15,7 +15,7 @@ import { LogIdMiddleware } from './utils/log-id.middleware';
   exports: [AuthenticationPidWinstonLogger],
 })
 export class AuthenticationLoggerModule implements NestModule {
-  public configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer) {
     consumer.apply(LogIdMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

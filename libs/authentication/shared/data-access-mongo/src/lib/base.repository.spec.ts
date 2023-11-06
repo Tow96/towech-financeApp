@@ -21,31 +21,28 @@ export class DummyModel extends MockModel<DummyDoc> {
   protected entityStub = dummyStub();
 }
 export class DummyRepo extends BaseRepository<DummyDoc> {
-  public constructor(@InjectModel(DummyDoc.name) model: Model<DummyDoc>) {
+  constructor(@InjectModel(DummyDoc.name) model: Model<DummyDoc>) {
     super(model);
   }
-  public override create(document: DummyDoc) {
+  override create(document: DummyDoc) {
     return super.create(document);
   }
-  public override find(filterQuery: FilterQuery<DummyDoc>) {
+  override find(filterQuery: FilterQuery<DummyDoc>) {
     return super.find(filterQuery);
   }
-  public override findById(id: string) {
+  override findById(id: string) {
     return super.findById(id);
   }
-  public override findOne(filterQuery: FilterQuery<DummyDoc>) {
+  override findOne(filterQuery: FilterQuery<DummyDoc>) {
     return super.findOne(filterQuery);
   }
-  public override findOneAndUpdate(
-    filterQuery: FilterQuery<DummyDoc>,
-    update: UpdateQuery<DummyDoc>
-  ) {
+  override findOneAndUpdate(filterQuery: FilterQuery<DummyDoc>, update: UpdateQuery<DummyDoc>) {
     return super.findOneAndUpdate(filterQuery, update);
   }
-  public override findByIdAndUpdate(id: Types.ObjectId | string, update: UpdateQuery<DummyDoc>) {
+  override findByIdAndUpdate(id: Types.ObjectId | string, update: UpdateQuery<DummyDoc>) {
     return super.findByIdAndUpdate(id, update);
   }
-  public override findByIdAndDelete(id: string | Types.ObjectId, options?: FilterQuery<DummyDoc>) {
+  override findByIdAndDelete(id: string | Types.ObjectId, options?: FilterQuery<DummyDoc>) {
     return super.findByIdAndDelete(id, options);
   }
 }

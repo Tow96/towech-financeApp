@@ -1,0 +1,39 @@
+<div class="nav-wrapper">
+  <nav [ngClass]="getNavClass((isCollapsed$ | async) || false)">
+    <!-- Menu toggle + header -->
+    <div class="header">
+      <finance-navbar-item
+        id="navbar-menu"
+        (clicked)="toggleCollapse()"
+        label="Close"
+        [collapsed]="(isCollapsed$ | async) || false"
+        icon="bars"></finance-navbar-item>
+      <div class="title">
+        <h1>{{ title$ | async }}</h1>
+      </div>
+    </div>
+    <!-- Menu contents -->
+    <div class="contents">
+      <div class="nav__divider desk__only"></div>
+      <div class="contents__main">
+        <finance-navbar-item
+          *ngFor="let item of items$ | async"
+          [id]="setItemId(item.route)"
+          [label]="item.title"
+          [collapsed]="(isCollapsed$ | async) || false"
+          [icon]="item.icon"
+          [active]="isRouteActive(item.route)"
+          (clicked)="navigateTo(item.route)"></finance-navbar-item>
+      </div>
+      <!-- Logout -->
+      <div class="nav__divider"></div>
+      <div>
+        <finance-navbar-item
+          id="logout"
+          (clicked)="user.logout()"
+          label="Logout"
+          [collapsed]="(isCollapsed$ | async) || false"></finance-navbar-item>
+      </div>
+    </div>
+  </nav>
+</div>

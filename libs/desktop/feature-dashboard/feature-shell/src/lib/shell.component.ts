@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast';
 
 // TODO: Testing
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-dashboard',
   styles: [
@@ -19,15 +20,15 @@ import { DesktopToasterService } from '@finance/desktop/shared/data-access-toast
   `,
 })
 export class DesktopDashboardComponent {
-  public constructor(private readonly toastService: DesktopToasterService) {}
+  constructor(private readonly toastService: DesktopToasterService) {}
 
-  public msg() {
-    this.toastService.addAccent$.next({ message: 'pesto' });
-    this.toastService.addError$.next({ message: 'pesto' });
-    this.toastService.addSuccess$.next({ message: 'pesto' });
-    this.toastService.addWarning$.next({ message: 'pesto' });
+  msg() {
+    this.toastService.addAccent('pesto');
+    this.toastService.addError('pesto');
+    this.toastService.addSuccess('pesto');
+    this.toastService.addWarning('pesto');
   }
-  public err() {
+  err() {
     throw new Error('THIS IS A TEST');
   }
 }

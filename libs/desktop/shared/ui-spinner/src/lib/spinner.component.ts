@@ -5,9 +5,10 @@
  * The animation was obtained from: https://loading.io/css/
  */
 
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'finance-spinner',
   imports: [],
@@ -50,5 +51,5 @@ import { Component, Input, HostBinding } from '@angular/core';
 export class DesktopSpinnerComponent {
   @HostBinding('style.--spinner-size')
   @Input()
-  public size = '30px';
+  size = '30px';
 }

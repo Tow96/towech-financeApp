@@ -5,120 +5,49 @@
  */
 // Libraries
 import { Injectable } from '@angular/core';
-import { createAdapter } from '@state-adapt/core';
-import { adaptNgrx } from '@state-adapt/ngrx';
-import { Source, splitRequestSources, toSource } from '@state-adapt/rxjs';
-import { exhaustMap, map, share, tap } from 'rxjs';
-// Services
-import { DesktopAuthenticationService } from './authentication.service';
+import { EffectSources } from '@ngrx/effects';
+import { Store, createFeature, createSelector } from '@ngrx/store';
+import { reducer } from './user.reducer';
 // Models
-import { LoginUser, UserModel } from '@finance/shared/utils-types';
-
-enum Actions {
-  LOGIN = '[User Service] Login',
-  LOGOUT = '[User Service] Logout',
-  REFRESH = '[User Service] Refresh',
-}
-
-export enum Status {
-  INIT = 'initialized',
-  IN_PROGRESS = 'in progress',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-}
-
-export interface state {
-  data: UserModel | null;
-  status: Status;
-  token: string | null;
-}
+import { EditUser, LoginUser } from '@finance/shared/utils-types';
+import { Status } from './types';
+// Actions
+import { editActions, loginActions, logoutActions, refreshActions } from './user.actions';
+// Effects
+import * as UserEffects from './user.effects';
 
 @Injectable()
-export class DesktopUserService extends DesktopAuthenticationService {
-  private storeName = 'user';
-  private initialState: state = {
-    data: null,
-    status: Status.INIT,
-    token: null,
-  };
-
-  // Sources ---------------------------------------------------------
-  public login$ = new Source<LoginUser>(Actions.LOGIN);
-  public logout$ = new Source<void>(Actions.LOGOUT);
-  public refresh$ = new Source<void>(Actions.REFRESH);
-
-  // Helpers -------------------------------------------------------
-  private handleLogin = splitRequestSources(
-    Actions.LOGIN,
-    this.login$.pipe(
-      exhaustMap(action => this.callLogin(action.payload, Actions.LOGIN)),
-      share()
-    )
-  );
-  private handleRefresh = splitRequestSources(
-    Actions.REFRESH,
-    this.refresh$.pipe(exhaustMap(() => this.callRefresh(Actions.REFRESH)))
-  );
-  private handleLogout = splitRequestSources(
-    Actions.LOGOUT,
-    this.logout$.pipe(exhaustMap(() => this.callLogout(Actions.LOGOUT)))
-  );
-
-  // Pipes ------------------------------------------------------------
-  private initialLoad$ = this.callRefresh('').pipe(
-    map(({ payload, type }) => {
-      if (type === '.success$')
-        return { data: payload.user, token: payload.token, status: Status.COMPLETED };
-      return { ...this.initialState, status: Status.FAILED };
+export class DesktopUserService {
+  private state = createFeature({
+    name: 'user',
+    reducer,
+    extraSelectors: ({ selectUserState }) => ({
+      isLoggedIn: createSelector(selectUserState, state => ({
+        loaded: state.status === Status.COMPLETED || state.status === Status.FAILED,
+        logged: state.data !== null,
+      })),
+      tokenExp: createSelector(selectUserState, state => ({
+        value: state.token,
+        expired: new Date().getTime() > (state.data?.exp || 0) * 1000,
+      })),
     }),
-    toSource('[User Service] initial load')
-  );
-
-  private onLoginSuccess$ = this.handleLogin.success$.pipe(tap(() => this.router.navigate([''])));
-  public onLoginError$ = this.handleLogin.error$.pipe(
-    tap(error => this.toast.addError$.next({ message: error.payload.message })),
-    share()
-  );
-
-  private onRefreshSucess$ = this.handleRefresh.success$.pipe();
-  private onRefreshError$ = this.handleRefresh.error$.pipe(
-    tap(error => {
-      this.router.navigate(['login']);
-      this.toast.addError$.next({ message: error.payload.message });
-    })
-  );
-
-  private onLogoutSuccess$ = this.handleLogout.success$.pipe(
-    tap(() => this.router.navigate(['login']))
-  );
-  private onLogoutError$ = this.handleLogout.error$.pipe(
-    tap(() => this.router.navigate(['login'])),
-    tap(({ payload }) => this.toast.addError$.next({ message: payload }))
-  );
-
-  // Adapter -------------------------------------------------------
-  private adapter = createAdapter<state>()({
-    clearUser: state => ({ ...state, data: null, token: null }),
-    setUser: (state, value): state => ({ ...state, data: value.user, token: value.token }),
-    setStatusComplete: state => ({ ...state, status: Status.COMPLETED }),
-    setStatusFailed: state => ({ ...state, status: Status.FAILED }),
-    setStatusInProgress: state => ({ ...state, status: Status.IN_PROGRESS }),
-    selectors: {
-      isLoggedIn: user => ({
-        loaded: user.status === Status.COMPLETED || user.status === Status.FAILED,
-        logged: user.data !== null,
-      }),
-      status: user => user.status,
-    },
   });
 
-  // Store ---------------------------------------------------------
-  public store = adaptNgrx([this.storeName, this.initialState, this.adapter], {
-    set: this.initialLoad$,
-    clearUser: [this.onRefreshError$, this.onLogoutSuccess$, this.onLogoutError$],
-    setUser: [this.onLoginSuccess$, this.onRefreshSucess$],
-    setStatusComplete: [this.onLoginSuccess$, this.onRefreshSucess$, this.onLogoutSuccess$],
-    setStatusFailed: [this.onLoginError$, this.onRefreshError$, this.onLogoutError$],
-    setStatusInProgress: this.login$,
-  });
+  // Sources ------------------------------------------------------------------
+  login = (payload: Partial<LoginUser>) => this.ngrx.dispatch(loginActions.do({ payload }));
+  logout = () => this.ngrx.dispatch(logoutActions.do({ payload: undefined }));
+  refresh = () => this.ngrx.dispatch(refreshActions.do({ payload: undefined }));
+  edit = (payload: EditUser) => this.ngrx.dispatch(editActions.do({ payload }));
+
+  // Selectors ----------------------------------------------------------------
+  status$ = this.ngrx.select(this.state.selectStatus);
+  value$ = this.ngrx.select(this.state.selectData);
+  token$ = this.ngrx.select(this.state.tokenExp);
+  isLoggedIn$ = this.ngrx.select(this.state.isLoggedIn);
+
+  constructor(private readonly ngrx: Store, private readonly effects: EffectSources) {
+    ngrx.addReducer(this.state.name, this.state.reducer);
+    effects.addEffects(UserEffects);
+    this.refresh();
+  }
 }

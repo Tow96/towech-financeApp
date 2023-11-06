@@ -10,9 +10,7 @@ import { DesktopUserAuthGuard } from './auth.guard';
 import { DesktopUserService } from '@finance/desktop/shared/data-access-user';
 
 const mockState = (value: boolean) => ({
-  store: {
-    isLoggedIn$: of({ loaded: true, logged: value }),
-  },
+  isLoggedIn$: of({ loaded: true, logged: value }),
 });
 
 describe('Auth Guard', () => {

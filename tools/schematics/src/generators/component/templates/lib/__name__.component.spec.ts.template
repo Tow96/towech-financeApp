@@ -1,0 +1,36 @@
+// Libraries
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+// Tested elements
+import { <%= compName %>Component } from './<%= name %>.component';
+
+describe('<%= compName %>', () => {
+  let component: <%= compName %>Component;
+  let fixture: ComponentFixture<<%= compName %>Component>;
+  let compiled: HTMLElement;
+
+  const getElement = (testid: string) => 
+    fixture.debugElement.query(By.css(`[data-test-id="${testid}"]`))
+  const detectChanges = () => {
+    fixture.debugElement.triggerEventHandler('click', null);
+    fixture.detectChanges();
+  }
+
+  beforeEach(() => {
+    TestBed.overrideComponent(<%= compName %>Component, {
+      set: { host: { '(click)': 'dummy' }, providers: [], schemas: [CUSTOM_ELEMENTS_SCHEMA] } 
+    });
+    fixture = TestBed.createComponent(<%= compName %>Component);
+    component = fixture.componentInstance;
+
+    detectChanges();
+    compiled = fixture.nativeElement;
+  });
+
+  it('Should be defined', () => expect(component).toBeTruthy());
+
+  it.skip('Must match the snapshot', () => expect(compiled).toMatchSnapshot());
+
+  //TEST GOES HERE
+});
