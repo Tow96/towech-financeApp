@@ -1,52 +1,21 @@
 {
-  "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "extends": "next/core-web-vitals",
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nx/enforce-module-boundaries": [
+        "max-depth": [
           "error",
           {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              }
-            ]
+            "max": 2
           }
         ],
-        "max-depth": ["error", { "max": 2 }],
-        "max-nested-callbacks": ["error", { "max": 1 }]
-      }
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
-      "rules": {
-        "@typescript-eslint/explicit-member-accessibility": [
+        "max-nested-callbacks": [
           "error",
-          { "accessibility": "no-public" }
+          {
+            "max": 1
+          }
         ]
-      }
-    },
-    {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx", "*.mock.ts"],
-      "env": { "jest": true },
-      "rules": {
-        "max-depth": "off",
-        "max-nested-callbacks": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-non-null-assertion": "off"
-      }
-    },
-    {
-      "files": ["*.cy.ts"],
-      "rules": {
-        "max-nested-callbacks": "off"
       }
     }
   ]

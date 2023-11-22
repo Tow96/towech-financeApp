@@ -1,7 +1,0 @@
-@use 'sass:map';
-@use 'libs/desktop/core/ui-theme' as core;
-@use 'libs/desktop/core/feature-toast-tray/ui-toast/src' as toasts;
-
-@mixin color($theme) {
-  @include toasts.color($theme);
-}

@@ -1,0 +1,116 @@
+/** Navbar.tsx
+ * Copyright (c) 2023, Towechlabs
+ *
+ * Navbar feature of the app, allows to move between pages
+ */
+'use client';
+import { useEffect, useRef, useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
+import { redirect, usePathname } from 'next/navigation';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+import { useLogout } from '@/feature-authentication/UserService';
+import { classNames } from '@/utils/ConditionalClasses';
+
+import { NavbarItem } from './NavbarItem';
+
+type NavIcon = {
+  name: string;
+  href: string;
+  icon: IconProp;
+};
+const links: NavIcon[] = [
+  { name: 'Transactions', href: '/dashboard', icon: 'money-check-dollar' },
+  { name: 'Settings', href: '/settings', icon: 'gear' },
+];
+
+export const Navbar = (): JSX.Element => {
+  const path = usePathname();
+
+  const { mutate: logout, status } = useLogout();
+  useEffect(() => {
+    if (status !== 'success') return;
+    redirect('/login');
+  }, [status]);
+
+  const [collapsed, setCollapsed] = useState(true);
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
+  };
+  const sideBarClass = classNames({
+    '!left-0': !collapsed,
+    'button-shadow': !collapsed,
+  });
+
+  const transitionNavRef = useRef(null);
+  const transitionNavCls = {
+    enter: 'sm:w-20',
+    enterActive: 'transition-all sm:!w-96',
+    enterDone: 'sm:w-96',
+    exit: 'sm:w-96',
+    exitActive: 'transition-all sm:!w-20',
+    exitDone: 'sm:w-20',
+  };
+
+  return (
+    <>
+      <div className="flex sm:max-w-[5rem]">
+        <CSSTransition
+          nodeRef={transitionNavRef}
+          timeout={100}
+          in={!collapsed}
+          classNames={transitionNavCls}>
+          <nav
+            ref={transitionNavRef}
+            className="sm:button-shadow z-10 flex w-full flex-col bg-riverbed-800 sm:h-screen">
+            {/* Toggle + header */}
+            <div className="flex items-center">
+              <NavbarItem
+                type="button"
+                icon="bars"
+                name="Close"
+                click={toggleCollapse}
+                collapsed={collapsed}
+              />
+              <div className="sm:hidden">
+                <h1 className="text-2xl font-bold">Title</h1>
+              </div>
+            </div>
+            {/* Contents */}
+            <div
+              className={`absolute -left-20 flex h-screen flex-grow flex-col bg-riverbed-800 sm:static ${sideBarClass}`}>
+              {/* Top divider (desktop only) */}
+              <div className="mx-3 mt-3 hidden border-b-2 border-riverbed-900 sm:block"></div>
+              {/* Main contents */}
+              <div className="flex-grow">
+                {links.map((lk, i) => (
+                  <NavbarItem
+                    key={i}
+                    type="link"
+                    collapsed={collapsed}
+                    setCollapsed={setCollapsed}
+                    name={lk.name}
+                    href={lk.href}
+                    current={path}
+                    icon={lk.icon}
+                  />
+                ))}
+              </div>
+              {/* Logout */}
+              <div className="mx-3 mt-3 border-b-2 border-riverbed-900"></div>
+              <div>
+                <NavbarItem type="button" collapsed={collapsed} name="Logout" click={logout} />
+              </div>
+            </div>
+          </nav>
+        </CSSTransition>
+      </div>
+      {!collapsed && (
+        <div
+          className="absolute h-screen w-full bg-transparent"
+          onClick={() => setCollapsed(true)}
+        />
+      )}
+    </>
+  );
+};

@@ -74,7 +74,9 @@ EMAIL_CLIENT_ID=<id>.apps.googleusercontent.com
 EMAIL_CLIENT_SECRET=secret
 EMAIL_REFRESH_TOKEN=token
 ```
+
 ### Installing example
+
 This repository contains a script that deploys the most basic form of the application, to install it, docker needs to be installed in the machine, then run the script.
 
 ```
