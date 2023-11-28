@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 import { Checkbox } from '@/components/checkbox';
 import { Input } from '@/components/input';
 import { Button } from '@/components/button';
-import { useLogin } from '@/feature-authentication/UserService';
+import { useLogin } from '@/libs/feature-authentication/UserService';
 
 type Inputs = {
   username: string;

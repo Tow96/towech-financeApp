@@ -9,7 +9,7 @@ import { CSSTransition } from 'react-transition-group';
 import { redirect, usePathname } from 'next/navigation';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { useLogout } from '@/feature-authentication/UserService';
+import { useLogout } from '@/libs/feature-authentication/UserService';
 import { classNames } from '@/utils/ConditionalClasses';
 
 import { NavbarItem } from './NavbarItem';

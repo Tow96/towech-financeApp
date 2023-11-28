@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
 
 import { Spinner } from '@/components/spinner';
-import { useAuth } from '@/feature-authentication/UserService';
+import { useAuth } from '@/libs/feature-authentication/UserService';
 
 type Props = {
   children: React.ReactNode;

@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import TanstackProvider from '@/utils/TanstackProvider';
-import { ToastProvider } from '@/feature-toasts/ToastProvider';
+import { ToastProvider } from '@/libs/feature-toasts/ToastProvider';
 
 const raleway = Raleway({ subsets: ['latin'], display: 'swap', variable: '--font-raleway' });
 

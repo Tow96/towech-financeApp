@@ -4,7 +4,7 @@
  * Dashboard Page, will display transactions
  */
 'use client';
-import { useAddToast } from '@/feature-toasts/ToastService';
+import { useAddToast } from '@/libs/feature-toasts/ToastService';
 
 const DashboardPage = (): JSX.Element => {
   const addToast = useAddToast();

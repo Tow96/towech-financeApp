@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import '@/feature-icons/icons';
+import '@/libs/feature-icons/icons';
 import { classNames } from '@/utils/ConditionalClasses';
 
 type NavbarItemProps = NavbarLinkProps | NavbarButtonProps;

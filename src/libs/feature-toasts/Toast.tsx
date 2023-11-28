@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { Toast, useDismissToast } from '@/feature-toasts/ToastService';
+import { Toast, useDismissToast } from '@/libs/feature-toasts/ToastService';
 import { classNames } from '@/utils/ConditionalClasses';
 
 export const ToastComponent = ({ toast }: { toast: Toast }): JSX.Element => {

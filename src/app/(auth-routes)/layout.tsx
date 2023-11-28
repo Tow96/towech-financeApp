@@ -4,8 +4,8 @@
  * Layout for all authenticated pages.
  * Includes the auth provider as well as the navbar
  */
-import { AuthProvider } from '@/feature-authentication/AuthProvider';
-import { Navbar } from '@/feature-navbar/Navbar';
+import { AuthProvider } from '@/libs/feature-authentication/AuthProvider';
+import { Navbar } from '@/libs/feature-navbar/Navbar';
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => (
   <AuthProvider>
