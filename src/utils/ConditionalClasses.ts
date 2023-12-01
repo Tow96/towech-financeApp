@@ -7,4 +7,6 @@
 export const classNames = (input: Record<string, boolean>): string =>
   Object.keys(input)
     .map(key => (input[key] ? key : ''))
-    .join(' ');
+    .join(' ')
+    .replace(/  +/g, ' ')
+    .trim();
