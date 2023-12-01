@@ -1,8 +1,17 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "max-depth": [
           "error",
@@ -16,6 +25,17 @@
             "max": 1
           }
         ]
+      }
+    },
+    {
+      "files": [
+        "*.spec.ts",
+        "*.spec.tsx",
+        "*spec.js",
+        "*spec.jsx"
+      ],
+      "rules": {
+        "max-nested-callbacks": "off"
       }
     }
   ]
