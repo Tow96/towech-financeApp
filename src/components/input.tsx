@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const Input = ({ register, label, error, type = 'text' }: Props): JSX.Element => {
-  const id = (label || 'id').replace(/\s/g, '').toLowerCase();
+  const id = label.replace(/\s/g, '').toLowerCase();
   const inputVariableClasses = error
     ? `focus-visible:focused-input-error`
     : `focus-visible:focused-input-shadow`;
@@ -31,6 +31,7 @@ export const Input = ({ register, label, error, type = 'text' }: Props): JSX.Ele
         className={`${inputVariableClasses} input-shadow peer box-border w-full rounded border-none bg-riverbed-800 px-4 py-2 text-2xl font-normal text-riverbed-50 focus:outline-none`}
       />
       <label
+        data-testid="label"
         htmlFor={id}
         className={`${labelVariableClasses} pointer-events-none absolute left-0 top-0 mx-1 my-1 origin-top-left translate-x-0 translate-y-0 whitespace-nowrap bg-transparent px-1 py-1 text-2xl transition-all peer-focus:-translate-y-2/3 peer-focus:translate-x-1 peer-focus:scale-[0.57] peer-[:not(:placeholder-shown)]:-translate-y-2/3 peer-[:not(:placeholder-shown)]:translate-x-1 peer-[:not(:placeholder-shown)]:scale-[0.57] `}>
         {label}

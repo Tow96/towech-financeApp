@@ -10,6 +10,7 @@ type Props = {
 export const Spinner = ({ size = 60 }: Props): JSX.Element => {
   return (
     <span
+      data-testid="spinner"
       className={`aspect-square w-24 animate-spin rounded-full border-8 border-solid border-riverbed-300 border-b-transparent border-t-transparent`}></span>
   );
 };

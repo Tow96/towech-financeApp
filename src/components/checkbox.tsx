@@ -11,11 +11,12 @@ type Props = {
 };
 
 export const Checkbox = ({ register, label }: Props): JSX.Element => {
-  const id = (label || 'id').replace(/\s/g, '').toLowerCase();
+  const id = label.replace(/\s/g, '').toLowerCase();
 
   return (
     <div className="flex items-center">
       <input
+        data-testid="checkbox"
         className="input-shadow peer mr-1 flex h-5 w-5 cursor-pointer appearance-none items-center justify-center rounded bg-riverbed-800 after:hidden after:text-sm after:font-bold after:text-yellow-500 after:content-['X'] after:checked:block focus-visible:outline-none"
         type="checkbox"
         id={id}
