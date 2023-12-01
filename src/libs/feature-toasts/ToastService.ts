@@ -44,7 +44,7 @@ export const useDismissToast = () => useToastStore(store => store.dismiss);
 // Adapter --------------------------------------------------------------------
 const addToast = (toast: NewToast, state: State): State => {
   const idToast = { id: uuid.v4(), ...toast };
-  // TODO: Use state.toSpliced(0, 0, newToast) when it finally arrives
+  // TODO: use return { ...state, toasts: state.toasts.toSpliced(0, 0, idToast) } when available in jest;
   return { ...state, toasts: [idToast, ...state.toasts] };
 };
 const removeToast = (id: string, state: State): State => {
