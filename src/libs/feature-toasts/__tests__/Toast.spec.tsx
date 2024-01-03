@@ -10,8 +10,6 @@ jest.mock('../ToastService', () => ({
 }));
 
 describe('Toast Component', () => {
-  beforeEach(() => {});
-
   describe('Render', () => {
     it('Should have the message displayed', () => {
       render(<ToastComponent toast={stubToast} />);
