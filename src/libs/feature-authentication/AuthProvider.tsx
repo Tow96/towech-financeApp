@@ -17,8 +17,6 @@ type Props = {
 
 export const AuthProvider = ({ children, auth = true }: Props): JSX.Element => {
   const user = useAuth();
-
-  // TODO: This redirects each time the token changes, this needs to be fixed
   useEffect(() => {
     if (!user.isPending) {
       if (auth && user.isError) redirect('/login');
@@ -26,15 +24,11 @@ export const AuthProvider = ({ children, auth = true }: Props): JSX.Element => {
     }
   }, [user.status, user.data, auth, user]);
 
+  // Render -------------------------------------------------------------------
+  if (!user.isPending) return <>{children}</>;
   return (
-    <>
-      {user.isPending ? (
-        <div className="flex h-screen w-full items-center justify-center">
-          <Spinner />
-        </div>
-      ) : (
-        children
-      )}
-    </>
+    <div className="flex h-screen w-full items-center justify-center" data-testid="auth-loading">
+      <Spinner />
+    </div>
   );
 };

@@ -43,6 +43,7 @@
     "@types/react-transition-group": "^4.4.9",
     "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.0.1",
+    "axios-mock-adapter": "^1.22.0",
     "eslint": "^8",
     "eslint-config-next": "^14.0.2",
     "eslint-config-prettier": "^9.0.0",
