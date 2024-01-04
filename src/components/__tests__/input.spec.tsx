@@ -1,7 +1,10 @@
+// Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+// Tested Components ----------------------------------------------------------
 import { Input } from '../input';
 
+// Tests ----------------------------------------------------------------------
 describe('Input component', () => {
   // Type ---------------------------------------
   it('should have a type of "text" as default', () => {

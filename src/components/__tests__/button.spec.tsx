@@ -1,7 +1,10 @@
+// Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+// Tested Components ----------------------------------------------------------
 import { Button } from '../button';
 
+// Tests ----------------------------------------------------------------------
 describe('Button component', () => {
   // Type -------------------------------------
   it('should have a button of type "button" as default', () => {

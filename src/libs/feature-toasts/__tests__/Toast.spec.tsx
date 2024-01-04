@@ -1,14 +1,20 @@
+// Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
-import { ToastComponent } from '../Toast';
 import { Toast } from '../ToastService';
+// Tested Components ----------------------------------------------------------
+import { ToastComponent } from '../Toast';
 
+// Stubs ----------------------------------------------------------------------
 const stubToast: Toast = { id: 'test', message: 'This is a test toast', type: 'info' };
+
+// Mocks ----------------------------------------------------------------------
 const mockDismiss = jest.fn();
 jest.mock('../ToastService', () => ({
   useDismissToast: () => mockDismiss,
 }));
 
+// Tests ----------------------------------------------------------------------
 describe('Toast Component', () => {
   describe('Render', () => {
     it('Should have the message displayed', () => {

@@ -1,24 +1,33 @@
-import { Toast } from "../ToastService"
-import { ToastProvider } from "../ToastProvider"
-import { render, screen } from '@testing-library/react'
+// Libraries ------------------------------------------------------------------
+import { render, screen } from '@testing-library/react';
+import { Toast } from '../ToastService';
+// Tested Components ----------------------------------------------------------
+import { ToastProvider } from '../ToastProvider';
 
-let toasts: Toast[] = [{id: '0', message: 'a', type: 'info'}]
+// Stubs ----------------------------------------------------------------------
+let stubToasts: Toast[] = [{ id: '0', message: 'a', type: 'info' }];
 
+// Mocks ----------------------------------------------------------------------
 jest.mock('../ToastService', () => {
   return {
-    useToasts: jest.fn(() => toasts),
-    useDismissToast: jest.fn(() => {})
-  }
-})
+    useToasts: jest.fn(() => stubToasts),
+    useDismissToast: jest.fn(() => {}),
+  };
+});
 
+// Tests ----------------------------------------------------------------------
 describe('Toast Provider', () => {
   describe('Behaviour', () => {
     let renderedToasts: HTMLElement[];
 
     test('Should render appropriate amount of toasts', () => {
-      render(<ToastProvider><div>test</div></ToastProvider>)
+      render(
+        <ToastProvider>
+          <div>test</div>
+        </ToastProvider>
+      );
       renderedToasts = screen.getAllByRole('alert');
-      expect(renderedToasts.length).toBe(toasts.length);
-    })
-  })
-})
+      expect(renderedToasts.length).toBe(stubToasts.length);
+    });
+  });
+});

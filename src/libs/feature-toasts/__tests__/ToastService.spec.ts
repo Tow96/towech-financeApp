@@ -1,6 +1,9 @@
+// Libraries ------------------------------------------------------------------
 import { act, renderHook } from '@testing-library/react';
+// Tested elements ------------------------------------------------------------
 import { NewToast, useAddToast, useDismissToast, useToastStore, useToasts } from '../ToastService';
 
+// Tests ----------------------------------------------------------------------
 describe('Toast Store', () => {
   it('Should have an empty array as an initial value', () => {
     const { result: store } = renderHook(() => useToastStore());
