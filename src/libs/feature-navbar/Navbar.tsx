@@ -54,6 +54,7 @@ export const Navbar = (): JSX.Element => {
 
   return (
     <>
+      {/* Menu */}
       <div className="flex sm:max-w-[5rem]">
         <CSSTransition
           nodeRef={transitionNavRef}
@@ -99,18 +100,32 @@ export const Navbar = (): JSX.Element => {
               {/* Logout */}
               <div className="mx-3 mt-3 border-b-2 border-riverbed-900"></div>
               <div>
-                <NavbarItem type="button" collapsed={collapsed} name="Logout" click={logout} />
+                <NavbarItem
+                  icon={'right-from-bracket'}
+                  type="button"
+                  collapsed={collapsed}
+                  name="Logout"
+                  click={logout}
+                />
               </div>
             </div>
           </nav>
         </CSSTransition>
       </div>
-      {!collapsed && (
-        <div
-          className="absolute h-screen w-full bg-transparent"
-          onClick={() => setCollapsed(true)}
-        />
-      )}
+      {/* Dismiss Area */}
+      <NavbarDismissArea collapsed={collapsed} setCollapsed={setCollapsed} />
     </>
+  );
+};
+
+const NavbarDismissArea = (props: {
+  collapsed: boolean;
+  setCollapsed: (v: boolean) => void;
+}): JSX.Element => {
+  if (!props.collapsed) return <></>;
+  return (
+    <div
+      className="absolute h-screen w-full bg-transparent"
+      onClick={() => props.setCollapsed(true)}></div>
   );
 };

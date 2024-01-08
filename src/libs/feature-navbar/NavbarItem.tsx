@@ -21,7 +21,7 @@ export const NavbarItem = (props: NavbarItemProps): JSX.Element => {
 // Common things shared bewtween the Link and the Button ----------------------
 type ItemProps = {
   collapsed: boolean;
-  icon?: IconProp;
+  icon: IconProp;
   name: string;
 };
 const getClasses = (disabled: boolean): string => {
@@ -32,12 +32,13 @@ const getClasses = (disabled: boolean): string => {
     'active:input-shadow': !disabled,
     'active:bg-riverbed-900': !disabled,
     'text-golden-500': disabled,
+    'pointer-events-none': disabled,
     underline: disabled,
   });
   return `${baseClasses} ${variableClasses}`;
 };
 const ItemContent = (props: ItemProps): JSX.Element => {
-  const { icon = 'right-from-bracket', name, collapsed } = props;
+  const { icon, name, collapsed } = props;
   const transitionRef = useRef(null);
   const transitionCls = {
     enter: 'w-0 opacity-0',
@@ -51,7 +52,7 @@ const ItemContent = (props: ItemProps): JSX.Element => {
   return (
     <div className="flex w-auto items-center transition-all">
       <div className="flex items-center justify-center">
-        <FontAwesomeIcon icon={icon} size="2x" width={40} />
+        <FontAwesomeIcon icon={icon} size="2x" width={40} data-testid="icon" />
       </div>
       <CSSTransition
         mountOnEnter={true}
@@ -60,7 +61,7 @@ const ItemContent = (props: ItemProps): JSX.Element => {
         timeout={100}
         classNames={transitionCls}
         in={!collapsed}>
-        <div ref={transitionRef} className="pl-4 text-lg">
+        <div ref={transitionRef} className="pl-4 text-lg" data-testid="title">
           {name}
         </div>
       </CSSTransition>
@@ -89,12 +90,14 @@ type NavbarLinkProps = ItemProps & {
 const NavbarLink = (props: NavbarLinkProps): JSX.Element => {
   const disabled = props.href.startsWith(props.current);
   const classes = getClasses(disabled);
-  const content = <ItemContent {...props} />;
 
-  if (disabled) return <div className={classes}>{content}</div>;
   return (
-    <Link href={props.href} className={classes} onClick={() => props.setCollapsed(true)}>
-      {content}
+    <Link
+      href={props.href}
+      className={classes}
+      aria-disabled={disabled}
+      onClick={() => props.setCollapsed(true)}>
+      <ItemContent {...props} />
     </Link>
   );
 };
