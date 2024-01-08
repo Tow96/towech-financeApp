@@ -7,7 +7,7 @@
 import { AuthProvider } from '@/libs/feature-authentication/AuthProvider';
 import { Navbar } from '@/libs/feature-navbar/Navbar';
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => (
+const AuthLayout = ({ children }: { children?: React.ReactNode }) => (
   <AuthProvider>
     <div className="flex flex-col sm:flex-row">
       <Navbar />

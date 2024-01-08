@@ -31,6 +31,7 @@ const LoginPage = (): JSX.Element => {
       case 'error':
         form.setError('username', { type: 'validate' });
         form.setError('password', { type: 'validate' });
+        // TODO: Error toast
         break;
       case 'success':
         redirect('/dashboard');

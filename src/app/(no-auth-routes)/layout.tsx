@@ -6,7 +6,7 @@
  */
 import { AuthProvider } from '@/libs/feature-authentication/AuthProvider';
 
-const NoAuthLayout = ({ children }: { children: React.ReactNode }) => (
+const NoAuthLayout = ({ children }: { children?: React.ReactNode }) => (
   <AuthProvider auth={false}>{children}</AuthProvider>
 );
 
