@@ -6,24 +6,23 @@ const apiClient = axios.create({
   baseURL: BASE_URL,
 });
 
-// apiClient.interceptors.request.use(
-//   // Intercept
-//   q => q,
-//   // On Error
-//   q => {
-//     console.log('req err');
-//     return q;
-//   }
-// );
+apiClient.interceptors.request.use(
+  // Intercept
+  q => q,
+  // On Error
+  (e: AxiosError) => {
+    console.log(e);
+    throw 'req'; // TODO: Process error
+  }
+);
 
-// apiClient.interceptors.response.use(
-//   // Intercept
-//   q => q,
-//   // On error
-//   (e: AxiosError) => {
-//     console.log(e.response?.status);
-//     Promise.reject(e)
-//   }
-// );
+apiClient.interceptors.response.use(
+  // Intercept
+  q => q,
+  // On error
+  (e: AxiosError) => {
+    throw 'res'; // TODO: Process error
+  }
+);
 
 export default apiClient;
