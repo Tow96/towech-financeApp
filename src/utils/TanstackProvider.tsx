@@ -8,16 +8,15 @@ export enum keys {
   USERKEY = 'token',
 }
 
-// TODO: Move this into useState if disconnects are happening
+// Move this into useState if disconnects are happening
 const queryClient = new QueryClient();
 queryClient.setQueryDefaults([keys.USERKEY], { retry: 0 });
 
 // Wrapper --------------------------------------------------------------------
-// TODO: Hide the DevTools on production build
 const TanstackProvider = ({ children }: { children: React.ReactNode }): JSX.Element => (
   <QueryClientProvider client={queryClient}>
     {children}
-    <ReactQueryDevtools initialIsOpen={false} />
+    {process.env.NEXT_PUBLIC_DEBUG === 'True' && <ReactQueryDevtools initialIsOpen={false} />}
   </QueryClientProvider>
 );
 

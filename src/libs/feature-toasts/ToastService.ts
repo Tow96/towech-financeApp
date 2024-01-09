@@ -28,13 +28,13 @@ type SetState<T extends State> = {
 }['_'];
 
 // Store ----------------------------------------------------------------------
-// TODO: Remove devtools from production build
 const store: StateCreator<State> = (set: SetState<State>) => ({
   toasts: [],
   add: toast => set(state => addToast(toast, state), true, 'addToast'),
   dismiss: id => set(state => removeToast(id, state), true, 'removeToast'),
 });
-export const useToastStore = create(devtools(store));
+export const useToastStore =
+  process.env.NEXT_PUBLIC_DEBUG === 'True' ? create(devtools(store)) : create(store);
 
 // Selectors ------------------------------------------------------------------
 export const useToasts = () => useToastStore(store => store.toasts);
@@ -44,7 +44,6 @@ export const useDismissToast = () => useToastStore(store => store.dismiss);
 // Adapter --------------------------------------------------------------------
 const addToast = (toast: NewToast, state: State): State => {
   const idToast = { id: uuid.v4(), ...toast };
-  // TODO: use return { ...state, toasts: state.toasts.toSpliced(0, 0, idToast) } when available in jest;
   return { ...state, toasts: [idToast, ...state.toasts] };
 };
 const removeToast = (id: string, state: State): State => {

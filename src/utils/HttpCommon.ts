@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// TODO: Make base_url depend on config
 export const BASE_URL = 'http://localhost:3001';
 
 const apiClient = axios.create({
@@ -7,12 +8,12 @@ const apiClient = axios.create({
 });
 
 // apiClient.interceptors.request.use(
-//   // TODO: Intercept
+//   // Intercept
 //   q => {
 //     // console.log('a');
 //     return q;
 //   },
-//   // TODO: On Error
+//   // On Error
 //   q => {
 //     // console.log('b');
 //     return q;
