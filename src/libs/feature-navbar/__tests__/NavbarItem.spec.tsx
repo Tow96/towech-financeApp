@@ -83,6 +83,15 @@ describe('NavbarItem Component', () => {
         expect(bttn).not.toHaveTextContent(title);
         expect(link).not.toHaveTextContent(title);
       });
+      it('should set the aria-expanded attribute to false', () => {
+        const { bttn, link } = renderBttnAndLink('hamburger', true);
+
+        const bttnItem = within(bttn).getByRole('menuitem');
+        const linkItem = within(link).getByRole('menuitem');
+
+        expect(bttnItem).toHaveAttribute('aria-expanded', 'false');
+        expect(linkItem).toHaveAttribute('aria-expanded', 'false');
+      });
     });
     describe('not collapsed', () => {
       it('should render an icon', () => {
@@ -100,6 +109,15 @@ describe('NavbarItem Component', () => {
 
         expect(bttn).toHaveTextContent(title);
         expect(link).toHaveTextContent(title);
+      });
+      it('should set the aria-expanded attribute to true', () => {
+        const { bttn, link } = renderBttnAndLink('hamburger', false);
+
+        const bttnItem = within(bttn).getByRole('menuitem');
+        const linkItem = within(link).getByRole('menuitem');
+
+        expect(bttnItem).toHaveAttribute('aria-expanded', 'true');
+        expect(linkItem).toHaveAttribute('aria-expanded', 'true');
       });
     });
   });

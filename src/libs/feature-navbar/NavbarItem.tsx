@@ -50,7 +50,10 @@ const ItemContent = (props: ItemProps): JSX.Element => {
   };
 
   return (
-    <div className="flex w-auto items-center transition-all">
+    <div
+      role="menuitem"
+      aria-expanded={!collapsed}
+      className="flex w-auto items-center transition-all">
       <div className="flex items-center justify-center">
         <FontAwesomeIcon icon={icon} size="2x" width={40} data-testid="icon" />
       </div>

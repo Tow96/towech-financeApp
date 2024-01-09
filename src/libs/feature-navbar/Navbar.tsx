@@ -27,12 +27,14 @@ const links: NavIcon[] = [
 export const Navbar = (): JSX.Element => {
   const path = usePathname();
 
+  // Logout -------------------------------------
   const { mutate: logout, status } = useLogout();
   useEffect(() => {
     if (status !== 'success') return;
     redirect('/login');
   }, [status]);
 
+  // Collapse -----------------------------------
   const [collapsed, setCollapsed] = useState(true);
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -42,6 +44,7 @@ export const Navbar = (): JSX.Element => {
     'button-shadow': !collapsed,
   });
 
+  // Transitions --------------------------------
   const transitionNavRef = useRef(null);
   const transitionNavCls = {
     enter: 'sm:w-20',
@@ -52,6 +55,7 @@ export const Navbar = (): JSX.Element => {
     exitDone: 'sm:w-20',
   };
 
+  // Render -------------------------------------
   return (
     <>
       {/* Menu */}
@@ -69,7 +73,7 @@ export const Navbar = (): JSX.Element => {
               <NavbarItem
                 type="button"
                 icon="bars"
-                name="Close"
+                name={collapsed ? 'Expand' : 'Close'}
                 click={toggleCollapse}
                 collapsed={collapsed}
               />
@@ -122,9 +126,10 @@ const NavbarDismissArea = (props: {
   collapsed: boolean;
   setCollapsed: (v: boolean) => void;
 }): JSX.Element => {
-  if (!props.collapsed) return <></>;
+  if (props.collapsed) return <></>;
   return (
     <div
+      data-testid="dismiss-area"
       className="absolute h-screen w-full bg-transparent"
       onClick={() => props.setCollapsed(true)}></div>
   );
