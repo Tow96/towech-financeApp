@@ -21,9 +21,8 @@ export const ToastComponent = ({ toast }: { toast: Toast }): JSX.Element => {
     setTimeout(() => dismiss(toast.id), duration + 1000); // eslint-disable-line max-nested-callbacks
   }, [dismiss, toast]);
 
-  // TODO: Add toast colors
   let text = classNames({ 'text-transparent': !visible });
-  let color = classNames({ 'bg-golden-500': true });
+  let color = classNames({ 'bg-golden-500': true, '!bg-cinnabar-500': toast.type === 'error' });
 
   const transitionRef = useRef(null);
   const transitionCls = {
