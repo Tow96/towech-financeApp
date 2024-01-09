@@ -121,10 +121,9 @@ export const Navbar = (): JSX.Element => {
     </>
   );
 };
-
 const NavbarDismissArea = (props: {
   collapsed: boolean;
-  setCollapsed: (v: boolean) => void;
+  setCollapsed: (_: boolean) => void;
 }): JSX.Element => {
   if (props.collapsed) return <></>;
   return (

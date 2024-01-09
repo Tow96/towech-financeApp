@@ -3,11 +3,12 @@
  *
  * Simple loading spinner
  */
-type Props = {
-  size?: number;
-};
+// type Props = {
+//   size?: number;
+// };
 // TODO: Size
-export const Spinner = ({ size = 60 }: Props): JSX.Element => {
+// export const Spinner = ({ size = 60 }: Props): JSX.Element => {
+export const Spinner = (): JSX.Element => {
   return (
     <span
       data-testid="spinner"

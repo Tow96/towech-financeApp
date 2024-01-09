@@ -1,6 +1,6 @@
 // Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import * as Navigation from 'next/navigation';
 // Tested Components ----------------------------------------------------------
 import AppPage from '@/app/page';
