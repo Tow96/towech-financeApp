@@ -3,6 +3,10 @@
  *
  * Page for user settings
  */
-const SettingsPage = (): JSX.Element => <main>SETTINGS</main>;
+const SettingsPage = (): JSX.Element => (
+  <main>
+    <h1>Settings</h1>
+  </main>
+);
 
 export default SettingsPage;

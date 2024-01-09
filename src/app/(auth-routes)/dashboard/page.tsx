@@ -3,22 +3,10 @@
  *
  * Dashboard Page, will display transactions
  */
-'use client';
-import { useAddToast } from '@/libs/feature-toasts/ToastService';
-
 const DashboardPage = (): JSX.Element => {
-  const addToast = useAddToast();
-
-  const displayAllTypes = () => {
-    addToast({ message: 'warning', type: 'warning' });
-    addToast({ message: 'info', type: 'info' });
-    addToast({ message: 'success', type: 'success' });
-    addToast({ message: 'error', type: 'error' });
-  };
   return (
     <main>
-      DASHBOARD
-      <button onClick={displayAllTypes}>TOSTON</button>
+      <h1>Dashboard</h1>
     </main>
   );
 };
