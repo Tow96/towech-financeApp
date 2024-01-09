@@ -40,7 +40,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: async (cred: Login) => postWithCredentials('/authentication/login', cred),
     onSuccess: res => client.setQueryData([keys.USERKEY], processUser(res)),
-    onError: () => client.setQueryData([keys.USERKEY], null),
+    // onError: () => client.setQueryData([keys.USERKEY], null),
   });
 };
 

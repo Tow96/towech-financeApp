@@ -18,11 +18,11 @@ type Props = {
 export const AuthProvider = ({ children, auth = true }: Props): JSX.Element => {
   const user = useAuth();
   useEffect(() => {
-    if (!user.isPending) {
-      if (auth && user.isError) redirect('/login');
-      if (!auth && user.isSuccess) redirect('/dashboard');
+    if (user.status !== 'pending') {
+      if (auth && user.status === 'error') redirect('/login');
+      if (!auth && user.status === 'success') redirect('/dashboard');
     }
-  }, [user.status, user.data, auth, user]);
+  }, [user.status, user.data, auth]);
 
   // Render -------------------------------------------------------------------
   if (!user.isPending) return <>{children}</>;

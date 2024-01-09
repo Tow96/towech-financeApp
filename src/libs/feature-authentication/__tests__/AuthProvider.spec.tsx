@@ -25,7 +25,9 @@ describe('AuthProvider', () => {
 
   describe('Render', () => {
     describe('user.isPending is false', () => {
-      beforeEach(() => mockUseAuth.mockImplementation(() => ({ isPending: false }) as any));
+      beforeEach(() =>
+        mockUseAuth.mockImplementation(() => ({ status: 'idle', isPending: false }) as any)
+      );
 
       it('should render the content', () => {
         render(<AuthProvider>{stubContent}</AuthProvider>);
@@ -40,7 +42,9 @@ describe('AuthProvider', () => {
       });
     });
     describe('user.isPending is true', () => {
-      beforeEach(() => mockUseAuth.mockImplementation(() => ({ isPending: true }) as any));
+      beforeEach(() =>
+        mockUseAuth.mockImplementation(() => ({ status: 'pending', isPending: true }) as any)
+      );
 
       it('should not render the content', () => {
         render(<AuthProvider>{stubContent}</AuthProvider>);
@@ -56,13 +60,13 @@ describe('AuthProvider', () => {
   describe('Behaviour', () => {
     describe('Authenticated route', () => {
       it('should not redirect if refreshing the token is successful', () => {
-        mockUseAuth.mockImplementation(() => ({ isPending: false, isError: false }) as any);
+        mockUseAuth.mockImplementation(() => ({ status: 'successful' }) as any);
         render(<AuthProvider>{stubContent}</AuthProvider>);
 
         expect(mockRedirect).toHaveBeenCalledTimes(0);
       });
       it('should redirect to the login page if refreshing the token is unsuccessful', () => {
-        mockUseAuth.mockImplementation(() => ({ isPending: false, isError: true }) as any);
+        mockUseAuth.mockImplementation(() => ({ status: 'error' }) as any);
         render(<AuthProvider>{stubContent}</AuthProvider>);
 
         expect(mockRedirect).toHaveBeenCalledTimes(1);
@@ -71,13 +75,13 @@ describe('AuthProvider', () => {
     });
     describe('Unauthenticated route', () => {
       it('should not redirect if refreshing the token is unsuccessful', () => {
-        mockUseAuth.mockImplementation(() => ({ isPending: false, isSuccess: false }) as any);
+        mockUseAuth.mockImplementation(() => ({ status: 'error' }) as any);
         render(<AuthProvider auth={false}>{stubContent}</AuthProvider>);
 
         expect(mockRedirect).toHaveBeenCalledTimes(0);
       });
       it('should redirect to the dashboard page if refreshing the token is successful', () => {
-        mockUseAuth.mockImplementation(() => ({ isPending: false, isSuccess: true }) as any);
+        mockUseAuth.mockImplementation(() => ({ status: 'success' }) as any);
         render(<AuthProvider auth={false}>{stubContent}</AuthProvider>);
 
         expect(mockRedirect).toHaveBeenCalledTimes(1);

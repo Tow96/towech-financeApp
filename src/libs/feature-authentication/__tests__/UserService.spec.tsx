@@ -69,17 +69,17 @@ describe('UserService', () => {
 
       expect(queryClient.getQueryData([keys.USERKEY])).toBe(stubLogin.token);
     });
-    it('Should set the token as null if call is unsuccessful', async () => {
-      const mock = mockAdapter();
-      const { wrapper, queryClient } = mockTanstack();
-      mock.onPost(`${BASE_URL}/authentication/login`).networkErrorOnce();
+    // it('Should set the token as null if call is unsuccessful', async () => {
+    //   const mock = mockAdapter();
+    //   const { wrapper, queryClient } = mockTanstack();
+    //   mock.onPost(`${BASE_URL}/authentication/login`).networkErrorOnce();
 
-      const { result } = renderHook(() => useLogin(), { wrapper });
-      act(() => result.current.mutate(stubCredentials));
-      await waitFor(() => expect(result.current.isError).toBe(true));
+    //   const { result } = renderHook(() => useLogin(), { wrapper });
+    //   act(() => result.current.mutate(stubCredentials));
+    //   await waitFor(() => expect(result.current.isError).toBe(true));
 
-      expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
-    });
+    //   expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+    // });
   });
   describe('useLogout', () => {
     it('Should set the token as null call is successful', async () => {

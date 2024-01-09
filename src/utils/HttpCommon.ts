@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || '/api';
 
@@ -8,14 +8,21 @@ const apiClient = axios.create({
 
 // apiClient.interceptors.request.use(
 //   // Intercept
-//   q => {
-//     // console.log('a');
-//     return q;
-//   },
+//   q => q,
 //   // On Error
 //   q => {
-//     // console.log('b');
+//     console.log('req err');
 //     return q;
+//   }
+// );
+
+// apiClient.interceptors.response.use(
+//   // Intercept
+//   q => q,
+//   // On error
+//   (e: AxiosError) => {
+//     console.log(e.response?.status);
+//     Promise.reject(e)
 //   }
 // );
 
