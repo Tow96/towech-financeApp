@@ -9,8 +9,7 @@ import apiClient from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 
 // Constants --------------------------------------------------------
-// TODO: Token auto-refresh
-// const TOKENDURATIONMS = 5 * 1000;
+const TOKENDURATIONMS = 5 * 1000;
 
 // Types ------------------------------------------------------------
 type Login = {
@@ -29,10 +28,10 @@ export const useAuth = () =>
   useQuery({
     queryKey: [keys.USERKEY],
     queryFn: async () => processUser(await postWithCredentials('/authentication/refresh')),
-    // refetchInterval: s => {
-    //   if (s.state.status === 'error') return 0;
-    //   return TOKENDURATIONMS;
-    // },
+    refetchInterval: s => {
+      if (s.state.status === 'error') return 0;
+      return TOKENDURATIONMS;
+    },
   });
 
 // Secondary hooks --------------------------------------------------
