@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// TODO: Make base_url depend on config
-export const BASE_URL = 'http://localhost:3001';
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
