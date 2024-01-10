@@ -91,7 +91,9 @@ type NavbarLinkProps = ItemProps & {
   href: string;
 };
 const NavbarLink = (props: NavbarLinkProps): JSX.Element => {
-  const disabled = props.href.startsWith(props.current);
+  const splittedCurrentRoute = props.current.split('/').filter(s => s);
+  const splittedHref = props.href.split('/').filter(s => s);
+  const disabled = splittedCurrentRoute[0] === splittedHref[0];
   const classes = getClasses(disabled);
 
   return (

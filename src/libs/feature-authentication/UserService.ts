@@ -9,9 +9,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import apiClient from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 
-// Constants --------------------------------------------------------
-const TOKENDURATIONMS = 5 * 1000;
-
 // Types ------------------------------------------------------------
 type Login = {
   username: string;
