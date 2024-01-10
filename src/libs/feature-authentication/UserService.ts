@@ -3,7 +3,6 @@
  *
  * Tanstack Store that handles the user state
  */
-import { AxiosResponse } from 'axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import apiClient from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
@@ -17,11 +16,14 @@ type Login = {
   password: string;
   keepSession: boolean;
 };
+type TokenResponse = {
+  token: string;
+};
 
 // Http calls -------------------------------------------------------
 const postWithCredentials = (url: string, payload?: unknown) =>
-  apiClient.post(url, payload, { withCredentials: true });
-const processUser = (res: AxiosResponse) => res.data.token;
+  apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
+const processUser = (data: TokenResponse) => data.token;
 
 // Base Hook --------------------------------------------------------
 export const useAuth = () =>
@@ -39,7 +41,7 @@ export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
     mutationFn: async (cred: Login) => postWithCredentials('/authentication/login', cred),
-    onSuccess: res => client.setQueryData([keys.USERKEY], processUser(res)),
+    onSuccess: (res: TokenResponse) => client.setQueryData([keys.USERKEY], processUser(res)),
     // onError: () => client.setQueryData([keys.USERKEY], null),
   });
 };
