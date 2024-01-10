@@ -3,11 +3,13 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as UserService from '@/libs/feature-authentication/UserService';
+import * as NavService from '@/libs/feature-navbar/NavbarService';
 import * as Navigation from 'next/navigation';
 // Tested Components ----------------------------------------------------------
 import { Navbar } from '../Navbar';
 
 // Stubs ----------------------------------------------------------------------
+const stubTitle = 'TestNav';
 
 // Mocks ----------------------------------------------------------------------
 jest.mock('../../../libs/feature-authentication/UserService.ts', () => ({
@@ -17,9 +19,13 @@ jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
   usePathname: jest.fn(),
 }));
+jest.mock('../NavbarService', () => ({
+  useNavStore: jest.fn(),
+}));
 const mockUseLogout = jest.spyOn(UserService, 'useLogout');
 const mockRedirect = jest.spyOn(Navigation, 'redirect');
 const mockUsePathname = jest.spyOn(Navigation, 'usePathname');
+const mockUseNav = jest.spyOn(NavService, 'useNavStore');
 
 // Tests ----------------------------------------------------------------------
 describe('Navbar', () => {
@@ -27,6 +33,7 @@ describe('Navbar', () => {
     jest.resetAllMocks();
     mockUseLogout.mockImplementation(() => ({ mutate: () => ({}) }) as any);
     mockUsePathname.mockImplementation(() => '/');
+    mockUseNav.mockImplementation(() => ({ title: stubTitle }));
   });
 
   describe('Render', () => {
@@ -51,6 +58,12 @@ describe('Navbar', () => {
       const area = screen.getByTestId('dismiss-area');
 
       expect(area).toBeInTheDocument();
+    });
+    it('should render a heading containing the given title of the screen', () => {
+      render(<Navbar />);
+      const heading = screen.getByRole('heading');
+
+      expect(heading).toHaveTextContent(stubTitle);
     });
   });
 

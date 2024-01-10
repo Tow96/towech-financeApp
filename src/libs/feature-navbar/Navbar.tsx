@@ -4,16 +4,19 @@
  * Navbar feature of the app, allows to move between pages
  */
 'use client';
-import { useEffect, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+// Libraries ------------------------------------------------------------------
 import { redirect, usePathname } from 'next/navigation';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
-import { useLogout } from '@/libs/feature-authentication/UserService';
 import { classNames } from '@/utils/ConditionalClasses';
-
+// Hooks ----------------------------------------------------------------------
+import { useEffect, useRef, useState } from 'react';
+import { useLogout } from '@/libs/feature-authentication/UserService';
+import { useNavStore } from '@/libs/feature-navbar/NavbarService';
+// Used Components ------------------------------------------------------------
+import { CSSTransition } from 'react-transition-group';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { NavbarItem } from './NavbarItem';
 
+// Types ----------------------------------------------------------------------
 type NavIcon = {
   name: string;
   href: string;
@@ -24,8 +27,10 @@ const links: NavIcon[] = [
   { name: 'Settings', href: '/settings', icon: 'gear' },
 ];
 
+// Component ------------------------------------------------------------------
 export const Navbar = (): JSX.Element => {
   const path = usePathname();
+  const { title } = useNavStore();
 
   // Logout -------------------------------------
   const { mutate: logout, status } = useLogout();
@@ -78,7 +83,7 @@ export const Navbar = (): JSX.Element => {
                 collapsed={collapsed}
               />
               <div className="sm:hidden">
-                <h1 className="text-2xl font-bold">Title</h1>
+                <h1 className="text-2xl font-bold">{title}</h1>
               </div>
             </div>
             {/* Contents */}
