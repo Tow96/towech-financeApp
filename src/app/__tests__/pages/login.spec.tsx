@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as UserService from '@/libs/feature-authentication/UserService';
+import * as ToastService from '@/libs/feature-toasts/ToastService';
 import * as Navigation from 'next/navigation';
 // Tested Components ----------------------------------------------------------
 import LoginPage from '@/app/(no-auth-routes)/login/page';
@@ -16,7 +17,11 @@ jest.mock('../../../libs/feature-authentication/UserService.ts', () => ({
 jest.mock('next/navigation', () => ({
   redirect: jest.fn(),
 }));
+jest.mock('../../../libs/feature-toasts/ToastService', () => ({
+  useAddToast: jest.fn(),
+}));
 const mockUseLogin = jest.spyOn(UserService, 'useLogin');
+const mockAddToast = jest.spyOn(ToastService, 'useAddToast');
 const mockRedirect = jest.spyOn(Navigation, 'redirect');
 
 // Tests ----------------------------------------------------------------------
@@ -24,6 +29,7 @@ describe('Login Page', () => {
   beforeEach(() => {
     jest.resetAllMocks();
     mockUseLogin.mockImplementation(() => ({ mutate: () => ({}) }) as any);
+    mockAddToast.mockImplementation(() => () => {});
   });
   describe('Render', () => {
     it('should have the correct title', () => {
@@ -92,6 +98,13 @@ describe('Login Page', () => {
       expect(usernameIn).toHaveClass('focus-visible:focused-input-error');
       expect(passwordIn).toHaveClass('focus-visible:focused-input-error');
     });
-    it.todo('should display an error toast giving the reasons for the log in failure');
+    it('should display an error toast giving the reasons for the log in failure', () => {
+      const mockToast = jest.fn();
+      mockUseLogin.mockImplementation(() => ({ status: 'error' }) as any);
+      mockAddToast.mockImplementation(() => mockToast);
+
+      render(<LoginPage />);
+      expect(mockToast).toHaveBeenCalledWith({ message: expect.any(String), type: 'error' });
+    });
   });
 });
