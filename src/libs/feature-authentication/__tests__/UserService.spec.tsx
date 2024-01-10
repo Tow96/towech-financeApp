@@ -11,12 +11,34 @@ import { useAuth, useLogin, useLogout } from '../UserService';
 // Stubs ----------------------------------------------------------------------
 const stubRefresh = {
   token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJfaWQiOiJmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmYiLCJyb2xlIjoidXNlciIsImFjY291bnRDb25maXJtZWQiOnRydWUsImlhdCI6MTcwNDM3Nzk5NCwiZXhwIjoxNzA0Mzc4MDU0fQ.KscPMBfszDRLRkJQneWnRxFsRVOhEebrrjBloXMHmXY',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzNzc5OTQsImV4cCI6MTcwNDM3ODA1NH0.P-TbFlXnX7kFP2WwcWGjc3-SJq2ppLTMjSGmsmItbg0',
+};
+const stubRefreshUser = {
+  name: 'test',
+  username: 'testuser@provider.com',
+  _id: 'ffffffffffffffffffffffff',
+  role: 'user',
+  accountConfirmed: true,
+  iat: 1704377994,
+  exp: 1704378054,
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzNzc5OTQsImV4cCI6MTcwNDM3ODA1NH0.P-TbFlXnX7kFP2WwcWGjc3-SJq2ppLTMjSGmsmItbg0',
 };
 const stubCredentials = { username: 'test', password: 'test', keepSession: false };
 const stubLogin = {
   token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJfaWQiOiJmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmYiLCJyb2xlIjoidXNlciIsImFjY291bnRDb25maXJtZWQiOnRydWUsImlhdCI6MTcwNDM4NTIzMywiZXhwIjoxNzA0Mzg1MjM1fQ.QiYl4n1WRzzUsdHbtJWBe2E12AMiWYNtp9FMYJCqOXo',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzODUyMzMsImV4cCI6MTcwNDM4NTIzNX0.VIWq3x51tDLzZXYLDQn8V8mL9EfNCiClkbzErDazaAM',
+};
+const stubLoginUser = {
+  name: 'test',
+  username: 'testuser@provider.com',
+  _id: 'ffffffffffffffffffffffff',
+  role: 'user',
+  accountConfirmed: true,
+  iat: 1704385233,
+  exp: 1704385235,
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzODUyMzMsImV4cCI6MTcwNDM4NTIzNX0.VIWq3x51tDLzZXYLDQn8V8mL9EfNCiClkbzErDazaAM',
 };
 
 // Mocks ----------------------------------------------------------------------
@@ -29,10 +51,6 @@ const mockTanstack = () => {
   return { wrapper, queryClient };
 };
 
-// jest.mock('@/libs/feature-toasts/ToastService', () => {
-
-// })
-
 // Tests ----------------------------------------------------------------------
 describe('UserService', () => {
   describe('useAuth', () => {
@@ -44,7 +62,7 @@ describe('UserService', () => {
       const { result } = renderHook(() => useAuth(), { wrapper });
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(result.current.data).toBe(stubRefresh.token);
+      expect(result.current.data).toEqual(stubRefreshUser);
     });
     it('Should be undefined if call is unsuccessful', async () => {
       const mock = mockAdapter();
@@ -67,7 +85,7 @@ describe('UserService', () => {
       act(() => result.current.mutate(stubCredentials));
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(queryClient.getQueryData([keys.USERKEY])).toBe(stubLogin.token);
+      expect(queryClient.getQueryData([keys.USERKEY])).toEqual(stubLoginUser);
     });
     // it('Should set the token as null if call is unsuccessful', async () => {
     //   const mock = mockAdapter();
