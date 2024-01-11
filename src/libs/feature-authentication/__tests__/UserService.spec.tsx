@@ -6,19 +6,22 @@ import { renderHook, waitFor } from '@testing-library/react';
 import apiClient, { BASE_URL } from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 // Tested Components ----------------------------------------------------------
-import { useAuth, useLogin, useLogout } from '../UserService';
+import { useAuth, useEditUser, useLogin, useLogout } from '../UserService';
 
 // Stubs ----------------------------------------------------------------------
-const stubRefresh = {
-  token:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzNzc5OTQsImV4cCI6MTcwNDM3ODA1NH0.P-TbFlXnX7kFP2WwcWGjc3-SJq2ppLTMjSGmsmItbg0',
-};
-const stubRefreshUser = {
+const stubUser = {
   name: 'test',
   username: 'testuser@provider.com',
   _id: 'ffffffffffffffffffffffff',
   role: 'user',
   accountConfirmed: true,
+};
+const stubRefresh = {
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzNzc5OTQsImV4cCI6MTcwNDM3ODA1NH0.P-TbFlXnX7kFP2WwcWGjc3-SJq2ppLTMjSGmsmItbg0',
+};
+const stubRefreshUser = {
+  ...stubUser,
   iat: 1704377994,
   exp: 1704378054,
   token:
@@ -30,11 +33,7 @@ const stubLogin = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsInVzZXJuYW1lIjoidGVzdHVzZXJAcHJvdmlkZXIuY29tIiwiX2lkIjoiZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmIiwicm9sZSI6InVzZXIiLCJhY2NvdW50Q29uZmlybWVkIjp0cnVlLCJpYXQiOjE3MDQzODUyMzMsImV4cCI6MTcwNDM4NTIzNX0.VIWq3x51tDLzZXYLDQn8V8mL9EfNCiClkbzErDazaAM',
 };
 const stubLoginUser = {
-  name: 'test',
-  username: 'testuser@provider.com',
-  _id: 'ffffffffffffffffffffffff',
-  role: 'user',
-  accountConfirmed: true,
+  ...stubUser,
   iat: 1704385233,
   exp: 1704385235,
   token:
@@ -53,7 +52,7 @@ const mockTanstack = () => {
 
 // Tests ----------------------------------------------------------------------
 describe('UserService', () => {
-  describe('useAuth', () => {
+  describe('Query', () => {
     it('Should obtain the token if call is successful', async () => {
       const mock = mockAdapter();
       const { wrapper } = mockTanstack();
@@ -75,52 +74,78 @@ describe('UserService', () => {
       expect(result.current.data).toBeUndefined();
     });
   });
-  describe('useLogin', () => {
-    it('Should obtain the token if call is successful', async () => {
-      const mock = mockAdapter();
-      const { wrapper, queryClient } = mockTanstack();
-      mock.onPost(`${BASE_URL}/authentication/login`).replyOnce(200, stubLogin);
 
-      const { result } = renderHook(() => useLogin(), { wrapper });
-      act(() => result.current.mutate(stubCredentials));
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  describe('Mutations', () => {
+    describe('useLogin', () => {
+      it('Should obtain the token if call is successful', async () => {
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/login`).replyOnce(200, stubLogin);
 
-      expect(queryClient.getQueryData([keys.USERKEY])).toEqual(stubLoginUser);
+        const { result } = renderHook(() => useLogin(), { wrapper });
+        act(() => result.current.mutate(stubCredentials));
+        await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+        expect(queryClient.getQueryData([keys.USERKEY])).toEqual(stubLoginUser);
+      });
+      // it('Should set the token as null if call is unsuccessful', async () => {
+      //   const mock = mockAdapter();
+      //   const { wrapper, queryClient } = mockTanstack();
+      //   mock.onPost(`${BASE_URL}/authentication/login`).networkErrorOnce();
+
+      //   const { result } = renderHook(() => useLogin(), { wrapper });
+      //   act(() => result.current.mutate(stubCredentials));
+      //   await waitFor(() => expect(result.current.isError).toBe(true));
+
+      //   expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+      // });
     });
-    // it('Should set the token as null if call is unsuccessful', async () => {
-    //   const mock = mockAdapter();
-    //   const { wrapper, queryClient } = mockTanstack();
-    //   mock.onPost(`${BASE_URL}/authentication/login`).networkErrorOnce();
+    describe('useLogout', () => {
+      it('Should set the token as null call is successful', async () => {
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/logout`).replyOnce(204);
 
-    //   const { result } = renderHook(() => useLogin(), { wrapper });
-    //   act(() => result.current.mutate(stubCredentials));
-    //   await waitFor(() => expect(result.current.isError).toBe(true));
+        const { result } = renderHook(() => useLogout(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    //   expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
-    // });
-  });
-  describe('useLogout', () => {
-    it('Should set the token as null call is successful', async () => {
-      const mock = mockAdapter();
-      const { wrapper, queryClient } = mockTanstack();
-      mock.onPost(`${BASE_URL}/authentication/logout`).replyOnce(204);
+        expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+      });
+      it('Should set the token as null if call is unsuccessful', async () => {
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/logout`).networkErrorOnce();
 
-      const { result } = renderHook(() => useLogout(), { wrapper });
-      act(() => result.current.mutate());
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+        const { result } = renderHook(() => useLogout(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isError).toBe(true));
 
-      expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+        expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+      });
     });
-    it('Should set the token as null if call is unsuccessful', async () => {
-      const mock = mockAdapter();
-      const { wrapper, queryClient } = mockTanstack();
-      mock.onPost(`${BASE_URL}/authentication/logout`).networkErrorOnce();
+    describe('useEditUser', () => {
+      it('should update the user with the received information', async () => {
+        const newName = 'newName';
+        const response = { ...stubUser, name: newName };
 
-      const { result } = renderHook(() => useLogout(), { wrapper });
-      act(() => result.current.mutate());
-      await waitFor(() => expect(result.current.isError).toBe(true));
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/refresh`).replyOnce(200, stubRefresh);
+        mock.onPatch(`${BASE_URL}/users/${stubRefreshUser._id}`).replyOnce(200, response);
 
-      expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+        const { result: refresh } = renderHook(() => useAuth(), { wrapper });
+        await waitFor(() => expect(refresh.current.isSuccess).toBe(true));
+
+        const { result } = renderHook(() => useEditUser(), { wrapper });
+        act(() => result.current.mutate({ name: newName }));
+        await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+        expect(queryClient.getQueryData([keys.USERKEY])).toEqual({
+          ...stubRefreshUser,
+          ...response,
+        });
+      });
     });
   });
 });

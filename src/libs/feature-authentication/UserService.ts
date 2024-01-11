@@ -32,6 +32,11 @@ type User = {
 // Http calls -------------------------------------------------------
 const postWithCredentials = (url: string, payload?: unknown) =>
   apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
+const patch = (url: string, token: string, payload?: unknown) =>
+  apiClient.patch(url, payload, { headers: { Authorization: `Bearer ${token}` } });
+
+// Adapter ----------------------------------------------------------
+const updateUser = (user: Partial<User>, state: User): User => ({ ...state, ...user });
 const processUser = (data: TokenResponse): User => {
   const decoded: Omit<User, 'token'> = jwtDecode(data.token);
   return { ...decoded, token: data.token };
@@ -52,6 +57,7 @@ export const useAuth = () =>
 export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
+    mutationKey: [keys.USERKEY, 'login'],
     mutationFn: async (cred: Login) => postWithCredentials('/authentication/login', cred),
     onSuccess: (res: TokenResponse) => client.setQueryData([keys.USERKEY], processUser(res)),
     // onError: () => client.setQueryData([keys.USERKEY], null),
@@ -61,8 +67,20 @@ export const useLogin = () => {
 export const useLogout = () => {
   const client = useQueryClient();
   return useMutation({
+    mutationKey: [keys.USERKEY, 'logout'],
     mutationFn: async () => postWithCredentials('/authentication/logout'),
     onSuccess: () => client.setQueryData([keys.USERKEY], null),
     onError: () => client.setQueryData([keys.USERKEY], null),
+  });
+};
+
+export const useEditUser = () => {
+  const client = useQueryClient();
+  const user: User | undefined = client.getQueryData([keys.USERKEY]);
+  return useMutation({
+    mutationKey: [keys.USERKEY, 'update'],
+    mutationFn: async (data: Partial<User>) =>
+      patch(`/users/${user?._id}`, user?.token || '', data) as Partial<User>,
+    onSuccess: (res: Partial<User>) => client.setQueryData([keys.USERKEY], updateUser(res, user!)),
   });
 };
