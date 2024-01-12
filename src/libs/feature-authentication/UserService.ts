@@ -34,6 +34,8 @@ const postWithCredentials = (url: string, payload?: unknown) =>
   apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
 const patch = (url: string, token?: string, payload?: unknown) =>
   apiClient.patch(url, payload, { headers: { Authorization: `Bearer ${token}` } });
+const get = (url: string, token?: string) =>
+  apiClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
 
 // Adapter ----------------------------------------------------------
 const updateUser = (user: Partial<User>, state: User): User => ({ ...state, ...user });
@@ -82,5 +84,14 @@ export const useEditUser = () => {
     mutationFn: async (data: Partial<User>) =>
       patch(`/users/${user?._id}`, user?.token, data) as Partial<User>,
     onSuccess: (res: Partial<User>) => client.setQueryData([keys.USERKEY], updateUser(res, user!)),
+  });
+};
+
+export const useResendMail = () => {
+  const client = useQueryClient();
+  const user: User | undefined = client.getQueryData([keys.USERKEY]);
+  return useMutation({
+    mutationKey: [keys.USERKEY, 'resend mail'],
+    mutationFn: async () => get(`/users/email`, user?.token),
   });
 };

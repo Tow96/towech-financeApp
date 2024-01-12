@@ -8,7 +8,7 @@
 // Hooks ----------------------------------------------------------------------
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAuth, useEditUser } from '@/libs/feature-authentication/UserService';
+import { useAuth, useEditUser, useResendMail } from '@/libs/feature-authentication/UserService';
 import { useAddToast } from '@/libs/feature-toasts/ToastService';
 // Used Components ------------------------------------------------------------
 import { Button } from '@/components/button';
@@ -27,7 +27,7 @@ const UserSettingsPage = (): JSX.Element => {
   const addToast = useAddToast();
 
   // User Form ----------------------------------
-  const { mutate: editUser, status: editStatus, error: editError } = useEditUser();
+  const editUser = useEditUser();
   const userForm = useForm<UserForm>({
     defaultValues: { name: user?.name, username: user?.username },
   });
@@ -37,11 +37,15 @@ const UserSettingsPage = (): JSX.Element => {
       userForm.formState.defaultValues?.username !== userForm.getValues('username');
     return nameDifferent || mailDifferent;
   };
-  const onUserFormSubmit: SubmitHandler<UserForm> = data => editUser(data);
+  const onUserFormSubmit: SubmitHandler<UserForm> = data => editUser.mutate(data);
   useEffect(() => {
-    if (editStatus === 'success') addToast({ message: 'User updated', type: 'success' });
-    if (editStatus === 'error') addToast({ message: editError?.message || 'Error', type: 'error' });
-  }, [addToast, editStatus, editError?.message]);
+    if (editUser.status === 'success') addToast({ message: 'User updated', type: 'success' });
+    if (editUser.status === 'error')
+      addToast({ message: editUser.error?.message || 'Error', type: 'error' });
+  }, [addToast, editUser.status, editUser.error?.message]);
+
+  // Verification Mail --------------------------
+  const resendMail = useResendMail();
 
   // Render -------------------------------------
   return (
@@ -65,10 +69,17 @@ const UserSettingsPage = (): JSX.Element => {
             Save
           </Button>
         </form>
-        {editStatus === 'pending' && <Spinner />}
+        {editUser.status === 'pending' && <Spinner />}
       </section>
-      {/* TODO: Resend verification mail */}
+      <section data-testid="mail-status">
+        <h2>Email status:</h2>
+        <span role="caption">{user?.accountConfirmed ? 'Verified' : 'Unverified'}</span>
+        {!user?.accountConfirmed && (
+          <Button onClick={() => resendMail.mutate()}>Resend verification email</Button>
+        )}
+      </section>
       {/* TODO: Delete user button*/}
+      <section data-testid="delete-user"></section>
     </main>
   );
 };

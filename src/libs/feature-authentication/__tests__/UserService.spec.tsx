@@ -6,7 +6,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import apiClient, { BASE_URL } from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 // Tested Components ----------------------------------------------------------
-import { useAuth, useEditUser, useLogin, useLogout } from '../UserService';
+import { useAuth, useEditUser, useLogin, useLogout, useResendMail } from '../UserService';
 
 // Stubs ----------------------------------------------------------------------
 const stubUser = {
@@ -59,7 +59,7 @@ describe('UserService', () => {
       mock.onPost(`${BASE_URL}/authentication/refresh`).replyOnce(200, stubRefresh);
 
       const { result } = renderHook(() => useAuth(), { wrapper });
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
       expect(result.current.data).toEqual(stubRefreshUser);
     });
@@ -69,7 +69,7 @@ describe('UserService', () => {
       mock.onPost(`${BASE_URL}/authentication/refresh`).networkErrorOnce();
 
       const { result } = renderHook(() => useAuth(), { wrapper });
-      await waitFor(() => expect(result.current.isError).toBe(true));
+      await waitFor(() => expect(result.current.isError).toBeTruthy());
 
       expect(result.current.data).toBeUndefined();
     });
@@ -84,7 +84,7 @@ describe('UserService', () => {
 
         const { result } = renderHook(() => useLogin(), { wrapper });
         act(() => result.current.mutate(stubCredentials));
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(queryClient.getQueryData([keys.USERKEY])).toEqual(stubLoginUser);
       });
@@ -95,7 +95,7 @@ describe('UserService', () => {
 
       //   const { result } = renderHook(() => useLogin(), { wrapper });
       //   act(() => result.current.mutate(stubCredentials));
-      //   await waitFor(() => expect(result.current.isError).toBe(true));
+      //   await waitFor(() => expect(result.current.isError).toBeTruthy());
 
       //   expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
       // });
@@ -108,7 +108,7 @@ describe('UserService', () => {
 
         const { result } = renderHook(() => useLogout(), { wrapper });
         act(() => result.current.mutate());
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
       });
@@ -119,7 +119,7 @@ describe('UserService', () => {
 
         const { result } = renderHook(() => useLogout(), { wrapper });
         act(() => result.current.mutate());
-        await waitFor(() => expect(result.current.isError).toBe(true));
+        await waitFor(() => expect(result.current.isError).toBeTruthy());
 
         expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
       });
@@ -135,16 +135,29 @@ describe('UserService', () => {
         mock.onPatch(`${BASE_URL}/users/${stubRefreshUser._id}`).replyOnce(200, response);
 
         const { result: refresh } = renderHook(() => useAuth(), { wrapper });
-        await waitFor(() => expect(refresh.current.isSuccess).toBe(true));
+        await waitFor(() => expect(refresh.current.isSuccess).toBeTruthy());
 
         const { result } = renderHook(() => useEditUser(), { wrapper });
         act(() => result.current.mutate({ name: newName }));
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(queryClient.getQueryData([keys.USERKEY])).toEqual({
           ...stubRefreshUser,
           ...response,
         });
+      });
+    });
+    describe('useResendMail', () => {
+      it('should call the correct endpoint', async () => {
+        const mock = mockAdapter();
+        const { wrapper } = mockTanstack();
+        mock.onGet(`${BASE_URL}/users/email`).replyOnce(204);
+
+        const { result } = renderHook(() => useResendMail(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
+
+        expect(mock.history.get[0].url).toBe('/users/email');
       });
     });
   });

@@ -23,12 +23,14 @@ const stubUser: UserService.User = {
 jest.mock('../../../../libs/feature-authentication/UserService', () => ({
   useAuth: jest.fn(),
   useEditUser: jest.fn(),
+  useResendMail: jest.fn(),
 }));
 jest.mock('../../../../libs/feature-toasts/ToastService', () => ({
   useAddToast: jest.fn(),
 }));
 const mockUseAuth = jest.spyOn(UserService, 'useAuth');
 const mockUseEditUser = jest.spyOn(UserService, 'useEditUser');
+const mockResendMail = jest.spyOn(UserService, 'useResendMail');
 const mockAddToast = jest.spyOn(ToastService, 'useAddToast');
 
 // Tests ----------------------------------------------------------------------
@@ -37,6 +39,7 @@ describe('User Settings Page', () => {
     jest.resetAllMocks();
     mockUseAuth.mockImplementation(() => ({ data: stubUser, status: 'success' }) as any);
     mockUseEditUser.mockImplementation(() => ({ mutate: () => ({}) }) as any);
+    mockResendMail.mockImplementation(() => ({ mutate: () => ({}) }) as any);
     mockAddToast.mockImplementation(() => () => {});
   });
 
@@ -149,6 +152,74 @@ describe('User Settings Page', () => {
           message: expect.any(String),
           type: 'error',
         });
+      });
+    });
+  });
+
+  describe('Email Verification', () => {
+    describe('Render', () => {
+      it('should render a header indicating the status of the account', () => {
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        const title = within(userForm).getByRole('heading');
+
+        expect(title).toHaveTextContent('Email status:');
+      });
+      it('should have a text saying Verified if the account is confirmed', () => {
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        const caption = within(userForm).getByRole('caption');
+
+        expect(caption).toHaveTextContent('Verified');
+      });
+      it('Should not render any button when the account is confirmed', () => {
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        expect(() => within(userForm).getAllByRole('button')).toThrow();
+      });
+      it('should have a text saying Unverified if the account is confirmed', () => {
+        mockUseAuth.mockImplementation(
+          () => ({ data: { ...stubUser, accountConfirmed: false }, status: 'success' }) as any
+        );
+
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        const caption = within(userForm).getByRole('caption');
+
+        expect(caption).toHaveTextContent('Unverified');
+      });
+      it('Should render a Resend Verification email button when the account is not confirmed', () => {
+        mockUseAuth.mockImplementation(
+          () => ({ data: { ...stubUser, accountConfirmed: false }, status: 'success' }) as any
+        );
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        const resendBttn = within(userForm).getByRole('button');
+
+        expect(resendBttn).toHaveAttribute('type', 'button');
+        expect(resendBttn).toHaveTextContent('Resend verification email');
+      });
+    });
+    describe('Behaviour', () => {
+      it('Should call the resendEmail hook when the resend verification button is clicked', async () => {
+        const mutate = jest.fn();
+        mockResendMail.mockImplementation(() => ({ mutate }) as any);
+        mockUseAuth.mockImplementation(
+          () => ({ data: { ...stubUser, accountConfirmed: false }, status: 'success' }) as any
+        );
+
+        render(<UserSettingsPage />);
+        const userForm = screen.getByTestId('mail-status');
+
+        const resendBttn = within(userForm).getByRole('button');
+        await userEvent.click(resendBttn);
+
+        expect(mutate).toHaveBeenCalledTimes(1);
       });
     });
   });
