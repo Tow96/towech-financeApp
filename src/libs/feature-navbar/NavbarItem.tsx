@@ -101,6 +101,7 @@ const NavbarLink = (props: NavbarLinkProps): JSX.Element => {
       href={props.href}
       className={classes}
       aria-disabled={disabled}
+      tabIndex={disabled ? -1 : undefined}
       onClick={() => props.setCollapsed(true)}>
       <ItemContent {...props} />
     </Link>
