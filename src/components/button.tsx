@@ -3,26 +3,31 @@
  *
  * Simple button component
  */
-type Props = {
-  type?: 'button' | 'reset' | 'submit';
+// Types ----------------------------------------------------------------------
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'accent' | 'success' | 'error' | 'warning';
-  children: React.ReactNode;
-};
+}
 
-export const Button = ({ type = 'button', color = 'accent', children }: Props): JSX.Element => {
+export const Button = ({
+  type = 'button',
+  color = 'accent',
+  disabled = false,
+  ...props
+}: Props): JSX.Element => {
   let variableClasses = '';
 
   switch (color) {
     // TODO: button colors
     default:
-      variableClasses = `bg-golden-500 hover:bg-golden-400 active:bg-golden-600 text-riverbed-950 focus-visible:focused-button-shadow`;
+      variableClasses = `bg-golden-500 hover:bg-golden-400 active:bg-golden-600 text-riverbed-950 focus-visible:focused-button-shadow disabled:bg-golden-300 disabled:button-shadow-disabled disabled:text-riverbed-600`;
   }
 
   return (
     <button
+      {...props}
+      disabled={disabled}
       type={type}
-      className={`${variableClasses} button-shadow active:input-shadow rounded-lg px-4 py-2 text-lg font-semibold transition-shadow focus-visible:outline-none`}>
-      {children}
-    </button>
+      className={`button-shadow active:input-shadow rounded-lg px-4 py-2 text-lg font-semibold transition-shadow focus-visible:outline-none ${variableClasses}`}
+    />
   );
 };
