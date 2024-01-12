@@ -9,6 +9,7 @@
 
 // Hooks ----------------------------------------------------------------------
 import { useUpdateTitle } from '@/libs/feature-navbar/NavbarService';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 // Used Components ------------------------------------------------------------
@@ -24,7 +25,14 @@ const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
   }, [updateTitle]);
 
   // Render -------------------------------------
-  return <>{children}</>;
+  return (
+    <div>
+      <div>
+        <Link href="/settings/user">User</Link>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
 };
 
 export default SettingsLayout;

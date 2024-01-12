@@ -18,7 +18,7 @@ type Login = {
 type TokenResponse = {
   token: string;
 };
-type User = {
+export type User = {
   _id: string;
   accountConfirmed: boolean;
   exp: number;
@@ -32,34 +32,34 @@ type User = {
 // Http calls -------------------------------------------------------
 const postWithCredentials = (url: string, payload?: unknown) =>
   apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
-const patch = (url: string, token: string, payload?: unknown) =>
+const patch = (url: string, token?: string, payload?: unknown) =>
   apiClient.patch(url, payload, { headers: { Authorization: `Bearer ${token}` } });
 
 // Adapter ----------------------------------------------------------
 const updateUser = (user: Partial<User>, state: User): User => ({ ...state, ...user });
-const processUser = (data: TokenResponse): User => {
-  const decoded: Omit<User, 'token'> = jwtDecode(data.token);
-  return { ...decoded, token: data.token };
+const processToken = (token: TokenResponse): User => {
+  const decoded: Omit<User, 'token'> = jwtDecode(token.token);
+  return { ...decoded, token: token.token };
 };
 
-// Base Hook --------------------------------------------------------
+// Query Hook -------------------------------------------------------
 export const useAuth = () =>
   useQuery({
     queryKey: [keys.USERKEY],
-    queryFn: async () => processUser(await postWithCredentials('/authentication/refresh')),
+    queryFn: async () => processToken(await postWithCredentials('/authentication/refresh')),
     refetchInterval: s => {
       if (s.state.status === 'error') return 0;
       return ((s.state.data?.exp || 0) - (s.state.data?.iat || 0)) * 1000;
     },
   });
 
-// Secondary hooks --------------------------------------------------
+// Mutation hooks ---------------------------------------------------
 export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [keys.USERKEY, 'login'],
     mutationFn: async (cred: Login) => postWithCredentials('/authentication/login', cred),
-    onSuccess: (res: TokenResponse) => client.setQueryData([keys.USERKEY], processUser(res)),
+    onSuccess: (res: TokenResponse) => client.setQueryData([keys.USERKEY], processToken(res)),
     // onError: () => client.setQueryData([keys.USERKEY], null),
   });
 };
@@ -80,7 +80,7 @@ export const useEditUser = () => {
   return useMutation({
     mutationKey: [keys.USERKEY, 'update'],
     mutationFn: async (data: Partial<User>) =>
-      patch(`/users/${user?._id}`, user?.token || '', data) as Partial<User>,
+      patch(`/users/${user?._id}`, user?.token, data) as Partial<User>,
     onSuccess: (res: Partial<User>) => client.setQueryData([keys.USERKEY], updateUser(res, user!)),
   });
 };

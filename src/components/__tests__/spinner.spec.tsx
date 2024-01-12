@@ -8,7 +8,7 @@ import { Spinner } from '../spinner';
 describe('Spinner component', () => {
   it('should render the component', () => {
     render(<Spinner />);
-    const elem = screen.getByTestId('spinner');
+    const elem = screen.getByRole('status');
     expect(elem).toBeInTheDocument();
   });
 });

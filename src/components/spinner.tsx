@@ -10,7 +10,7 @@
 export const Spinner = (): JSX.Element => {
   return (
     <span
-      data-testid="spinner"
+      role="status"
       className={`aspect-square w-24 animate-spin rounded-full border-8 border-solid border-riverbed-300 border-b-transparent border-t-transparent`}></span>
   );
 };
