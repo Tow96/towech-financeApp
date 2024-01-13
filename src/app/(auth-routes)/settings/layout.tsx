@@ -29,6 +29,8 @@ const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
     <div>
       <div>
         <Link href="/settings/user">User</Link>
+        <br />
+        <Link href="/settings/security">Security</Link>
       </div>
       <div>{children}</div>
     </div>

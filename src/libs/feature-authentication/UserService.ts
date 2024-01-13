@@ -10,12 +10,12 @@ import apiClient from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 
 // Types ------------------------------------------------------------
-type Login = {
+export type Login = {
   username: string;
   password: string;
   keepSession: boolean;
 };
-type ChangePassword = {
+export type ChangePassword = {
   confirmPassword: string;
   newPassword: string;
   oldPassword: string;
