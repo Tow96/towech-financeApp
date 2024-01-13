@@ -15,6 +15,11 @@ type Login = {
   password: string;
   keepSession: boolean;
 };
+type ChangePassword = {
+  confirmPassword: string;
+  newPassword: string;
+  oldPassword: string;
+};
 type TokenResponse = {
   token: string;
 };
@@ -34,6 +39,8 @@ const postWithCredentials = (url: string, payload?: unknown) =>
   apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
 const patch = (url: string, token?: string, payload?: unknown) =>
   apiClient.patch(url, payload, { headers: { Authorization: `Bearer ${token}` } });
+const put = (url: string, token?: string, payload?: unknown) =>
+  apiClient.put(url, payload, { headers: { Authorization: `Bearer ${token}` } });
 const get = (url: string, token?: string) =>
   apiClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
 
@@ -93,5 +100,14 @@ export const useResendMail = () => {
   return useMutation({
     mutationKey: [keys.USERKEY, 'resend mail'],
     mutationFn: async () => get(`/users/email`, user?.token),
+  });
+};
+
+export const usePasswordChange = () => {
+  const client = useQueryClient();
+  const user: User | undefined = client.getQueryData([keys.USERKEY]);
+  return useMutation({
+    mutationKey: [keys.USERKEY, 'change password'],
+    mutationFn: async (data: ChangePassword) => put('/users/password', user?.token, data),
   });
 };

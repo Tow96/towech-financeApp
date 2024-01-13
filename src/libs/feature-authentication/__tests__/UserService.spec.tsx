@@ -6,7 +6,14 @@ import { renderHook, waitFor } from '@testing-library/react';
 import apiClient, { BASE_URL } from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 // Tested Components ----------------------------------------------------------
-import { useAuth, useEditUser, useLogin, useLogout, useResendMail } from '../UserService';
+import {
+  useAuth,
+  useEditUser,
+  useLogin,
+  useLogout,
+  usePasswordChange,
+  useResendMail,
+} from '../UserService';
 
 // Stubs ----------------------------------------------------------------------
 const stubUser = {
@@ -158,6 +165,21 @@ describe('UserService', () => {
         await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(mock.history.get[0].url).toBe('/users/email');
+      });
+    });
+    describe('usePasswordChange', () => {
+      it('should call the correct endpoint', async () => {
+        const mock = mockAdapter();
+        const { wrapper } = mockTanstack();
+        mock.onPut(`${BASE_URL}/users/password`).replyOnce(204);
+
+        const { result } = renderHook(() => usePasswordChange(), { wrapper });
+        act(() =>
+          result.current.mutate({ confirmPassword: 'new', newPassword: 'new', oldPassword: 'old' })
+        );
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
+
+        expect(mock.history.put[0].url).toBe('/users/password');
       });
     });
   });
