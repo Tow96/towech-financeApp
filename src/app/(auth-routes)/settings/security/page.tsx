@@ -5,7 +5,11 @@
  */
 'use client';
 // Libraries ------------------------------------------------------------------
-import { ChangePassword, usePasswordChange } from '@/libs/feature-authentication/UserService';
+import {
+  ChangePassword,
+  usePasswordChange,
+  usePasswordReset,
+} from '@/libs/feature-authentication/UserService';
 // Hooks ----------------------------------------------------------------------
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -34,6 +38,14 @@ const SecuritySettingsPage = (): JSX.Element => {
       addToast({ message: changePass.error?.message || 'Error', type: 'error' });
   }, [addToast, changePassForm, changePass.status, changePass.error?.message]);
 
+  // Pasword Reset ------------------------------
+  const resetPass = usePasswordReset();
+  useEffect(() => {
+    if (resetPass.status === 'success') addToast({ message: 'Email sent', type: 'success' });
+    if (resetPass.status === 'error')
+      addToast({ message: resetPass.error?.message || 'Error', type: 'error' });
+  }, [addToast, resetPass.status, resetPass.error?.message]);
+
   // Render -------------------------------------
   return (
     <main>
@@ -60,6 +72,10 @@ const SecuritySettingsPage = (): JSX.Element => {
           </Button>
         </form>
         {changePass.status === 'pending' && <Spinner />}
+      </section>
+      <section data-testid="reset-form">
+        <h2>Forgotten Password</h2>
+        <Button onClick={() => resetPass.mutate()}>Send reset email</Button>
       </section>
     </main>
   );
