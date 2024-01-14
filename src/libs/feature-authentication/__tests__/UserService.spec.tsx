@@ -12,6 +12,7 @@ import {
   useLogin,
   useLogout,
   usePasswordChange,
+  usePasswordReset,
   useResendMail,
 } from '../UserService';
 
@@ -180,6 +181,19 @@ describe('UserService', () => {
         await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(mock.history.put[0].url).toBe('/users/password');
+      });
+    });
+    describe('usePasswordReset', () => {
+      it('should call the correct endpoint', async () => {
+        const mock = mockAdapter();
+        const { wrapper } = mockTanstack();
+        mock.onPost(`${BASE_URL}/users/reset`).replyOnce(204);
+
+        const { result } = renderHook(() => usePasswordReset(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
+
+        expect(mock.history.post[0].url).toBe('/users/reset');
       });
     });
   });

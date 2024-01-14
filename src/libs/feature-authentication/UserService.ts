@@ -111,3 +111,12 @@ export const usePasswordChange = () => {
     mutationFn: async (data: ChangePassword) => put('/users/password', user?.token, data),
   });
 };
+
+export const usePasswordReset = () => {
+  const client = useQueryClient();
+  const user: User | undefined = client.getQueryData([keys.USERKEY]);
+  return useMutation({
+    mutationKey: [keys.USERKEY, 'reset password'],
+    mutationFn: async () => postWithCredentials('/users/reset', { username: user?.username }),
+  });
+};
