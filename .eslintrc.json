@@ -6,12 +6,7 @@
   ],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "max-depth": [
           "error",
@@ -28,12 +23,7 @@
       }
     },
     {
-      "files": [
-        "*.spec.ts",
-        "*.spec.tsx",
-        "*spec.js",
-        "*spec.jsx"
-      ],
+      "files": ["*.spec.ts", "*.spec.tsx", "*spec.js", "*spec.jsx"],
       "rules": {
         "max-nested-callbacks": "off"
       }
