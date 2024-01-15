@@ -9,6 +9,7 @@ import { keys } from '@/utils/TanstackProvider';
 import {
   useAuth,
   useEditUser,
+  useGlobalLogout,
   useLogin,
   useLogout,
   usePasswordChange,
@@ -194,6 +195,30 @@ describe('UserService', () => {
         await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
         expect(mock.history.post[0].url).toBe('/users/reset');
+      });
+    });
+    describe('useGlobalLogout', () => {
+      it('Should set the token as null call is successful', async () => {
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/logout-all`).replyOnce(204);
+
+        const { result } = renderHook(() => useGlobalLogout(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
+
+        expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
+      });
+      it('Should set the token as null if call is unsuccessful', async () => {
+        const mock = mockAdapter();
+        const { wrapper, queryClient } = mockTanstack();
+        mock.onPost(`${BASE_URL}/authentication/logout-all`).networkErrorOnce();
+
+        const { result } = renderHook(() => useGlobalLogout(), { wrapper });
+        act(() => result.current.mutate());
+        await waitFor(() => expect(result.current.isError).toBeTruthy());
+
+        expect(queryClient.getQueryData([keys.USERKEY])).toBeNull();
       });
     });
   });

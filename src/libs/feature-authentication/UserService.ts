@@ -120,3 +120,13 @@ export const usePasswordReset = () => {
     mutationFn: async () => postWithCredentials('/users/reset', { username: user?.username }),
   });
 };
+
+export const useGlobalLogout = () => {
+  const client = useQueryClient();
+  return useMutation({
+    mutationKey: [keys.USERKEY, 'logout-all'],
+    mutationFn: async () => postWithCredentials('/authentication/logout-all'),
+    onSuccess: () => client.setQueryData([keys.USERKEY], null),
+    onError: () => client.setQueryData([keys.USERKEY], null),
+  });
+};
