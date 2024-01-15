@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+dialog::backdrop {
+  backdrop-filter: blur(4px);
+}
+
 @layer utilities {
   html {
     @apply scroll-smooth;
