@@ -26,13 +26,13 @@ const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
 
   // Render -------------------------------------
   return (
-    <div>
+    <div className="mx-3 mt-6 flex-1 bg-riverbed-700">
       <div>
         <Link href="/settings/user">User</Link>
         <br />
         <Link href="/settings/security">Security</Link>
       </div>
-      <div>{children}</div>
+      <div className="px-3">{children}</div>
     </div>
   );
 };
