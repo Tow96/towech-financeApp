@@ -20,7 +20,7 @@ const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
     <div className="flex flex-1 items-center justify-center px-6 pt-10 sm:p-4">
       <div className="short:h-full flex h-full max-w-[60rem] flex-1 flex-col bg-riverbed-700 sm:flex-row md:h-[30rem]">
         <SettingsMenu />
-        <div className="h-full flex-1 overflow-auto px-3">{children}</div>
+        <div className="h-full flex-1 overflow-auto p-3">{children}</div>
       </div>
     </div>
   );

@@ -47,26 +47,39 @@ export const EditUserForm = (): JSX.Element => {
 
   // Render -------------------------------------
   return (
-    <section>
-      <h2>Change User</h2>
+    <section className="relative">
+      <h2 className="text-2xl">Change User</h2>
       <form onSubmit={userForm.handleSubmit(onUserFormSubmit)}>
-        <Input
-          label="Name"
-          register={userForm.register('name', {
-            validate: { isDifferent },
-          })}
-        />
-        <Input
-          label="Email"
-          register={userForm.register('username', {
-            validate: { isDifferent },
-          })}
-        />
-        <Button type="submit" disabled={!userForm.formState.isValid}>
-          Save
-        </Button>
+        <div className="justify-around md:flex">
+          <Input
+            label="Name"
+            register={userForm.register('name', {
+              validate: { isDifferent },
+            })}
+          />
+          <Input
+            label="Email"
+            register={userForm.register('username', {
+              validate: { isDifferent },
+            })}
+          />
+        </div>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={!userForm.formState.isValid}>
+            Save
+          </Button>
+        </div>
       </form>
-      {editUser.status === 'pending' && <Spinner />}
+      <FormLoading visible={editUser.status === 'pending'} />
     </section>
+  );
+};
+
+const FormLoading = ({ visible }: { visible: boolean }): JSX.Element => {
+  if (!visible) return <></>;
+  return (
+    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-riverbed-700 opacity-80">
+      <Spinner />
+    </div>
   );
 };

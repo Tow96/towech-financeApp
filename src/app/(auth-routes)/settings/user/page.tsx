@@ -5,7 +5,7 @@
  */
 // Libraries ------------------------------------------------------------------
 // Used Components ------------------------------------------------------------
-import { EditUserForm } from '@/libs/feature-settings/editUserForm';
+import { EditUserForm } from '@/libs/feature-settings/EditUserForm';
 import { ResendVerificationForm } from '@/libs/feature-settings/resendVerificationForm';
 
 // Component ------------------------------------------------------------------
@@ -14,6 +14,7 @@ const UserSettingsPage = (): JSX.Element => {
   return (
     <main>
       <EditUserForm />
+      <div className="my-3 block border-b-2 border-riverbed-900" />
       <ResendVerificationForm />
       {/* TODO: Delete user button*/}
       <section data-testid="delete-user"></section>

@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { User } from '@/libs/feature-authentication/UserService';
 // Tested Components ----------------------------------------------------------
-import { EditUserForm } from '../editUserForm';
+import { EditUserForm } from '../EditUserForm';
 
 // Stubs ----------------------------------------------------------------------
 const stubUser: User = {
