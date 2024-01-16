@@ -4,37 +4,32 @@
  * Layout for the settings pages
  * Contains the selector menu as well as the title changer
  */
-'use client';
 // Libraries ------------------------------------------------------------------
-
-// Hooks ----------------------------------------------------------------------
-import { useUpdateTitle } from '@/libs/feature-navbar/NavbarService';
-import Link from 'next/link';
-import { useEffect } from 'react';
-
+import { Metadata } from 'next';
 // Used Components ------------------------------------------------------------
-
-// Types ----------------------------------------------------------------------
+import { SettingsMenuItem } from '@/libs/feature-settings/MenuItem';
 
 // Component ------------------------------------------------------------------
-const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
-  // Title change ------------------------------
-  const updateTitle = useUpdateTitle();
-  useEffect(() => {
-    updateTitle('Settings');
-  }, [updateTitle]);
+export const metadata: Metadata = {
+  title: 'Settings',
+};
 
+const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
   // Render -------------------------------------
   return (
-    <div className="mx-3 mt-6 flex-1 bg-riverbed-700">
-      <div>
-        <Link href="/settings/user">User</Link>
-        <br />
-        <Link href="/settings/security">Security</Link>
-      </div>
-      <div className="px-3">{children}</div>
+    <div className="mx-6 mt-10 flex flex-1 flex-col bg-riverbed-700 sm:m-4 sm:flex-row">
+      <SettingsMenu />
+      <div className="flex-1 overflow-auto px-3">{children}</div>
     </div>
   );
 };
 
 export default SettingsLayout;
+
+const SettingsMenu = (): JSX.Element => (
+  <nav className=" flex justify-around bg-riverbed-800 sm:w-28 sm:flex-col sm:justify-normal">
+    <SettingsMenuItem icon="user" name="User" href="user" />
+    <SettingsMenuItem icon="lock" name="Security" href="security" />
+    <SettingsMenuItem icon="users" name="Manage" href="manageusers" />
+  </nav>
+);
