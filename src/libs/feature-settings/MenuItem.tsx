@@ -28,21 +28,23 @@ export const SettingsMenuItem = (props: Props): JSX.Element => {
 
   const classes = classNames({
     'active:input-shadow': true,
-    'sm:p-2': true,
-    'p-4': true,
-    'w-20': true,
-    'sm:w-auto': true,
-    'hover:bg-riverbed-700': true,
-    'hover:text-golden-500': true,
-    'active:bg-riverbed-900': true,
     'pointer-events-none': disabled,
-    underline: disabled,
-    'bg-golden-500': disabled,
-    'text-riverbed-950': disabled,
     flex: true,
+    'w-20': true,
     'flex-col': true,
     'items-center': true,
-    'sm:block': true,
+    'p-4': true,
+    'bg-golden-500': disabled,
+    'text-riverbed-950': disabled,
+    underline: disabled,
+    'hover:bg-riverbed-700': true,
+    'active:bg-riverbed-900': true,
+    'focus-visible:outline-none': true,
+    'focus-visible:text-golden-500': !disabled,
+    'sm:w-auto': true,
+    'sm:flex-row': true,
+    'sm:p-2': true,
+    'md:text-lg': true,
   });
 
   return (
@@ -52,7 +54,7 @@ export const SettingsMenuItem = (props: Props): JSX.Element => {
       aria-disabled={disabled}
       className={classes}>
       <FontAwesomeIcon icon={props.icon} data-testid="icon" width={20} className="sm:pr-2" />
-      {props.name}
+      <div className="line-clamp-1">{props.name}</div>
     </Link>
   );
 };

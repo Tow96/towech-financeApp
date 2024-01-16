@@ -29,9 +29,9 @@ const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
 export default SettingsLayout;
 
 const SettingsMenu = (): JSX.Element => (
-  <nav className=" flex justify-around bg-riverbed-800 sm:w-28 sm:flex-col sm:justify-normal">
+  <nav className=" flex justify-around bg-riverbed-800 sm:w-28 sm:flex-col sm:justify-normal md:w-36">
     <SettingsMenuItem icon="user" name="User" href="user" />
     <SettingsMenuItem icon="lock" name="Security" href="security" />
-    <SettingsMenuItem icon="users" name="Manage" href="manageusers" />
+    <SettingsMenuItem icon="users" name="Manage Users" href="manageusers" />
   </nav>
 );
