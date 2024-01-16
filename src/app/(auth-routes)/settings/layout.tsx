@@ -17,9 +17,11 @@ export const metadata: Metadata = {
 const SettingsLayout = ({ children }: { children?: React.ReactNode }) => {
   // Render -------------------------------------
   return (
-    <div className="mx-6 mt-10 flex flex-1 flex-col bg-riverbed-700 sm:m-4 sm:flex-row">
-      <SettingsMenu />
-      <div className="flex-1 overflow-auto px-3">{children}</div>
+    <div className="flex flex-1 items-center justify-center px-6 pt-10 sm:p-4">
+      <div className="short:h-full flex h-full max-w-[60rem] flex-1 flex-col bg-riverbed-700 sm:flex-row md:h-[30rem]">
+        <SettingsMenu />
+        <div className="h-full flex-1 overflow-auto px-3">{children}</div>
+      </div>
     </div>
   );
 };

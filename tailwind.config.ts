@@ -54,8 +54,9 @@ const config: Config = {
         mono: ['var(--font-chivo-mono)'],
       },
       screens: {
-        widescreen: { raw: '(max-aspect-ratio: 3/2)' },
-        tallscreen: { raw: '(max-aspect-ratio: 13/20)' },
+        // widescreen: { raw: '(max-aspect-ratio: 3/2)' },
+        // tallscreen: { raw: '(max-aspect-ratio: 13/20)' },
+        short: { raw: '(max-height: 500px)' },
       },
     },
   },
