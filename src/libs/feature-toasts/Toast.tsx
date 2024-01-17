@@ -22,7 +22,11 @@ export const ToastComponent = ({ toast }: { toast: Toast }): JSX.Element => {
   }, [dismiss, toast]);
 
   let text = classNames({ 'text-transparent': !visible });
-  let color = classNames({ 'bg-golden-500': true, '!bg-cinnabar-500': toast.type === 'error' });
+  let color = classNames({
+    'bg-golden-500': true,
+    '!bg-cinnabar-500': toast.type === 'error',
+    '!bg-mint-500': toast.type === 'success',
+  });
 
   const transitionRef = useRef(null);
   const transitionCls = {
