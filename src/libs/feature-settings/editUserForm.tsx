@@ -13,7 +13,6 @@ import { useAddToast } from '@/libs/feature-toasts/ToastService';
 // Used Components ------------------------------------------------------------
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
-import { Spinner } from '@/components/spinner';
 
 // Types ----------------------------------------------------------------------
 type EditUserForm = {
@@ -47,39 +46,34 @@ export const EditUserForm = (): JSX.Element => {
 
   // Render -------------------------------------
   return (
-    <section className="relative">
+    <section>
       <h2 className="text-2xl">Change User</h2>
       <form onSubmit={userForm.handleSubmit(onUserFormSubmit)}>
         <div className="justify-around md:flex">
           <Input
             label="Name"
+            disabled={editUser.isPending}
             register={userForm.register('name', {
               validate: { isDifferent },
             })}
           />
           <Input
             label="Email"
+            disabled={editUser.isPending}
             register={userForm.register('username', {
               validate: { isDifferent },
             })}
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" disabled={!userForm.formState.isValid}>
+          <Button
+            type="submit"
+            loading={editUser.isPending}
+            disabled={!userForm.formState.isValid || editUser.isPending}>
             Save
           </Button>
         </div>
       </form>
-      <FormLoading visible={editUser.status === 'pending'} />
     </section>
-  );
-};
-
-const FormLoading = ({ visible }: { visible: boolean }): JSX.Element => {
-  if (!visible) return <></>;
-  return (
-    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-riverbed-700 opacity-80">
-      <Spinner />
-    </div>
   );
 };

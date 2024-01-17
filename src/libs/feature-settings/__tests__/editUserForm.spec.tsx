@@ -60,19 +60,6 @@ describe('Edit User Form', () => {
       expect(saveBttn).toHaveAttribute('type', 'submit');
       expect(saveBttn).toHaveTextContent('Save');
     });
-    it('Should render a spinner if the status is pending', () => {
-      mockUseEditUser.mockImplementationOnce(() => ({ status: 'pending' }) as any);
-      render(<EditUserForm />);
-
-      const spinner = screen.getByRole('status');
-      expect(spinner).toBeInTheDocument();
-    });
-    it('Should not render a spinner if status is not pending', () => {
-      mockUseEditUser.mockImplementationOnce(() => ({ status: 'idle' }) as any);
-      render(<EditUserForm />);
-
-      expect(() => screen.getByRole('status')).toThrow();
-    });
   });
   describe('Behaviour', () => {
     it('The save button should be disabled when there are no changes in the user', async () => {
@@ -101,6 +88,25 @@ describe('Edit User Form', () => {
       await userEvent.click(saveBttn);
 
       expect(mutate).toHaveBeenCalledWith({ name: 'newName', username: 'newEmail@provider.com' });
+    });
+    it('Should disable the inputs and button if the status is pending', () => {
+      mockUseEditUser.mockImplementationOnce(() => ({ status: 'pending', isPending: true }) as any);
+
+      render(<EditUserForm />);
+      const nameInput = screen.getByLabelText('Name');
+      const emailInput = screen.getByLabelText('Email');
+      const saveBttn = screen.getByRole('button');
+
+      expect(nameInput).toBeDisabled();
+      expect(emailInput).toBeDisabled();
+      expect(saveBttn).toBeDisabled();
+    });
+    it('Should set the button to "loading" if the status is pending', () => {
+      mockUseEditUser.mockImplementationOnce(() => ({ status: 'pending', isPending: true }) as any);
+      render(<EditUserForm />);
+      const saveBttn = screen.getByRole('button');
+
+      expect(saveBttn).toHaveAttribute('aria-busy', 'true');
     });
     it('Should add a success Toast if the call returns successful', () => {
       mockUseEditUser.mockImplementation(() => ({ status: 'success' }) as any);
