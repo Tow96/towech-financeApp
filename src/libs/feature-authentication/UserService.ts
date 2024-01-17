@@ -121,7 +121,7 @@ export const usePasswordReset = () => {
   });
 };
 
-export const useGlobalLogout = () => {
+export const useLogoutAll = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [keys.USERKEY, 'logout-all'],

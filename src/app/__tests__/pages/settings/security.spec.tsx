@@ -24,25 +24,12 @@ const stubForm = (name: string) => <div data-testid="form-item">{name}</div>;
 jest.mock('../../../../libs/feature-settings/ChangePasswordForm', () => ({
   ChangePasswordForm: () => stubForm('Change Pass'),
 }));
-jest.mock('../../../../libs/feature-settings/ResetPasswordForm.tsx', () => ({
+jest.mock('../../../../libs/feature-settings/ResetPasswordForm', () => ({
   ResetPasswordForm: () => stubForm('Reset Pass'),
 }));
-
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  useSearchParams: jest.fn(),
-  usePathname: jest.fn(),
-  redirect: jest.fn(),
+jest.mock('../../../../libs/feature-settings/LogoutAllForm', () => ({
+  LogoutAllForm: () => stubForm('Logout All'),
 }));
-jest.mock('../../../../libs/feature-authentication/UserService', () => ({
-  useAuth: jest.fn(),
-  useGlobalLogout: jest.fn(),
-}));
-const mockUseAuth = jest.spyOn(UserService, 'useAuth');
-const mockRouter = jest.spyOn(Navigation, 'useRouter');
-const mockPath = jest.spyOn(Navigation, 'usePathname');
-const mockParams = jest.spyOn(Navigation, 'useSearchParams');
-const mockGlobalLogout = jest.spyOn(UserService, 'useGlobalLogout');
 
 // Tests ----------------------------------------------------------------------
 describe('Security Settings Page', () => {
@@ -53,61 +40,7 @@ describe('Security Settings Page', () => {
 
       expect(forms[0]).toHaveTextContent('Change Pass');
       expect(forms[1]).toHaveTextContent('Reset Pass');
-    });
-  });
-
-  beforeEach(() => {
-    jest.resetAllMocks();
-    mockUseAuth.mockImplementation(() => ({ data: stubUser, status: 'success' }) as any);
-    mockGlobalLogout.mockImplementation(() => ({ mutate: () => ({}) }) as any);
-    mockRouter.mockImplementation(() => ({ route: '/' }) as any);
-    mockPath.mockImplementation(() => '/');
-    mockParams.mockImplementation(() => ({}) as any);
-  });
-
-  describe('Global logout', () => {
-    describe('Render', () => {
-      it('Should have a header indicating the form', () => {
-        render(<SecuritySettingsPage />);
-        const logoutForm = screen.getByTestId('logout-form');
-
-        const title = within(logoutForm).getByRole('heading');
-
-        expect(title).toHaveTextContent('Logout from all devices');
-      });
-      it('Should have a logout button', () => {
-        render(<SecuritySettingsPage />);
-        const logoutForm = screen.getByTestId('logout-form');
-
-        const logBttn = within(logoutForm).getAllByRole('button')[0];
-
-        expect(logBttn).toHaveAttribute('type', 'button');
-        expect(logBttn).toHaveTextContent('Logout');
-      });
-    });
-    describe('Behaviour', () => {
-      it('should add the show-logout param when the logout button is clicked', async () => {
-        const mockReplace = jest.fn();
-        mockRouter.mockImplementation(() => ({ route: '/', replace: mockReplace }) as any);
-        render(<SecuritySettingsPage />);
-        const logoutForm = screen.getByTestId('logout-form');
-
-        const logBttn = within(logoutForm).getAllByRole('button')[0];
-        await userEvent.click(logBttn);
-
-        expect(mockReplace).toHaveBeenCalledWith('/?show-logout=y');
-      });
-      it('should call the global logout mutation when the logout modal is confirmed', async () => {
-        const mutate = jest.fn();
-        mockGlobalLogout.mockImplementation(() => ({ mutate }) as any);
-        render(<SecuritySettingsPage />);
-        const logoutForm = screen.getByTestId('logout-form');
-
-        const confirmBttn = within(logoutForm).getAllByRole('button')[1];
-        await userEvent.click(confirmBttn);
-
-        expect(mutate).toHaveBeenCalled();
-      });
+      expect(forms[2]).toHaveTextContent('Logout All');
     });
   });
 });
