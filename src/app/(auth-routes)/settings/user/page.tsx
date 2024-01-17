@@ -6,7 +6,7 @@
 // Libraries ------------------------------------------------------------------
 // Used Components ------------------------------------------------------------
 import { EditUserForm } from '@/libs/feature-settings/EditUserForm';
-import { ResendVerificationForm } from '@/libs/feature-settings/resendVerificationForm';
+import { ResendVerificationForm } from '@/libs/feature-settings/ResendVerificationForm';
 
 // Component ------------------------------------------------------------------
 const UserSettingsPage = (): JSX.Element => {

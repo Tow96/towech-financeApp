@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { User } from '@/libs/feature-authentication/UserService';
 // Tested Components ----------------------------------------------------------
-import { ResendVerificationForm } from '../resendVerificationForm';
+import { ResendVerificationForm } from '../ResendVerificationForm';
 
 // Stubs ----------------------------------------------------------------------
 const stubUser: User = {
@@ -68,7 +68,7 @@ describe('Email Verification', () => {
       const resendBttn = screen.getByRole('button');
 
       expect(resendBttn).toHaveAttribute('type', 'button');
-      expect(resendBttn).toHaveTextContent('Resend verification email');
+      expect(resendBttn).toHaveTextContent('Resend email');
     });
   });
   describe('Behaviour', () => {
@@ -86,6 +86,47 @@ describe('Email Verification', () => {
 
       expect(mutate).toHaveBeenCalledTimes(1);
     });
-    it.todo('Send TOAST');
+    it('Should disable the button when the status is pending', () => {
+      mockAuth.mockImplementation(() => ({
+        data: { ...stubUser, accountConfirmed: false },
+        status: 'success',
+      }));
+      mockResendMail.mockImplementation(() => ({ status: 'pending', isPending: true }) as any);
+      render(<ResendVerificationForm />);
+
+      const resendBttn = screen.getByRole('button');
+
+      expect(resendBttn).toBeDisabled();
+    });
+    it('Should set the button as "loading" if the status is pending', () => {
+      mockAuth.mockImplementation(() => ({
+        data: { ...stubUser, accountConfirmed: false },
+        status: 'success',
+      }));
+      mockResendMail.mockImplementation(() => ({ status: 'pending', isPending: true }) as any);
+      render(<ResendVerificationForm />);
+
+      const resendBttn = screen.getByRole('button');
+
+      expect(resendBttn).toHaveAttribute('aria-busy', 'true');
+    });
+    it('Should add a success Toast if the call returns successful', () => {
+      mockResendMail.mockImplementation(() => ({ status: 'success' }) as any);
+      render(<ResendVerificationForm />);
+
+      expect(mockToast).toHaveBeenCalledWith({
+        message: 'Email sent',
+        type: 'success',
+      });
+    });
+    it('Should add an error Toast if the call returns an error', () => {
+      mockResendMail.mockImplementation(() => ({ status: 'error' }) as any);
+      render(<ResendVerificationForm />);
+
+      expect(mockToast).toHaveBeenCalledWith({
+        message: expect.any(String),
+        type: 'error',
+      });
+    });
   });
 });

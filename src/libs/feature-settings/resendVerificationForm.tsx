@@ -4,15 +4,12 @@
  * Form that is used to re-verify an email
  */
 'use client';
-// Libraries ------------------------------------------------------------------
 // Hooks ----------------------------------------------------------------------
+import { useEffect } from 'react';
 import { useAuth, useResendMail } from '@/libs/feature-authentication/UserService';
 import { useAddToast } from '@/libs/feature-toasts/ToastService';
 // Used Components ------------------------------------------------------------
 import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import { Spinner } from '@/components/spinner';
-// Types ----------------------------------------------------------------------
 
 // Component ------------------------------------------------------------------
 export const ResendVerificationForm = (): JSX.Element => {
@@ -20,14 +17,30 @@ export const ResendVerificationForm = (): JSX.Element => {
   const resendMail = useResendMail();
 
   const addToast = useAddToast();
+  useEffect(() => {
+    if (resendMail.status === 'success') addToast({ message: 'Email sent', type: 'success' });
+    if (resendMail.status === 'error')
+      addToast({ message: resendMail.error?.message || 'Error', type: 'error' });
+  }, [addToast, resendMail.status, resendMail.error?.message]);
 
   return (
     <section data-testid="mail-status">
-      <h2>Email status:</h2>
-      <span role="caption">{user?.accountConfirmed ? 'Verified' : 'Unverified'}</span>
-      {!user?.accountConfirmed && (
-        <Button onClick={() => resendMail.mutate()}>Resend verification email</Button>
-      )}
+      <h2 className="mb-2 text-2xl">Email status:</h2>
+      <div className="flex items-center gap-12">
+        <p
+          role="caption"
+          className={`${user?.accountConfirmed ? 'text-mint-300' : 'text-cinnabar-300'} font-extrabold`}>
+          {user?.accountConfirmed ? 'Verified' : 'Unverified'}
+        </p>
+        {!user?.accountConfirmed && (
+          <Button
+            onClick={() => resendMail.mutate()}
+            disabled={resendMail.isPending}
+            loading={resendMail.isPending}>
+            Resend email
+          </Button>
+        )}
+      </div>
     </section>
   );
 };
