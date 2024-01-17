@@ -9,7 +9,7 @@ import { keys } from '@/utils/TanstackProvider';
 import {
   useAuth,
   useEditUser,
-  useGlobalLogout,
+  useLogoutAll,
   useLogin,
   useLogout,
   usePasswordChange,
@@ -203,7 +203,7 @@ describe('UserService', () => {
         const { wrapper, queryClient } = mockTanstack();
         mock.onPost(`${BASE_URL}/authentication/logout-all`).replyOnce(204);
 
-        const { result } = renderHook(() => useGlobalLogout(), { wrapper });
+        const { result } = renderHook(() => useLogoutAll(), { wrapper });
         act(() => result.current.mutate());
         await waitFor(() => expect(result.current.isSuccess).toBeTruthy());
 
@@ -214,7 +214,7 @@ describe('UserService', () => {
         const { wrapper, queryClient } = mockTanstack();
         mock.onPost(`${BASE_URL}/authentication/logout-all`).networkErrorOnce();
 
-        const { result } = renderHook(() => useGlobalLogout(), { wrapper });
+        const { result } = renderHook(() => useLogoutAll(), { wrapper });
         act(() => result.current.mutate());
         await waitFor(() => expect(result.current.isError).toBeTruthy());
 

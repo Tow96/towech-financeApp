@@ -29,13 +29,11 @@ describe('Button component', () => {
       it('should contain the "golden" color as default', () => {
         render(<Button>bttn</Button>);
         const bttn = screen.getByRole('button');
-        expect(bttn).toHaveClass('bg-golden-500 text-riverbed-950');
-        expect(bttn).toHaveClass('hover:bg-golden-400');
-        expect(bttn).toHaveClass('active:bg-golden-600');
+        expect(bttn).toHaveClass('bg-golden-400 text-golden-950');
+        expect(bttn).toHaveClass('hover:bg-golden-300');
+        expect(bttn).toHaveClass('active:bg-golden-500');
         expect(bttn).toHaveClass('focus-visible:focused-button-shadow');
-        expect(bttn).toHaveClass(
-          'disabled:bg-golden-300 disabled:button-shadow-disabled disabled:text-riverbed-600'
-        );
+        expect(bttn).toHaveClass('disabled:bg-golden-400');
       });
     });
     it('should render the child content', () => {

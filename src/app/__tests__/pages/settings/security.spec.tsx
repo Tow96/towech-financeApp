@@ -1,23 +1,10 @@
 // Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
-import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import * as UserService from '@/libs/feature-authentication/UserService';
-import * as Navigation from 'next/navigation';
+import { render, screen } from '@testing-library/react';
 // Tested Components ----------------------------------------------------------
 import SecuritySettingsPage from '@/app/(auth-routes)/settings/security/page';
 
 // Stubs ----------------------------------------------------------------------
-const stubUser: UserService.User = {
-  name: 'test',
-  username: 'testuser@provider.com',
-  _id: 'ffffffffffffffffffffffff',
-  role: 'user',
-  accountConfirmed: true,
-  exp: 0,
-  iat: 0,
-  token: 'token',
-};
 const stubForm = (name: string) => <div data-testid="form-item">{name}</div>;
 
 // Mocks ----------------------------------------------------------------------
