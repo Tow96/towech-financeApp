@@ -46,6 +46,12 @@ describe('Button component', () => {
 
       expect(bttn).toHaveTextContent(num.toString());
     });
+    it('should render a spinner if it has the loading attribute', () => {
+      render(<Button loading={true}>a</Button>);
+      const spinner = screen.getByRole('status');
+
+      expect(spinner).toBeInTheDocument();
+    });
   });
   describe('Behaviour', () => {
     it('Should execute the given function when clicked', async () => {
