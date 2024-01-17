@@ -19,8 +19,13 @@ const stubUser: UserService.User = {
   iat: 0,
   token: 'token',
 };
+const stubForm = (name: string) => <div data-testid="form-item">{name}</div>;
 
 // Mocks ----------------------------------------------------------------------
+jest.mock('../../../../libs/feature-settings/ChangePasswordForm', () => ({
+  ChangePasswordForm: () => stubForm('Change Pass'),
+}));
+
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn(),
@@ -47,6 +52,15 @@ const mockGlobalLogout = jest.spyOn(UserService, 'useGlobalLogout');
 
 // Tests ----------------------------------------------------------------------
 describe('Security Settings Page', () => {
+  describe('Render', () => {
+    it('should render all the forms in the correct order', () => {
+      render(<SecuritySettingsPage />);
+      const forms = screen.getAllByTestId('form-item');
+
+      expect(forms[0]).toHaveTextContent('Change Pass');
+    });
+  });
+
   beforeEach(() => {
     jest.resetAllMocks();
     mockAddToast.mockImplementation(() => () => {});
@@ -57,154 +71,6 @@ describe('Security Settings Page', () => {
     mockRouter.mockImplementation(() => ({ route: '/' }) as any);
     mockPath.mockImplementation(() => '/');
     mockParams.mockImplementation(() => ({}) as any);
-  });
-
-  describe('Change Password Form', () => {
-    describe('Render', () => {
-      it('Should have a header indicating the form', () => {
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-
-        const title = within(passForm).getByRole('heading');
-
-        expect(title).toHaveTextContent('Change Password');
-      });
-      it('Should have three password inputs containing the old new and confirm password fields', () => {
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-
-        const oldInput = within(passForm).getByLabelText('Old password');
-        const newInput = within(passForm).getByLabelText('New password');
-        const confirmInput = within(passForm).getByLabelText('Confirm new password');
-
-        expect(oldInput).toBeInTheDocument();
-        expect(oldInput).toHaveAttribute('type', 'password');
-        expect(newInput).toBeInTheDocument();
-        expect(newInput).toHaveAttribute('type', 'password');
-        expect(confirmInput).toBeInTheDocument();
-        expect(confirmInput).toHaveAttribute('type', 'password');
-      });
-      it('Should have a Save button', () => {
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-
-        const saveBttn = within(passForm).getByRole('button');
-
-        expect(saveBttn).toHaveAttribute('type', 'submit');
-        expect(saveBttn).toHaveTextContent('Save');
-      });
-      it('Should render a spinner if the status is pending', () => {
-        mockUsePassChange.mockImplementation(() => ({ status: 'pending' }) as any);
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-        const spinner = within(passForm).getByRole('status');
-        expect(spinner).toBeInTheDocument();
-      });
-      it('Should not render a spinner if the status is not pending', () => {
-        mockUsePassChange.mockImplementation(() => ({ status: 'idle' }) as any);
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-        expect(() => within(passForm).getByRole('status')).toThrow();
-      });
-    });
-    describe('Behaviour', () => {
-      it('Should disable the Save button until all fields are populated', async () => {
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-
-        const saveBttn = within(passForm).getByRole('button');
-        const oldInput = within(passForm).getByLabelText('Old password');
-        const newInput = within(passForm).getByLabelText('New password');
-        const confirmInput = within(passForm).getByLabelText('Confirm new password');
-
-        await userEvent.clear(oldInput);
-        await userEvent.clear(newInput);
-        await userEvent.clear(confirmInput);
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.type(oldInput, 'old');
-        await userEvent.clear(newInput);
-        await userEvent.clear(confirmInput);
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.clear(oldInput);
-        await userEvent.type(newInput, 'new');
-        await userEvent.clear(confirmInput);
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.clear(oldInput);
-        await userEvent.clear(newInput);
-        await userEvent.type(confirmInput, 'new');
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.type(oldInput, 'old');
-        await userEvent.type(newInput, 'new');
-        await userEvent.clear(confirmInput);
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.type(oldInput, 'old');
-        await userEvent.clear(newInput);
-        await userEvent.type(confirmInput, 'new');
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.clear(oldInput);
-        await userEvent.type(newInput, 'new');
-        await userEvent.type(confirmInput, 'new');
-        expect(saveBttn).toBeDisabled();
-
-        await userEvent.type(oldInput, 'old');
-        await userEvent.type(newInput, 'new');
-        await userEvent.type(confirmInput, 'new');
-        expect(saveBttn).toBeEnabled();
-      });
-      it('Should send the params when save is clicked', async () => {
-        const mutate = jest.fn();
-        mockUsePassChange.mockImplementation(() => ({ mutate }) as any);
-
-        render(<SecuritySettingsPage />);
-        const passForm = screen.getByTestId('pass-form');
-
-        const saveBttn = within(passForm).getByRole('button');
-        const oldInput = within(passForm).getByLabelText('Old password');
-        const newInput = within(passForm).getByLabelText('New password');
-        const confirmInput = within(passForm).getByLabelText('Confirm new password');
-
-        await userEvent.type(oldInput, 'old');
-        await userEvent.type(newInput, 'new');
-        await userEvent.type(confirmInput, 'confirm');
-        await userEvent.click(saveBttn);
-
-        expect(mutate).toHaveBeenCalledWith({
-          oldPassword: 'old',
-          newPassword: 'new',
-          confirmPassword: 'confirm',
-        });
-      });
-      it('Should add a success Toast if the call returns successful', () => {
-        const mockToast = jest.fn();
-        mockUsePassChange.mockImplementation(() => ({ status: 'success' }) as any);
-        mockAddToast.mockImplementation(() => mockToast);
-
-        render(<SecuritySettingsPage />);
-
-        expect(mockToast).toHaveBeenCalledWith({
-          message: 'Password updated',
-          type: 'success',
-        });
-      });
-      it('Should add an error Toast if the call returns an error', () => {
-        const mockToast = jest.fn();
-        mockUsePassChange.mockImplementation(() => ({ status: 'error' }) as any);
-        mockAddToast.mockImplementation(() => mockToast);
-
-        render(<SecuritySettingsPage />);
-
-        expect(mockToast).toHaveBeenCalledWith({
-          message: expect.any(String),
-          type: 'error',
-        });
-      });
-    });
   });
 
   describe('Password Reset', () => {

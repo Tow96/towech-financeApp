@@ -35,7 +35,7 @@ export const Input = ({
   });
 
   return (
-    <div className="relative mx-1 mb-5 mt-7 w-full">
+    <div className="relative mb-2 mt-5 w-full">
       <input
         type={type}
         placeholder=""

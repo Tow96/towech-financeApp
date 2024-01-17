@@ -49,7 +49,7 @@ export const EditUserForm = (): JSX.Element => {
     <section>
       <h2 className="text-2xl">Change User</h2>
       <form onSubmit={userForm.handleSubmit(onUserFormSubmit)}>
-        <div className="justify-around md:flex">
+        <div className="justify-around gap-2 md:flex">
           <Input
             label="Name"
             disabled={editUser.isPending}
