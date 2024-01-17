@@ -34,8 +34,8 @@ describe('Toast Component', () => {
       const toastAccents = screen.getAllByTestId('accent');
       expect(toastAccents[0]).toHaveClass('bg-golden-500'); // info
       expect(toastAccents[1]).toHaveClass('!bg-cinnabar-500'); // error
-      // TODO: Set colors for success and warning
-      // expect(toastAccents[2]).toHaveClass('!bg-golden-500'); // success
+      expect(toastAccents[2]).toHaveClass('!bg-mint-500'); // success
+      // TODO: Set color for warning
       // expect(toastAccents[3]).toHaveClass('!bg-golden-500'); // warning
     });
   });

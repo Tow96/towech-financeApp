@@ -160,15 +160,15 @@ describe('NavbarItem Component', () => {
         expect(link).toHaveAttribute('aria-disabled', 'false');
         expect(link).not.toHaveClass('pointer-events-none');
       });
-      it('should be disabled when the href and current path are the same', () => {
+      it('should be disabled when the href and current path are in the same root', () => {
         render(
           <NavbarItem
             collapsed={false}
             name="test"
             type="link"
-            href="/"
+            href="/destination"
             setCollapsed={() => {}}
-            current="/"
+            current="/destination/extra"
             icon={'hamburger'}
           />
         );

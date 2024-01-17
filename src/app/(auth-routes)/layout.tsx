@@ -9,9 +9,9 @@ import { Navbar } from '@/libs/feature-navbar/Navbar';
 
 const AuthLayout = ({ children }: { children?: React.ReactNode }) => (
   <AuthProvider>
-    <div className="flex flex-col sm:flex-row">
+    <div className="flex h-screen flex-col sm:w-screen sm:flex-row">
       <Navbar />
-      {children}
+      <div className="flex flex-1">{children}</div>
     </div>
   </AuthProvider>
 );

@@ -3,10 +3,7 @@
  *
  * Page for user settings
  */
-const SettingsPage = (): JSX.Element => (
-  <main>
-    <h1>Settings</h1>
-  </main>
-);
+import { redirect } from 'next/navigation';
 
+const SettingsPage = () => redirect('/settings/user');
 export default SettingsPage;

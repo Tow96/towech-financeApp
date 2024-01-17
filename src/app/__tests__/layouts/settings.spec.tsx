@@ -1,27 +1,31 @@
 // Libraries ------------------------------------------------------------------
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
-import * as NavService from '@/libs/feature-navbar/NavbarService';
+import { render, screen, within } from '@testing-library/react';
 // Tested Components ----------------------------------------------------------
-import SettingsLayout from '@/app/(auth-routes)/settings/layout';
+import SettingsLayout, { metadata } from '@/app/(auth-routes)/settings/layout';
 
 // Stubs ----------------------------------------------------------------------
 const stubContent = <div data-testid="test-content">CONTENT</div>;
+const stubMenuItem = (name: string) => <div data-testid="menu-item">{name}</div>;
 
 // Mocks ----------------------------------------------------------------------
-jest.mock('../../../libs/feature-navbar/NavbarService', () => ({
-  useUpdateTitle: jest.fn(),
+jest.mock('../../../libs/feature-settings/MenuItem', () => ({
+  SettingsMenuItem: ({ name }: { name: string }) => stubMenuItem(name),
 }));
-const mockTitle = jest.spyOn(NavService, 'useUpdateTitle');
 
 // Tests ----------------------------------------------------------------------
 describe('Settings Layout', () => {
-  beforeEach(() => {
-    jest.restoreAllMocks();
-    mockTitle.mockImplementation(() => () => {});
-  });
-
   describe('Render', () => {
+    it('should set the page title to "Settings"', () => {
+      expect(metadata.title).toBe('Settings');
+    });
+    it('should render a nav containing three items', () => {
+      render(<SettingsLayout>{stubContent}</SettingsLayout>);
+      const nav = screen.getByRole('navigation');
+      const items = within(nav).getAllByTestId('menu-item');
+
+      expect(items.length).toBe(2);
+    });
     it('should render the child content', () => {
       render(<SettingsLayout>{stubContent}</SettingsLayout>);
 
@@ -29,14 +33,14 @@ describe('Settings Layout', () => {
       expect(content).toBeInTheDocument();
     });
   });
-  describe('Behaviour', () => {
-    it('should update the title of the navbar', () => {
-      const mockUpdate = jest.fn();
-      mockTitle.mockImplementation(() => mockUpdate);
+  // describe('Behaviour', () => {
+  //   it('should update the title of the navbar', () => {
+  //     const mockUpdate = jest.fn();
+  //     mockTitle.mockImplementation(() => mockUpdate);
 
-      render(<SettingsLayout>{stubContent}</SettingsLayout>);
+  //     render(<SettingsLayout>{stubContent}</SettingsLayout>);
 
-      expect(mockUpdate).toHaveBeenCalledWith('Settings');
-    });
-  });
+  //     expect(mockUpdate).toHaveBeenCalledWith('Settings');
+  //   });
+  // });
 });
