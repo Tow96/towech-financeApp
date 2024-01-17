@@ -3,6 +3,7 @@
  *
  * Text Input component
  */
+import { classNames } from '@/utils/ConditionalClasses';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -15,18 +16,23 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = ({
   register,
   label,
-  error,
+  error = false,
   type = 'text',
   className,
   ...props
 }: Props): JSX.Element => {
   const id = label.replace(/\s/g, '').toLowerCase();
-  const inputVariableClasses = error
-    ? `focus-visible:focused-input-error`
-    : `focus-visible:focused-input-shadow`;
-  const labelVariableClasses = error
-    ? `text-cinnabar-500 font-semibold`
-    : `text-riverbed-50 font-normal`;
+
+  const inputVariableClasses = classNames({
+    'focus-visible:focused-input-error': error,
+    'focus-visible:focused-input-shadow': !error,
+  });
+  const labelVariableClasses = classNames({
+    'text-cinnabar-500': error,
+    'font-semibold': error,
+    'text-riverbed-50': !error,
+    'font-normal': !error,
+  });
 
   return (
     <div className="relative mx-1 mb-5 mt-7 w-full">
@@ -35,7 +41,7 @@ export const Input = ({
         placeholder=""
         {...register}
         id={id}
-        className={`${inputVariableClasses} input-shadow peer box-border w-full rounded border-none bg-riverbed-800 px-2 py-1 text-lg font-normal text-riverbed-50 focus:outline-none ${className}`}
+        className={`${inputVariableClasses} input-shadow peer box-border w-full rounded border-none bg-riverbed-800 px-2 py-1 text-lg font-normal text-riverbed-50 focus:outline-none disabled:opacity-75 disabled:shadow-none ${className}`}
         {...props}
       />
       <label
