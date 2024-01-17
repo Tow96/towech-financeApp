@@ -9,7 +9,7 @@ import { Spinner } from './spinner';
 
 // Types ----------------------------------------------------------------------
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: 'accent' | 'success' | 'error' | 'warning';
+  color?: 'accent' | 'danger';
   loading?: boolean;
 }
 
@@ -22,11 +22,17 @@ export const Button = ({
   ...props
 }: Props): JSX.Element => {
   const variableClasses = classNames({
-    // TODO: button colors
-    'bg-golden-500 hover:bg-golden-400 active:bg-golden-600 text-riverbed-950 focus-visible:focused-button-shadow disabled:bg-golden-300 disabled:button-shadow-disabled disabled:text-riverbed-600':
-      true,
+    'bg-golden-400 text-golden-950 hover:bg-golden-300 active:bg-golden-500 focus-visible:focused-button-shadow disabled:bg-golden-400':
+      color === 'accent',
+    'bg-cinnabar-300 text-cinnabar-900 hover:bg-cinnabar-200 active:bg-cinnabar-400 focus-visible:focused-danger-button-shadow disabled:bg-cinnabar-300':
+      color === 'danger',
     'px-3': loading,
     'px-6': !loading,
+  });
+  const spinnerClass = classNames({
+    'mr-2': true,
+    'border-golden-950': color === 'accent',
+    'border-cinnabar-900': color === 'danger',
   });
 
   return (
@@ -35,8 +41,8 @@ export const Button = ({
       disabled={disabled}
       type={type}
       aria-busy={loading}
-      className={`button-shadow active:input-shadow relative flex items-center rounded-lg py-2 font-semibold transition duration-200 focus-visible:outline-none ${variableClasses}`}>
-      {loading && <Spinner size="xs" color={disabled ? '600' : '950'} className="mr-2" />}
+      className={`button-shadow active:input-shadow disabled:button-shadow-disabled relative flex items-center rounded-lg py-2 font-semibold transition duration-200 focus-visible:outline-none disabled:opacity-75 ${variableClasses} `}>
+      {loading && <Spinner size="xs" className={spinnerClass} />}
       <div>{children}</div>
     </button>
   );

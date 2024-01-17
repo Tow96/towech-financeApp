@@ -44,4 +44,7 @@ dialog::backdrop {
   .focused-button-shadow {
     box-shadow: 0 0 0 0.2rem rgba(252, 206, 79, 0.5);
   }
+  .focused-danger-button-shadow {
+    box-shadow: 0 0 0 0.2rem rgba(237, 55, 38, 0.5);
+  }
 }
