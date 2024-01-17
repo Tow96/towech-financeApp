@@ -13,6 +13,7 @@ import { Button } from './button';
 
 // Types ----------------------------------------------------------------------
 type Props = {
+  color?: 'accent' | 'danger';
   title: string;
   onClose?: () => void;
   onOk?: () => void;
@@ -21,7 +22,14 @@ type Props = {
 };
 
 // Component ------------------------------------------------------------------
-export const Modal = ({ title, onClose, onOk, children, param }: Props): JSX.Element | null => {
+export const Modal = ({
+  color,
+  title,
+  onClose,
+  onOk,
+  children,
+  param,
+}: Props): JSX.Element | null => {
   const router = useRouter();
   const path = usePathname();
 
@@ -64,16 +72,22 @@ export const Modal = ({ title, onClose, onOk, children, param }: Props): JSX.Ele
   // Render -------------------------------------
   if (!showDialog) return null;
   return (
-    <dialog ref={dialogRef} className="w-4/5 sm:w-96">
+    <dialog ref={dialogRef} className="w-4/5 shadow-2xl drop-shadow-2xl sm:w-96">
       <div className="bg-riverbed-800 p-4 text-riverbed-50">
-        <div className="flex justify-between">
-          <h2>{title}</h2>
-          <button onClick={closeDialog}>X</button>
+        <div className="flex items-start justify-between">
+          <h2 className="text-xl sm:text-2xl">{title}</h2>
+          <button
+            onClick={closeDialog}
+            className="active:input-shadow aspect-square w-8 rounded-full text-lg font-extrabold hover:bg-riverbed-700 active:bg-riverbed-900">
+            X
+          </button>
         </div>
         <div className="my-3 block border-b-2 border-riverbed-900"></div>
-        <div>{children}</div>
+        <div className="pb-4 sm:text-sm">{children}</div>
         <div className="flex justify-end">
-          <Button onClick={confirmDialog}>Ok</Button>
+          <Button color={color} onClick={confirmDialog}>
+            Ok
+          </Button>
         </div>
       </div>
     </dialog>
