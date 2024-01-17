@@ -24,7 +24,7 @@ describe('Settings Layout', () => {
       const nav = screen.getByRole('navigation');
       const items = within(nav).getAllByTestId('menu-item');
 
-      expect(items.length).toBe(3);
+      expect(items.length).toBe(2);
     });
     it('should render the child content', () => {
       render(<SettingsLayout>{stubContent}</SettingsLayout>);
