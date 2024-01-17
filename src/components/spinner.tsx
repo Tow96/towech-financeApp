@@ -7,17 +7,12 @@ import { classNames } from '@/utils/ConditionalClasses';
  */
 type Props = {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  color?: '300' | '600' | '950';
   className?: string;
 };
-export const Spinner = ({ size = 'lg', color = '300', className }: Props): JSX.Element => {
+export const Spinner = ({ size = 'lg', className }: Props): JSX.Element => {
   const variableClasses = classNames({
     'w-24 border-8': size === 'lg',
     'w-4 border-2': size === 'xs',
-
-    'border-riverbed-300': color === '300',
-    'border-riverbed-600': color === '600',
-    'border-riverbed-950': color === '950',
   });
   return (
     <span
