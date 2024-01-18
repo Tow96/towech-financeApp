@@ -10,7 +10,6 @@ import { classNames } from '@/utils/ConditionalClasses';
 // Hooks ----------------------------------------------------------------------
 import { useEffect, useRef, useState } from 'react';
 import { useLogout } from '@/libs/feature-authentication/UserService';
-import { useNavStore } from '@/libs/feature-navbar/NavbarService';
 // Used Components ------------------------------------------------------------
 import { CSSTransition } from 'react-transition-group';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -30,7 +29,14 @@ const links: NavIcon[] = [
 // Component ------------------------------------------------------------------
 export const Navbar = (): JSX.Element => {
   const path = usePathname();
-  const { title } = useNavStore();
+
+  // Title --------------------------------------
+  const [title, setTitle] = useState(document.title);
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    setTitle(document.title);
+  });
+  /* eslint-enable */
 
   // Logout -------------------------------------
   const { mutate: logout, status } = useLogout();
