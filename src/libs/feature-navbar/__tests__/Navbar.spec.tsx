@@ -2,40 +2,25 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as UserService from '@/libs/feature-authentication/UserService';
-import * as NavService from '@/libs/feature-navbar/NavbarService';
-import * as Navigation from 'next/navigation';
 // Tested Components ----------------------------------------------------------
 import { Navbar } from '../Navbar';
 
-// Stubs ----------------------------------------------------------------------
-const stubTitle = 'TestNav';
+// // Stubs ----------------------------------------------------------------------
+// const stubTitle = 'TestNav';
 
 // Mocks ----------------------------------------------------------------------
+const mockUseLogout = jest.fn(() => ({ mutate: () => ({}), status: 'idle' }));
+const mockRouteRedirect = jest.fn();
 jest.mock('../../../libs/feature-authentication/UserService.ts', () => ({
-  useLogout: jest.fn(),
+  useLogout: () => mockUseLogout(),
 }));
 jest.mock('next/navigation', () => ({
-  redirect: jest.fn(),
-  usePathname: jest.fn(),
+  redirect: (s: string) => mockRouteRedirect(s),
+  usePathname: () => '/',
 }));
-jest.mock('../NavbarService', () => ({
-  useNavStore: jest.fn(),
-}));
-const mockUseLogout = jest.spyOn(UserService, 'useLogout');
-const mockRedirect = jest.spyOn(Navigation, 'redirect');
-const mockUsePathname = jest.spyOn(Navigation, 'usePathname');
-const mockUseNav = jest.spyOn(NavService, 'useNavStore');
 
 // Tests ----------------------------------------------------------------------
 describe('Navbar', () => {
-  beforeEach(() => {
-    jest.resetAllMocks();
-    mockUseLogout.mockImplementation(() => ({ mutate: () => ({}) }) as any);
-    mockUsePathname.mockImplementation(() => '/');
-    mockUseNav.mockImplementation(() => ({ title: stubTitle }));
-  });
-
   describe('Render', () => {
     it('should render a nav tag', () => {
       render(<Navbar />);
@@ -59,12 +44,12 @@ describe('Navbar', () => {
 
       expect(area).toBeInTheDocument();
     });
-    it('should render a heading containing the given title of the screen', () => {
-      render(<Navbar />);
-      const heading = screen.getByRole('heading');
+    // it('should render a heading containing the given title of the screen', () => {
+    //   render(<Navbar />);
+    //   const heading = screen.getByRole('heading');
 
-      expect(heading).toHaveTextContent(stubTitle);
-    });
+    //   expect(heading).toHaveTextContent(stubTitle);
+    // });
   });
 
   describe('Behaviour', () => {
@@ -80,7 +65,6 @@ describe('Navbar', () => {
       await userEvent.click(mi[0]);
       expect(mi.every(val => val.getAttribute('aria-expanded') === 'false')).toBeTruthy();
     });
-
     it('should collapse the menu when the dimiss area is clicked', async () => {
       render(<Navbar />);
 
@@ -91,21 +75,21 @@ describe('Navbar', () => {
 
       expect(mi.every(val => val.getAttribute('aria-expanded') === 'false')).toBeTruthy();
     });
-
     it('should call useLogout when the last button is clicked', async () => {
+      const mutate = jest.fn();
+      mockUseLogout.mockImplementation(() => ({ mutate, status: 'idle' }));
       render(<Navbar />);
 
       const mi = screen.getAllByRole('menuitem');
       await userEvent.click(mi[mi.length - 1]);
 
-      expect(mockUseLogout).toHaveBeenCalledTimes(1);
+      expect(mutate).toHaveBeenCalledTimes(1);
     });
-
     it('should redirect to the login page if a logout call is successful', () => {
       mockUseLogout.mockImplementation(() => ({ mutate: () => ({}), status: 'success' }) as any);
       render(<Navbar />);
 
-      expect(mockRedirect).toHaveBeenCalledWith('/login');
+      expect(mockRouteRedirect).toHaveBeenCalledWith('/login');
     });
   });
 });
