@@ -2,7 +2,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 // Tested Components ----------------------------------------------------------
-import apiClient, { BASE_URL } from '../HttpCommon';
+import { apiClient, BASE_URL } from '../HttpCommon';
 import { HttpStatusCode } from 'axios';
 
 // Stubs ----------------------------------------------------------------------
@@ -14,52 +14,47 @@ const stubError = {
   message: 'Invalid credentials',
 };
 
-// Mocks ----------------------------------------------------------------------
-const mockAdapter = () => new MockAdapter(apiClient);
-
-const testAll = async (expected: unknown) => {
-  const getRes = await apiClient.get('test').catch(e => e);
-  const deleteRes = await apiClient.delete('test').catch(e => e);
-  const postRes = await apiClient.post('test').catch(e => e);
-  const putRes = await apiClient.put('test').catch(e => e);
-  const patchRes = await apiClient.patch('test').catch(e => e);
-
-  expect(getRes).toEqual(expected);
-  expect(deleteRes).toEqual(expected);
-  expect(postRes).toEqual(expected);
-  expect(putRes).toEqual(expected);
-  expect(patchRes).toEqual(expected);
+const testAll = async (client: apiClient, expected: unknown) => {
+  expect(await client.delete('test').catch(e => e)).toEqual(expected);
+  expect(await client.get('test').catch(e => e)).toEqual(expected);
+  expect(await client.patch('test').catch(e => e)).toEqual(expected);
+  expect(await client.post('test').catch(e => e)).toEqual(expected);
+  expect(await client.postWithCredentials('test').catch(e => e)).toEqual(expected);
+  expect(await client.put('test').catch(e => e)).toEqual(expected);
 };
-
 // Tests ----------------------------------------------------------------------
-describe('Common api provider', () => {
-  it.todo('Should attach the auth token to all requests');
+describe('api provider', () => {
+  it('should only return the endpoint data when the response is successful', async () => {
+    const client = new apiClient();
+    const mockAdapter = new MockAdapter(client.axiosInstance);
 
-  it('Should just return the data when fulfilling', async () => {
-    const mock = mockAdapter();
-    mock.onAny(`${BASE_URL}/test`).reply(200, stubResponse);
+    mockAdapter.onAny('test').reply(200, stubResponse);
 
-    testAll(stubResponse);
+    testAll(client, stubResponse);
   });
+  it('should only return the endpoint data when the response is successful', async () => {
+    const client = new apiClient();
+    const mockAdapter = new MockAdapter(client.axiosInstance);
 
-  it('Should just return the error message when failing', async () => {
-    const mock = mockAdapter();
-    mock.onAny(`${BASE_URL}/test`).reply(421, stubError);
+    mockAdapter.onAny('test').reply(421, stubError);
 
-    testAll({ message: stubError.message, status: 421 });
+    const res: any = { message: stubError.message, status: 421 };
+    testAll(client, res);
   });
+  it('should provide a default error message if there is none', async () => {
+    const client = new apiClient();
+    const mockAdapter = new MockAdapter(client.axiosInstance);
 
-  it('If there is no error message, axios should use a default one', async () => {
-    const mock = mockAdapter();
-    mock.onAny(`${BASE_URL}/test`).reply(400, undefined);
+    mockAdapter.onAny(`test`).reply(400, undefined);
 
-    testAll({ message: HttpStatusCode[400], status: 400 });
+    testAll(client, { message: HttpStatusCode[400], status: 400 });
   });
+  it('should send an unexpected error if there is no response', async () => {
+    const client = new apiClient();
+    const mockAdapter = new MockAdapter(client.axiosInstance);
 
-  it('If there is no response, then an unexpected error is raised', async () => {
-    const mock = mockAdapter();
-    mock.onAny(`${BASE_URL}/test`).networkError();
+    mockAdapter.onAny(`${BASE_URL}/test`).networkError();
 
-    testAll({ message: 'Unexpected Error: Network Error', status: 0 });
+    testAll(client, { message: HttpStatusCode[500], status: 500 });
   });
 });

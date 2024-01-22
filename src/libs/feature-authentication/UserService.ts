@@ -6,7 +6,7 @@
 // Libraries ---------------------------------------------------------
 import { jwtDecode } from 'jwt-decode';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import apiClient from '@/utils/HttpCommon';
+import { apiClient } from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';
 
 // Types ------------------------------------------------------------
@@ -34,17 +34,8 @@ export type User = {
   username: string; // Email
 };
 
-// Http calls -------------------------------------------------------
-const postWithCredentials = (url: string, payload?: unknown) =>
-  apiClient.post(url, payload, { withCredentials: true }) as Promise<TokenResponse>;
-const patch = (url: string, token?: string, payload?: unknown) =>
-  apiClient.patch(url, payload, { headers: { Authorization: `Bearer ${token}` } });
-const put = (url: string, token?: string, payload?: unknown) =>
-  apiClient.put(url, payload, { headers: { Authorization: `Bearer ${token}` } });
-const get = (url: string, token?: string) =>
-  apiClient.get(url, { headers: { Authorization: `Bearer ${token}` } });
-
 // Adapter ----------------------------------------------------------
+const api = new apiClient();
 const updateUser = (user: Partial<User>, state: User): User => ({ ...state, ...user });
 const processToken = (token: TokenResponse): User => {
   const decoded: Omit<User, 'token'> = jwtDecode(token.token);
@@ -55,7 +46,8 @@ const processToken = (token: TokenResponse): User => {
 export const useAuth = () =>
   useQuery({
     queryKey: [keys.USERKEY],
-    queryFn: async () => processToken(await postWithCredentials('/authentication/refresh')),
+    queryFn: async () =>
+      processToken(await api.postWithCredentials<TokenResponse>('/authentication/refresh')),
     refetchInterval: s => {
       if (s.state.status === 'error') return 0;
       return ((s.state.data?.exp || 0) - (s.state.data?.iat || 0)) * 1000;
@@ -67,7 +59,8 @@ export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [keys.USERKEY, 'login'],
-    mutationFn: async (cred: Login) => postWithCredentials('/authentication/login', cred),
+    mutationFn: async (cred: Login) =>
+      api.postWithCredentials<TokenResponse>('/authentication/login', cred),
     onSuccess: (res: TokenResponse) => client.setQueryData([keys.USERKEY], processToken(res)),
     // onError: () => client.setQueryData([keys.USERKEY], null),
   });
@@ -77,7 +70,7 @@ export const useLogout = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [keys.USERKEY, 'logout'],
-    mutationFn: async () => postWithCredentials('/authentication/logout'),
+    mutationFn: async () => api.postWithCredentials('/authentication/logout'),
     onSuccess: () => client.setQueryData([keys.USERKEY], null),
     onError: () => client.setQueryData([keys.USERKEY], null),
   });
@@ -89,8 +82,8 @@ export const useEditUser = () => {
   return useMutation({
     mutationKey: [keys.USERKEY, 'update'],
     mutationFn: async (data: Partial<User>) =>
-      patch(`/users/${user?._id}`, user?.token, data) as Partial<User>,
-    onSuccess: (res: Partial<User>) => client.setQueryData([keys.USERKEY], updateUser(res, user!)),
+      api.patch<Partial<User>>(`/users/${user?._id}`, user?.token, data),
+    onSuccess: res => client.setQueryData([keys.USERKEY], updateUser(res, user!)),
   });
 };
 
@@ -99,7 +92,7 @@ export const useResendMail = () => {
   const user: User | undefined = client.getQueryData([keys.USERKEY]);
   return useMutation({
     mutationKey: [keys.USERKEY, 'resend mail'],
-    mutationFn: async () => get(`/users/email`, user?.token),
+    mutationFn: async () => api.get(`/users/email`, user?.token),
   });
 };
 
@@ -108,7 +101,7 @@ export const usePasswordChange = () => {
   const user: User | undefined = client.getQueryData([keys.USERKEY]);
   return useMutation({
     mutationKey: [keys.USERKEY, 'change password'],
-    mutationFn: async (data: ChangePassword) => put('/users/password', user?.token, data),
+    mutationFn: async (data: ChangePassword) => api.put('/users/password', user?.token, data),
   });
 };
 
@@ -117,7 +110,7 @@ export const usePasswordReset = () => {
   const user: User | undefined = client.getQueryData([keys.USERKEY]);
   return useMutation({
     mutationKey: [keys.USERKEY, 'reset password'],
-    mutationFn: async () => postWithCredentials('/users/reset', { username: user?.username }),
+    mutationFn: async () => api.postWithCredentials('/users/reset', { username: user?.username }),
   });
 };
 
@@ -125,7 +118,7 @@ export const useLogoutAll = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [keys.USERKEY, 'logout-all'],
-    mutationFn: async () => postWithCredentials('/authentication/logout-all'),
+    mutationFn: async () => api.postWithCredentials('/authentication/logout-all'),
     onSuccess: () => client.setQueryData([keys.USERKEY], null),
     onError: () => client.setQueryData([keys.USERKEY], null),
   });

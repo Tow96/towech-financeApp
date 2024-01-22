@@ -9,17 +9,14 @@ import { EditUserForm } from '@/libs/feature-settings/EditUserForm';
 import { ResendVerificationForm } from '@/libs/feature-settings/ResendVerificationForm';
 
 // Component ------------------------------------------------------------------
-const UserSettingsPage = (): JSX.Element => {
-  // Render -------------------------------------
-  return (
-    <main>
-      <EditUserForm />
-      <div className="my-3 block border-b-2 border-riverbed-900" />
-      <ResendVerificationForm />
-      {/* TODO: Delete user button*/}
-      <section data-testid="delete-user"></section>
-    </main>
-  );
-};
+const UserSettingsPage = (): JSX.Element => (
+  <main>
+    <EditUserForm />
+    <div className="my-3 block border-b-2 border-riverbed-900" />
+    <ResendVerificationForm />
+    {/* TODO: Delete user button*/}
+    <section data-testid="delete-user"></section>
+  </main>
+);
 
 export default UserSettingsPage;
