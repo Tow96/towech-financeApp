@@ -18,7 +18,13 @@ jest.mock('next/navigation', () => ({
 jest.mock('../../feature-authentication/UserService', () => ({
   useLogoutAll: () => mockLogoutAll(),
 }));
-
+jest.mock('../../../components/modal', () => ({
+  Modal: ({ onOk }: { onOk: () => void }) => (
+    <div data-testid="modal">
+      <button onClick={onOk}>Ok</button>
+    </div>
+  ),
+}));
 // Tests ----------------------------------------------------------------------
 describe('Global logout', () => {
   describe('Render', () => {
