@@ -4,32 +4,33 @@
  *
  * Reducer for all the changes that the transactions can receive
  */
+/* eslint-disable max-nested-callbacks */
 import React, { useReducer } from 'react';
 
 // Models
-import { Objects } from '../models';
+// import { Objects } from '../models';
 
 // Utilities
-import { ParseDataMonth, DateInsideDataMonth } from '../Utils/ParseDataMonth';
+import { ParseDataMonth, DateInsideDataMonth } from '../utils/ParseDataMonth';
 
-export interface FrontendTransaction extends Objects.Transaction {
-  from_wallet?: string;
-  to_wallet?: string;
-}
+// export interface FrontendTransaction  {
+//   from_wallet?: string;
+//   to_wallet?: string;
+// }
 
 export interface TransactionState {
-  selectedWallet: Objects.Wallet;
+  selectedWallet: any;
   dataMonth: string;
   report: { earnings: number; expenses: number };
-  transactions: FrontendTransaction[];
+  transactions: any[];
 }
 
 export interface TransAction {
   type: 'SELECT-WALLET' | 'SELECT-DATAMONTH' | 'SET' | 'ADD' | 'EDIT' | 'DELETE';
   payload: {
     dataMonth?: string;
-    selectedWallet?: Objects.Wallet;
-    transactions?: Objects.Transaction[];
+    selectedWallet?: any;
+    transactions?: any[];
     consolidateChildren?: boolean;
   };
 }
@@ -37,22 +38,18 @@ export interface TransAction {
 /** useWallets
  * Reducer that stores the user transactions
  *
- * @param {Objects.TransactionState} initial initial state of the transactions
+ * @param {anyState} initial initial state of the transactions
  *
- * @returns {Objects.TransactionState} Wallets
+ * @returns {anyState} Wallets
  * @returns {React.Dispatch<TransAction>} The function to dispatch actions
  */
 // Functions
-const cleanAndSort = (
-  input: Objects.Transaction[],
-  selectedWallet: Objects.Wallet,
-  dataMonth: string,
-): FrontendTransaction[] => {
+const cleanAndSort = (input: any[], selectedWallet: any, dataMonth: string): any[] => {
   // Removes transactions outside the datamonth and wallet/subwallets
-  const cleaned = [] as FrontendTransaction[];
-  input.map((x) => {
+  const cleaned = [] as any[];
+  input.map(x => {
     const validWallets = [selectedWallet._id];
-    selectedWallet.child_id?.map((x) => validWallets.push(x._id));
+    selectedWallet.child_id?.map((x: any) => validWallets.push(x._id));
 
     /** First removes the transactions following the parameters
      * - The transaction is part of the selected wallet or "Total" is selected
@@ -81,7 +78,9 @@ const cleanAndSort = (
     // All transactions beyond this point are transactions ---
 
     // Checks if the partner transactions was already added
-    const transferred = transferClean.find((x) => x._id === cleaned[i]._id || x.transfer_id === cleaned[i]._id);
+    const transferred = transferClean.find(
+      x => x._id === cleaned[i]._id || x.transfer_id === cleaned[i]._id
+    );
 
     // Either adds or pushes the transaction along with its from-to
     if (transferred) {
@@ -115,13 +114,13 @@ const cleanAndSort = (
 
 // Reads the transactions and separates the income and expenses as well as the total in the header
 const calculateReport = (
-  input: Objects.Transaction[],
-  selectedWallet: Objects.Wallet,
+  input: any[],
+  selectedWallet: any
 ): { earnings: number; expenses: number } => {
   let earnings = 0;
   let expenses = 0;
 
-  input.map((x) => {
+  input.map(x => {
     if (!x.excludeFromReport && !(x.transfer_id && selectedWallet._id === '-1')) {
       if (x.category.type === 'Income') {
         earnings += x.amount;
@@ -140,7 +139,7 @@ const reducer = (state: TransactionState, action: TransAction): TransactionState
   switch (action.type.toUpperCase().trim()) {
     case 'SELECT-WALLET':
       item = { ...state };
-      item.selectedWallet = action.payload.selectedWallet || ({ _id: '-1' } as Objects.Wallet);
+      item.selectedWallet = action.payload.selectedWallet || ({ _id: '-1' } as any);
 
       return item;
     case 'SELECT-DATAMONTH':
@@ -155,7 +154,7 @@ const reducer = (state: TransactionState, action: TransAction): TransactionState
         transactions: cleanAndSort(
           action.payload.transactions || state.transactions,
           state.selectedWallet,
-          ParseDataMonth(state.dataMonth),
+          ParseDataMonth(state.dataMonth)
         ),
         report: { earnings: 0, expenses: 0 },
       };
@@ -166,44 +165,54 @@ const reducer = (state: TransactionState, action: TransAction): TransactionState
       item = { ...state };
 
       // only adds the transactions that are not already in the state
-      action.payload.transactions?.map((transaction: Objects.Transaction) => {
-        const index = state.transactions.findIndex((x) => x._id === transaction._id);
+      action.payload.transactions?.map((transaction: any) => {
+        const index = state.transactions.findIndex(x => x._id === transaction._id);
         if (index === -1) {
           item.transactions.push(transaction);
         }
       });
 
-      item.transactions = cleanAndSort(item.transactions, state.selectedWallet, ParseDataMonth(state.dataMonth));
+      item.transactions = cleanAndSort(
+        item.transactions,
+        state.selectedWallet,
+        ParseDataMonth(state.dataMonth)
+      );
       item.report = calculateReport(item.transactions, item.selectedWallet);
 
       return item;
     case 'EDIT':
       item = { ...state };
 
-      action.payload.transactions?.map((transaction: Objects.Transaction) => {
+      action.payload.transactions?.map((transaction: any) => {
         // only changes the transactions that are in the state
-        const index = state.transactions.findIndex((x) => x._id === transaction._id);
+        const index = state.transactions.findIndex(x => x._id === transaction._id);
         if (index >= 0) {
           item.transactions[index] = transaction;
         }
         // If a transfer was edited, then the partner transaction also was updated, so it also gets added
         else {
-          const transferIndex = state.transactions.findIndex((x) => x.transfer_id === transaction._id);
+          const transferIndex = state.transactions.findIndex(
+            x => x.transfer_id === transaction._id
+          );
           if (transferIndex >= 0) {
             item.transactions.push(transaction);
           }
         }
       });
 
-      item.transactions = cleanAndSort(item.transactions, state.selectedWallet, ParseDataMonth(state.dataMonth));
+      item.transactions = cleanAndSort(
+        item.transactions,
+        state.selectedWallet,
+        ParseDataMonth(state.dataMonth)
+      );
       item.report = calculateReport(item.transactions, item.selectedWallet);
       return item;
     case 'DELETE':
       item = { ...state };
 
       // Filters the array
-      item.transactions = state.transactions.filter((transaction) => {
-        let index = action.payload.transactions?.findIndex((x: Objects.Transaction) => x._id === transaction._id);
+      item.transactions = state.transactions.filter(transaction => {
+        let index = action.payload.transactions?.findIndex((x: any) => x._id === transaction._id);
         if (index === undefined) index = -1;
 
         return index < 0;
@@ -216,10 +225,12 @@ const reducer = (state: TransactionState, action: TransAction): TransactionState
   }
 };
 
-const useTransactions = (initial?: TransactionState): [TransactionState, React.Dispatch<TransAction>] => {
+const useTransactions = (
+  initial?: TransactionState
+): [TransactionState, React.Dispatch<TransAction>] => {
   // The initial state is an empty array
   const initialState: TransactionState = initial || {
-    selectedWallet: { _id: '-1' } as Objects.Wallet,
+    selectedWallet: { _id: '-1' } as any,
     dataMonth: ParseDataMonth('-1'),
     report: { earnings: 0, expenses: 0 },
     transactions: [],

@@ -38,7 +38,10 @@ const UseForm = (callback: any, initialState: any) => {
         setValues({ ...values, [data.target.name]: data.target.value });
         break;
       case 'select-one':
-        setValues({ ...values, [data.target.name]: data.target.options[data.target.selectedIndex].value });
+        setValues({
+          ...values,
+          [data.target.name]: data.target.options[data.target.selectedIndex].value,
+        });
         break;
       default:
         console.log(`No onChange routine for type: ${data.target.type}`); //eslint-disable-line no-console

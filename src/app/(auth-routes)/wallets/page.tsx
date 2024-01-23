@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from 'react';
 // import { useWallets } from '@/libs/feature-wallets/WalletService';
 // Used components ------------------------------------------------------------
 import { Button } from '@/components/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Legacy ---------------------------------------------------------------------
 import '../../../libs/legacyStuff/wallets/Wallets.css';
@@ -50,7 +50,7 @@ const WalletsPage = (): JSX.Element => {
         // console.log(err.response);
         setLoaded(true);
       });
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <main>

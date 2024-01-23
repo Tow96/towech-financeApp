@@ -17,7 +17,7 @@ const config = {
     '!**/node_modules/**',
     '!**/.next/**',
     '!**/coverage/**',
-    '!**/*.mock.tsx',
+    '!**/__mocks__/**',
   ],
 };
 

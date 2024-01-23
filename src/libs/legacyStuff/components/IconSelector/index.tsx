@@ -58,7 +58,7 @@ const IconSelector = (props: IconSelectorProps): JSX.Element => {
                   iconid={i}
                   className="IconSelector__Grid__Icon"
                   onClick={() => selectIcon(i)}
-                />,
+                />
               );
             }
             return icons;

@@ -23,7 +23,7 @@
       }
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.mock.ts", "*.mock.tsx"],
+      "files": ["**/__mocks__/**", "**/__tests__/**"],
       "rules": {
         "max-nested-callbacks": "off"
       }

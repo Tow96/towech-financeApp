@@ -7,7 +7,7 @@
 import React, { createContext } from 'react';
 
 // Hooks
-import { TokenAction, TokenState } from './UseToken';
+import { TokenAction } from './UseToken';
 import { CategoryAction, CategoryState } from './UseCategories';
 import { WalletAction } from './UseWallets';
 import { TransactionState, TransAction } from './UseTransactions';
@@ -19,7 +19,7 @@ import { TransactionState, TransAction } from './UseTransactions';
 // Context that holds the Authentication Token in order to make API Calls
 export const MainStore = createContext({
   // Token
-  authToken: {} as TokenState,
+  authToken: {} as { token: string },
   dispatchAuthToken: (() => {
     /*empty*/
   }) as React.Dispatch<TokenAction>,

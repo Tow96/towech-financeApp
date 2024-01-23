@@ -5,31 +5,32 @@
  * Hook that holds all the categories of a user, meant to be used in conjunction with
  * a store to create a cache
  */
+/* eslint-disable max-nested-callbacks */
 import React, { useReducer } from 'react';
 
 // Models
-import { Objects } from '../models';
+// import { Objects } from '../models';
 
 export interface CategoryState {
-  Income: Objects.Category[];
-  Expense: Objects.Category[];
-  Archived: Objects.Category[];
+  Income: any[];
+  Expense: any[];
+  Archived: any[];
 }
 
 export interface CategoryAction {
   type: 'SET' | 'UPDATE';
   payload: {
-    Income: Objects.Category[];
-    Expense: Objects.Category[];
-    Archived: Objects.Category[];
+    Income: any[];
+    Expense: any[];
+    Archived: any[];
   };
 }
 
 // Functions
-const cleanAndSort = (input: Objects.Category[]): Objects.Category[] => {
+const cleanAndSort = (input: any[]): any[] => {
   // Gets the main wallets and sorts them
-  let mainCategories: Objects.Category[] = [];
-  input.map((x) => {
+  let mainCategories: any[] = [];
+  input.map(x => {
     if (x.parent_id === '-1') mainCategories.push(x);
   });
   mainCategories = mainCategories.sort((a, b) => {
@@ -38,11 +39,11 @@ const cleanAndSort = (input: Objects.Category[]): Objects.Category[] => {
     return 0;
   });
 
-  let output: Objects.Category[] = [];
+  let output: any[] = [];
   // Fetches the subwallets, sorts them and adds them
-  mainCategories.map((mC) => {
+  mainCategories.map(mC => {
     // Gets the subwallets for the main wallet
-    let subCategories = input.filter((x) => {
+    let subCategories = input.filter(x => {
       return x.parent_id === mC._id;
     });
     subCategories = subCategories.sort((a, b) => {
@@ -70,15 +71,19 @@ const reducer = (state: CategoryState, action: CategoryAction): CategoryState =>
       };
       return item;
     case 'UPDATE':
-      item = { Income: state.Income, Expense: state.Expense, Archived: cleanAndSort(action.payload.Archived) };
+      item = {
+        Income: state.Income,
+        Expense: state.Expense,
+        Archived: cleanAndSort(action.payload.Archived),
+      };
 
-      action.payload.Income.map((cat) => {
-        const index = state.Income.findIndex((x) => x._id === cat._id);
+      action.payload.Income.map(cat => {
+        const index = state.Income.findIndex(x => x._id === cat._id);
         if (index === -1) state.Income.push(cat);
       });
 
-      action.payload.Expense.map((cat) => {
-        const index = state.Expense.findIndex((x) => x._id === cat._id);
+      action.payload.Expense.map(cat => {
+        const index = state.Expense.findIndex(x => x._id === cat._id);
         if (index === -1) state.Expense.push(cat);
       });
 
@@ -100,7 +105,9 @@ const reducer = (state: CategoryState, action: CategoryAction): CategoryState =>
  * @returns {React.Dispatch<categoryAction>} The function to dispatch actions
  *
  */
-const useCategories = (initial?: CategoryState): [CategoryState, React.Dispatch<CategoryAction>] => {
+const useCategories = (
+  initial?: CategoryState
+): [CategoryState, React.Dispatch<CategoryAction>] => {
   // The initial state is an empty array
   const initialState: CategoryState = initial || { Income: [], Expense: [], Archived: [] };
 
