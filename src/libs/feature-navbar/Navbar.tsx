@@ -23,6 +23,7 @@ type NavIcon = {
 };
 const links: NavIcon[] = [
   { name: 'Transactions', href: '/dashboard', icon: 'money-check-dollar' },
+  { name: 'Wallets', href: '/wallets', icon: 'wallet' },
   { name: 'Settings', href: '/settings', icon: 'gear' },
 ];
 

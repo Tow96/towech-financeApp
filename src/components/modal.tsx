@@ -78,7 +78,8 @@ export const Modal = ({
           <h2 className="text-xl sm:text-2xl">{title}</h2>
           <button
             onClick={closeDialog}
-            className="active:input-shadow aspect-square w-8 rounded-full text-lg font-extrabold hover:bg-riverbed-700 active:bg-riverbed-900">
+            className="active:input-shadow aspect-square w-8 rounded-full text-lg font-extrabold hover:bg-riverbed-700 active:bg-riverbed-900"
+            data-testid="close-button">
             X
           </button>
         </div>

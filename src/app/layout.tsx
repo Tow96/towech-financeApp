@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import TanstackProvider from '@/utils/TanstackProvider';
 import { ToastProvider } from '@/libs/feature-toasts/ToastProvider';
+import { LegacyProvider } from '@/libs/legacyStuff/legacyProvider';
 
 const raleway = Raleway({ subsets: ['latin'], display: 'swap', variable: '--font-raleway' });
 
@@ -15,9 +16,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={raleway.className}>
-        <ToastProvider>
-          <TanstackProvider>{children}</TanstackProvider>
-        </ToastProvider>
+        <LegacyProvider>
+          <ToastProvider>
+            <TanstackProvider>{children}</TanstackProvider>
+          </ToastProvider>
+        </LegacyProvider>
       </body>
     </html>
   );

@@ -10,7 +10,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   label: string;
   register?: UseFormRegisterReturn<string>;
-  type?: 'text' | 'password';
+  type?: 'text' | 'password' | 'number';
 }
 
 export const Input = ({

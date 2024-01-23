@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // Client ---------------------------------------------------------------------
 export enum keys {
   USERKEY = 'user',
+  WALLETKEY = 'wallet',
 }
 
 // Move this into useState if disconnects are happening
