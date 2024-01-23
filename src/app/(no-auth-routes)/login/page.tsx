@@ -45,7 +45,6 @@ const LoginPage = (): JSX.Element => {
   // Generate toast
   useEffect(() => {
     if (status === 'error') {
-      console.log('pepeino');
       addToast({ message: error?.message || 'Error', type: 'error' });
     }
   }, [status, addToast, error]);
