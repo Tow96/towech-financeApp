@@ -4,7 +4,7 @@
  * Zustand store that handles the currently active toasts
  */
 import { StateCreator, create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+// import { devtools } from 'zustand/middleware';
 import * as uuid from 'uuid';
 
 // Types ----------------------------------------------------------------------
@@ -33,8 +33,8 @@ const store: StateCreator<State> = (set: SetState<State>) => ({
   add: toast => set(state => addToast(toast, state), true, 'addToast'),
   dismiss: id => set(state => removeToast(id, state), true, 'removeToast'),
 });
-export const useToastStore =
-  process.env.NEXT_PUBLIC_DEBUG === 'True' ? create(devtools(store)) : create(store);
+export const useToastStore = create(store);
+// export const useToastStore = create(devtools(store));
 
 // Selectors ------------------------------------------------------------------
 export const useToasts = () => useToastStore(store => store.toasts);
