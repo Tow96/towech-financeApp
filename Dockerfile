@@ -1,4 +1,5 @@
-FROM node:18-alpine AS base
+ARG ALPINE_VERSION=3.18
+FROM node:18-alpine${ALPINE_VERSION} AS base
 
 # Dependencies ------------------------------------------------------------------------------------
 FROM base AS deps
@@ -17,23 +18,26 @@ RUN npm run build
 
 
 # Runner ------------------------------------------------------------------------------------------
-FROM alpine:3.18.4 AS runner
-RUN apk add --update nodejs npm
-WORKDIR /app
+FROM alpine:${ALPINE_VERSION} AS runner
+WORKDIR /usr/src/app
+
+# RUN addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node \
+#   && chown node:node ./
+
+RUN apk add --update nodejs dumb-init \
+  && addgroup -g 1001 node && adduser -u 1001 -G node -s /bin/sh -D node \
+  && chown node:node ./
+
+USER node
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV HOSTNAME "0.0.0.0"
+ENV PORT 3000
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/package*.json ./
+# COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 
-USER nextjs
 EXPOSE 3000
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-ENTRYPOINT ["node", "server.js"]
+# CMD ["node", "server.js"]
+CMD ["dumb-init", "node", "server.js"]
