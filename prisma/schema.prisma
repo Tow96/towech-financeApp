@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  icon_id   String
+  name      String
+  parent_id String 
+  type      String
+  user_id   String
+}
+
+model transactions {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                 Int      @map("__v")
+  amount            Int
+  category          String
+  concept           String
+  createdAt         DateTime @db.Date
+  excludeFromReport Boolean
+  transactionDate   DateTime @db.Date
+  transfer_id       String?
+  user_id           String
+  wallet_id         String
+}
+
+model users {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                  Int      @map("__v")
+  accountConfirmed   Boolean
+  createdAt          String
+  name               String
+  password           String
+  refreshTokens      String[]
+  resetToken         String?
+  role               String
+  singleSessionToken String
+  username           String
+}
+
+model wallets {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  child_id  String[]
+  createdAt DateTime @db.Date
+  currency  String
+  icon_id   Int
+  money     Int
+  name      String
+  parent_id String?
+  user_id   String
+}
