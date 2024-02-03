@@ -9,11 +9,12 @@ datasource db {
 
 model categories {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  icon_id   String
+  icon_id   Int
   name      String
   parent_id String 
   type      String
   user_id   String
+  archived  Boolean?
 }
 
 model transactions {
