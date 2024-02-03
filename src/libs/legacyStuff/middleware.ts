@@ -35,52 +35,49 @@ export default class Middlewares {
     }
   };
 
-  // // Middleware that checks if the requester is an admin
-  // static checkAdmin = (req: Request, res: Response, next: NextFunction): void => {
-  //   try {
-  //     // Gets the Authorization header
-  //     const authorization = req.headers.authorization;
-  //     if (!authorization) {
-  //       throw AmqpMessage.errorMessage('No authorization header', 401);
-  //     }
+  // Middleware that checks if the requester is an admin
+  // static checkAdmin = (req: NextRequest): void => {
+  //   // Gets the Authorization header
+  //   const authorization = req.headers.get('Authorization');
+  //   console.log(authorization);
+  //   // if (!authorization) {
+  //   //   throw AmqpMessage.errorMessage('No authorization header', 401);
+  //   // }
 
-  //     // Checks if the token is super user or an admin
-  //     const token = authorization.split(' ')[1];
-  //     if (!this.isSuperUser(token)) {
-  //       // Decripts the token
-  //       try {
-  //         const decodedToken: any = this.isAuth(token);
-  //         if (decodedToken.role !== 'admin') {
-  //           throw AmqpMessage.errorMessage('User is not admin', 401);
-  //         }
-  //       } catch (err: any) {
-  //         throw AmqpMessage.errorMessage('Invalid token', 401);
-  //       }
-  //     }
+  //   // // Checks if the token is super user or an admin
+  //   // const token = authorization.split(' ')[1];
+  //   // if (!this.isSuperUser(token)) {
+  //   //   // Decripts the token
+  //   //   try {
+  //   //     const decodedToken: any = this.isAuth(token);
+  //   //     if (decodedToken.role !== 'admin') {
+  //   //       throw AmqpMessage.errorMessage('User is not admin', 401);
+  //   //     }
+  //   //   } catch (err: any) {
+  //   //     throw AmqpMessage.errorMessage('Invalid token', 401);
+  //   //   }
+  //   // }
 
-  //     next();
-  //   } catch (err: any) {
-  //     AmqpMessage.sendHttpError(res, err);
-  //   }
+  //   // next();
   // };
 
   // // Middleware that checks if the requester is authenticated
-  // static checkAuth = (req: Request, res: Response, next: NextFunction): void => {
-  //   try {
-  //     const authorization = req.headers.authorization;
+  static checkAuth = (req: Request) => {
+    const authorization = req.headers.get('Authorization');
+    if (!authorization) throw { status: 403, message: 'Invalid token' };
 
-  //     if (!authorization) throw AmqpMessage.errorMessage('Invalid token', 403);
+    // Check if the authToken is valid
+    const decodedToken: any = this.isAuth(authorization.split(' ')[1]);
 
-  //     // Check if the authToken is valid
-  //     const decodedToken: any = this.isAuth(authorization.split(' ')[1]);
-
-  //     req.user = decodedToken as Objects.User.BaseUser;
-
-  //     next();
-  //   } catch (err: any) {
-  //     AmqpMessage.sendHttpError(res, err);
-  //   }
-  // };
+    return {
+      _id: decodedToken.id,
+      accountConfirmed: decodedToken.accountConfirmed,
+      createdAt: decodedToken.createdAt,
+      name: decodedToken.name,
+      role: decodedToken.role,
+      username: decodedToken.username,
+    };
+  };
 
   // Middleware that checks if the requester has a valid refreshToken
   static checkRefresh = async () => {

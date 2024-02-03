@@ -10,6 +10,44 @@ const generateError = (status = 500, message = 'Unexpected Error', error?: any) 
   error,
 });
 
+class Validator {
+  // static validateEmail = async (email: string): Promise<{ valid: boolean; errors: any }> => {
+  //   const errors: any = {};
+
+  //   // Checks if email is not empty and is valid
+  //   if (!email || email.trim() === '') {
+  //     errors.email = 'e-mail must not be empty';
+  //   } else {
+  //     const regEx = /^[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}$/;
+  //     if (!email.match(regEx)) {
+  //       errors.email = 'e-mail must be a valid address';
+  //     }
+  //   }
+
+  //   // Checks the DB to see if the user already exists
+  //   if (await User.getByEmail(email)) errors.email = 'e-mail already registered';
+
+  //   return {
+  //     errors,
+  //     valid: Object.keys(errors).length < 1,
+  //   };
+  // };
+
+  static validateName = async (name: string): Promise<{ valid: boolean; errors: any }> => {
+    const errors: any = {};
+
+    // Checks if name is not empty
+    if (name.trim() === '') {
+      errors.name = 'name must not be empty';
+    }
+
+    return {
+      errors,
+      valid: Object.keys(errors).length < 1,
+    };
+  };
+}
+
 export const login = async (cred: Login) => {
   try {
     const user = await prisma.users.findFirst({ where: { username: cred.username } });
@@ -77,4 +115,45 @@ export const verifyEmail = async (id: string) => {
 
   if (!user.accountConfirmed)
     await prisma.users.update({ where: { id }, data: { accountConfirmed: true } });
+};
+
+export const editUser = async (id: string, changes: any) => {
+  try {
+    let errors: any = {};
+    const content: any = {};
+
+    // Validation
+    if (changes.name) {
+      const nameValidation = await Validator.validateName(changes.name);
+      if (!nameValidation.valid) errors = { ...errors, ...nameValidation.errors };
+      else {
+        const dbuser = await prisma.users.findFirst({ where: { id } });
+        if (!dbuser) errors.user = `Invalid user`;
+        else if (dbuser.name !== changes.name.trim()) {
+          content.name = changes.name.trim();
+        }
+      }
+    }
+
+    // If there is an error, it gets thrown
+    if (Object.keys(errors).length > 0) return generateError(422, 'Invalid fields', errors);
+
+    // If there aren't any changes, returns a 304 code
+    if (Object.keys(content).length < 1) return { status: 304 };
+
+    // Updates the transaction
+    const updatedUser = await prisma.users.update({ where: { id }, data: content });
+    const output = {
+      _id: updatedUser.id,
+      accountConfirmed: updatedUser.accountConfirmed,
+      createdAt: updatedUser.createdAt,
+      name: updatedUser.name,
+      role: updatedUser.role,
+      username: updatedUser.username,
+    };
+
+    return { ...output, status: 201 };
+  } catch (e) {
+    return e;
+  }
 };
