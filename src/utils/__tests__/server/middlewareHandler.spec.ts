@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 
 import { NextRequest } from 'next/server';
 import { apiHandler, CustomResponse, ErrorResponse } from '../../middlewareHandler';
+import { ZodError } from 'zod';
 
 describe('apiHandler', () => {
   it('Should run each middleware function in order, passing the given req', async () => {
@@ -56,6 +57,27 @@ describe('apiHandler', () => {
 
     expect(response.status).toBe(errorStatus);
     expect(await response.json()).toEqual({ message: errorMessage, errors });
+  });
+
+  it('Should return a 422 response if any of the functions throws a ZodError object', async () => {
+    const mid_1 = jest.fn(async _ => {});
+    const apiCall = jest.fn(async _ => {
+      throw new ZodError([
+        {
+          code: 'invalid_type',
+          expected: 'string',
+          path: ['test'],
+          fatal: false,
+          received: 'integer',
+          message: 'Required',
+        },
+      ]);
+    });
+
+    const response = await apiHandler(mid_1, apiCall)(new NextRequest('http://pesto'));
+
+    expect(response.status).toBe(422);
+    // expect(await response.json()).toEqual({ message: errorMessage, errors });
   });
 
   it('Should return an unxepected error message if any other error type is thrown', async () => {

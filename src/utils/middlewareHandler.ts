@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 
 export type CustomResponse = { status: number; body: unknown };
 export class ErrorResponse<T> extends Error {
@@ -39,6 +40,7 @@ export const apiHandler =
     } catch (e) {
       if (e instanceof ErrorResponse)
         return NextResponse.json({ errors: e.errors, message: e.message }, { status: e.status });
+      if (e instanceof ZodError) return NextResponse.json(e.flatten().fieldErrors, { status: 422 });
 
       console.error(e); // TODO: proper logging
       return NextResponse.json({ message: 'Unexpected internal error' }, { status: 500 });

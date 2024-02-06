@@ -68,9 +68,9 @@ export default class Middlewares {
 
     // Check if the authToken is valid
     const decodedToken: any = this.isAuth(authorization.split(' ')[1]);
-
+    console.log(decodedToken);
     return {
-      _id: decodedToken.id,
+      _id: decodedToken._id,
       accountConfirmed: decodedToken.accountConfirmed,
       createdAt: decodedToken.createdAt,
       name: decodedToken.name,
@@ -116,19 +116,10 @@ export default class Middlewares {
     }
   };
 
-  // // Middleware that checks if the user's account is confirmed, is meant to go after checkAuth if not, it fails automatically
-  // static checkConfirmed = (req: Request, res: Response, next: NextFunction): void => {
-  //   try {
-  //     if (!req.user) throw AmqpMessage.errorMessage('Server Error, there is no user in the request', 501);
-
-  //     if (!req.user.accountConfirmed)
-  //       throw AmqpMessage.errorMessage('Email not confirmed', 403, { confirmation: 'E-mail not verified' });
-
-  //     next();
-  //   } catch (err: any) {
-  //     AmqpMessage.sendHttpError(res, err);
-  //   }
-  // };
+  // Middleware that checks if the user's account is confirmed, is meant to go after checkAuth if not, it fails automatically
+  static checkConfirmed = (user: any): void => {
+    if (!user.accountConfirmed) throw { status: 403, message: 'Email not confirmed' };
+  };
 
   // // Middleware that checks if the requester is the owner of the account or an admin, is used for user requests, superuser will be rejected
   // static validateAdminOrOwner = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -11,7 +11,9 @@
     "format:fix": "prettier --write .",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll",
-    "test:watch:cov": "jest --watchAll --coverage"
+    "test:watch:cov": "jest --watchAll --coverage",
+    "makemigrations": "drizzle-kit generate:pg",
+    "migrate": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -22,6 +24,9 @@
     "@tanstack/react-query-devtools": "^5.7.4",
     "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
+    "bson": "^6.3.0",
+    "drizzle-orm": "^0.29.3",
+    "drizzle-zod": "^0.5.1",
     "googleapis": "^131.0.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
@@ -30,11 +35,13 @@
     "next": "^14.0.2",
     "nodemailer": "^6.9.9",
     "npm": "^10.2.3",
+    "postgres": "^3.4.3",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "react-transition-group": "^4.4.5",
     "uuid": "^9.0.1",
+    "zod": "^3.22.4",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
@@ -51,6 +58,7 @@
     "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.0.1",
     "axios-mock-adapter": "^1.22.0",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "^14.0.2",
     "eslint-config-prettier": "^9.0.0",

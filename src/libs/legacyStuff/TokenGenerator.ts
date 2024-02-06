@@ -6,7 +6,7 @@ export default class TokenGenerator {
       {
         name: user.name,
         username: user.username,
-        _id: user._id,
+        _id: user._id || user.id,
         role: user.role,
         accountConfirmed: user.accountConfirmed,
       },
