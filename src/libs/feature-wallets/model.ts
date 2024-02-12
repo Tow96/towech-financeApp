@@ -6,7 +6,7 @@
 // Libraries ------------------------------------------------------------------
 import { ObjectId } from 'bson';
 import { eq, sql } from 'drizzle-orm';
-import { db } from '@/libs/data-access/connection';
+import { db } from '@/libs/data-access';
 // Schemas --------------------------------------------------------------------
 import { InsertWallet, insertWalletSchema, wallets, Wallet } from '@/libs/data-access/schema';
 import { ErrorResponse } from '@/utils/middlewareHandler';
