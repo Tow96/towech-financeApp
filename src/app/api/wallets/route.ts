@@ -3,9 +3,9 @@
  *
  * Api route for getting and adding wallets
  */
-import { isAccountConfirmed, isAuthenticated } from '@/libs/feature-authentication/middleware';
+import { isAccountConfirmed, isAuthenticated } from '@/libs/feature-authentication/Middleware';
 import { WalletModel } from '@/libs/feature-wallets/model';
-import { apiHandler } from '@/utils/middlewareHandler';
+import { apiHandler } from '@/utils/MiddlewareHandler';
 
 export const GET = apiHandler(isAuthenticated, async req => {
   const userId = req.headers.get('userId')!;

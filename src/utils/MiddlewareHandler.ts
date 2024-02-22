@@ -3,8 +3,6 @@
  *
  * Proper API route middleware handler, as I agree with the article, NextJs' implementation is extremely poor
  */
-
-import { NextRequest, NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
 export type CustomResponse = { status: number; body: unknown };
@@ -17,12 +15,12 @@ export class ErrorResponse<T> extends Error {
   }
 }
 
-export type Middleware = (req: NextRequest) => Promise<CustomResponse | void>;
-// export type Middleware = (req: NextRequest, _next: () => void) => Promise<CustomResponse | void>;
+export type Middleware = (req: Request) => Promise<CustomResponse | void>;
+// export type Middleware = (req: Request, _next: () => void) => Promise<CustomResponse | void>;
 
 export const apiHandler =
   (...middlewares: Middleware[]) =>
-  async (request: NextRequest) => {
+  async (request: Request) => {
     let result: CustomResponse | null = null;
 
     try {
@@ -35,14 +33,14 @@ export const apiHandler =
         // if (!nextInvoked) break;
       }
 
-      if (!result) return new NextResponse(null, { status: 204 });
-      return NextResponse.json(result.body, { status: result.status });
+      if (!result) return new Response(null, { status: 204 });
+      return Response.json(result.body, { status: result.status });
     } catch (e) {
       if (e instanceof ErrorResponse)
-        return NextResponse.json({ errors: e.errors, message: e.message }, { status: e.status });
-      if (e instanceof ZodError) return NextResponse.json(e.flatten().fieldErrors, { status: 422 });
+        return Response.json({ errors: e.errors, message: e.message }, { status: e.status });
+      if (e instanceof ZodError) return Response.json(e.flatten().fieldErrors, { status: 422 });
 
       console.error(e); // TODO: proper logging
-      return NextResponse.json({ message: 'Unexpected internal error' }, { status: 500 });
+      return Response.json({ message: 'Unexpected internal error' }, { status: 500 });
     }
   };

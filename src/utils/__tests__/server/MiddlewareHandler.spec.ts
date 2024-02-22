@@ -4,7 +4,7 @@
 import '@testing-library/jest-dom';
 
 import { NextRequest } from 'next/server';
-import { apiHandler, CustomResponse, ErrorResponse } from '../../middlewareHandler';
+import { apiHandler, CustomResponse, ErrorResponse } from '../../MiddlewareHandler';
 import { ZodError } from 'zod';
 
 describe('apiHandler', () => {

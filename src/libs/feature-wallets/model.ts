@@ -9,7 +9,7 @@ import { eq, sql } from 'drizzle-orm';
 import { db } from '@/libs/data-access';
 // Schemas --------------------------------------------------------------------
 import { InsertWallet, insertWalletSchema, wallets, Wallet } from '@/libs/data-access/schema';
-import { ErrorResponse } from '@/utils/middlewareHandler';
+import { ErrorResponse } from '@/utils/MiddlewareHandler';
 
 export class WalletModel {
   create = async (wallet: InsertWallet): Promise<Wallet> => {

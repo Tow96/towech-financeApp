@@ -10,7 +10,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { Argon2id } from 'oslo/password';
 
 import { dbClient } from '@/libs/data-access';
-import { ErrorResponse } from '@/utils/middlewareHandler';
+import { ErrorResponse } from '@/utils/MiddlewareHandler';
 
 // Schemas --------------------------------------------------------------------
 import * as schema from './Schema';
