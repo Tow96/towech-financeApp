@@ -5,7 +5,7 @@ import { POST } from '@/app/api/users/route';
 import { mockRequest } from '@/utils/__mocks__/Request';
 
 describe('/api/users', () => {
-  describe('Given an unauthenticated user', () => {
+  describe('Given an unauthenticated/invalid user', () => {
     test('- Then an unauthorized response should be returned', async () => {
       const req = mockRequest();
       const response = await POST(req);

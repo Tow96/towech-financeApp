@@ -5,13 +5,21 @@ import { isSuperUserOrAdmin } from '../..';
 // Mocks ----------------------------------------------------------------------
 import { mockRequest } from '@/utils/__mocks__/Request';
 
-describe('/api/users', () => {
-  describe('Given an unauthenticated user', () => {
-    test('- Then an unauthorized error should be thrown', async () => {
-      const req = mockRequest();
-      const response = async () => await isSuperUserOrAdmin(req);
+const superUserKey = 'SuperKey';
 
-      expect(response).rejects.toThrow(new ErrorResponse('Unauthorized', null, 401));
-    });
+describe('/api/users', () => {
+  beforeAll(() => (process.env.SUPERUSERKEY = superUserKey));
+  describe('Given an unauthenticated user', () => {
+    const req = mockRequest();
+    test('- Then an unauthorized error should be thrown', async () => expectUnauthorized(req));
+  });
+  describe('Given an invalid user', () => {
+    const req = mockRequest({ headers: { Authorization: 'FAKE' } });
+    test('-Then an unauthorized error should be thrown', async () => expectUnauthorized(req));
   });
 });
+
+function expectUnauthorized(req: Request) {
+  const response = async () => await isSuperUserOrAdmin(req);
+  expect(response).rejects.toThrow(new ErrorResponse('Unauthorized', null, 401));
+}
