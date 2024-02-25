@@ -8,7 +8,7 @@ import { mockRequest } from '@/utils/__mocks__/Request';
 const superUserKey = 'SuperKey';
 
 describe('/api/users', () => {
-  beforeAll(() => (process.env.SUPERUSERKEY = superUserKey));
+  beforeAll(() => (process.env.SUPERUSER_KEY = superUserKey));
   describe('Given an unauthenticated user', () => {
     const req = mockRequest();
     test('- Then an unauthorized error should be thrown', async () => expectUnauthorized(req));

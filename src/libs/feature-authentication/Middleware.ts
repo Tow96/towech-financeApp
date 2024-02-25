@@ -10,7 +10,7 @@ export const isSuperUserOrAdmin: Middleware = async req => {
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) throw new ErrorResponse('Unauthorized', null, 401);
   // TODO add admin check
-  if (authHeader !== process.env.SUPERUSERKEY) throw new ErrorResponse('Unauthorized', null, 401);
+  if (authHeader !== process.env.SUPERUSER_KEY) throw new ErrorResponse('Unauthorized', null, 401);
 };
 
 // TODO: fix this when user is migrated
