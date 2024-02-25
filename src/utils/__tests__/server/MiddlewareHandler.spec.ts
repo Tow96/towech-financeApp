@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import { NextRequest } from 'next/server';
 import { apiHandler, CustomResponse, ErrorResponse } from '../../MiddlewareHandler';
 import { ZodError } from 'zod';
+import { DbError } from '@/libs/data-access/db';
 
 describe('apiHandler', () => {
   it('Should run each middleware function in order, passing the given req', async () => {
@@ -78,6 +79,18 @@ describe('apiHandler', () => {
 
     expect(response.status).toBe(422);
     // expect(await response.json()).toEqual({ message: errorMessage, errors });
+  });
+
+  it('Should return a 409 code response if any of the functions throws a DatabaseError object', async () => {
+    const mid_1 = jest.fn(async _ => {});
+    const apiCall = jest.fn(async _ => {
+      throw new DbError('Already exists');
+    });
+
+    const response = await apiHandler(mid_1, apiCall)(new NextRequest('http://pesto'));
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ message: 'Already exists' });
   });
 
   it('Should return an unxepected error message if any other error type is thrown', async () => {

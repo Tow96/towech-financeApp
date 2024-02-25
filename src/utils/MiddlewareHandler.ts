@@ -3,6 +3,7 @@
  *
  * Proper API route middleware handler, as I agree with the article, NextJs' implementation is extremely poor
  */
+import { DbError } from '@/libs/data-access/db';
 import { ZodError } from 'zod';
 
 export type CustomResponse = { status: number; body: unknown };
@@ -38,6 +39,9 @@ export const apiHandler =
     } catch (e) {
       if (e instanceof ErrorResponse)
         return Response.json({ errors: e.errors, message: e.message }, { status: e.status });
+
+      if (e instanceof DbError) return Response.json({ message: e.message }, { status: 409 });
+
       if (e instanceof ZodError) return Response.json(e.flatten().fieldErrors, { status: 422 });
 
       console.error(e); // TODO: proper logging
