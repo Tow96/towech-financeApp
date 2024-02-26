@@ -13,7 +13,7 @@ export class UsersModel {
   private db = new UsersDb();
 
   register = async (user: InsertUser, password: string) => {
-    const userExists = await this.db.getByEmail(user.email);
+    const userExists = await this.db.getByEmail(user.email); // eslint-disable-line
     if (userExists) throw new DbError(`email ${user.email} already registered`);
 
     return await this.db.add(user, password);
