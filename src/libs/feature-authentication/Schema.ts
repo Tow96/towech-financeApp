@@ -9,7 +9,7 @@ export enum tableNames {
 }
 
 // Tables ---------------------------------------------------------------------
-export const users = pgTable(tableNames.USERS, {
+export const usersTable = pgTable(tableNames.USERS, {
   id: varchar('id', { length: 24 }).primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull(),
@@ -22,14 +22,14 @@ export const users = pgTable(tableNames.USERS, {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deleted: boolean('deleted').notNull().default(false),
 });
-export const sessions = pgTable(tableNames.SESSIONS, {
+export const sessionsTable = pgTable(tableNames.SESSIONS, {
   id: text('id').primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),
   userId: varchar('user_id', { length: 24 }).notNull(),
 });
 
 // Schemas --------------------------------------------------------------------
-export const insertUserSchema = createInsertSchema(users, {
+export const insertUserSchema = createInsertSchema(usersTable, {
   email: s => s.email.trim().email(),
   name: s => s.name.trim().min(3),
   role: s => s.role.default('user'),
@@ -38,9 +38,9 @@ export const insertUserSchema = createInsertSchema(users, {
   email: true,
   role: true,
 });
-export const selectWalletSchema = createSelectSchema(users).omit({
+export const selectUserSchema = createSelectSchema(usersTable).omit({
   hashedPassword: true,
 });
 // Types ----------------------------------------------------------------------
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = z.infer<typeof selectWalletSchema>;
+export type User = z.infer<typeof selectUserSchema>;

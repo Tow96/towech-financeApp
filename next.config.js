@@ -2,7 +2,11 @@
 const nextConfig = {
   output: 'standalone',
   experimental: {
-    serverComponentsExternalPackages: ['pino', 'pino-pretty']
+    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
+  },
+  webpack: (config) => {
+    config.externals.push("@node-rs/argon2", "@node-rs/bcrypt", "mailgen");
+    return config;
   }
 };
 
