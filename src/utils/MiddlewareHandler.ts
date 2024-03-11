@@ -6,6 +6,9 @@
 import { DbError } from '@/libs/data-access/db';
 import { AuthError } from '@/libs/feature-authentication';
 import { ZodError } from 'zod';
+import { getLogger } from './Logger';
+
+const logger = getLogger('MiddlewareHandler');
 
 export type CustomResponse = { status: number; body: unknown };
 export class ErrorResponse<T> extends Error {
@@ -47,7 +50,7 @@ export const apiHandler =
 
       if (e instanceof ZodError) return Response.json(e.flatten().fieldErrors, { status: 422 });
 
-      console.error(e); // TODO: proper logging
+      logger.error(e);
       return Response.json({ message: 'Unexpected internal error' }, { status: 500 });
     }
   };

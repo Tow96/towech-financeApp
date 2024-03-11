@@ -54,7 +54,7 @@ export class UsersDb {
       .update(usersTable)
       .set({ hashedPassword: updatedPassword, updatedAt: new Date() })
       .where(eq(usersTable.id, id));
-    // TODO: Log password update for user
+
     return true;
   };
 }

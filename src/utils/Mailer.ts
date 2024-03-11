@@ -7,6 +7,7 @@
 // Libraries
 import sgMail from '@sendgrid/mail';
 import mailgen from 'mailgen';
+import { getLogger } from './Logger';
 
 const { EMAIL, EMAIL_API_KEY, FRONTEND } = process.env;
 
@@ -14,6 +15,8 @@ export class Mailer {
   constructor() {
     sgMail.setApiKey(EMAIL_API_KEY || '');
   }
+
+  private logger = getLogger('Mailer');
 
   // creates an instance of the mail generator, that has all the common elements
   private mailGenerator = new mailgen({
@@ -44,8 +47,7 @@ export class Mailer {
         html: emailBody,
       });
 
-      // TODO: Add proper logging
-      // console.log(`Sent email ${info[0].}`);
+      this.logger.info(`Sent mail to ${recipient}`);
     } catch (e) {
       console.error(JSON.stringify(e));
     }
