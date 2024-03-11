@@ -7,7 +7,7 @@ type Data = {
 
 export const mockRequest = (data?: Data) => {
   const mockedRequest: Request = mock(Request);
-  const headers = data?.headers || {};
+  const headers: Record<string, any> = { Origin: 'pesto', Host: 'pesto', ...data?.headers };
   when(mockedRequest.headers).thenReturn({
     get: (s: string) => headers[s] || null,
     set: (key: string, value: string) => {

@@ -5,6 +5,7 @@
  */
 import { DbError } from '@/libs/data-access/db';
 import { AuthError } from '@/libs/feature-authentication';
+import { verifyRequestOrigin } from 'lucia';
 import { ZodError } from 'zod';
 import { getLogger } from './Logger';
 
@@ -26,8 +27,13 @@ export type Middleware = (req: Request) => Promise<CustomResponse | void>;
 export const apiHandler =
   (...middlewares: Middleware[]) =>
   async (request: Request) => {
-    let result: CustomResponse | null = null;
+    // CSRF protection
+    const originHeader = request.headers.get('Origin');
+    const hostHeader = request.headers.get('Host');
+    if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
+      return Response.json({}, { status: 403 });
 
+    let result: CustomResponse | null = null;
     try {
       for (let i = 0; i < middlewares.length; i++) {
         // let nextInvoked = false;

@@ -7,6 +7,9 @@ jest.mock('oslo/crypto', () => ({
 jest.mock('oslo/password', () => ({
   Argon2id: jest.fn(),
 }));
+jest.mock('lucia', () => ({
+  verifyRequestOrigin: (origin: string, hosts: string[]) => hosts.includes(origin),
+}));
 jest.mock('../src/libs/feature-authentication/DataAccessDb.ts', () => ({
   UsersDb: jest.fn().mockImplementation(() => MockUsersDb),
 }));
