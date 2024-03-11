@@ -31,22 +31,6 @@ export const isAuthenticated: Middleware = async req => {
   req.headers.set('user', JSON.stringify(result.user));
   req.headers.set('sessionId', result.session.id);
 };
-// TODO: fix this when user is migrated
-// import jwt from 'jsonwebtoken';
-// import { ErrorResponse, Middleware } from '@/utils/middlewareHandler';
-// import { prisma } from '@/libs/legacyStuff/db/prisma';
-
-// const validateToken = (token: string, isRefresh = false) => {
-//   try {
-//     const decodedToken = jwt.verify(
-//       `${token}`,
-//       isRefresh ? process.env.REFRESH_TOKEN_KEY || '' : process.env.AUTH_TOKEN_KEY || ''
-//     );
-//     return decodedToken as jwt.JwtPayload;
-//   } catch (err) {
-//     throw new ErrorResponse('Invalid token', err, 401);
-//   }
-// };
 
 // export const isAccountConfirmed: Middleware = async req => {
 //   const userid = req.headers.get('userId');
