@@ -7,10 +7,15 @@ type Data = {
 
 export const mockRequest = (data?: Data) => {
   const mockedRequest: Request = mock(Request);
+  const headers = data?.headers || {};
   when(mockedRequest.headers).thenReturn({
-    get: (s: string) => (data?.headers || {})[s] || null,
+    get: (s: string) => headers[s] || null,
+    set: (key: string, value: string) => {
+      headers[key] = value;
+    },
   } as any);
   when(mockedRequest.json).thenReturn(async () => data?.body || null);
+  when(mockedRequest.url).thenReturn('http://localhost');
 
   return instance(mockedRequest);
 };

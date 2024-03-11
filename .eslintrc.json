@@ -6,7 +6,12 @@
   ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "max-depth": [
           "error",
@@ -23,7 +28,11 @@
       }
     },
     {
-      "files": ["**/__mocks__/**", "**/__tests__/**"],
+      "files": [
+        "**/__mocks__/**",
+        "**/__tests__/**",
+        "*.setup.ts"
+      ],
       "rules": {
         "max-nested-callbacks": "off"
       }

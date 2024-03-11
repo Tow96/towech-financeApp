@@ -10,6 +10,7 @@ export const stubOwner: User = {
   role: 'owner',
   updatedAt: new Date(),
 };
+export const stubPass = 'validPassword';
 
 const data: User[] = [stubOwner];
 export const MockUsersDb = {
@@ -23,4 +24,5 @@ export const MockUsersDb = {
     id: '32425',
     updatedAt: new Date(),
   }),
+  verifyPassword: (id: string, pass: string) => id === stubOwner.id && pass === stubPass,
 };

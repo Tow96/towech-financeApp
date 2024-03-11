@@ -7,6 +7,7 @@ import { NextRequest } from 'next/server';
 import { apiHandler, CustomResponse, ErrorResponse } from '../../MiddlewareHandler';
 import { ZodError } from 'zod';
 import { DbError } from '@/libs/data-access/db';
+import { AuthError } from '@/libs/feature-authentication';
 
 describe('apiHandler', () => {
   it('Should run each middleware function in order, passing the given req', async () => {
@@ -91,6 +92,18 @@ describe('apiHandler', () => {
 
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({ message: 'Already exists' });
+  });
+
+  it('Should return a 401 error if any of the functions throws an AuthError object', async () => {
+    const mid_1 = jest.fn(async _ => {});
+    const apiCall = jest.fn(async _ => {
+      throw new AuthError('Unauthorized');
+    });
+
+    const response = await apiHandler(mid_1, apiCall)(new NextRequest('http://pesto'));
+
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ message: 'Unauthorized' });
   });
 
   it('Should return an unxepected error message if any other error type is thrown', async () => {

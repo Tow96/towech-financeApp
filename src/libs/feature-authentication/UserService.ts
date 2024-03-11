@@ -4,7 +4,6 @@
  * Tanstack Store that handles the user state
  */
 // Libraries ---------------------------------------------------------
-import { jwtDecode } from 'jwt-decode';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/utils/HttpCommon';
 import { keys } from '@/utils/TanstackProvider';

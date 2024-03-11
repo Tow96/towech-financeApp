@@ -24,7 +24,7 @@ export const usersTable = pgTable(tableNames.USERS, {
 });
 export const sessionsTable = pgTable(tableNames.SESSIONS, {
   id: text('id').primaryKey(),
-  expiresAt: timestamp('expires_at').notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   userId: varchar('user_id', { length: 24 }).notNull(),
 });
 
@@ -40,7 +40,20 @@ export const insertUserSchema = createInsertSchema(usersTable, {
 });
 export const selectUserSchema = createSelectSchema(usersTable).omit({
   hashedPassword: true,
+  deleted: true,
+});
+export const Login = z.object({
+  email: z.string(),
+  password: z.string(),
+  keepSession: z.boolean(),
 });
 // Types ----------------------------------------------------------------------
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = z.infer<typeof selectUserSchema>;
+export type Login = z.infer<typeof Login>;
+// Errors ---------------------------------------------------------------------
+export class AuthError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}

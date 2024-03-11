@@ -6,12 +6,12 @@ import { mockRequest } from '@/utils/__mocks__/Request';
 import {
   MockUsersDb,
   stubOwner,
-} from '../../../libs/feature-authentication/__mocks__/DataAccessDb';
-jest.mock('../../../libs/feature-authentication/DataAccessDb.ts', () => ({
+} from '../../../../libs/feature-authentication/__mocks__/DataAccessDb';
+jest.mock('../../../../libs/feature-authentication/DataAccessDb.ts', () => ({
   UsersDb: jest.fn().mockImplementation(() => MockUsersDb),
 }));
 const sendMailSpy = jest.fn();
-jest.mock('../../../utils/Mailer.ts', () => ({
+jest.mock('../../../../utils/Mailer.ts', () => ({
   Mailer: jest.fn().mockImplementation(() => ({ sendRegistrationEmail: sendMailSpy })),
 }));
 

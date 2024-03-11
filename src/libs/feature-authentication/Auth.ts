@@ -25,10 +25,13 @@ export const lucia = new Lucia(adapter, {
   },
   sessionExpiresIn: new TimeSpan(30, 'd'),
   getUserAttributes: attributes => ({
+    id: attributes.id,
     name: attributes.name,
     email: attributes.email,
+    accountConfirmed: attributes.account_confirmed,
     role: attributes.role,
-    accConfirmed: attributes.accountConfirmed,
+    createdAt: attributes.created_at,
+    updatedAt: attributes.updated_at,
   }),
 });
 

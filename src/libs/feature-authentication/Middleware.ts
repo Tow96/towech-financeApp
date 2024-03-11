@@ -3,8 +3,9 @@
  *
  * Middleware for the user related routes
  */
-
 import { ErrorResponse, Middleware } from '@/utils';
+import { cookies } from 'next/headers';
+import { lucia } from './Auth';
 
 export const isSuperUserOrAdmin: Middleware = async req => {
   const authHeader = req.headers.get('Authorization');
@@ -13,6 +14,23 @@ export const isSuperUserOrAdmin: Middleware = async req => {
   if (authHeader !== process.env.SUPERUSER_KEY) throw new ErrorResponse('Unauthorized', null, 401);
 };
 
+export const isAuthenticated: Middleware = async req => {
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+  if (!sessionId) throw new ErrorResponse('Unauthorized', null, 401);
+
+  const result = await lucia.validateSession(sessionId);
+  if (!result.session) {
+    const emptyCookie = lucia.createBlankSessionCookie();
+    cookies().set(emptyCookie.name, emptyCookie.value, emptyCookie.attributes);
+    throw new ErrorResponse('Unauthorized', null, 401);
+  }
+  if (result.session.fresh) {
+    const newCookie = lucia.createSessionCookie(result.session.id);
+    cookies().set(newCookie.name, newCookie.value, newCookie.attributes);
+  }
+  req.headers.set('user', JSON.stringify(result.user));
+  req.headers.set('sessionId', result.session.id);
+};
 // TODO: fix this when user is migrated
 // import jwt from 'jsonwebtoken';
 // import { ErrorResponse, Middleware } from '@/utils/middlewareHandler';
@@ -28,23 +46,6 @@ export const isSuperUserOrAdmin: Middleware = async req => {
 //   } catch (err) {
 //     throw new ErrorResponse('Invalid token', err, 401);
 //   }
-// };
-
-// export const isAuthenticated: Middleware = async req => {
-//   const authorization = req.headers.get('Authorization');
-//   if (!authorization) throw new ErrorResponse('No token', null, 401);
-
-//   const decodedToken: any = validateToken(authorization.split(' ')[1]);
-//   const user = {
-//     _id: decodedToken._id,
-//     accountConfirmed: decodedToken.accountConfirmed,
-//     createdAt: decodedToken.createdAt,
-//     name: decodedToken.name,
-//     role: decodedToken.role,
-//     username: decodedToken.username,
-//   };
-
-//   req.headers.set('userId', user._id);
 // };
 
 // export const isAccountConfirmed: Middleware = async req => {
