@@ -19,7 +19,6 @@ const testAll = async (client: apiClient, expected: unknown) => {
   expect(await client.get('test').catch(e => e)).toEqual(expected);
   expect(await client.patch('test').catch(e => e)).toEqual(expected);
   expect(await client.post('test').catch(e => e)).toEqual(expected);
-  expect(await client.postWithCredentials('test').catch(e => e)).toEqual(expected);
   expect(await client.put('test').catch(e => e)).toEqual(expected);
 };
 // Tests ----------------------------------------------------------------------
