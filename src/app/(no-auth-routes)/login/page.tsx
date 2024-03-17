@@ -15,13 +15,7 @@ import { useAddToast } from '@/libs/feature-toasts/ToastService';
 import { Checkbox } from '@/components/checkbox';
 import { Input } from '@/components/input';
 import { Button } from '@/components/button';
-
-// Types ----------------------------------------------------------------------
-type Inputs = {
-  username: string;
-  password: string;
-  keepSession: boolean;
-};
+import { Login } from '@/libs/feature-authentication';
 
 // Component ------------------------------------------------------------------
 const LoginPage = (): JSX.Element => {
@@ -29,16 +23,16 @@ const LoginPage = (): JSX.Element => {
   const addToast = useAddToast();
 
   // Form ---------------------------------------
-  const form = useForm<Inputs>();
+  const form = useForm<Login>();
   const formErrors = form.formState.errors;
-  const onSubmit: SubmitHandler<Inputs> = data => login(data);
+  const onSubmit: SubmitHandler<Login> = data => login(data);
 
-  // Login --------------------------------------
+  // // Login --------------------------------------
   const { mutate: login, status, error } = useLogin();
   // Set error in the form
   useEffect(() => {
     if (status === 'error') {
-      form.setError('username', { type: 'validate' });
+      form.setError('email', { type: 'validate' });
       form.setError('password', { type: 'validate' });
     }
   }, [status, form]);
@@ -49,9 +43,9 @@ const LoginPage = (): JSX.Element => {
     }
   }, [status, addToast, error]);
   // Redirect to dashboard
-  useEffect(() => {
-    if (status === 'success') redirect('/dashboard');
-  }, [status]);
+  // useEffect(() => {
+  //   if (status === 'success') redirect('/dashboard');
+  // }, [status]);
 
   // Render -------------------------------------
   return (
@@ -63,8 +57,8 @@ const LoginPage = (): JSX.Element => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Input
             label="Email"
-            error={formErrors.username !== undefined}
-            register={form.register('username', { required: true })}
+            error={formErrors.email !== undefined}
+            register={form.register('email', { required: true })}
           />
           <Input
             type="password"
@@ -73,7 +67,7 @@ const LoginPage = (): JSX.Element => {
             register={form.register('password', { required: true })}
           />
           {/* Keep session + submit */}
-          <div className="flex justify-between px-1">
+          <div className="flex justify-between px-1 pt-2">
             <Checkbox label="Keep Session" register={form.register('keepSession')} />
             <Button type="submit">Login</Button>
           </div>
