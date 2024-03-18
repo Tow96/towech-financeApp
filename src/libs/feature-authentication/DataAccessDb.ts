@@ -2,13 +2,14 @@
  * Copyright (c) 2024, Towechlabs
  *
  * Class that wraps the db connection
+ * When cache is implemented, it should also be handled here
  */
 // Libraries ------------------------------------------------------------------
 import { ObjectId } from 'bson';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { Argon2id, Bcrypt } from 'oslo/password';
-import { dbClient } from '@/libs/data-access';
+import { dbClient } from '@/utils';
 // Schemas --------------------------------------------------------------------
 import * as schema from './Schema';
 import { InsertUser, User, usersTable, selectUserSchema } from './Schema';

@@ -5,9 +5,9 @@
  */
 // Libraries ------------------------------------------------------------------
 import { Cookie } from 'lucia';
-import { DbError } from '../data-access/db';
 import { lucia } from './Auth';
 import { UsersDb } from './DataAccessDb';
+import { DbError } from '@/utils';
 // Schemas --------------------------------------------------------------------
 import { AuthError, InsertUser, Login, User } from './Schema';
 

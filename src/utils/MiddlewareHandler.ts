@@ -3,7 +3,7 @@
  *
  * Proper API route middleware handler, as I agree with the article, NextJs' implementation is extremely poor
  */
-import { DbError } from '@/libs/data-access/db';
+import { DbError } from './db';
 import { AuthError } from '@/libs/feature-authentication';
 import { verifyRequestOrigin } from 'lucia';
 import { ZodError } from 'zod';

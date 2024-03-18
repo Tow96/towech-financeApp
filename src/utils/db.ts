@@ -4,9 +4,6 @@
  * Handles the postgres db connection
  */
 import postgres from 'postgres';
-import { drizzle } from 'drizzle-orm/postgres-js';
-
-import * as schema from './schema';
 
 export class DbError extends Error {
   constructor(message: string) {
@@ -15,4 +12,3 @@ export class DbError extends Error {
 }
 
 export const dbClient = postgres(process.env.DB_URL || '', { max: 1 });
-export const db = drizzle(dbClient, { schema });

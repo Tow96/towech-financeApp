@@ -1,6 +1,6 @@
 // Libraries ------------------------------------------------------------------
 // Tested components ----------------------------------------------------------
-import { DbError } from '@/libs/data-access/db';
+import { DbError } from '@/utils/db';
 import { UsersModel } from '../../Model';
 import { AuthError, InsertUser, Login } from '../../Schema';
 // Mocks ----------------------------------------------------------------------
