@@ -1,4 +1,5 @@
 import { MockUsersDb, stubOwner } from '@/libs/feature-authentication/__mocks__/DataAccessDb';
+import { MockTransactionsDb } from '@/libs/feature-transactions/__mocks__/DataAccessDb';
 
 jest.mock('oslo/crypto', () => ({
   generateRandomString: (s: string) => s,
@@ -12,6 +13,9 @@ jest.mock('lucia', () => ({
 }));
 jest.mock('../src/libs/feature-authentication/DataAccessDb.ts', () => ({
   UsersDb: jest.fn().mockImplementation(() => MockUsersDb),
+}));
+jest.mock('../src/libs/feature-transactions/DataAccessDb.ts', () => ({
+  TransactionsDb: jest.fn().mockImplementation(() => MockTransactionsDb),
 }));
 jest.mock('../src/libs/feature-authentication/Auth.ts', () => ({
   lucia: {

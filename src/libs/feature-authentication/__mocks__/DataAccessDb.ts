@@ -3,7 +3,6 @@ import { InsertUser, User } from '../Schema';
 export const stubOwner: User = {
   accountConfirmed: true,
   createdAt: new Date(),
-  deleted: false,
   email: 'owner@mail.com',
   id: '1234',
   name: 'owner',
@@ -20,7 +19,6 @@ export const MockUsersDb = {
     ...user,
     accountConfirmed: false,
     createdAt: new Date(),
-    deleted: false,
     id: '32425',
     updatedAt: new Date(),
   }),

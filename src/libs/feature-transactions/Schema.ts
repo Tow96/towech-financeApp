@@ -13,7 +13,6 @@ export const walletsTable = pgTable(tableNames.WALLETS, {
   userId: varchar('user_id', { length: 24 }).notNull(),
   iconId: integer('icon_id').notNull().default(0),
   name: varchar('name', { length: 50 }).notNull(),
-  currency: varchar('currency', { length: 3 }).notNull().default('MXN'),
   money: integer('money').notNull().default(0), // Maybe this should be converted into a sum using a count
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
@@ -39,4 +38,5 @@ export const Wallet = createSelectSchema(walletsTable).omit({ deleted: true });
 
 // Types ----------------------------------------------------------------------
 export type Wallet = z.infer<typeof Wallet>;
+export type UpdateWallet = z.infer<typeof UpdateWallet>;
 export type InsertWallet = z.infer<typeof InsertWallet>;
