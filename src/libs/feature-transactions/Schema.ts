@@ -23,11 +23,16 @@ export const walletsTable = pgTable(tableNames.WALLETS, {
 // Schemas --------------------------------------------------------------------
 export const InsertWallet = createInsertSchema(walletsTable, {
   name: s => s.name.trim(),
-  currency: s => s.currency.optional(),
   iconId: s => s.iconId.optional(),
 }).pick({
   name: true,
-  currency: true,
+  iconId: true,
+});
+export const UpdateWallet = createInsertSchema(walletsTable, {
+  name: s => s.name.trim().optional(),
+  iconId: s => s.iconId.optional(),
+}).pick({
+  name: true,
   iconId: true,
 });
 export const Wallet = createSelectSchema(walletsTable).omit({ deleted: true });
