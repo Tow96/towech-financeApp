@@ -7,7 +7,7 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { PostgresJsAdapter } from '@lucia-auth/adapter-postgresql';
 // data access ----------------------------------------------------------------
-import { dbClient } from '@/libs/data-access';
+import { dbClient } from '@/utils';
 // tables ---------------------------------------------------------------------
 import { User, tableNames } from './Schema';
 
