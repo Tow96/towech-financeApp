@@ -9,9 +9,19 @@ export const stubOwner: User = {
   role: 'owner',
   updatedAt: new Date(),
 };
+export const stubUser: User = {
+  accountConfirmed: true,
+  createdAt: new Date(),
+  email: 'owner@mail.com',
+  id: '4321',
+  name: 'user',
+  role: 'user',
+  updatedAt: new Date(),
+};
+
 export const stubPass = 'validPassword';
 
-const data: User[] = [stubOwner];
+const data: User[] = [stubOwner, stubUser];
 export const MockUsersDb = {
   getByEmail: (email: string) => data.find(i => i.email === email) || null,
   add: (user: InsertUser): User => ({

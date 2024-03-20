@@ -1,4 +1,4 @@
-import { stubOwner } from '@/libs/feature-authentication/__mocks__/DataAccessDb';
+import { stubOwner, stubUser } from '@/libs/feature-authentication/__mocks__/DataAccessDb';
 import { InsertWallet, UpdateWallet, Wallet } from '../Schema';
 
 export const stubWallet: Wallet = {
@@ -10,8 +10,17 @@ export const stubWallet: Wallet = {
   updatedAt: new Date(),
   userId: stubOwner.id,
 };
+export const stubUserWallet: Wallet = {
+  createdAt: new Date(),
+  iconId: 0,
+  id: '4321',
+  money: 0,
+  name: 'Wallet 2',
+  updatedAt: new Date(),
+  userId: stubUser.id,
+};
 
-const data: Wallet[] = [stubWallet];
+const data: Wallet[] = [stubWallet, stubUserWallet];
 export const MockTransactionsDb = {
   addWallet: (userId: string, wallet: InsertWallet): Wallet => ({
     createdAt: new Date(),
