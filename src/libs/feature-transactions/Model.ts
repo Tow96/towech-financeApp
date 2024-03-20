@@ -1,54 +1,30 @@
 /** model.ts
  * Copyright (c) 2024, Towechlabs
  *
- * Class that handles the proper connection to the database
+ * Class that handles how the model should behave,
+ * It makes the necessary sb calls for it to work properly
  */
 // Libraries ------------------------------------------------------------------
-import { ObjectId } from 'bson';
-import { eq, sql } from 'drizzle-orm';
-import { db } from '@/libs/data-access';
-// Schemas --------------------------------------------------------------------
-import { InsertWallet, insertWalletSchema, wallets, Wallet } from '@/libs/data-access/schema';
-import { ErrorResponse } from '@/utils/MiddlewareHandler';
+import { TransactionsDb } from './DataAccessDb';
+import { InsertWallet, UpdateWallet, Wallet } from './Schema';
+import { DbError } from '@/utils';
 
-export class WalletModel {
-  create = async (wallet: InsertWallet): Promise<Wallet> => {
-    const validatedWallet = insertWalletSchema.parse(wallet);
-    const id = new ObjectId().toString();
+export class TransactionsModel {
+  private db = new TransactionsDb();
 
-    // TODO: optimize this calls to reduce trips
-    const walletExists = await db
-      .select({ value: sql<number>`count(*)::int` })
-      .from(wallets)
-      .where(
-        sql`${wallets.userId} = ${validatedWallet.userId} AND ${wallets.name} = ${validatedWallet.name}`
-      );
-    if (walletExists[0].value !== 0)
-      throw new ErrorResponse(`${validatedWallet.name} already exists`, {}, 422);
-    if (validatedWallet.parentId) {
-      const parentWallet = await db.query.wallets.findFirst({
-        where: eq(wallets.id, validatedWallet.parentId),
-      });
-      if (parentWallet?.parentId !== null)
-        throw new ErrorResponse('Only topmost wallest can have subwallets', null, 422);
-    }
+  createWallet = async (userId: string, wallet: InsertWallet): Promise<Wallet> => {
+    const walletExists = await this.db.getWalletByName(wallet.name, userId);
+    if (walletExists) throw new DbError('Wallet already exists');
 
-    const dbResponse = (
-      await db
-        .insert(wallets)
-        .values({ ...validatedWallet, id })
-        .returning()
-    )[0];
-    // TODO:Add initial transaction
-
-    return dbResponse;
+    return this.db.addWallet(userId, wallet);
   };
 
-  getAll = async (userId: string): Promise<Wallet[]> => {
-    const result = await db
-      .select()
-      .from(wallets)
-      .where(sql`${wallets.userId} = ${userId}`);
-    return result as Wallet[];
-  };
+  getAllWallets = async (userId: string): Promise<Wallet[]> => this.db.getAllWallets(userId);
+
+  getWallet = async (walletId: string): Promise<Wallet | null> => this.db.getWalletById(walletId);
+
+  updateWallet = async (walletId: string, updateWallet: UpdateWallet): Promise<Wallet | null> =>
+    this.db.updateWallet(walletId, updateWallet);
+
+  deleteWallet = async (walletId: string): Promise<boolean> => this.db.deleteWallet(walletId);
 }

@@ -1,0 +1,1 @@
+export { TransactionsModel } from './Model';
