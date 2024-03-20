@@ -1,7 +1,7 @@
 // Libraries ------------------------------------------------------------------
 import { ErrorResponse, Middleware } from '@/utils/MiddlewareHandler';
 // Tested components ----------------------------------------------------------
-import { isAuthenticated, isSuperUserOrAdmin } from '../../Middleware';
+import { isAccountConfirmed, isAuthenticated, isSuperUserOrAdmin } from '../../Middleware';
 // Mocks ----------------------------------------------------------------------
 import { mockRequest } from '@/utils/__mocks__/Request';
 import { mockGetCookie } from '../../../../../jest/jest.server.setup';
@@ -22,7 +22,7 @@ describe('isSuperUserOrAdmin', () => {
   });
 });
 
-describe('isCookieValid', () => {
+describe('isAuthenticated', () => {
   describe('Given no cookie', () => {
     const req = mockRequest();
     mockGetCookie.mockImplementationOnce(() => null);
@@ -41,6 +41,37 @@ describe('isCookieValid', () => {
     test('- Then it should set the user in the request headers', async () => {
       await isAuthenticated(req);
       expect(req.headers.get('user')).toBe(JSON.stringify(stubOwner));
+    });
+  });
+});
+
+describe('isAccountConfirmed', () => {
+  describe('Given no cookie', () => {
+    const req = mockRequest();
+    mockGetCookie.mockImplementationOnce(() => null);
+    test('- Then an unauthorized error should be thrown', async () =>
+      expectUnauthorized(isAccountConfirmed, req));
+  });
+  describe('Given an invalid/expired cookie', () => {
+    const req = mockRequest();
+    mockGetCookie.mockImplementationOnce(() => ({ value: 'false' }));
+    test('- Then an unauthorized error should be thrown', async () =>
+      expectUnauthorized(isAccountConfirmed, req));
+  });
+  describe('Given a valid cookie', () => {
+    const req = mockRequest();
+    describe('- When the user email is not confirmed', () => {
+      mockGetCookie.mockImplementationOnce(() => ({ value: 'unconfirmed' }));
+      test('- Then an unauthorized error should be thrown', async () => {
+        expectUnauthorized(isAccountConfirmed, req);
+      });
+    });
+    describe('- When the user email is confirmed', () => {
+      mockGetCookie.mockImplementationOnce(() => ({ value: 'refresh' }));
+      test('- Then it should set the user in the request headers', async () => {
+        await isAccountConfirmed(req);
+        expect(req.headers.get('user')).toBe(JSON.stringify(stubOwner));
+      });
     });
   });
 });

@@ -40,11 +40,22 @@ export const isAuthenticated: Middleware = async req => {
   req.headers.set('sessionId', result.session.id);
 };
 
-// export const isAccountConfirmed: Middleware = async req => {
-//   const userid = req.headers.get('userId');
-//   if (!userid) throw new ErrorResponse('User not authenticated', null, 401);
+export const isAccountConfirmed: Middleware = async req => {
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+  if (!sessionId) throw new ErrorResponse('Unauthorized', null, 401);
 
-//   const user = await prisma.users.findFirst({ where: { id: userid } });
-//   if (!user || !user.accountConfirmed)
-//     throw new ErrorResponse('User account is not confirmed', null, 403);
-// };
+  const result = await lucia.validateSession(sessionId);
+  if (!result.session) {
+    const emptyCookie = lucia.createBlankSessionCookie();
+    cookies().set(emptyCookie.name, emptyCookie.value, emptyCookie.attributes);
+    throw new ErrorResponse('Unauthorized', null, 401);
+  }
+  if (result.session.fresh) {
+    const newCookie = lucia.createSessionCookie(result.session.id);
+    cookies().set(newCookie.name, newCookie.value, newCookie.attributes);
+  }
+
+  if (!result.user.accountConfirmed) throw new ErrorResponse('Unauthorized', null, 401);
+  req.headers.set('user', JSON.stringify(result.user));
+  req.headers.set('sessionId', result.session.id);
+};
