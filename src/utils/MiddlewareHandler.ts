@@ -20,13 +20,15 @@ export class ErrorResponse<T> extends Error {
     (this.status = status), (this.errors = errors);
   }
 }
+export type DynamicParams = {
+  params?: Record<string, string>;
+};
 
-export type Middleware = (req: Request) => Promise<CustomResponse | void>;
-// export type Middleware = (req: Request, _next: () => void) => Promise<CustomResponse | void>;
+export type Middleware = (req: Request, params: DynamicParams) => Promise<CustomResponse | void>;
 
 export const apiHandler =
   (...middlewares: Middleware[]) =>
-  async (request: Request) => {
+  async (request: Request, params: DynamicParams) => {
     // CSRF protection
     const originHeader = request.headers.get('Origin');
     const hostHeader = request.headers.get('Host');
@@ -39,7 +41,7 @@ export const apiHandler =
         // let nextInvoked = false;
         // const next = async () => {};
 
-        result = (await middlewares[i](request)) || null;
+        result = (await middlewares[i](request, params)) || null;
 
         // if (!nextInvoked) break;
       }

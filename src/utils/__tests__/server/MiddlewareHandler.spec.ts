@@ -11,15 +11,15 @@ import { mockRequest } from '@/utils/__mocks__/Request';
 
 describe('apiHandler', () => {
   it('Should return a 403 response if the Origin header is not present', async () => {
-    const response = await apiHandler()(mockRequest({ headers: { Origin: undefined } }));
+    const response = await apiHandler()(mockRequest({ headers: { Origin: undefined } }), {});
     expect(response.status).toBe(403);
   });
   it('Should return a 403 response if the Host header is not present', async () => {
-    const response = await apiHandler()(mockRequest({ headers: { Host: undefined } }));
+    const response = await apiHandler()(mockRequest({ headers: { Host: undefined } }), {});
     expect(response.status).toBe(403);
   });
   it('Should return a 403 response if the Host and Origin headers do not match', async () => {
-    const response = await apiHandler()(mockRequest({ headers: { Origin: 'a', Host: 'b' } }));
+    const response = await apiHandler()(mockRequest({ headers: { Origin: 'a', Host: 'b' } }), {});
     expect(response.status).toBe(403);
   });
 
@@ -29,7 +29,7 @@ describe('apiHandler', () => {
     const mid_3 = jest.fn(async _ => {});
     const apiCall = jest.fn(async _ => {});
 
-    await apiHandler(mid_1, mid_2, mid_3, apiCall)(mockRequest());
+    await apiHandler(mid_1, mid_2, mid_3, apiCall)(mockRequest(), {});
 
     expect(mid_1).toHaveBeenCalledTimes(1);
     expect(mid_2).toHaveBeenCalledTimes(1);
@@ -43,7 +43,7 @@ describe('apiHandler', () => {
     const message: CustomResponse = { body: responseBody, status: responseStatus };
     const apiCall = async () => message;
 
-    const response = await apiHandler(apiCall)(mockRequest());
+    const response = await apiHandler(apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(responseStatus);
     expect(await response.json()).toEqual(responseBody);
@@ -52,7 +52,7 @@ describe('apiHandler', () => {
   it('Should return a 204 code response if the last fn does not return a response', async () => {
     const apiCall = async () => {};
 
-    const response = await apiHandler(apiCall)(mockRequest());
+    const response = await apiHandler(apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(204);
     expect(response.body).toBeNull();
@@ -68,7 +68,7 @@ describe('apiHandler', () => {
     });
     const apiCall = jest.fn(async _ => {});
 
-    const response = await apiHandler(mid_1, mid_2, apiCall)(mockRequest());
+    const response = await apiHandler(mid_1, mid_2, apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(errorStatus);
     expect(await response.json()).toEqual({ message: errorMessage, errors });
@@ -89,7 +89,7 @@ describe('apiHandler', () => {
       ]);
     });
 
-    const response = await apiHandler(mid_1, apiCall)(mockRequest());
+    const response = await apiHandler(mid_1, apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(422);
     // expect(await response.json()).toEqual({ message: errorMessage, errors });
@@ -101,7 +101,7 @@ describe('apiHandler', () => {
       throw new DbError('Already exists');
     });
 
-    const response = await apiHandler(mid_1, apiCall)(mockRequest());
+    const response = await apiHandler(mid_1, apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({ message: 'Already exists' });
@@ -113,7 +113,7 @@ describe('apiHandler', () => {
       throw new AuthError('Unauthorized');
     });
 
-    const response = await apiHandler(mid_1, apiCall)(mockRequest());
+    const response = await apiHandler(mid_1, apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({ message: 'Unauthorized' });
@@ -126,7 +126,7 @@ describe('apiHandler', () => {
     });
     const apiCall = jest.fn(async _ => {});
 
-    const response = await apiHandler(mid_1, mid_2, apiCall)(mockRequest());
+    const response = await apiHandler(mid_1, mid_2, apiCall)(mockRequest(), {});
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ message: 'Unexpected internal error' });
