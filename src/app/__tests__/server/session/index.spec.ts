@@ -64,7 +64,7 @@ describe('DELETE: /api/session', () => {
 });
 
 async function expectResponse(
-  fn: (req: any) => any,
+  fn: (req: any, p?: any) => any,
   req: Request,
   status: number,
   message: unknown

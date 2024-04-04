@@ -43,9 +43,9 @@ const LoginPage = (): JSX.Element => {
     }
   }, [status, addToast, error]);
   // Redirect to dashboard
-  // useEffect(() => {
-  //   if (status === 'success') redirect('/dashboard');
-  // }, [status]);
+  useEffect(() => {
+    if (status === 'success') redirect('/dashboard');
+  }, [status]);
 
   // Render -------------------------------------
   return (

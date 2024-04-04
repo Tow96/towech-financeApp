@@ -17,7 +17,7 @@ jest.mock('../../../../utils/Mailer.ts', () => ({
 
 const superUserKey = 'SuperKey';
 
-describe('/api/users', () => {
+describe('POST: /api/users', () => {
   beforeAll(() => (process.env.SUPERUSER_KEY = superUserKey));
   describe('Given not valid credentials', () => {
     const req = mockRequest();
@@ -48,14 +48,13 @@ describe('/api/users', () => {
       });
       test('- Then it should send an email with the password to the newly created user', async () => {
         sendMailSpy.mockClear();
-        await POST(req);
+        await POST(req, {});
         expect(sendMailSpy).toHaveBeenCalledTimes(1);
       });
       test('- Then it should return the newly created user', async () =>
         await expectResponse(req, 201, {
           accountConfirmed: false,
           createdAt: expect.any(String),
-          deleted: false,
           email: 'new@mail.com',
           id: expect.any(String),
           name: 'name',
@@ -67,7 +66,7 @@ describe('/api/users', () => {
 });
 
 async function expectResponse(req: Request, status: number, message: unknown) {
-  const response = await POST(req);
+  const response = await POST(req, {});
   expect(response.status).toBe(status);
   expect(await response.json()).toEqual(message);
 }

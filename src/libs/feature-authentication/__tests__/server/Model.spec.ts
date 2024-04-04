@@ -26,7 +26,6 @@ describe('UsersModel.register', () => {
         ...insertUser,
         accountConfirmed: false,
         createdAt: expect.any(Date),
-        deleted: false,
         id: expect.any(String),
         updatedAt: expect.any(Date),
       });

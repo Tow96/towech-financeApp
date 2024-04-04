@@ -77,7 +77,7 @@ describe('Login Page', () => {
 
       await userEvent.click(submitBttn);
       expect(mutate).toHaveBeenCalledWith({
-        username: mail,
+        email: mail,
         password: pass,
         keepSession: true,
       });
