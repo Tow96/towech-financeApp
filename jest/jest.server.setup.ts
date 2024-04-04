@@ -60,6 +60,11 @@ jest.mock('../src/libs/feature-authentication/Auth.ts', () => ({
           user: stubOwner,
           session: { id, userId: stubOwner.id, fresh: true, expiresAt: new Date() },
         };
+      if (id == 'unconfirmed')
+        return {
+          user: { ...stubOwner, accountConfirmed: false },
+          session: { id, userId: stubOwner.id, fresh: true, expiresAt: new Date() },
+        };
       return { user: null, session: null };
     },
   },

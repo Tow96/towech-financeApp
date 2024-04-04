@@ -55,7 +55,7 @@ export const isAccountConfirmed: Middleware = async req => {
     cookies().set(newCookie.name, newCookie.value, newCookie.attributes);
   }
 
-  if (!result.user.accountConfirmed) throw new ErrorResponse('Unauthorized', null, 401);
+  if (!result.user.accountConfirmed) throw new ErrorResponse('Account not confirmed', null, 403);
   req.headers.set('user', JSON.stringify(result.user));
   req.headers.set('sessionId', result.session.id);
 };

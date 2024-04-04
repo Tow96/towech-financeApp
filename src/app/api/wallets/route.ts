@@ -3,25 +3,24 @@
  *
  * Api route for getting and adding wallets
  */
-import { isAccountConfirmed, isAuthenticated } from '@/libs/feature-authentication/Middleware';
-import { WalletModel } from '@/libs/feature-wallets/model';
+import { isAccountConfirmed } from '@/libs/feature-authentication';
+import { TransactionsModel } from '@/libs/feature-transactions';
+import { InsertWallet } from '@/libs/feature-transactions/Schema';
 import { apiHandler } from '@/utils/MiddlewareHandler';
 
-export const GET = apiHandler(isAuthenticated, async req => {
-  const userId = req.headers.get('userId')!;
+export const GET = apiHandler(isAccountConfirmed, async req => {
+  const userId: string = JSON.parse(req.headers.get('user') || '{}').id;
+  const transactions = new TransactionsModel();
 
-  const wallets = new WalletModel();
-  const response = await wallets.getAll(userId);
-
-  return { body: response, status: 200 };
+  return { body: await transactions.getAllWallets(userId), status: 200 };
 });
 
-export const POST = apiHandler(isAuthenticated, isAccountConfirmed, async req => {
-  const userId = req.headers.get('userId');
-  const body = await req.json();
+export const POST = apiHandler(isAccountConfirmed, async req => {
+  const validatedData = InsertWallet.parse(await req.json());
+  const userId: string = JSON.parse(req.headers.get('user') || '{}').id;
+  const transactions = new TransactionsModel();
 
-  const wallets = new WalletModel();
-  const response = await wallets.create({ ...body, userId });
+  const newWallet = await transactions.createWallet(userId, validatedData);
 
-  return { body: response, status: 201 };
+  return { body: newWallet, status: 201 };
 });
