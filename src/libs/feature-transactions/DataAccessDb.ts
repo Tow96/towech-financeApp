@@ -17,14 +17,14 @@ export class TransactionsDb {
   private connection = drizzle(dbClient, { schema });
   private basicWalletFilter = (extra?: SQL) => and(eq(walletsTable.deleted, false), extra);
 
-  addWallet = async (userId: string, wallet: schema.InsertWallet): Promise<schema.Wallet> => {
+  addWallet = async (userId: string, wallet: schema.InsertWallet) => {
+    //: Promise<schema.Wallet> => {
     const id = new ObjectId().toString();
 
-    const newWallets = await this.connection.insert(walletsTable).values({
-      ...wallet,
-      id,
-      userId,
-    });
+    const newWallets = await this.connection
+      .insert(walletsTable)
+      .values({ ...wallet, id, userId })
+      .returning();
     return schema.Wallet.parse(newWallets[0]);
   };
 
