@@ -59,9 +59,9 @@ describe('TransactionModel.getWallet', () => {
 
 describe('TransactionModel.updateWallet', () => {
   describe('Given an unexistent wallet id', () => {
-    test('- Then it should return null', async () => {
-      const wallet = await model.updateWallet('fake wallet id', { name: 'Another' });
-      expect(wallet).toBeNull();
+    test('- Then it should throw a db error', async () => {
+      const t = async () => model.updateWallet('fake wallet id', { name: 'Another' });
+      expect(t).rejects.toThrow(new DbError('Wallet not found'));
     });
   });
   describe('Given an existent wallet id', () => {

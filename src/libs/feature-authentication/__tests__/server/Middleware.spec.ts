@@ -39,7 +39,7 @@ describe('isAuthenticated', () => {
     const req = mockRequest();
     mockGetCookie.mockImplementationOnce(() => ({ value: 'refresh' }));
     test('- Then it should set the user in the request headers', async () => {
-      await isAuthenticated(req);
+      await isAuthenticated(req, {});
       expect(req.headers.get('user')).toBe(JSON.stringify(stubOwner));
     });
   });
@@ -63,13 +63,14 @@ describe('isAccountConfirmed', () => {
     describe('- When the user email is not confirmed', () => {
       mockGetCookie.mockImplementationOnce(() => ({ value: 'unconfirmed' }));
       test('- Then an unauthorized error should be thrown', async () => {
-        expectUnauthorized(isAccountConfirmed, req);
+        const response = async () => await isAccountConfirmed(req, {});
+        expect(response).rejects.toThrow(new ErrorResponse('Account not confirmed', null, 401));
       });
     });
     describe('- When the user email is confirmed', () => {
       mockGetCookie.mockImplementationOnce(() => ({ value: 'refresh' }));
       test('- Then it should set the user in the request headers', async () => {
-        await isAccountConfirmed(req);
+        await isAccountConfirmed(req, {});
         expect(req.headers.get('user')).toBe(JSON.stringify(stubOwner));
       });
     });
@@ -77,6 +78,6 @@ describe('isAccountConfirmed', () => {
 });
 
 function expectUnauthorized(fn: Middleware, req: Request) {
-  const response = async () => await fn(req);
+  const response = async () => await fn(req, {});
   expect(response).rejects.toThrow(new ErrorResponse('Unauthorized', null, 401));
 }

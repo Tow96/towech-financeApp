@@ -30,10 +30,10 @@ export const apiHandler =
   (...middlewares: Middleware[]) =>
   async (request: Request, params: DynamicParams) => {
     // CSRF protection
-    // const originHeader = request.headers.get('Origin');
-    // const hostHeader = request.headers.get('Host');
-    // if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
-    //   return Response.json({}, { status: 403 });
+    const originHeader = request.headers.get('Origin');
+    const hostHeader = request.headers.get('Host');
+    if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
+      return Response.json({}, { status: 403 });
 
     let result: CustomResponse | null = null;
     try {

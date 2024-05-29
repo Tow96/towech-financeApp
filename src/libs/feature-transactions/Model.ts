@@ -25,7 +25,9 @@ export class TransactionsModel {
 
   updateWallet = async (walletId: string, updateWallet: UpdateWallet): Promise<Wallet | null> => {
     const wallet = await this.db.getWalletById(walletId);
-    const walletExists = await this.db.getWalletByName(updateWallet.name || '', wallet!.userId);
+    if (!wallet) throw new DbError('Wallet not found');
+
+    const walletExists = await this.db.getWalletByName(updateWallet.name || '', wallet.userId);
     if (walletExists) throw new DbError('Wallet already exists');
     return this.db.updateWallet(walletId, updateWallet);
   };
