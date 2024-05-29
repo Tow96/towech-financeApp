@@ -13,7 +13,7 @@ describe('canManageWallet', () => {
     describe('- When there is no user header', () => {
       const req = mockRequest();
       test('- Then it should throw an unauthorized error', () => {
-        expectUnauthorized(canManageWallet, req, { params: { walletId: stubWallet.id } });
+        expectUnauthorized(canManageWallet, req, { params: { walletid: stubWallet.id } });
       });
     });
     describe('- When there is no walletid', () => {
@@ -26,26 +26,25 @@ describe('canManageWallet', () => {
       test('- Then it should return a not found error', () => {
         const req = mockRequest({ headers: { user: JSON.stringify(stubOwner) } });
         const response = async () =>
-          await canManageWallet(req, { params: { walletId: 'I dont exist' } });
+          await canManageWallet(req, { params: { walletid: 'I dont exist' } });
         expect(response).rejects.toThrow(new ErrorResponse('Not found', null, 404));
       });
     });
   });
 
   describe('Given a walletid', () => {
-    const walletId = stubWallet.id;
+    const walletid = stubWallet.id;
     describe('- When the requesting user does not own the wallet', () => {
       const req = mockRequest({ headers: { user: JSON.stringify(stubUser) } });
       test('- Then it should throw a Forbidden error', () => {
-        const response = async () => await canManageWallet(req, { params: { walletId } });
+        const response = async () => await canManageWallet(req, { params: { walletid } });
         expect(response).rejects.toThrow(new ErrorResponse('Forbidden', null, 403));
       });
     });
-
     describe('- When the requesting user owns the wallet', () => {
       const req = mockRequest({ headers: { user: JSON.stringify(stubOwner) } });
       test('- Then it should add the wallet to the headers', async () => {
-        await canManageWallet(req, { params: { walletId } });
+        await canManageWallet(req, { params: { walletid } });
         expect(req.headers.get('wallet')).toBe(JSON.stringify(stubWallet));
       });
     });

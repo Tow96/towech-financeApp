@@ -2,3 +2,4 @@ export type { Middleware, CustomResponse, DynamicParams } from './MiddlewareHand
 export { apiHandler, ErrorResponse } from './MiddlewareHandler';
 export { Mailer } from './Mailer';
 export { dbClient, DbError } from './db';
+export { AuthError } from './Errors';

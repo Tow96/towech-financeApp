@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { apiHandler, CustomResponse, ErrorResponse } from '../../MiddlewareHandler';
 import { ZodError } from 'zod';
 import { DbError } from '@/utils/db';
-import { AuthError } from '@/libs/feature-authentication';
+import { AuthError } from '@/utils';
 import { mockRequest } from '@/utils/__mocks__/Request';
 
 describe('apiHandler', () => {

@@ -1,7 +1,7 @@
 // Libraries ------------------------------------------------------------------
 // Tested components ----------------------------------------------------------
 import { ZodError } from 'zod';
-import { Wallet, InsertWallet } from '../../Schema';
+import { Wallet, InsertWallet, UpdateWallet } from '../../Schema';
 
 describe('InsertWallet', () => {
   describe('Given a malformed name', () => {
@@ -50,6 +50,16 @@ describe('InsertWallet', () => {
     test('- Then it should format the data properly', () => {
       const result = InsertWallet.parse(testData);
       expect(result).toEqual({ name: 'name' });
+    });
+  });
+});
+
+describe('UpdateWallet', () => {
+  describe('Given a valid but unformatted data', () => {
+    const testData = { pepe: 'test' };
+    test('- Then it should format the data properly', () => {
+      const result = UpdateWallet.parse(testData);
+      expect(result).toEqual({});
     });
   });
 });

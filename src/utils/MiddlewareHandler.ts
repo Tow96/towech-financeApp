@@ -4,7 +4,7 @@
  * Proper API route middleware handler, as I agree with the article, NextJs' implementation is extremely poor
  */
 import { DbError } from './db';
-import { AuthError } from '@/libs/feature-authentication';
+import { AuthError } from '@/utils';
 import { verifyRequestOrigin } from 'lucia';
 import { ZodError } from 'zod';
 import { getLogger } from './Logger';
@@ -30,10 +30,10 @@ export const apiHandler =
   (...middlewares: Middleware[]) =>
   async (request: Request, params: DynamicParams) => {
     // CSRF protection
-    const originHeader = request.headers.get('Origin');
-    const hostHeader = request.headers.get('Host');
-    if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
-      return Response.json({}, { status: 403 });
+    // const originHeader = request.headers.get('Origin');
+    // const hostHeader = request.headers.get('Host');
+    // if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
+    //   return Response.json({}, { status: 403 });
 
     let result: CustomResponse | null = null;
     try {
@@ -51,11 +51,8 @@ export const apiHandler =
     } catch (e) {
       if (e instanceof ErrorResponse)
         return Response.json({ errors: e.errors, message: e.message }, { status: e.status });
-
       if (e instanceof AuthError) return Response.json({ message: e.message }, { status: 401 });
-
       if (e instanceof DbError) return Response.json({ message: e.message }, { status: 409 });
-
       if (e instanceof ZodError) return Response.json(e.flatten().fieldErrors, { status: 422 });
 
       logger.error(e);

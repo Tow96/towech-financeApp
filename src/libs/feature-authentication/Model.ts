@@ -9,7 +9,8 @@ import { lucia } from './Auth';
 import { UsersDb } from './DataAccessDb';
 import { DbError } from '@/utils';
 // Schemas --------------------------------------------------------------------
-import { AuthError, InsertUser, Login, User } from './Schema';
+import { InsertUser, Login, User } from './Schema';
+import { AuthError } from '@/utils';
 
 export class UsersModel {
   private db = new UsersDb();

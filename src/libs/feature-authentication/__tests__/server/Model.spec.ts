@@ -2,7 +2,8 @@
 // Tested components ----------------------------------------------------------
 import { DbError } from '@/utils/db';
 import { UsersModel } from '../../Model';
-import { AuthError, InsertUser, Login } from '../../Schema';
+import { InsertUser, Login } from '../../Schema';
+import { AuthError } from '@/utils';
 // Mocks ----------------------------------------------------------------------
 import { stubOwner, stubPass } from '../../__mocks__/DataAccessDb';
 

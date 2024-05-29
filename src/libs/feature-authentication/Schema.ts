@@ -51,9 +51,3 @@ export const Login = z.object({
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = z.infer<typeof selectUserSchema>;
 export type Login = z.infer<typeof Login>;
-// Errors ---------------------------------------------------------------------
-export class AuthError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}

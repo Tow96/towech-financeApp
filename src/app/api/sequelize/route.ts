@@ -3,7 +3,7 @@ import { apiHandler } from '@/utils';
 import { getLogger } from '@/utils/Logger';
 import { MongoClient } from 'mongodb';
 import { drizzle } from 'drizzle-orm/postgres-js';
-import { dbClient } from '@/libs/data-access';
+import { dbClient } from '@/utils';
 import * as userSchema from '@/libs/feature-authentication/Schema';
 import { eq } from 'drizzle-orm';
 /* eslint-disable max-nested-callbacks */
