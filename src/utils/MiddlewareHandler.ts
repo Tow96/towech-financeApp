@@ -32,7 +32,10 @@ export const apiHandler =
     // CSRF protection
     const originHeader = request.headers.get('Origin');
     const hostHeader = request.headers.get('Host');
-    if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
+    if (
+      process.env.NODE_ENV != 'development' &&
+      (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader]))
+    )
       return Response.json({}, { status: 403 });
 
     let result: CustomResponse | null = null;

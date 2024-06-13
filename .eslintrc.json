@@ -13,18 +13,9 @@
         "*.jsx"
       ],
       "rules": {
-        "max-depth": [
-          "error",
-          {
-            "max": 2
-          }
-        ],
-        "max-nested-callbacks": [
-          "error",
-          {
-            "max": 1
-          }
-        ]
+        "max-depth": [ "error", { "max": 2 } ],
+        "max-nested-callbacks": [ "error", { "max": 1 } ],
+        "arrow-body-style": ["error", "as-needed"]
       }
     },
     {

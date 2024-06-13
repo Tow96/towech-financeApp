@@ -4,10 +4,10 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['pino'],
   },
-  webpack: (config) => {
-    config.externals.push("@node-rs/argon2", "@node-rs/bcrypt", "mailgen");
+  webpack: config => {
+    config.externals.push('@node-rs/argon2', '@node-rs/bcrypt', 'mailgen');
     return config;
-  }
+  },
 };
 
 module.exports = nextConfig;
