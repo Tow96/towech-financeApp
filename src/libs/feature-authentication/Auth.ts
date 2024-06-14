@@ -24,7 +24,7 @@ export const lucia = new Lucia(adapter, {
     },
   },
   sessionExpiresIn: new TimeSpan(30, 'd'),
-  getUserAttributes: attributes => ({
+  getUserAttributes: (attributes: any) => ({
     id: attributes.id,
     name: attributes.name,
     email: attributes.email,

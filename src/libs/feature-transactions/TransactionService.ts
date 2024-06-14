@@ -19,17 +19,17 @@ import { Wallet, InsertWallet, UpdateWallet } from './Schema';
 const api = new apiClient();
 
 // Query Hook -----------------------------------------------------------------
-export const useWalletIds = (): UseQueryResult<string[] | Error> =>
+export const useWalletIds = (): UseQueryResult<string[]> =>
   useQuery({
     queryKey: [keys.WALLETKEY],
     queryFn: async () => (await api.get<Wallet[]>('/wallets')).map(w => w.id),
   });
-export const useWallet = (id: string): UseQueryResult<Wallet | Error> =>
+export const useWallet = (id: string): UseQueryResult<Wallet> =>
   useQuery({
     queryKey: [keys.WALLETKEY, id],
     queryFn: async () => await api.get<Wallet>(`/wallets/${id}`),
   });
-export const useWallets = (ids: string[] | undefined): UseQueryResult<Wallet | Error>[] =>
+export const useWallets = (ids: string[] | undefined): UseQueryResult<Wallet>[] =>
   useQueries({
     queries: (ids ?? []).map(id => ({
       queryKey: [keys.WALLETKEY, id],

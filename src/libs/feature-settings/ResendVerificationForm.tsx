@@ -7,7 +7,7 @@
 // Hooks ----------------------------------------------------------------------
 import { useEffect } from 'react';
 import { useAuth, useResendMail } from '@/libs/feature-authentication/UserService';
-import { useAddToast } from '@/libs/feature-toasts/ToastService';
+import { useAddToast } from '@/libs/feature-toasts';
 // Used Components ------------------------------------------------------------
 import { Button } from '@/components/button';
 
@@ -17,6 +17,7 @@ export const ResendVerificationForm = (): JSX.Element => {
   const resendMail = useResendMail();
 
   const addToast = useAddToast();
+
   useEffect(() => {
     if (resendMail.status === 'success') addToast({ message: 'Email sent', type: 'success' });
     if (resendMail.status === 'error')

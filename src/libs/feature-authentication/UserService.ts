@@ -50,14 +50,11 @@ export const useEditUser = () => {
   });
 };
 
-// export const useResendMail = () => {
-//   const client = useQueryClient();
-//   const user: User | undefined = client.getQueryData([keys.USERKEY]);
-//   // return useMutation({
-//   //   mutationKey: [keys.USERKEY, 'resend mail'],
-//   //   mutationFn: async () => api.get(`/users/email`, user?.token),
-//   // });
-// };
+export const useResendMail = () =>
+  useMutation({
+    mutationKey: [keys.USERKEY, 'resend mail'],
+    mutationFn: async () => api.post(`/users/email`),
+  });
 
 // export const usePasswordChange = () => {
 //   const client = useQueryClient();

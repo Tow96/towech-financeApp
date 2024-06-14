@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuth, useEditUser } from '@/libs/feature-authentication/UserService';
-import { useAddToast } from '@/libs/feature-toasts/ToastService';
+import { useAddToast } from '@/libs/feature-toasts';
 // Used Components ------------------------------------------------------------
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
@@ -17,7 +17,7 @@ import { Input } from '@/components/input';
 // Types ----------------------------------------------------------------------
 type EditUserForm = {
   name: string;
-  username: string;
+  email: string;
 };
 
 // Component ------------------------------------------------------------------
@@ -28,12 +28,11 @@ export const EditUserForm = (): JSX.Element => {
   const editUser = useEditUser();
 
   const userForm = useForm<EditUserForm>({
-    defaultValues: { name: user?.name, username: user?.username },
+    defaultValues: { name: user?.name, email: user?.email },
   });
   const isDifferent = () => {
     const nameDifferent = userForm.formState.defaultValues?.name !== userForm.getValues('name');
-    const mailDifferent =
-      userForm.formState.defaultValues?.username !== userForm.getValues('username');
+    const mailDifferent = userForm.formState.defaultValues?.email !== userForm.getValues('email');
     return nameDifferent || mailDifferent;
   };
 
@@ -53,16 +52,12 @@ export const EditUserForm = (): JSX.Element => {
           <Input
             label="Name"
             disabled={editUser.isPending}
-            register={userForm.register('name', {
-              validate: { isDifferent },
-            })}
+            register={userForm.register('name', { validate: { isDifferent } })}
           />
           <Input
             label="Email"
             disabled={editUser.isPending}
-            register={userForm.register('username', {
-              validate: { isDifferent },
-            })}
+            register={userForm.register('email', { validate: { isDifferent } })}
           />
         </div>
         <div className="flex justify-end">
