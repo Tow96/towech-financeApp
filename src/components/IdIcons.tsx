@@ -1,4 +1,3 @@
-// This needs to be properly reworked
 import * as React from 'react';
 import { SVGProps } from 'react';
 

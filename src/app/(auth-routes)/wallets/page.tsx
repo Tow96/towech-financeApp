@@ -5,18 +5,11 @@
  */
 'use client';
 // Hooks ----------------------------------------------------------------------
-import { useContext, useEffect, useState } from 'react';
 // import { useWallets } from '@/libs/feature-wallets/WalletService';
 // Used components ------------------------------------------------------------
-import { Button } from '@/components/button';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Legacy ---------------------------------------------------------------------
-import '../../../libs/legacyStuff/wallets/Wallets.css';
-import { MainStore } from '@/libs/legacyStuff/Hooks/ContextStore';
-import TransactionService from '@/libs/legacyStuff/services/TransactionService';
-import WalletForm from '@/libs/legacyStuff/wallets/WalletForm';
-import NoWalletsCard from '@/libs/legacyStuff/wallets/NoWalletsCard';
 import { useWalletIds, useWallets } from '@/libs/feature-transactions/TransactionService';
 import { WalletCard } from '@/libs/feature-transactions/WalletCard';
 
@@ -34,10 +27,10 @@ const WalletsPage = (): JSX.Element => {
   // const transactionService = new TransactionService({ token: user?.token || '' }, () => {});
 
   return (
-    <main>
-      <ul>
+    <main className="flex flex-1 flex-col">
+      <ul className="flex w-full flex-col px-6 pt-10">
         {wallets.map((w, i) => (
-          <WalletCard key={i} wallet={w.data}></WalletCard>
+          <WalletCard key={i} wallet={w.data} loading={w.isLoading}></WalletCard>
         ))}
       </ul>
       {/* <div className="Wallets"> */}

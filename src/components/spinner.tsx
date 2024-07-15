@@ -12,6 +12,8 @@ type Props = {
 export const Spinner = ({ size = 'lg', className }: Props): JSX.Element => {
   const variableClasses = classNames({
     'w-24 border-8': size === 'lg',
+    'w-12 border-4': size === 'md',
+    'w-8 border-4': size === 'sm',
     'w-4 border-2': size === 'xs',
   });
   return (

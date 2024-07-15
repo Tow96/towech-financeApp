@@ -6,24 +6,15 @@
   ],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "max-depth": [ "error", { "max": 2 } ],
-        "max-nested-callbacks": [ "error", { "max": 1 } ],
+        "max-depth": ["error", { "max": 2 }],
+        "max-nested-callbacks": ["error", { "max": 1 }],
         "arrow-body-style": ["error", "as-needed"]
       }
     },
     {
-      "files": [
-        "**/__mocks__/**",
-        "**/__tests__/**",
-        "*.setup.ts"
-      ],
+      "files": ["**/__mocks__/**", "**/__tests__/**", "*.setup.ts"],
       "rules": {
         "max-nested-callbacks": "off"
       }
