@@ -1,0 +1,62 @@
+@import url('../../App.css');
+
+.Wallets {
+  --cardContainerMargin: 13px;
+}
+
+.Wallets__Header {
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.Wallets__AddTop {
+  display: none;
+}
+
+.Wallets__AddFloat {
+  position: absolute;
+  z-index: 1;
+  bottom: 40px;
+  right: 25px;
+}
+
+.Wallets__Container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.Wallets__Container__Section {
+  background-color: var(--black);
+  border-radius: 25px;
+  height: calc(100vh - 220px);
+  margin: 30px 13px;
+  overflow: auto;
+  width: calc(100% - 2 * var(--cardContainerMargin));
+}
+
+.Wallets__Container__Section::-webkit-scrollbar-track-piece:start {
+  margin-top: 22px;
+}
+
+@media screen and (min-width: 769px) {
+  .Wallets__Header {
+    margin-left: 20px;
+  }
+
+  .Wallets__Container__Section {
+    height: calc(100vh - 130px);
+    margin: 30px 25px;
+    max-width: var(--max-container-size);
+  }
+
+  .Wallets__AddTop {
+    display: inline;
+    margin: 0 40px 0 auto;
+  }
+
+  .Wallets__AddFloat {
+    display: none !important;
+  }
+}

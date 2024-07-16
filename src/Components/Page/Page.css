@@ -1,0 +1,61 @@
+.Page {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: var(--header-size) 1fr;
+  grid-template-rows: var(--header-size) 1fr;
+
+  grid-template-areas:
+    'nav header'
+    'pageContent pageContent';
+}
+
+.Page > :nth-child(1) {
+  grid-area: nav;
+}
+
+.Page > :nth-child(2) {
+  grid-area: header;
+
+  align-items: center;
+  background-color: var(--black);
+  display: flex;
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+}
+
+.Page > :nth-child(3) {
+  grid-area: pageContent;
+}
+
+.Page > :nth-child(4) {
+  position: fixed;
+  z-index: 1000;
+  top: calc(50vh - 75px);
+  left: calc(50% - 75px);
+}
+
+.Page__spinner {
+  --spinner-size: 150px;
+  --color: var(--white);
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+}
+
+.Page__content {
+  position: relative;
+  height: 100%;
+}
+
+@media screen and (min-width: 769px) {
+  .Page {
+    grid-template-columns: calc(var(--header-size) * 1.5) 1fr;
+    grid-template-areas:
+      'nav header'
+      'nav pageContent';
+  }
+
+  .Page > :nth-child(2) {
+    padding: 10px;
+  }
+}

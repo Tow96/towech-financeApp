@@ -1,0 +1,171 @@
+.TransactionForm__Content__Splitted {
+  align-items: center;
+  display: flex;
+  margin-bottom: -15px;
+}
+
+.TransactionForm__Content__Splitted__Wallet {
+  flex: 1;
+  max-width: 50%;
+}
+
+.TransactionForm__Content__Splitted__Label {
+  color: var(--yellow);
+  flex: 1;
+  font-weight: 700;
+  margin: 7px 20px;
+}
+
+.TransactionForm__Delete {
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  font-size: 24px;
+  font-weight: 900;
+  height: 48px;
+  justify-content: center;
+  margin: 60px 0;
+  width: 100%;
+}
+
+.TransactionForm__Delete__Icon {
+  font-size: 22px;
+  line-height: 1.1;
+  margin-right: 5px;
+}
+
+/* Wallet Selector CSS */
+.TransactionForm__WalletSelector {
+  align-items: center;
+  background-color: var(--black);
+  border: 5px solid var(--black);
+  border-radius: 10px;
+  display: flex;
+  height: 30px;
+  justify-content: space-around;
+  margin: 10px 5px;
+  padding: 5px 8px;
+}
+
+.TransactionForm__WalletSelector.error {
+  border-color: var(--red);
+}
+
+.TransactionForm__WalletSelector__Icon {
+  background-color: transparent;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+}
+
+.TransactionForm__WalletSelector__Name {
+  flex: 1;
+  font-size: 20px;
+  margin: 0 8px;
+  max-width: calc(100% - 65px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.TransactionForm__WalletSelector__Open {
+  align-items: center;
+
+  border-radius: 50%;
+  display: flex;
+  height: 25px;
+  justify-content: center;
+  width: 25px;
+}
+
+.TransactionForm__WalletSelector__Open:hover {
+  background-color: var(--gray1);
+}
+
+.TransactionForm__WalletSelector__Triangle {
+  border-color: var(--yellow) transparent transparent transparent;
+  border-style: solid;
+  border-width: 12px 7px 0 7px;
+  height: 0;
+  width: 0;
+}
+
+.TransactionForm__WalletSelector__Container {
+  background-color: var(--gray1);
+  border-radius: 25px 25px 0 0;
+  height: calc(100% - 10px);
+  overflow: auto;
+  padding-top: 8px;
+}
+
+.TransactionForm__WalletSelector__WalletCard {
+  margin: 0 13px;
+}
+
+.TransactionForm__WalletSelector__WalletCard:hover {
+  background-color: var(--gray2);
+}
+
+.TransactionForm__WalletSelector__WalletCard:not(:first-child) > div {
+  border-top: 2px solid var(--yellow);
+}
+
+.TransactionForm__WalletSelector__WalletCard:not(:first-child) > div.SubWallet {
+  border-top: none;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Main {
+  align-items: center;
+  display: flex;
+  line-height: 1.5;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 15px 5px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Main.SubWallet {
+  font-size: 20px;
+  padding: 10px 5px 10px 40px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Icon {
+  border-radius: 50%;
+  height: 50px;
+  margin-right: 15px;
+  width: 50px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Icon.SubWallet {
+  height: 40px;
+  margin-right: 10px;
+  width: 40px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Icon.selected {
+  border: 2px solid var(--yellow);
+  height: 46px;
+  width: 46px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Icon.SubWallet.selected {
+  border: 2px solid var(--yellow);
+  height: 36px;
+  width: 36px;
+}
+
+.TransactionForm__WalletSelector__WalletCard__Name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 65px);
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 481px) {
+  .TransactionForm {
+    padding: 2.5%;
+  }
+
+  .TransactionForm__Content__Splitted__Wallet {
+    max-width: none;
+  }
+}
