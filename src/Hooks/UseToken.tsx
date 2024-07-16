@@ -8,7 +8,7 @@
  *                        if not provided, does not uses the storage
  */
 import React, { useReducer } from 'react';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { Objects } from '../models';
 
 // Extension of the user interface that also has the token, is used for the useToken reducer
@@ -34,7 +34,7 @@ function reducer(state: TokenState, action: TokenAction): TokenState {
 
   switch (action.type.toUpperCase()) {
     case 'LOGIN':
-      item = jwt_decode(action.payload.token);
+      item = jwtDecode(action.payload.token);
       item.token = action.payload.token;
       return item;
     case 'LOGOUT':

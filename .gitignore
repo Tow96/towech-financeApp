@@ -3,10 +3,6 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-/SVG
-/src/iconsTemp
 
 # testing
 /coverage
@@ -22,7 +18,10 @@
 .env.production.local
 
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
+# nextjs
+.next
+next-env.d.ts
+dist
 
 */logs

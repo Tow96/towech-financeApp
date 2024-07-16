@@ -5,8 +5,8 @@
  * Axios instance that can use and refresh the authToken
  */
 import React from 'react';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import jwtDecode from 'jwt-decode';
+import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 // Stores
 import { TokenAction, TokenState } from '../Hooks/UseToken';
@@ -14,7 +14,7 @@ import { Responses } from '../models';
 
 // Functions
 
-const rootURL = process.env.REACT_APP_WEBAPI || '';
+const rootURL = process.env.NEXT_PUBLIC_WEBAPI || '';
 
 /** getAuthToken
  * Makes a request to refresh the authentication token
@@ -52,7 +52,7 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
   // If a token dispatch is given, the interceptors are set
   if (tokenDispatch) {
     axiosInstance.interceptors.request.use(
-      async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+      async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
         let nuToken = token;
 
         // If there is no authToken, gets a new one
@@ -69,9 +69,7 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
         }
 
         // sets the token as header
-        config.headers = {
-          Authorization: `Bearer ${nuToken}`,
-        };
+        config.headers.set('Authorization', `Bearer ${nuToken}`);
 
         return config;
       },
