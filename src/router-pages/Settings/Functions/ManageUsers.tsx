@@ -126,7 +126,7 @@ export default class ManageUsers {
             name: userForm.values.name,
             role: userForm.values.admin ? 'admin' : 'user',
           },
-          setLoading,
+          setLoading
         );
         // Clears the form, sets wallets and closes the modal
         userForm.clear();

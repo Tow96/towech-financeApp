@@ -10,7 +10,7 @@ import './NoWalletsCard.css';
 const NoWalletsCard = (): JSX.Element => {
   return (
     <div className="NoWallets">
-      <h1>You don't have any wallets, yet.</h1>
+      <h1>You don&apos;t have any wallets, yet.</h1>
     </div>
   );
 };

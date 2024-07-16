@@ -51,7 +51,7 @@ const TransactionHeader = (): JSX.Element => {
 
   const getNameAndTotal = (
     wallets: Objects.Wallet[],
-    selected: string,
+    selected: string
   ): { name: string; total: number; money: number; id: number } => {
     const output = {
       id: -1,

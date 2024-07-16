@@ -97,7 +97,7 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
             let index = state[parentIndex].child_id?.findIndex((x) => x._id === wallet._id);
             if (index === undefined) index = -1;
 
-            if (index >= 0) state[parentIndex].child_id![index] = wallet; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            if (index >= 0) state[parentIndex].child_id![index] = wallet;
           }
         }
 

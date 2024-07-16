@@ -50,7 +50,7 @@ const IconSelector = (props: IconSelectorProps): JSX.Element => {
       <Modal setModal={setShowSelector} showModal={showSelector} title="Select icon">
         <div className="IconSelector__Grid">
           {(() => {
-            const icons = [];
+            const icons: JSX.Element[] = [];
             for (let i = 1; i <= IdIcons.amount; i++) {
               icons.push(
                 <IdIcons.Variable
@@ -58,7 +58,7 @@ const IconSelector = (props: IconSelectorProps): JSX.Element => {
                   iconid={i}
                   className="IconSelector__Grid__Icon"
                   onClick={() => selectIcon(i)}
-                />,
+                />
               );
             }
             return icons;

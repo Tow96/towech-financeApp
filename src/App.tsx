@@ -10,12 +10,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Pages
-import Transactions from './Pages/Transactions';
-import Login from './Pages/Login';
-import Wallets from './Pages/Wallets';
-import Settings from './Pages/Settings';
-import PasswordReset from './Pages/PasswordReset/PasswordReset';
-import VerifyAccount from './Pages/VerifyAccount/VerifyAccount';
+import Transactions from './router-pages/Transactions';
+import Login from './router-pages/Login';
+import Wallets from './router-pages/Wallets';
+import Settings from './router-pages/Settings';
+import PasswordReset from './router-pages/PasswordReset/PasswordReset';
+import VerifyAccount from './router-pages/VerifyAccount/VerifyAccount';
 // import Categories from './Pages/Categories';
 
 // Components

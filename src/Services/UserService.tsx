@@ -31,7 +31,7 @@ export default class UserService {
 
   async changePassword(
     values: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.put(`${this.SERVICE_URL}/users/password`, values, loading);
   }
@@ -41,7 +41,7 @@ export default class UserService {
    */
   async deleteUser(
     id: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.User.BaseUser>> {
     return await this.instance.delete(`${this.SERVICE_URL}/users/${id}`, loading);
   }
@@ -52,7 +52,7 @@ export default class UserService {
   async editUser(
     id: string,
     user: Objects.User.BackendUser,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.patch(`${this.SERVICE_URL}/users/${id}`, user, loading);
   }
@@ -61,7 +61,7 @@ export default class UserService {
    * Gets the basic info of all users in the DB, it will only work for admin users
    */
   async getUsers(
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.User.BaseUser[]>> {
     return await this.instance.get(`${this.SERVICE_URL}/users`, loading);
   }
@@ -71,7 +71,7 @@ export default class UserService {
    */
   async generateResetPasswordToken(
     email: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.post(`${this.SERVICE_URL}/users/reset`, { username: email }, loading);
   }
@@ -81,7 +81,7 @@ export default class UserService {
    */
   async validateResetPasswordToken(
     token: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.get(`${this.SERVICE_URL}/users/reset/${token}`, loading);
   }
@@ -91,7 +91,7 @@ export default class UserService {
    */
   async registerUser(
     user: Requests.WorkerRegisterUser,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.User.BaseUser>> {
     return await this.instance.post(`${this.SERVICE_URL}/users/register`, user, loading);
   }
@@ -102,7 +102,7 @@ export default class UserService {
   async setResetNewPassword(
     token: string,
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.post(`${this.SERVICE_URL}/users/reset/${token}`, payload, loading);
   }
@@ -112,7 +112,7 @@ export default class UserService {
    */
   async updateEmail(
     email: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.put(`${this.SERVICE_URL}/users/email`, { email: email }, loading);
   }
@@ -127,7 +127,7 @@ export default class UserService {
   /** verifyEmail */
   async verifyEmail(
     token: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     return await this.instance.patch(`${this.SERVICE_URL}/authentication/verify/${token}`, null, loading);
   }

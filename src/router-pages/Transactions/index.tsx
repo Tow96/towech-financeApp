@@ -70,7 +70,7 @@ const Transactions = (): JSX.Element => {
 
           // Also generates and sets the selectedWallet to contain the children
           const firstSelectedWallet = res.data.find(
-            (x) => x._id === (GetParameters(location.search, 'wallet') || '-1'),
+            (x) => x._id === (GetParameters(location.search, 'wallet') || '-1')
           );
 
           dispatchTransactionState({

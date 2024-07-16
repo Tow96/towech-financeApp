@@ -46,7 +46,7 @@ export interface TransAction {
 const cleanAndSort = (
   input: Objects.Transaction[],
   selectedWallet: Objects.Wallet,
-  dataMonth: string,
+  dataMonth: string
 ): FrontendTransaction[] => {
   // Removes transactions outside the datamonth and wallet/subwallets
   const cleaned = [] as FrontendTransaction[];
@@ -68,7 +68,7 @@ const cleanAndSort = (
   });
 
   // Gets the index of all transfers that are both contained in the array
-  const transferClean = [];
+  const transferClean: FrontendTransaction[] = [];
   for (let i = 0; i < cleaned.length; i++) {
     // transferClean.push(cleaned[i]); continue; // Skip this and pass all transactions
 
@@ -116,7 +116,7 @@ const cleanAndSort = (
 // Reads the transactions and separates the income and expenses as well as the total in the header
 const calculateReport = (
   input: Objects.Transaction[],
-  selectedWallet: Objects.Wallet,
+  selectedWallet: Objects.Wallet
 ): { earnings: number; expenses: number } => {
   let earnings = 0;
   let expenses = 0;
@@ -155,7 +155,7 @@ const reducer = (state: TransactionState, action: TransAction): TransactionState
         transactions: cleanAndSort(
           action.payload.transactions || state.transactions,
           state.selectedWallet,
-          ParseDataMonth(state.dataMonth),
+          ParseDataMonth(state.dataMonth)
         ),
         report: { earnings: 0, expenses: 0 },
       };

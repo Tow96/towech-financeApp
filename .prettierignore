@@ -1,8 +1,0 @@
-# Distribution
-dist/**/*
-
-# dependencies
-node_modules/**/*
-
-# Models folder
-src/Models/**/*

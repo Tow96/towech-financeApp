@@ -31,7 +31,7 @@ export default class AuthenticationService {
 
   async login(
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.AuthenticationResponse>> {
     return await this.instance.postCookie(`${this.SERVICE_URL}/login`, payload, loading);
   }
@@ -45,7 +45,7 @@ export default class AuthenticationService {
   }
 
   async refreshToken(
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.AuthenticationResponse>> {
     return await this.instance.postCookie(`${this.SERVICE_URL}/refresh`, null, loading);
   }

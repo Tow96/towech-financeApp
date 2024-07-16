@@ -31,14 +31,14 @@ export default class TransactionService {
 
   async deleteTransaction(
     id: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.ChangeTransactionResponse>> {
     return await this.instance.delete(`${this.SERVICE_URL}/transactions/${id}`, loading);
   }
 
   async deleteWallet(
     id: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.Wallet>> {
     return await this.instance.delete(`${this.SERVICE_URL}/wallets/${id}`, loading);
   }
@@ -46,14 +46,14 @@ export default class TransactionService {
   async editTransaction(
     transactionId: string,
     transaction: Objects.Transaction,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.ChangeTransactionResponse>> {
     return await this.instance.patch(`${this.SERVICE_URL}/transactions/${transactionId}`, transaction, loading);
   }
 
   async editWallet(
     wallet: Objects.Wallet,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.Wallet>> {
     return await this.instance.patch(`${this.SERVICE_URL}/wallets/${wallet._id}`, wallet, loading);
   }
@@ -65,31 +65,31 @@ export default class TransactionService {
   async getWalletTransactions(
     walletid: string,
     dataMonth: string,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.Transaction[]>> {
     return await this.instance.get(
       `${this.SERVICE_URL}/wallets/${walletid}/transactions?datamonth=${dataMonth}`,
-      loading,
+      loading
     );
   }
 
   async transferBetweenWallets(
     payload: Requests.WorkerTransfer,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.ChangeTransactionResponse>> {
     return await this.instance.post(`${this.SERVICE_URL}/wallets/transfer`, payload, loading);
   }
 
   async newTransaction(
     payload: Objects.Transaction,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.ChangeTransactionResponse>> {
     return await this.instance.post(`${this.SERVICE_URL}/transactions`, payload, loading);
   }
 
   async newWallet(
     payload: Objects.Wallet,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Objects.Wallet>> {
     return await this.instance.post(`${this.SERVICE_URL}/wallets`, payload, loading);
   }

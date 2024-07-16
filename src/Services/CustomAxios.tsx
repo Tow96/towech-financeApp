@@ -28,7 +28,7 @@ async function getAuthToken(tokenDispatch: React.Dispatch<TokenAction>): Promise
       null,
       {
         withCredentials: true,
-      },
+      }
     );
     tokenDispatch({ type: 'REFRESH', payload: res.data });
     return res.data.token;
@@ -76,7 +76,7 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
       (error) => {
         // console.log('api-request-error');
         return Promise.reject(error);
-      },
+      }
     );
   }
 
@@ -116,7 +116,7 @@ export default class CustomAxios {
   async post(
     url: string,
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
@@ -132,7 +132,7 @@ export default class CustomAxios {
   async postCookie(
     url: string,
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
@@ -148,7 +148,7 @@ export default class CustomAxios {
   async patch(
     url: string,
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
@@ -164,7 +164,7 @@ export default class CustomAxios {
   async put(
     url: string,
     payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {

@@ -131,7 +131,7 @@ const TransactionForm = (props: Props): JSX.Element => {
       const res = await transactionService.editTransaction(
         props.initialTransaction?._id || '',
         transactionForm.values,
-        setLoading,
+        setLoading
       );
       setErrors([]);
 
