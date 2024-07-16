@@ -4,8 +4,6 @@
  *
  * Styles for the whole app
  */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap');
-
 :root {
   --black: #000000;
   --gray1: #202124;
@@ -27,11 +25,6 @@
 body {
   background-color: var(--gray1);
   color: var(--white);
-  font-family: 'Raleway', serif;
-}
-
-h1 {
-  font-family: 'Raleway', serif;
 }
 
 ul {
