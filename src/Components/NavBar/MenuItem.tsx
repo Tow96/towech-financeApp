@@ -4,7 +4,8 @@
  *
  * Component that defines the menu Items
  */
-import { Link } from 'react-router-dom';
+'use client';
+import Link from 'next/link';
 
 // Styles
 import './MenuItem.css';
@@ -29,7 +30,7 @@ const MenuItem = (props: Props): JSX.Element => {
 
   return (
     <div onClick={props.onClick}>
-      <Link className={theme} to={props.link || '/'}>
+      <Link className={theme} href={props.link || '/'}>
         <div>{props.children}</div>
         <p>{props.label}</p>
       </Link>

@@ -4,6 +4,7 @@
  *
  * Navigation bar component
  */
+'use client';
 import { useContext, useRef, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 

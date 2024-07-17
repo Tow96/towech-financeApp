@@ -5,13 +5,13 @@
  * 404 - Error component
  */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const NotFound = (): JSX.Element => {
   return (
     <>
       <h1>404 - Not Found!</h1>
-      <Link to="/">Go Home</Link>
+      <Link href="/">Go Home</Link>
     </>
   );
 };
