@@ -50,7 +50,7 @@ const Transactions = (): JSX.Element => {
   const { authToken, dispatchAuthToken, wallets, dispatchWallets, dispatchCategories } = useContext(MainStore);
   const searchParams = useSearchParams();
   const router = useRouter();
-  if (!authToken.token) router.push('/?redirect=home');
+  if (!authToken.token) router.push(`/?redirect=home?wallet=${searchParams.get('wallet') || '-1'}`);
 
   // Starts the services
   const transactionService = new TransactionService(authToken, dispatchAuthToken);
@@ -61,7 +61,7 @@ const Transactions = (): JSX.Element => {
   const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [transactionState, dispatchTransactionState] = useTransactions({
     selectedWallet: { _id: searchParams.get('wallet') || '-1' } as Objects.Wallet,
-    dataMonth: ParseDataMonth(searchParams.get('mont')),
+    dataMonth: ParseDataMonth(searchParams.get('month')),
     report: { earnings: 0, expenses: 0 },
     transactions: [],
   });
@@ -71,11 +71,9 @@ const Transactions = (): JSX.Element => {
   // Main API call
   useEffect(() => {
     if (authToken.token) {
-      // Gets all the wallets of the client
       transactionService
         .getWallets()
         .then((res) => {
-          console.log(res.data);
           // Sets the available wallets, the transactions are fetched later
           dispatchWallets({ type: 'SET', payload: { wallets: res.data } });
 
@@ -86,9 +84,6 @@ const Transactions = (): JSX.Element => {
             type: 'SELECT-WALLET',
             payload: { selectedWallet: firstSelectedWallet || ({ _id: '-1' } as Objects.Wallet) },
           });
-        })
-        .catch(() => {
-          // console.log(err.response);
         })
         .finally(() => setLoaded(true));
 
@@ -134,39 +129,40 @@ const Transactions = (): JSX.Element => {
 
   return (
     <TransactionPageStore.Provider value={{ transactionState, dispatchTransactionState }}>
-      <Page loading={!loaded} header={header} selected="Transactions"></Page>
-      {loaded ? (
-        <div className="Transactions">
-          {wallets.length == 0 ? (
-            <EmptyTransactions.RedirectToWallets />
-          ) : (
-            <>
-              {/* Main content */}
-              <div className="Transactions__Content">
-                {/* <DataMonthSelector /> */}
-                <WalletTotals
-                  totals={transactionState.report}
-                  hidden={!(!loadingTransactions && transactionState.transactions.length > 0)}
-                />
-                {/* <TransactionViewer hidden={loadingTransactions} /> */}
-                {loadingTransactions && (
-                  <div className="Transactions__Content__Loading">
-                    <Loading className="Transactions__Spinner" />
-                  </div>
-                )}
-              </div>
-              {/*Add wallet button - mobile only*/}
-              <Button accent round className="Transactions__AddFloat" onClick={() => setAddModal(true)}>
-                <FaIcons.FaPlus />
-              </Button>
-              {/*Add wallet form*/}
-              <TransactionForm state={addModal} setState={setAddModal} />
-            </>
-          )}
-        </div>
-      ) : (
-        <></>
-      )}
+      <Page loading={!loaded} header={header} selected="Transactions">
+        {loaded ? (
+          <div className="Transactions">
+            {wallets.length == 0 ? (
+              <EmptyTransactions.RedirectToWallets />
+            ) : (
+              <>
+                {/* Main content */}
+                <div className="Transactions__Content">
+                  <DataMonthSelector />
+                  <WalletTotals
+                    totals={transactionState.report}
+                    hidden={!(!loadingTransactions && transactionState.transactions.length > 0)}
+                  />
+                  <TransactionViewer hidden={loadingTransactions} />
+                  {loadingTransactions && (
+                    <div className="Transactions__Content__Loading">
+                      <Loading className="Transactions__Spinner" />
+                    </div>
+                  )}
+                </div>
+                {/*Add wallet button - mobile only*/}
+                <Button accent round className="Transactions__AddFloat" onClick={() => setAddModal(true)}>
+                  <FaIcons.FaPlus />
+                </Button>
+                {/*Add wallet form*/}
+                <TransactionForm state={addModal} setState={setAddModal} />
+              </>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
+      </Page>
     </TransactionPageStore.Provider>
   );
 };

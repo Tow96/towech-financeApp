@@ -3,10 +3,10 @@
  * All rights reserved
  * Component that handles the selection of months to display
  */
+'use client';
 // Libraries
 import { useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import GetParameters from '../../Utils/GetParameters';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Hooks
 import { TransactionPageStore } from '../../Hooks/ContextStore';
@@ -48,6 +48,7 @@ const isCurrentMonth = (selectedDataMonth: string): boolean => {
 
 const DataMonthSelector = (): JSX.Element => {
   const { transactionState, dispatchTransactionState } = useContext(TransactionPageStore);
+  const searchParams = useSearchParams();
 
   // Roter
   const router = useRouter();
@@ -67,7 +68,7 @@ const DataMonthSelector = (): JSX.Element => {
     setPrevMonth(addMonths(prevMonth, amount));
 
     // redirects to the new datamonth
-    const walletId = GetParameters(location.search, 'wallet') || '-1';
+    const walletId = searchParams.get('wallet') || '-1'; // GetParameters(location.search, 'wallet') || '-1';
     router.push(`/home?wallet=${walletId}&month=${addMonths(transactionState.dataMonth, amount)}`);
   };
 
@@ -83,7 +84,7 @@ const DataMonthSelector = (): JSX.Element => {
     setPrevMonth(addMonths(currentDataMonth, -1));
 
     // redirects to the current datamonth
-    const walletId = GetParameters(location.search, 'wallet') || '-1';
+    const walletId = searchParams.get('wallet') || '-1';
     router.push(`/home?wallet=${walletId}&month=${currentDataMonth}`);
   };
 

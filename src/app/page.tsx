@@ -48,7 +48,9 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (authToken.token) router.push(searchParams.get('redirect') || '/home');
+    if (authToken.token) {
+      router.push(searchParams.get('redirect') || '/home');
+    }
   }, [authToken]);
 
   async function loginCallback() {
