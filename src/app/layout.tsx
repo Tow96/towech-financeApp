@@ -9,6 +9,7 @@ import '../Components/Page/Page.css';
 import '../Components/NavBar/NavBar.css';
 import '../Components/NavBar/MenuItem.css';
 import './Categories.css';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Towech Finance',
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={raleway.className}>
       <body>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          <Suspense>{children}</Suspense>
+        </AppProvider>
       </body>
     </html>
   );
