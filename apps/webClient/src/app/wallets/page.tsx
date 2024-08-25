@@ -16,9 +16,9 @@ import { MainStore } from '../../Hooks/ContextStore';
 // Components
 import Button from '../../Components/Button';
 import Page from '../../Components/Page';
-import NoWalletsCard from 'src/Components/Wallets/NoWalletsCard';
-import WalletCard from 'src/Components/Wallets/WalletCard';
-import WalletForm from 'src/Components/Wallets/WalletForm';
+import NoWalletsCard from '../../Components/Wallets/NoWalletsCard';
+import WalletCard from '../../Components/Wallets/WalletCard';
+import WalletForm from '../../Components/Wallets/WalletForm';
 
 // Services
 import TransactionService from '../../Services/TransactionService';
@@ -58,7 +58,7 @@ const Wallets = (): JSX.Element => {
         // console.log(err.response);
         setLoaded(true);
       });
-  }, []);
+  }, []); // eslint-disable-line
 
   const header = (
     <div className="Wallets__Header">

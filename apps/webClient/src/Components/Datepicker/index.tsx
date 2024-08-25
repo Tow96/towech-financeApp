@@ -207,8 +207,8 @@ const Datepicker = (props: Props): JSX.Element => {
                             compareDates(day, state.selectedDate)
                               ? 'Datepicker__Container__Content__Month__Week__Day selected'
                               : compareMonths(day, state.viewedDate)
-                                ? 'Datepicker__Container__Content__Month__Week__Day'
-                                : 'Datepicker__Container__Content__Month__Week__Day outside'
+                              ? 'Datepicker__Container__Content__Month__Week__Day'
+                              : 'Datepicker__Container__Content__Month__Week__Day outside'
                           }
                           onClick={() => {
                             setDayCallback(day);

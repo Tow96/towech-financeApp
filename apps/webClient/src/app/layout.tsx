@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { AppProvider } from 'src/Services/AppProvider';
+import { AppProvider } from '../Services/AppProvider';
 import { Raleway } from 'next/font/google';
 
 import 'normalize.css';

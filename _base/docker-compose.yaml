@@ -35,7 +35,7 @@ services:
   user-worker:
     container_name: user-worker1
     image: ghcr.io/towech-financeapp/userservice:1.2.1
-    
+
     depends_on:
       message-queue:
         condition: service_healthy
@@ -101,7 +101,7 @@ services:
       - ./environments/WebAPI.env
 
     ports:
-      - "3001:3000"
+      - '3001:3000'
 
   web-client:
     container_name: web-client1

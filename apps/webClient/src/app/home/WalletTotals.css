@@ -5,10 +5,7 @@
   font-size: 32px;
   height: 160px;
   padding: 15px 15px 0;
-  transition:
-    font-size 350ms,
-    height 200ms,
-    visibility 350ms;
+  transition: font-size 350ms, height 200ms, visibility 350ms;
   visibility: visible;
   width: 100%;
 }
@@ -21,10 +18,7 @@
   font-size: 0;
   height: 0;
   padding: 0 15px;
-  transition:
-    font-size 0ms,
-    height 0ms,
-    visibility 0ms;
+  transition: font-size 0ms, height 0ms, visibility 0ms;
   visibility: hidden;
 }
 

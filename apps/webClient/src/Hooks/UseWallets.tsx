@@ -123,7 +123,7 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
           // Only removes the wallet if found
           if (parentIndex !== -1) {
             item[parentIndex].child_id = item[parentIndex].child_id?.filter((x) => {
-              x._id === wallet._id;
+              x._id === wallet._id; // eslint-disable-line
             });
           }
         }

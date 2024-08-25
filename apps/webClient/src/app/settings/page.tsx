@@ -10,13 +10,13 @@ import { useRouter } from 'next/navigation';
 
 // Components
 import Page from '../../Components/Page';
-import SettingCard from 'src/Components/Settings/SettingCard';
-import EditNameForm from 'src/Functions/Settings/EditNameForm';
-import ChangePasswordForm from 'src/Functions/Settings/ChangePasswordForm';
-import ChangeEmailForm from 'src/Functions/Settings/ChangeEmailForm';
-import ResendVerification from 'src/Functions/Settings/ResendVerification';
-import ManageUsers from 'src/Functions/Settings/ManageUsers';
-import LogoutAll from 'src/Functions/Settings/LogoutAll';
+import SettingCard from '../../Components/Settings/SettingCard';
+import EditNameForm from '../../Functions/Settings/EditNameForm';
+import ChangePasswordForm from '../../Functions/Settings/ChangePasswordForm';
+import ChangeEmailForm from '../../Functions/Settings/ChangeEmailForm';
+import ResendVerification from '../../Functions/Settings/ResendVerification';
+import ManageUsers from '../../Functions/Settings/ManageUsers';
+import LogoutAll from '../../Functions/Settings/LogoutAll';
 
 // Hooks
 import { MainStore } from '../../Hooks/ContextStore';
