@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthenticationController } from './authentication.controller';
 import { RabbitMqService } from './rabbitMQ.service';
-import { CheckRefreshMiddleware } from '../utils/middlewares';
+import { CheckAuthMiddleware, CheckRefreshMiddleware } from '../utils/middlewares';
+import { CategoryController } from './categories.controller';
 
 @Module({
   imports: [],
-  controllers: [AuthenticationController],
+  controllers: [AuthenticationController, CategoryController],
   providers: [RabbitMqService],
 })
 export class AppModule implements NestModule {
@@ -13,5 +14,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(CheckRefreshMiddleware)
       .forRoutes('authentication/refresh', 'authentication/logout', 'authentication/logout-all');
+
+    consumer.apply(CheckAuthMiddleware).forRoutes('categories');
   }
 }

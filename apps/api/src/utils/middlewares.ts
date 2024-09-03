@@ -8,7 +8,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 
 import jwt from 'jsonwebtoken';
 // import { Request, Response, NextFunction } from 'express';
@@ -17,7 +17,7 @@ import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
 
 // Models
 import { WorkerGetUserById } from '../Models/requests';
-import { BackendUser } from '../Models/Objects/user';
+import { BackendUser, BaseUser } from '../Models/Objects/user';
 
 // utils
 import UserConverter from '../utils/userConverter';
@@ -82,6 +82,26 @@ export class CheckRefreshMiddleware implements NestMiddleware {
   }
 }
 
+@Injectable()
+export class CheckAuthMiddleware implements NestMiddleware {
+  async use(req: any, res: Response, next: NextFunction) {
+    try {
+      const authorization = req.headers.authorization;
+
+      if (!authorization) throw AmqpMessage.errorMessage('Invalid token', 403);
+
+      // Check if the authToken is valid
+      const decodedToken: any = isAuth(authorization.split(' ')[1]);
+
+      req.user = decodedToken as BaseUser;
+
+      next();
+    } catch (err: any) {
+      AmqpMessage.sendHttpError(res, err);
+    }
+  }
+}
+
 // export default class Middlewares {
 //   private static userQueue = (process.env.USER_QUEUE as string) || 'userQueue';
 
@@ -116,24 +136,6 @@ export class CheckRefreshMiddleware implements NestMiddleware {
 //           throw AmqpMessage.errorMessage('Invalid token', 401);
 //         }
 //       }
-
-//       next();
-//     } catch (err: any) {
-//       AmqpMessage.sendHttpError(res, err);
-//     }
-//   };
-
-//   // Middleware that checks if the requester is authenticated
-//   static checkAuth = (req: Request, res: Response, next: NextFunction): void => {
-//     try {
-//       const authorization = req.headers.authorization;
-
-//       if (!authorization) throw AmqpMessage.errorMessage('Invalid token', 403);
-
-//       // Check if the authToken is valid
-//       const decodedToken: any = this.isAuth(authorization.split(' ')[1]);
-
-//       req.user = decodedToken as Objects.User.BaseUser;
 
 //       next();
 //     } catch (err: any) {
