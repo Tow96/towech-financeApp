@@ -11,7 +11,6 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Response, NextFunction } from 'express';
 
 import jwt from 'jsonwebtoken';
-// import { Request, Response, NextFunction } from 'express';
 // import logger from 'tow96-logger';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
 
@@ -35,6 +34,14 @@ const isAuth = (token: string, isRefresh = false): jwt.JwtPayload => {
   } catch (err) {
     throw AmqpMessage.errorMessage('Invalid token', 401);
   }
+};
+
+// Checks if the given authorization string belongs to the superuser password
+const isSuperUser = (token: string): boolean => {
+  if (!process.env.SUPERUSER_KEY || token !== process.env.SUPERUSER_KEY) {
+    return false;
+  }
+  return true;
 };
 
 @Injectable()
@@ -102,46 +109,41 @@ export class CheckAuthMiddleware implements NestMiddleware {
   }
 }
 
+@Injectable()
+export class CheckAdminMiddleware implements NestMiddleware {
+  async use(req: any, res: Response, next: NextFunction) {
+    try {
+      // Gets the Authorization header
+      console.log('pipo');
+      const authorization = req.headers.authorization;
+      if (!authorization) {
+        throw AmqpMessage.errorMessage('No authorization header', 401);
+      }
+
+      // Checks if the token is super user or an admin
+      const token = authorization.split(' ')[1];
+      if (!isSuperUser(token)) {
+        // Decripts the token
+        try {
+          const decodedToken: any = isAuth(token);
+          if (decodedToken.role !== 'admin') {
+            throw AmqpMessage.errorMessage('User is not admin', 401);
+          }
+        } catch (err: any) {
+          throw AmqpMessage.errorMessage('Invalid token', 401);
+        }
+      }
+      next();
+    } catch (err: any) {
+      AmqpMessage.sendHttpError(res, err);
+    }
+  }
+}
+
 // export default class Middlewares {
 //   private static userQueue = (process.env.USER_QUEUE as string) || 'userQueue';
 
 //   // Functions
-//   // Checks if the given authorization string belongs to the superuser password
-//   private static isSuperUser = (token: string): boolean => {
-//     if (!process.env.SUPERUSER_KEY || token !== process.env.SUPERUSER_KEY) {
-//       return false;
-//     }
-//     return true;
-//   };
-
-//   // Middleware that checks if the requester is an admin
-//   static checkAdmin = (req: Request, res: Response, next: NextFunction): void => {
-//     try {
-//       // Gets the Authorization header
-//       const authorization = req.headers.authorization;
-//       if (!authorization) {
-//         throw AmqpMessage.errorMessage('No authorization header', 401);
-//       }
-
-//       // Checks if the token is super user or an admin
-//       const token = authorization.split(' ')[1];
-//       if (!this.isSuperUser(token)) {
-//         // Decripts the token
-//         try {
-//           const decodedToken: any = this.isAuth(token);
-//           if (decodedToken.role !== 'admin') {
-//             throw AmqpMessage.errorMessage('User is not admin', 401);
-//           }
-//         } catch (err: any) {
-//           throw AmqpMessage.errorMessage('Invalid token', 401);
-//         }
-//       }
-
-//       next();
-//     } catch (err: any) {
-//       AmqpMessage.sendHttpError(res, err);
-//     }
-//   };
 
 //   // Middleware that checks if the user's account is confirmed, is meant to go after checkAuth if not, it fails automatically
 //   static checkConfirmed = (req: Request, res: Response, next: NextFunction): void => {
