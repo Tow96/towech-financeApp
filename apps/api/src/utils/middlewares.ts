@@ -140,24 +140,21 @@ export class CheckAdminMiddleware implements NestMiddleware {
   }
 }
 
-// export default class Middlewares {
-//   private static userQueue = (process.env.USER_QUEUE as string) || 'userQueue';
+@Injectable()
+export class CheckConfirmedMiddleware implements NestMiddleware {
+  async use(req: any, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) throw AmqpMessage.errorMessage('Server Error, there is no user in the request', 501);
 
-//   // Functions
+      if (!req.user.accountConfirmed)
+        throw AmqpMessage.errorMessage('Email not confirmed', 403, { confirmation: 'E-mail not verified' });
 
-//   // Middleware that checks if the user's account is confirmed, is meant to go after checkAuth if not, it fails automatically
-//   static checkConfirmed = (req: Request, res: Response, next: NextFunction): void => {
-//     try {
-//       if (!req.user) throw AmqpMessage.errorMessage('Server Error, there is no user in the request', 501);
-
-//       if (!req.user.accountConfirmed)
-//         throw AmqpMessage.errorMessage('Email not confirmed', 403, { confirmation: 'E-mail not verified' });
-
-//       next();
-//     } catch (err: any) {
-//       AmqpMessage.sendHttpError(res, err);
-//     }
-//   };
+      next();
+    } catch (err: any) {
+      AmqpMessage.sendHttpError(res, err);
+    }
+  }
+}
 
 //   // Middleware that checks if the requester is the owner of the account or an admin, is used for user requests, superuser will be rejected
 //   static validateAdminOrOwner = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
