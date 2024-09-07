@@ -1,0 +1,43 @@
+.Transactions__Viewer {
+  background-color: var(--black);
+  display: flex;
+  flex-direction: column;
+
+  visibility: visible;
+  overflow: auto;
+  width: 100%;
+}
+
+.Transactions__Viewer.inactive {
+  height: 0;
+  visibility: hidden;
+}
+
+.Transactions__Empty {
+  align-items: center;
+  background-color: var(--gray2);
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+  z-index: 0;
+}
+
+.Transactions__Viewer__List {
+  background-color: var(--background-color);
+  border: 3px solid var(--color-dark);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  height: 100vh;
+}
+
+.Transactions__Viewer__Filler {
+  height: 120px;
+}
+
+@media screen and (min-width: 769px) {
+  .Transactions__Viewer {
+    max-width: var(--max-container-size);
+  }
+}

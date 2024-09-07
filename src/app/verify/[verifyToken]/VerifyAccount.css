@@ -1,0 +1,21 @@
+/** VerifyAccount.css
+ * Copyright (c) 2022, Towechlabs
+ * All rights reserved.
+ *
+ * VerifyAccount page styles
+ */
+.VerifyAccount {
+  background-color: var(--black);
+  border-radius: 20px;
+  margin: 10px;
+  padding: 15px;
+  position: relative;
+  width: auto;
+}
+
+@media screen and (min-width: 768px) {
+  .VerifyAccount {
+    margin: 45px auto;
+    max-width: 500px;
+  }
+}

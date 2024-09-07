@@ -1,0 +1,27 @@
+.IconSelector {
+  border-radius: 50%;
+  height: 65px;
+}
+
+.IconSelector:hover {
+  background-color: var(--gray1);
+}
+
+.IconSelector__Grid {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  grid-gap: 10px;
+}
+
+.IconSelector__Grid__Icon {
+  height: 60px;
+  width: 60px;
+}
+
+.IconSelector__Grid__Icon:hover {
+  border-radius: 50%;
+  border: 2px solid var(--yellow);
+  height: 56px;
+  width: 56px;
+}
