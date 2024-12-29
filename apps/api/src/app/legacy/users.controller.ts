@@ -6,8 +6,8 @@
  */
 import { Controller, Get, Res, Req, Post, Put, Body, Patch, Param } from '@nestjs/common';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
-import { BackendUser, BaseUser, FrontendUser } from '../Models/Objects/user';
-import UserConverter from '../utils/userConverter';
+import { BackendUser, BaseUser, FrontendUser } from './Models/Objects/user';
+import UserConverter from './utils/userConverter';
 import {
   WorkerChangeEmail,
   WorkerChangePassword,
@@ -15,8 +15,8 @@ import {
   WorkerGetUserByUsername,
   WorkerPasswordReset,
   WorkerRegisterUser,
-} from '../Models/requests';
-import TokenGenerator from '../utils/tokenGenerator';
+} from './Models/requests';
+import TokenGenerator from './utils/tokenGenerator';
 import jwt from 'jsonwebtoken';
 
 @Controller('users')

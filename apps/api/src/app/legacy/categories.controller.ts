@@ -5,9 +5,9 @@
  * index for all the category routes
  */
 import { Controller, Get, Req, Res } from '@nestjs/common';
-import { GetCategoriesResponse } from '../Models/responses';
-import { Category } from '../Models/objects';
-import { WorkerGetAllCategories } from '../Models/requests';
+import { GetCategoriesResponse } from './Models/responses';
+import { Category } from './Models/objects';
+import { WorkerGetAllCategories } from './Models/requests';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
 
 @Controller('categories')

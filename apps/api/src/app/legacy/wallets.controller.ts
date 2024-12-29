@@ -6,10 +6,10 @@
  */
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Res } from '@nestjs/common';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
-import { BaseUser } from '../Models/Objects/user';
-import { Transaction, Wallet } from '../Models/objects';
-import { ChangeTransactionResponse } from '../Models/responses';
-import { WorkerGetTransactions, WorkerTransfer } from '../Models/requests';
+import { BaseUser } from './Models/Objects/user';
+import { Transaction, Wallet } from './Models/objects';
+import { ChangeTransactionResponse } from './Models/responses';
+import { WorkerGetTransactions, WorkerTransfer } from './Models/requests';
 
 @Controller('wallets')
 export class WalletController {

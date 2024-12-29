@@ -10,11 +10,11 @@ import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
 import jwt from 'jsonwebtoken';
 
 import { RabbitMqService } from './rabbitMQ.service';
-import { WorkerChangeEmail, WorkerGetUserByUsername } from '../Models/Requests/userService';
-import { LoginRequest } from '../Models/Requests/webApi';
-import { BackendUser, FrontendUser } from '../Models/Objects/user';
-import TokenGenerator from '../utils/tokenGenerator';
-import logoutUser from '../utils/logoutUser';
+import { WorkerChangeEmail, WorkerGetUserByUsername } from './Models/Requests/userService';
+import { LoginRequest } from './Models/Requests/webApi';
+import { BackendUser, FrontendUser } from './Models/Objects/user';
+import TokenGenerator from './utils/tokenGenerator';
+import logoutUser from './utils/logoutUser';
 
 @Controller('authentication')
 export class AuthenticationController {

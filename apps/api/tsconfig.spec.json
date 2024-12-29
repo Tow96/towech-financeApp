@@ -13,6 +13,6 @@
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts",
-    "src/Models/Objects/transaction.ts"
+    "src/app/legacy/Models/Objects/transaction.ts"
   ]
 }

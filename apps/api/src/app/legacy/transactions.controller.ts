@@ -6,8 +6,8 @@
  */
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, Res } from '@nestjs/common';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
-import { Transaction } from '../Models/objects';
-import { ChangeTransactionResponse } from '../Models/responses';
+import { Transaction } from './Models/objects';
+import { ChangeTransactionResponse } from './Models/responses';
 
 @Controller('transactions')
 export class TransactionController {
