@@ -18,7 +18,7 @@ const userQueue = (process.env.USER_QUEUE as string) || 'userQueue';
 const logoutUser = async (
   channel: amqplib.Channel,
   user: Objects.User.BaseUser,
-  token: string | null = null,
+  token: string | null = null
 ): Promise<void> => {
   // If a token is provided, only that one is removed
 

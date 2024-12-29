@@ -5,13 +5,10 @@ import {
   WorkerGetUserByUsername,
   WorkerPasswordReset,
   WorkerRegisterUser,
-} from "./Requests/userService";
-import {
-  WorkerGetTransactions,
-  WorkerTransfer,
-} from "./Requests/transactionService";
-import WorkerGetAllCategories from "./Requests/workerGetAllCategories";
-import { LoginRequest, NewCategoryRequest } from "./Requests/webApi";
+} from './Requests/userService';
+import { WorkerGetTransactions, WorkerTransfer } from './Requests/transactionService';
+import WorkerGetAllCategories from './Requests/workerGetAllCategories';
+import { LoginRequest, NewCategoryRequest } from './Requests/webApi';
 
 export {
   // CategoryReportService
@@ -31,5 +28,5 @@ export {
 
   // WebApi
   LoginRequest,
-  NewCategoryRequest
+  NewCategoryRequest,
 };

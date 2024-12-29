@@ -1,4 +1,4 @@
-import Category from "./category";
+import Category from './category';
 
 export default interface Transaction {
   _id: string;

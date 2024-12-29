@@ -5,7 +5,7 @@
  * Settings Page for the App
  */
 'use client';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Components

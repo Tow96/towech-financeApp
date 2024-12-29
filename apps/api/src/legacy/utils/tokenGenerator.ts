@@ -24,7 +24,7 @@ export default class TokenGenerator {
       process.env.AUTH_TOKEN_KEY as string,
       {
         expiresIn: '1m',
-      },
+      }
     );
   };
 
@@ -36,7 +36,7 @@ export default class TokenGenerator {
       process.env.REFRESH_TOKEN_KEY as string,
       {
         expiresIn: keepSession ? '30d' : '1h',
-      },
+      }
     );
   };
 
@@ -49,7 +49,7 @@ export default class TokenGenerator {
       process.env.PASSWORD_TOKEN_KEY as string,
       {
         expiresIn: '24h',
-      },
+      }
     );
   };
 
@@ -62,7 +62,7 @@ export default class TokenGenerator {
       process.env.EMAILVERIFICATION_TOKEN_KEY as string,
       {
         expiresIn: '7d',
-      },
+      }
     );
   };
 }

@@ -3,8 +3,8 @@
 # compiled output
 dist
 tmp
-/out-tsc
-logs/
+out-tsc
+logs
 
 # environment variables
 *.env*
