@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LegacyModule } from './legacy/legacy.module';
+import { LegacyModule } from '../legacy/legacy.module';
 
 @Module({
   imports: [LegacyModule],

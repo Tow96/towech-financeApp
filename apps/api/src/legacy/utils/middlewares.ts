@@ -19,7 +19,7 @@ import { WorkerGetUserById } from '../Models/requests';
 import { BackendUser, BaseUser } from '../Models/Objects/user';
 
 // utils
-import UserConverter from '../utils/userConverter';
+import UserConverter from './userConverter';
 
 // Checks if a jwt Token is valid
 const isAuth = (token: string, isRefresh = false): jwt.JwtPayload => {
