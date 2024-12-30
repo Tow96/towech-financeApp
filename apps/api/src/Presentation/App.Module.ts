@@ -1,23 +1,14 @@
 import { Module } from '@nestjs/common';
 import { LegacyModule } from '../legacy/legacy.module';
-import { UserController } from './User.Controller';
-import { GetUserQueryHandler } from '../Core/Application/User/Queries/GetUser/GetUser.QueryHandler';
-import { IUserRepository } from '../Core/Domain/User/Abstractions/User.Repository';
-import { UserRepository } from '../Infrastructure/Persistence/User/Repositories/User.Repository';
 import { CqrsModule } from '@nestjs/cqrs';
-import { CreateUserCommandHandler } from '../Core/Application/User/Commands/CreateUser/CreateUser.CommandHandler';
+
+import { ApplicationCommands, ApplicationQueries } from '../Core/Application/Configs/ApplicationUseCase.Registration';
+import { PersistenceService } from '../Infrastructure/Persistence/Configs/PersistanceService.Registration';
+import { PresentationControllers } from './Configs/Presentation.Registration';
 
 @Module({
   imports: [LegacyModule, CqrsModule],
-  controllers: [UserController],
-  providers: [
-    GetUserQueryHandler,
-    CreateUserCommandHandler,
-    UserRepository,
-    {
-      provide: IUserRepository,
-      useClass: UserRepository,
-    },
-  ],
+  controllers: [...PresentationControllers],
+  providers: [...ApplicationCommands, ...ApplicationQueries, ...PersistenceService],
 })
 export class AppModule {}

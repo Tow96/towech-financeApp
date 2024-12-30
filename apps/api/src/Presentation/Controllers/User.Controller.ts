@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
-import { CreateUserCommand } from '../Core/Application/User/Commands/CreateUser/CreateUser.Command';
-import { GetUserQuery } from '../Core/Application/User/Queries/GetUser/GetUser.Query';
+import { CreateUserCommand } from '../../Core/Application/User/Commands/CreateUser/CreateUser.Command';
+import { GetUserQuery } from '../../Core/Application/User/Queries/GetUser/GetUser.Query';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GetUserQueryResponse } from '../Core/Application/User/Queries/GetUser/GetUser.QueryResponse';
+import { GetUserQueryResponse } from '../../Core/Application/User/Queries/GetUser/GetUser.QueryResponse';
 
 @Controller('pesto')
 export class UserController {
