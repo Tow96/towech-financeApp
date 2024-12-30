@@ -1,7 +1,3 @@
-export interface GetUserQuery {
-  id: string;
-}
-
 export interface GetUserQueryResponse {
   id: string;
   name: string;
