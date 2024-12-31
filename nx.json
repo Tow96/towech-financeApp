@@ -35,7 +35,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/financeapp-e2e/**/*"]
+      "exclude": ["apps/api-e2e/**/*"]
     },
     {
       "plugin": "@nx/next/plugin",
@@ -60,6 +60,11 @@
   "targetDefaults": {
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
