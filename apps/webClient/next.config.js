@@ -13,7 +13,7 @@ const nextConfig = {
     svgr: false,
   },
   output: 'standalone',
-  distDir: '../../dist/apps/webClient/.next'
+  distDir: '../../dist/apps/webclient/.next',
 };
 
 const plugins = [

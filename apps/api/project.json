@@ -3,8 +3,20 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["type:app", "scope:backend"],
   "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "webpack-cli build",
+        "args": ["node-env=production"]
+      },
+      "configurations": {
+        "development": {
+          "args": ["node-env=development"]
+        }
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -22,23 +34,14 @@
         }
       }
     },
-    "container": {
-      "executor": "@nx-tools/nx-container:build",
-      "dependsOn": ["build"],
+    "test": {
       "options": {
-        "engine": "docker",
-        "metadata": {
-          "images": ["api"],
-          "load": true,
-          "tags": [
-            "type=schedule",
-            "type=ref,event=branch",
-            "type=ref,event=tag",
-            "type=ref,event=pr",
-            "type=sha,prefix=sha-"
-          ]
-        }
+        "passWithNoTests": true
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/api/Dockerfile . -t api"
     }
   }
 }

@@ -1,3 +1,4 @@
+
 ARG ALPINE_VERSION=3.18
 FROM alpine:${ALPINE_VERSION} AS base
 WORKDIR /usr/src/app
@@ -18,12 +19,12 @@ ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# COPY apps/webClient/public ./public
 COPY apps/webClient/next.config.js ./
-COPY --chown=${USER}:${GROUP} dist/apps/webClient/.next/static ./.next/static
-COPY --chown=${USER}:${GROUP} dist/apps/webClient/.next/standalone/apps/webClient ./
-COPY --chown=${USER}:${GROUP} dist/apps/webClient/.next/standalone/package.json ./
-COPY --chown=${USER}:${GROUP} dist/apps/webClient/.next/standalone/node_modules ./node_modules
+# COPY --chown=${USER}:${GROUP} apps/webClient/public ./public
+COPY --chown=${USER}:${GROUP} apps/webClient/.next/static ./.next/static
+COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/apps/webClient ./
+COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/package.json ./
+COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["dumb-init", "node", "server.js"]

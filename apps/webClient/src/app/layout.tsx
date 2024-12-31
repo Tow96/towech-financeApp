@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AppProvider } from '../Services/AppProvider';
 import { Raleway } from 'next/font/google';
 
-import 'normalize.css';
+import '../normalize.css';
 import '../index.css';
 // TODO: Fix css imports
 import '../Components/Page/Page.css';
