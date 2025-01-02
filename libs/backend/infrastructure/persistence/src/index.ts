@@ -1,1 +1,1 @@
-export * from './Configs/PersistanceService.Registration';
+export * from './Persistence.Module';
