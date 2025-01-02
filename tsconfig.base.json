@@ -18,7 +18,8 @@
       "@financeApp/backend-application": ["libs/backend/application/src/index.ts"],
       "@financeApp/backend-domain": ["libs/backend/domain/src/index.ts"],
       "@financeApp/backend-infrastructure-persistence": ["libs/backend/infrastructure/persistence/src/index.ts"],
-      "@financeApp/backend-presentation": ["libs/backend/presentation/src/index.ts"]
+      "@financeApp/backend-presentation": ["libs/backend/presentation/src/index.ts"],
+      "@financeApp/backend-infrastructure-logging": ["libs/backend/infrastructure/logging/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
