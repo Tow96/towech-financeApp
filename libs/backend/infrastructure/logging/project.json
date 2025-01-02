@@ -1,0 +1,9 @@
+{
+  "name": "backend-infrastructure-logging",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/infrastructure/logging/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project backend-infrastructure-logging --web",
+  "targets": {}
+}
