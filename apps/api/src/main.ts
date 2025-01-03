@@ -7,15 +7,19 @@ import { Logger as PinoLogger } from '@financeApp/backend-infrastructure-logging
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './App.Module';
+import { HttpExceptionFilter } from './Filters/HttpException.Filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Logging
   app.useLogger(app.get(PinoLogger));
 
-  const port = process.env.PORT || 3000;
-  const corsOrigin = process.env.CORS_ORIGIN;
+  // ErrorHandling
+  app.useGlobalFilters(new HttpExceptionFilter());
 
+  // CORS
+  const corsOrigin = process.env.CORS_ORIGIN;
   if (process.env.ENABLE_CORS === 'true') {
     app.enableCors({
       origin: corsOrigin,
@@ -25,7 +29,11 @@ async function bootstrap() {
     });
   }
 
+  // Cookies
   app.use(cookieParser());
+
+  // Launch app
+  const port = process.env.PORT || 3000;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}}`);
 }
