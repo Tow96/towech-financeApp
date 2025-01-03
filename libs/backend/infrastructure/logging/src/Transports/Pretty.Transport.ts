@@ -2,5 +2,9 @@ import { TransportSingleOptions } from 'pino';
 
 export const PrettyTransport: TransportSingleOptions = {
   target: 'pino-pretty',
-  options: { messageKey: 'message' },
+  options: {
+    colorize: true,
+    messageKey: 'message',
+    ignore: 'correlationId',
+  },
 };

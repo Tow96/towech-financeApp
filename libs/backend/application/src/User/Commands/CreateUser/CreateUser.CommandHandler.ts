@@ -11,13 +11,13 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
   constructor(private readonly repository: IUserRepository) {}
 
   async execute(command: CreateUserCommand): Promise<string> {
-    const { name, email, role } = command;
+    const { name, email, password } = command;
     // this.logger.log('Creating new user');
     const newUser = User.create({
       id: uuidV4(),
       email,
       name,
-      role,
+      password,
     });
     this.logger.debug('This is a debug message');
 

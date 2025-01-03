@@ -1,64 +1,46 @@
 export class User {
-  private _id: string;
-  private _createdAt: Date;
-  private _updatedAt: Date;
-  private _name: string;
-  private _email: string;
-  private _role: string;
-  private _accountConfirmed: boolean;
+  private constructor(
+    private _id: string,
+    private _name: string,
+    private _email: string,
+    private _passwordHash: string,
+    private _emailVerified = false,
+    private _createdAt: Date = new Date(),
+    private _updatedAt: Date = new Date(0)
+  ) {}
 
-  private constructor(createUser: {
+  get Id(): string { return this._id; } // prettier-ignore
+  get CreatedAt(): Date { return this._createdAt; } // prettier-ignore
+  get UpdatedAt(): Date { return this._updatedAt; } // prettier-ignore
+  get Email(): string { return this._email; } // prettier-ignore
+  get EmailVerified(): boolean { return this._emailVerified; } // prettier-ignore
+  get Name(): string { return this._name; } // prettier-ignore
+  get PasswordHash(): string { return this._passwordHash; } // prettier-ignore
+
+  // TODO: Validate attributes
+  static create = (createUser: {
     id: string;
     name: string;
     email: string;
-    role: string;
-    accountConfirmed: boolean;
-  }) {
-    this._id = createUser.id;
-    this._createdAt = new Date();
-    this._updatedAt = new Date(0);
-    this._name = createUser.name;
-    this._email = createUser.email;
-    this._role = createUser.role;
-    this._accountConfirmed = createUser.accountConfirmed;
-  }
+    password: string;
+  }): User => new User(createUser.id, createUser.name, createUser.email, createUser.password);
 
-  get Id(): string {
-    return this._id;
-  }
-
-  get CreatedAt(): Date {
-    return this._createdAt;
-  }
-
-  get UpdatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  get Name(): string {
-    return this._name;
-  }
-
-  get Email(): string {
-    return this._email;
-  }
-
-  get Role(): string {
-    return this._role;
-  }
-
-  get AccountConfirmed(): boolean {
-    return this._accountConfirmed;
-  }
-
-  // TODO: Validate attributes
-  static create(createUser: { id: string; name: string; email: string; role: string }): User {
-    return new User({
-      id: createUser.id,
-      role: createUser.role,
-      name: createUser.name,
-      email: createUser.email,
-      accountConfirmed: false,
-    });
-  }
+  static fromDb = (data: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    passwordHash: string;
+  }): User =>
+    new User(
+      data.id,
+      data.name,
+      data.email,
+      data.passwordHash,
+      data.emailVerified,
+      data.createdAt,
+      data.updatedAt
+    );
 }

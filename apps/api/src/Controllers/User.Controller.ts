@@ -9,7 +9,7 @@ export class UserController {
 
   @Post('')
   async create(@Body() body: CreateUserCommand): Promise<string> {
-    const command = new CreateUserCommand(body.name, body.email, body.role);
+    const command = new CreateUserCommand(body.name, body.email, body.password);
     return await this.commandBus.execute(command);
   }
 

@@ -16,9 +16,8 @@ export class GetUserQueryHandler implements IQueryHandler<GetUserQuery, GetUserQ
     return {
       name: user.Name,
       email: user.Email,
-      role: user.Role,
       id: user.Id,
-      accountConfirmed: user.AccountConfirmed,
+      emailVerified: user.EmailVerified,
     };
   }
 }
