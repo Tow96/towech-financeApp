@@ -1,13 +1,17 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, ImATeapotException, Param, Post } from '@nestjs/common';
 
-import { CreateUserCommand, GetUserQuery, GetUserQueryResponse } from '@financeApp/backend-application';
+import {
+  CreateUserCommand,
+  GetUserQuery,
+  GetUserQueryResponse,
+} from '@financeApp/backend-application';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 @Controller('pesto')
 export class UserController {
   constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) {}
 
-  @Post('')
+  @Post('register')
   async create(@Body() body: CreateUserCommand): Promise<string> {
     const command = new CreateUserCommand(body.name, body.email, body.password);
     return await this.commandBus.execute(command);

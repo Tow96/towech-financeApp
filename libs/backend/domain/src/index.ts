@@ -1,2 +1,2 @@
-export * from './User/Entities/User.Entity';
-export * from './User/Abstractions/User.Repository';
+export * from './Primitives';
+export * from './User';

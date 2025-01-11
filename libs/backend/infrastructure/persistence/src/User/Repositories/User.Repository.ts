@@ -26,6 +26,14 @@ export class UserRepository extends IUserRepository {
     }
   }
 
+  async existsByEmail(email: string): Promise<boolean> {
+    const user = await this.database.query.userTable.findFirst({
+      where: eq(schema.userTable.email, email),
+    });
+
+    return !!user;
+  }
+
   async findById(id: string): Promise<User | null> {
     const user = await this.database.query.userTable.findFirst({
       where: eq(schema.userTable.id, id),
