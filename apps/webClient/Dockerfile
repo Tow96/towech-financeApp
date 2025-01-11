@@ -14,17 +14,17 @@ RUN apk add --update nodejs dumb-init \
   && chown ${USER}:${GROUP} ./
 
 USER ${USER}
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV HOSTNAME "0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME="0.0.0.0"
 ENV NODE_ENV=production
 ENV PORT=3000
 
-COPY apps/webClient/next.config.js ./
-# COPY --chown=${USER}:${GROUP} apps/webClient/public ./public
-COPY --chown=${USER}:${GROUP} apps/webClient/.next/static ./.next/static
-COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/apps/webClient ./
-COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/package.json ./
-COPY --chown=${USER}:${GROUP} apps/webClient/.next/standalone/node_modules ./node_modules
+COPY apps/webclient/next.config.js ./
+# COPY --chown=${USER}:${GROUP} apps/webclient/public ./public
+COPY --chown=${USER}:${GROUP} apps/webclient/.next/static ./.next/static
+COPY --chown=${USER}:${GROUP} apps/webclient/.next/standalone/apps/webclient ./
+COPY --chown=${USER}:${GROUP} apps/webclient/.next/standalone/package.json ./
+COPY --chown=${USER}:${GROUP} apps/webclient/.next/standalone/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["dumb-init", "node", "server.js"]
