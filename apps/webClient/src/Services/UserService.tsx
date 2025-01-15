@@ -73,11 +73,15 @@ export default class UserService {
     email: string,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
-    return await this.instance.post(`${this.SERVICE_URL}/users/reset`, { username: email }, loading);
+    return await this.instance.post(
+      `${this.SERVICE_URL}/users/reset`,
+      { username: email },
+      loading
+    );
   }
 
   /** validateResetPasswordToken
-   * Sends an api call to verify if a resetToken is valid
+   * Sends an Api call to verify if a resetToken is valid
    */
   async validateResetPasswordToken(
     token: string,
@@ -120,7 +124,9 @@ export default class UserService {
   /** resendVerificationEmail
    * resends the email verification
    */
-  async resendVerificationEmail(loading?: React.Dispatch<React.SetStateAction<boolean>>): Promise<AxiosResponse<any>> {
+  async resendVerificationEmail(
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
+  ): Promise<AxiosResponse<any>> {
     return await this.instance.get(`${this.SERVICE_URL}/users/email`, loading);
   }
 
@@ -129,6 +135,10 @@ export default class UserService {
     token: string,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<any>> {
-    return await this.instance.patch(`${this.SERVICE_URL}/authentication/verify/${token}`, null, loading);
+    return await this.instance.patch(
+      `${this.SERVICE_URL}/authentication/verify/${token}`,
+      null,
+      loading
+    );
   }
 }

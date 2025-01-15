@@ -173,7 +173,11 @@ export class UserController {
         } as FrontendUser,
       });
 
-      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       const user = response.payload;
 
       const output = UserConverter.convertToBaseUser(user);
@@ -240,14 +244,18 @@ export class UserController {
       });
 
       // If the user is not registered, sends a 204 code and acts as if it worked
-      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       const db_user = response.payload;
       if (!db_user) throw AmqpMessage.errorMessage('', 204);
 
       // Creates the passwordResetToken this token is only valid for 24h
       const token = TokenGenerator.passwordToken(db_user._id);
 
-      // Sends the token to the database so it can be registered and the email can be sent
+      // Sends the token to the Database so it can be registered and the email can be sent
       Queue.publishSimple(channel, this.userQueue, {
         status: 200,
         type: 'password-reset',
@@ -270,7 +278,9 @@ export class UserController {
       const channel = await Queue.setUpChannelAndExchange(connection);
 
       // extracts the payload, expiration is verified later
-      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', { ignoreExpiration: true });
+      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
+        ignoreExpiration: true,
+      });
 
       // Fetches the user to verify tokens
       const corrId = await Queue.publishWithReply(channel, this.userQueue, {
@@ -282,7 +292,11 @@ export class UserController {
       });
 
       // If there is no user, returns an error
-      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       if (!response.payload) throw AmqpMessage.errorMessage('Invalid user', 422);
       const db_user = response.payload;
 
@@ -317,7 +331,9 @@ export class UserController {
       const channel = await Queue.setUpChannelAndExchange(connection);
 
       // extracts the payload, expiration is verified later
-      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', { ignoreExpiration: true });
+      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
+        ignoreExpiration: true,
+      });
 
       // Fetches the user to verify tokens
       const corrId = await Queue.publishWithReply(channel, this.userQueue, {
@@ -329,7 +345,11 @@ export class UserController {
       });
 
       // If there is no user, returns an error
-      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<BackendUser> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       if (!response.payload) throw AmqpMessage.errorMessage('Invalid user', 422);
       const db_user = response.payload;
 
@@ -351,7 +371,11 @@ export class UserController {
           });
 
           // Waits for the response from the workers
-          const response: AmqpMessage<null> = await Queue.fetchFromQueue(channel, passwordCorrId, passwordCorrId);
+          const response: AmqpMessage<null> = await Queue.fetchFromQueue(
+            channel,
+            passwordCorrId,
+            passwordCorrId
+          );
           res.status(response.status).send(response.payload);
         } catch (e) {
           Queue.publishSimple(channel, this.userQueue, {

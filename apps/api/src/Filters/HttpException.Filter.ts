@@ -1,6 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
 import { Response } from 'express';
-import { InputException } from '@financeApp/backend-domain';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -15,9 +14,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       // NestJS exceptions
       case exception instanceof HttpException:
         return response.status(exception.getStatus()).send(exception.getResponse());
-      // Domain exceptions
-      case exception instanceof InputException:
-        return this.SendErrorMessage(422, exception, response);
 
       default:
         this.logger.error(`Unknown exception: ${exception}`);

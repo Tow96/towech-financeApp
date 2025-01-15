@@ -74,7 +74,7 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
         return config;
       },
       (error) => {
-        // console.log('api-request-error');
+        // console.log('Api-request-error');
         return Promise.reject(error);
       }
     );
@@ -101,7 +101,10 @@ export default class CustomAxios {
     this.tokenDispatch = tokenDispatch;
   }
 
-  async get(url: string, loading?: React.Dispatch<React.SetStateAction<boolean>>): Promise<AxiosResponse<any>> {
+  async get(
+    url: string,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
+  ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
       const res = await mAxios(this.token.token, this.tokenDispatch).get(url);
@@ -136,7 +139,9 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).post(url, payload, { withCredentials: true });
+      const res = await mAxios(this.token.token, this.tokenDispatch).post(url, payload, {
+        withCredentials: true,
+      });
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -177,7 +182,10 @@ export default class CustomAxios {
     }
   }
 
-  async delete(url: string, loading?: React.Dispatch<React.SetStateAction<boolean>>): Promise<AxiosResponse<any>> {
+  async delete(
+    url: string,
+    loading?: React.Dispatch<React.SetStateAction<boolean>>
+  ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
       const res = await mAxios(this.token.token, this.tokenDispatch).delete(url);

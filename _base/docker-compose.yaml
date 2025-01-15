@@ -1,7 +1,7 @@
 version: '3.5'
 
 services:
-  # database:
+  # Database:
   #   container_name: mongodb
   #   image: mongo:latest
 
