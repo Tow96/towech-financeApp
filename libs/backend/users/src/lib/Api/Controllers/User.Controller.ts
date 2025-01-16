@@ -12,11 +12,16 @@ import {
   Post,
   Logger,
   UnprocessableEntityException,
+  Patch,
+  NotImplementedException,
+  Get,
 } from '@nestjs/common';
 
 import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
 import * as schema from '../../Database/Schemas/User.Schema';
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
+import { GetUsersDto } from '../Dto/GetUsers.Dto';
+import { GetUserDto } from '../Dto/GetUser.Dto';
 
 @Controller('user-new')
 export class UserController {
@@ -53,6 +58,33 @@ export class UserController {
 
     // Return
     return newUser.id;
+  }
+
+  @Get('')
+  async getAllUsers(): Promise<GetUsersDto[]> {
+    return this._db
+      .select({
+        id: schema.UserSchema.id,
+        email: schema.UserSchema.email,
+        name: schema.UserSchema.name,
+      })
+      .from(schema.UserSchema);
+  }
+
+  @Get(':id')
+  async getUser(@Param('id') id: string): Promise<GetUserDto> {
+    const userQuery = await this._db
+      .select({
+        id: schema.UserSchema.id,
+        email: schema.UserSchema.email,
+        name: schema.UserSchema.name,
+      })
+      .from(schema.UserSchema)
+      .where(eq(schema.UserSchema.id, id));
+
+    if (userQuery.length == 0) throw new NotFoundException('User not found.');
+
+    return userQuery[0];
   }
 
   @Delete(':id')
