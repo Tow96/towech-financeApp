@@ -2,7 +2,7 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 // import { Logger as PinoLogger } from '@financeApp/backend-infrastructure-logging';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
@@ -14,6 +14,9 @@ async function bootstrap() {
 
   // Logging
   // app.useLogger(app.get(PinoLogger));
+
+  // Validation
+  app.useGlobalPipes(new ValidationPipe());
 
   // ErrorHandling
   app.useGlobalFilters(new HttpExceptionFilter());

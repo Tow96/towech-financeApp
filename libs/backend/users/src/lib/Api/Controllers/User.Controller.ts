@@ -1,10 +1,22 @@
-import { Body, Controller, Delete, Inject, NotFoundException, Param, Post } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
-import { Logger, UnprocessableEntityException } from '@nestjs/common';
-import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../../Database/Schemas/User.Schema';
 import { eq } from 'drizzle-orm';
+
+import {
+  Body,
+  Controller,
+  Delete,
+  Inject,
+  NotFoundException,
+  Param,
+  Post,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+
+import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
+import * as schema from '../../Database/Schemas/User.Schema';
+import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 
 @Controller('user-new')
 export class UserController {
@@ -12,11 +24,7 @@ export class UserController {
   constructor(@Inject(DATABASE_CONNECTION) private readonly _db: NodePgDatabase<typeof schema>) {}
 
   @Post('register')
-  async registerUser(
-    @Body() createUser: { name: string; email: string; password: string }
-  ): Promise<string> {
-    // TODO: Validate data
-
+  async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
     const userExists = await this._db.query.UserSchema.findFirst({
       where: eq(schema.UserSchema.email, createUser.email),
@@ -39,6 +47,7 @@ export class UserController {
         passwordHash: createUser.password,
       })
       .returning();
+    this._logger.log(`Inserted new user with email "${newUser.email}" and id: ${newUser.id}.`);
 
     // TODO: Send registration email
 
@@ -55,5 +64,6 @@ export class UserController {
 
     // Delete user
     await this._db.delete(schema.UserSchema).where(eq(schema.UserSchema.id, id));
+    this._logger.log(`Deleted user with id ${id}.`);
   }
 }
