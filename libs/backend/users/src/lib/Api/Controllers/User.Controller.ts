@@ -13,7 +13,6 @@ import {
   Logger,
   UnprocessableEntityException,
   Patch,
-  NotImplementedException,
   Get,
 } from '@nestjs/common';
 
@@ -22,6 +21,8 @@ import * as schema from '../../Database/Schemas/User.Schema';
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { GetUsersDto } from '../Dto/GetUsers.Dto';
 import { GetUserDto } from '../Dto/GetUser.Dto';
+import { ChangeNameDto } from '../Validation/ChangeName.Dto';
+import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
 
 @Controller('user-new')
 export class UserController {
@@ -97,5 +98,37 @@ export class UserController {
     // Delete user
     await this._db.delete(schema.UserSchema).where(eq(schema.UserSchema.id, id));
     this._logger.log(`Deleted user with id ${id}.`);
+  }
+
+  @Patch(':id/name')
+  async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
+    const userExists = await this._db.query.UserSchema.findFirst({
+      where: eq(schema.UserSchema.id, id),
+    });
+    if (!userExists) throw new NotFoundException('User not found.');
+
+    // Update user
+    await this._db
+      .update(schema.UserSchema)
+      .set({ name: data.name, updatedAt: new Date() })
+      .where(eq(schema.UserSchema.id, id));
+
+    this._logger.log(`Updated name of user with id ${id}.`);
+  }
+
+  @Patch(':id/email')
+  async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
+    const userExists = await this._db.query.UserSchema.findFirst({
+      where: eq(schema.UserSchema.id, id),
+    });
+    if (!userExists) throw new NotFoundException('User not found.');
+
+    // Update user
+    await this._db
+      .update(schema.UserSchema)
+      .set({ email: data.email, emailVerified: false, updatedAt: new Date() })
+      .where(eq(schema.UserSchema.id, id));
+
+    this._logger.log(`Updated email of user with id ${id}.`);
   }
 }
