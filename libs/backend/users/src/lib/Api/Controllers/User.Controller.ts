@@ -17,12 +17,11 @@ import {
 } from '@nestjs/common';
 
 import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
-import * as schema from '../../Database/Schemas/User.Schema';
+import * as schema from '../../Database/Schemas';
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { GetUsersDto } from '../Dto/GetUsers.Dto';
 import { GetUserDto } from '../Dto/GetUser.Dto';
 import { ChangeNameDto } from '../Validation/ChangeName.Dto';
-import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
 
 @Controller('user-new')
 export class UserController {
@@ -50,7 +49,7 @@ export class UserController {
         name: createUser.name,
         email: createUser.email,
         emailVerified: false,
-        passwordHash: createUser.password,
+        passwordHash: createUser.password, // TODO: Hash password
       })
       .returning();
     this._logger.log(`Inserted new user with email "${newUser.email}" and id: ${newUser.id}.`);
@@ -114,21 +113,5 @@ export class UserController {
       .where(eq(schema.UserSchema.id, id));
 
     this._logger.log(`Updated name of user with id ${id}.`);
-  }
-
-  @Patch(':id/email')
-  async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, id),
-    });
-    if (!userExists) throw new NotFoundException('User not found.');
-
-    // Update user
-    await this._db
-      .update(schema.UserSchema)
-      .set({ email: data.email, emailVerified: false, updatedAt: new Date() })
-      .where(eq(schema.UserSchema.id, id));
-
-    this._logger.log(`Updated email of user with id ${id}.`);
   }
 }
