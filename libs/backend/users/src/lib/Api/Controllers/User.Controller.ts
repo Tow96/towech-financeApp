@@ -17,8 +17,8 @@ import {
   Get,
 } from '@nestjs/common';
 
-import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
-import * as schema from '../../Database/Schemas';
+import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
+import { UsersSchema } from '../../Database/Users.Schema';
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { GetUsersDto } from '../Dto/GetUsers.Dto';
 import { GetUserDto } from '../Dto/GetUser.Dto';
@@ -27,13 +27,15 @@ import { ChangeNameDto } from '../Validation/ChangeName.Dto';
 @Controller('user-new')
 export class UserController {
   private readonly _logger = new Logger(UserController.name);
-  constructor(@Inject(DATABASE_CONNECTION) private readonly _db: NodePgDatabase<typeof schema>) {}
+  constructor(
+    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>
+  ) {}
 
   @Post('register')
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.email, createUser.email),
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.email, createUser.email),
     });
     if (userExists)
       throw new UnprocessableEntityException(
@@ -49,7 +51,7 @@ export class UserController {
 
     // Create user
     const [newUser] = await this._db
-      .insert(schema.UserSchema)
+      .insert(UsersSchema.UserInfoTable)
       .values({
         id: uuidV4(),
         createdAt: new Date(),
@@ -72,23 +74,23 @@ export class UserController {
   async getAllUsers(): Promise<GetUsersDto[]> {
     return this._db
       .select({
-        id: schema.UserSchema.id,
-        email: schema.UserSchema.email,
-        name: schema.UserSchema.name,
+        id: UsersSchema.UserInfoTable.id,
+        email: UsersSchema.UserInfoTable.email,
+        name: UsersSchema.UserInfoTable.name,
       })
-      .from(schema.UserSchema);
+      .from(UsersSchema.UserInfoTable);
   }
 
   @Get(':id')
   async getUser(@Param('id') id: string): Promise<GetUserDto> {
     const userQuery = await this._db
       .select({
-        id: schema.UserSchema.id,
-        email: schema.UserSchema.email,
-        name: schema.UserSchema.name,
+        id: UsersSchema.UserInfoTable.id,
+        email: UsersSchema.UserInfoTable.email,
+        name: UsersSchema.UserInfoTable.name,
       })
-      .from(schema.UserSchema)
-      .where(eq(schema.UserSchema.id, id));
+      .from(UsersSchema.UserInfoTable)
+      .where(eq(UsersSchema.UserInfoTable.id, id));
 
     if (userQuery.length == 0) throw new NotFoundException('User not found.');
 
@@ -97,28 +99,28 @@ export class UserController {
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, id),
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.id, id),
     });
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Delete user
-    await this._db.delete(schema.UserSchema).where(eq(schema.UserSchema.id, id));
+    await this._db.delete(UsersSchema.UserInfoTable).where(eq(UsersSchema.UserInfoTable.id, id));
     this._logger.log(`Deleted user with id ${id}.`);
   }
 
   @Patch(':id/name')
   async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, id),
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.id, id),
     });
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Update user
     await this._db
-      .update(schema.UserSchema)
+      .update(UsersSchema.UserInfoTable)
       .set({ name: data.name, updatedAt: new Date() })
-      .where(eq(schema.UserSchema.id, id));
+      .where(eq(UsersSchema.UserInfoTable.id, id));
 
     this._logger.log(`Updated name of user with id ${id}.`);
   }

@@ -1,5 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
-import { verify } from '@node-rs/argon2';
+import { hash, verify } from '@node-rs/argon2';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { encodeBase32UpperCaseNoPadding } from '../../fake-oslo/encoding';
@@ -16,44 +16,45 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
-import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
-import * as schema from '../../Database/Schemas';
+import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
 import { VerifyEmailDto } from '../Validation/VerifyEmail.Dto';
-import { hash } from '@node-rs/argon2';
+import { UsersSchema } from '../../Database/Users.Schema';
 
 @Controller('user-new/:id/email')
 export class EmailController {
   private readonly _logger = new Logger(EmailController.name);
-  constructor(@Inject(DATABASE_CONNECTION) private readonly _db: NodePgDatabase<typeof schema>) {}
+  constructor(
+    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>
+  ) {}
 
   @Patch('')
   async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, id),
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.id, id),
     });
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Update user
     await this._db
-      .update(schema.UserSchema)
+      .update(UsersSchema.UserInfoTable)
       .set({ email: data.email, emailVerified: false, updatedAt: new Date() })
-      .where(eq(schema.UserSchema.id, id));
+      .where(eq(UsersSchema.UserInfoTable.id, id));
 
     this._logger.log(`Updated email of user with id ${id}.`);
   }
 
   @Post('/send-verification')
   async sendVerificationEmail(@Param('id') userId: string): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, userId),
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.id, userId),
     });
     if (!userExists) throw new NotFoundException('User not found.');
 
     const [previousToken] = await this._db
       .select()
-      .from(schema.EmailVerificationSchema)
-      .where(eq(schema.EmailVerificationSchema.userId, userId));
+      .from(UsersSchema.EmailVerificationTable)
+      .where(eq(UsersSchema.EmailVerificationTable.userId, userId));
     const minimumTime = new Date().getTime() - 10 * 60 * 1000;
     if (previousToken !== undefined && previousToken.createdAt.getTime() > minimumTime)
       throw new UnprocessableEntityException('Token generated too soon');
@@ -61,8 +62,8 @@ export class EmailController {
     // If older than 10 minutes, deletes the token
     if (previousToken)
       await this._db
-        .delete(schema.EmailVerificationSchema)
-        .where(eq(schema.EmailVerificationSchema.id, previousToken.id));
+        .delete(UsersSchema.EmailVerificationTable)
+        .where(eq(UsersSchema.EmailVerificationTable.id, previousToken.id));
 
     // Generates random OTP
     const bytes = new Uint8Array(5);
@@ -76,7 +77,7 @@ export class EmailController {
     });
 
     // Stores the new token
-    await this._db.insert(schema.EmailVerificationSchema).values({
+    await this._db.insert(UsersSchema.EmailVerificationTable).values({
       id: uuidV4(),
       userId: userId,
       hashedCode: hashedCode,
@@ -91,36 +92,36 @@ export class EmailController {
   }
 
   @Post('/verify')
-  async verifyEmail(@Param('id') id: string, @Body() data: VerifyEmailDto): Promise<void> {
-    const userExists = await this._db.query.UserSchema.findFirst({
-      where: eq(schema.UserSchema.id, id),
+  async verifyEmail(@Param('id') userId: string, @Body() data: VerifyEmailDto): Promise<void> {
+    const userExists = await this._db.query.UserInfoTable.findFirst({
+      where: eq(UsersSchema.UserInfoTable.id, userId),
     });
     if (!userExists) throw new NotFoundException('User not found.');
 
     const [tokenExists] = await this._db
       .select()
-      .from(schema.EmailVerificationSchema)
-      .where(eq(schema.EmailVerificationSchema.userId, id));
+      .from(UsersSchema.EmailVerificationTable)
+      .where(eq(UsersSchema.EmailVerificationTable.userId, userId));
     if (!tokenExists) throw new UnprocessableEntityException('Invalid token'); // Saying another thing is TMI
 
     const timeLimit = new Date().getTime() - 24 * 60 * 60 * 1000; // 24 hours
     if (tokenExists.createdAt.getTime() < timeLimit)
       throw new UnprocessableEntityException('Token expired, generate a new one');
 
-    if (await verify(tokenExists.hashedCode, data.token))
+    if (!(await verify(tokenExists.hashedCode, data.token)))
       throw new UnprocessableEntityException('Invalid token');
 
     // delete token
     await this._db
-      .delete(schema.EmailVerificationSchema)
-      .where(eq(schema.EmailVerificationSchema.id, tokenExists.id));
+      .delete(UsersSchema.EmailVerificationTable)
+      .where(eq(UsersSchema.EmailVerificationTable.id, tokenExists.id));
 
     // update user
     await this._db
-      .update(schema.UserSchema)
+      .update(UsersSchema.UserInfoTable)
       .set({ emailVerified: true, updatedAt: new Date() })
-      .where(eq(schema.UserSchema.id, id));
+      .where(eq(UsersSchema.UserInfoTable.id, userId));
 
-    this._logger.log(`User: ${id}, successfully verified their account`);
+    this._logger.log(`User: ${userId}, successfully verified their account`);
   }
 }
