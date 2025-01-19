@@ -28,6 +28,7 @@ export class PasswordController {
   ) {}
 
   @Patch('')
+  // TODO: User guard
   async changePassword(@Param('id') id: string, @Body() data: ChangePasswordDto): Promise<void> {
     const userExists = await this._db.query.UserInfoTable.findFirst({
       where: eq(UsersSchema.UserInfoTable.id, id),

@@ -32,6 +32,7 @@ export class UserController {
   ) {}
 
   @Post('register')
+  // TODO: Admin/Master guard
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
     const userExists = await this._db.query.UserInfoTable.findFirst({
@@ -71,6 +72,7 @@ export class UserController {
   }
 
   @Get('')
+  // TODO: admin guard
   async getAllUsers(): Promise<GetUsersDto[]> {
     return this._db
       .select({
@@ -82,6 +84,7 @@ export class UserController {
   }
 
   @Get(':id')
+  // TODO: user guard
   async getUser(@Param('id') id: string): Promise<GetUserDto> {
     const userQuery = await this._db
       .select({
@@ -98,6 +101,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  // TODO: user/admin/master guard
   async deleteUser(@Param('id') id: string): Promise<void> {
     const userExists = await this._db.query.UserInfoTable.findFirst({
       where: eq(UsersSchema.UserInfoTable.id, id),
@@ -110,6 +114,7 @@ export class UserController {
   }
 
   @Patch(':id/name')
+  // TODO: user guard
   async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
     const userExists = await this._db.query.UserInfoTable.findFirst({
       where: eq(UsersSchema.UserInfoTable.id, id),

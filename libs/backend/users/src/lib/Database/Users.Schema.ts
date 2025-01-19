@@ -1,4 +1,4 @@
-import { boolean, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 
 // Used to declare the tables
 export const schema = pgSchema('users');
@@ -32,5 +32,19 @@ export const PasswordResetTable = schema.table('password_reset', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 });
 
+export const SessionTable = schema.table('sessions', {
+  id: text('id').primaryKey().notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => UserInfoTable.id, { onDelete: 'cascade' }),
+  expiresAt: integer().notNull(),
+  type: text('type'),
+});
+
 // Schema used in code
-export const UsersSchema = { UserInfoTable, EmailVerificationTable, PasswordResetTable };
+export const UsersSchema = {
+  UserInfoTable: UserInfoTable,
+  EmailVerificationTable: EmailVerificationTable,
+  PasswordResetTable: PasswordResetTable,
+  SessionTable: SessionTable,
+};

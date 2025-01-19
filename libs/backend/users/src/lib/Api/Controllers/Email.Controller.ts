@@ -29,6 +29,7 @@ export class EmailController {
   ) {}
 
   @Patch('')
+  // TODO: User guard
   async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
     const userExists = await this._db.query.UserInfoTable.findFirst({
       where: eq(UsersSchema.UserInfoTable.id, id),
@@ -45,6 +46,7 @@ export class EmailController {
   }
 
   @Post('/send-verification')
+  // TODO: User/admin guard
   async sendVerificationEmail(@Param('id') userId: string): Promise<void> {
     const userExists = await this._db.query.UserInfoTable.findFirst({
       where: eq(UsersSchema.UserInfoTable.id, userId),
