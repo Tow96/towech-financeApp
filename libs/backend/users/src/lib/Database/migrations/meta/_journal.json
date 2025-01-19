@@ -15,6 +15,13 @@
       "when": 1737227039825,
       "tag": "0001_absurd_zarda",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737313740296,
+      "tag": "0002_powerful_lilith",
+      "breakpoints": true
     }
   ]
 }

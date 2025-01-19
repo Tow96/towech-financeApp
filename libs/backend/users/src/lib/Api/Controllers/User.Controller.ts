@@ -1,4 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
+import { hash } from '@node-rs/argon2';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 
@@ -39,6 +40,13 @@ export class UserController {
         `User with email "${createUser.email}" already registered.`
       );
 
+    const hashedPassword = await hash(createUser.password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
+
     // Create user
     const [newUser] = await this._db
       .insert(schema.UserSchema)
@@ -49,7 +57,7 @@ export class UserController {
         name: createUser.name,
         email: createUser.email,
         emailVerified: false,
-        passwordHash: createUser.password, // TODO: Hash password
+        passwordHash: hashedPassword,
       })
       .returning();
     this._logger.log(`Inserted new user with email "${newUser.email}" and id: ${newUser.id}.`);

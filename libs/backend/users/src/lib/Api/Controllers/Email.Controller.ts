@@ -1,4 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
+import { verify } from '@node-rs/argon2';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { encodeBase32UpperCaseNoPadding } from '../../fake-oslo/encoding';
@@ -19,6 +20,7 @@ import { DATABASE_CONNECTION } from '../../Database/drizzle.provider';
 import * as schema from '../../Database/Schemas';
 import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
 import { VerifyEmailDto } from '../Validation/VerifyEmail.Dto';
+import { hash } from '@node-rs/argon2';
 
 @Controller('user-new/:id/email')
 export class EmailController {
@@ -53,7 +55,7 @@ export class EmailController {
       .from(schema.EmailVerificationSchema)
       .where(eq(schema.EmailVerificationSchema.userId, userId));
     const minimumTime = new Date().getTime() - 10 * 60 * 1000;
-    if (previousToken !== undefined && previousToken.tokenCreatedAt.getTime() > minimumTime)
+    if (previousToken !== undefined && previousToken.createdAt.getTime() > minimumTime)
       throw new UnprocessableEntityException('Token generated too soon');
 
     // If older than 10 minutes, deletes the token
@@ -66,13 +68,19 @@ export class EmailController {
     const bytes = new Uint8Array(5);
     crypto.getRandomValues(bytes);
     const code = encodeBase32UpperCaseNoPadding(bytes);
+    const hashedCode = await hash(code, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
 
     // Stores the new token
     await this._db.insert(schema.EmailVerificationSchema).values({
       id: uuidV4(),
       userId: userId,
-      verificationToken: code, // TODO: Store hashed
-      tokenCreatedAt: new Date(),
+      hashedCode: hashedCode,
+      createdAt: new Date(),
     });
     this._logger.log(`Email verification token generated for user: ${userId}`);
     this._logger.debug(`Created email verification code: ${code} for user: ${userId}`);
@@ -96,11 +104,10 @@ export class EmailController {
     if (!tokenExists) throw new UnprocessableEntityException('Invalid token'); // Saying another thing is TMI
 
     const timeLimit = new Date().getTime() - 24 * 60 * 60 * 1000; // 24 hours
-    if (tokenExists.tokenCreatedAt.getTime() < timeLimit)
+    if (tokenExists.createdAt.getTime() < timeLimit)
       throw new UnprocessableEntityException('Token expired, generate a new one');
 
-    // TODO: Verify using hash
-    if (tokenExists.verificationToken !== data.token)
+    if (await verify(tokenExists.hashedCode, data.token))
       throw new UnprocessableEntityException('Invalid token');
 
     // delete token

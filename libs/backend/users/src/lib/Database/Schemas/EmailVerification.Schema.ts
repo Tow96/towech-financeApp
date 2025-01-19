@@ -6,6 +6,6 @@ export const EmailVerificationSchema = pgTable('email_verification', {
   userId: text('user_id')
     .notNull()
     .references(() => UserSchema.id),
-  verificationToken: text('verification_token').notNull(),
-  tokenCreatedAt: timestamp('token_created_at', { withTimezone: true }).notNull(),
+  hashedCode: text('hashed_code').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 });
