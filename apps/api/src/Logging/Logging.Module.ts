@@ -1,8 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { LoggerModule } from 'nestjs-pino';
-import { CORRELATION_ID_HEADER, CorrelationIdMiddleware } from './CorrelationId.Middleware';
+
+import {
+  CORRELATION_ID_HEADER,
+  CorrelationIdMiddleware,
+} from './Middleware/CorrelationId.Middleware';
 import { PrettyTransport } from './Transports/Pretty.Transport';
+import { HttpLogMiddleware } from './Middleware/Http.Middleware';
 
 @Module({
   imports: [
@@ -24,5 +29,6 @@ import { PrettyTransport } from './Transports/Pretty.Transport';
 export class LoggingModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CorrelationIdMiddleware).forRoutes('*');
+    consumer.apply(HttpLogMiddleware).forRoutes('*');
   }
 }

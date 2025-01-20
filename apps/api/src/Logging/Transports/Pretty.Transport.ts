@@ -5,6 +5,7 @@ export const PrettyTransport: TransportSingleOptions = {
   options: {
     colorize: true,
     messageKey: 'message',
-    ignore: 'correlationId',
+    ignore: 'pid,hostname,correlationId,context',
+    messageFormat: '[{context}] {message}',
   },
 };

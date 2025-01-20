@@ -20,11 +20,11 @@ export class UserInfoRepository {
     await this._db
       .delete(UsersSchema.UserInfoTable)
       .where(eq(UsersSchema.UserInfoTable.id, model.id));
-    this._logger.verbose(`Deleted entry with id: ${model.id} in table: ${tableName}}.`);
+    this._logger.debug(`Deleted entry with id: ${model.id} in table: ${tableName}}.`);
   }
 
   async getByEmail(email: string): Promise<UserInfoModel | undefined> {
-    this._logger.verbose(`Fetching if entry exists with email: ${email} in table: ${tableName}.`);
+    this._logger.debug(`Fetching if entry exists with email: ${email} in table: ${tableName}.`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.UserInfoTable)
@@ -34,7 +34,7 @@ export class UserInfoRepository {
   }
 
   async getById(id: string): Promise<UserInfoModel | undefined> {
-    this._logger.verbose(`Fetching if entry exists with id: ${id} in table: ${tableName}.`);
+    this._logger.debug(`Fetching if entry exists with id: ${id} in table: ${tableName}.`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.UserInfoTable)
@@ -45,7 +45,7 @@ export class UserInfoRepository {
   async insert(model: UserInfoModel): Promise<void> {
     await this._db.insert(UsersSchema.UserInfoTable).values({ ...model });
 
-    this._logger.verbose(`Inserted entry with id: ${model.id} in table: ${tableName}.`);
+    this._logger.debug(`Inserted entry with id: ${model.id} in table: ${tableName}.`);
   }
 
   async update(model: UserInfoModel): Promise<void> {
@@ -53,6 +53,6 @@ export class UserInfoRepository {
       .update(UsersSchema.UserInfoTable)
       .set({ ...model })
       .where(eq(UsersSchema.UserInfoTable.id, model.id));
-    this._logger.verbose(`Updated db entry with id: ${model.id} in table: ${tableName}.`);
+    this._logger.debug(`Updated db entry with id: ${model.id} in table: ${tableName}.`);
   }
 }

@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 import { Logger, ValidationPipe } from '@nestjs/common';
-// import { Logger as PinoLogger } from '@financeApp/backend-infrastructure-logging';
+import { Logger as PinoLogger } from 'nestjs-pino';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './App.Module';
@@ -13,7 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Logging
-  // app.useLogger(app.get(PinoLogger));
+  app.useLogger(app.get(PinoLogger));
 
   // Validation
   app.useGlobalPipes(new ValidationPipe());
@@ -38,7 +38,7 @@ async function bootstrap() {
   // Launch app
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}}`);
+  Logger.log(`🚀 Application is running on: http://localhost:${port}}`, 'Startup');
 }
 
 bootstrap();

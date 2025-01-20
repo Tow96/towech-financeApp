@@ -19,18 +19,18 @@ export class SessionsRepository {
     await this._db
       .delete(UsersSchema.SessionTable)
       .where(eq(UsersSchema.SessionTable.id, model.id));
-    this._logger.verbose(`Deleted entry with id: ${model.id} in table: ${tableName}`);
+    this._logger.debug(`Deleted entry with id: ${model.id} in table: ${tableName}`);
   }
 
   async deleteAll(userId: string): Promise<void> {
     await this._db
       .delete(UsersSchema.SessionTable)
       .where(eq(UsersSchema.SessionTable.userId, userId));
-    this._logger.verbose(`Deleted all entries with user id: ${userId} in table: ${tableName}`);
+    this._logger.debug(`Deleted all entries with user id: ${userId} in table: ${tableName}`);
   }
 
   async getById(id: string): Promise<SessionModel | undefined> {
-    this._logger.verbose(`Fetching if entry exists with id: ${id} in table ${tableName}`);
+    this._logger.debug(`Fetching if entry exists with id: ${id} in table ${tableName}`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.SessionTable)
@@ -41,7 +41,7 @@ export class SessionsRepository {
   async insert(model: SessionModel): Promise<void> {
     await this._db.insert(UsersSchema.SessionTable).values({ ...model });
 
-    this._logger.verbose(`Inserted entry with id: ${model.id} in table: ${tableName}`);
+    this._logger.debug(`Inserted entry with id: ${model.id} in table: ${tableName}`);
   }
 
   async update(model: SessionModel): Promise<void> {
@@ -49,6 +49,6 @@ export class SessionsRepository {
       .update(UsersSchema.SessionTable)
       .set({ ...model })
       .where(eq(UsersSchema.SessionTable.id, model.id));
-    this._logger.verbose(`Updated db entry with id: ${model.id} in table: ${tableName}`);
+    this._logger.debug(`Updated db entry with id: ${model.id} in table: ${tableName}`);
   }
 }

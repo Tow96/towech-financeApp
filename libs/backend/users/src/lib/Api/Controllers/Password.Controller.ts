@@ -87,7 +87,7 @@ export class PasswordController {
     };
     await this._passwordResetRepository.insert(newCode);
     this._logger.log(`Password reset token generated for user: ${userId}`);
-    this._logger.debug(`Created password reset token: ${code} for user: ${userId}`);
+    this._logger.verbose(`CODE: ${code}`);
 
     // TODO: Send email with code
 

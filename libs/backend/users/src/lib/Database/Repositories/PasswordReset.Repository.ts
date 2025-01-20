@@ -19,11 +19,11 @@ export class PasswordResetRepository {
     await this._db
       .delete(UsersSchema.PasswordResetTable)
       .where(eq(UsersSchema.PasswordResetTable.id, model.id));
-    this._logger.verbose(`Deleted entry with id: ${model.id} in table: ${tableName}.`);
+    this._logger.debug(`Deleted entry with id: ${model.id} in table: ${tableName}.`);
   }
 
   async getByUserId(userId: string): Promise<PasswordResetModel | undefined> {
-    this._logger.verbose(`Fetching if entry exists with userId: ${userId} in table: ${tableName}.`);
+    this._logger.debug(`Fetching if entry exists with userId: ${userId} in table: ${tableName}.`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.PasswordResetTable)
@@ -34,6 +34,6 @@ export class PasswordResetRepository {
   async insert(model: PasswordResetModel): Promise<void> {
     await this._db.insert(UsersSchema.PasswordResetTable).values({ ...model });
 
-    this._logger.verbose(`Inserted entry with id: ${model.id} in table: ${tableName}`);
+    this._logger.debug(`Inserted entry with id: ${model.id} in table: ${tableName}`);
   }
 }

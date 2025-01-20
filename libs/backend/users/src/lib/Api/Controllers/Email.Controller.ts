@@ -78,7 +78,7 @@ export class EmailController {
     };
     await this._emailVerificationRepository.insert(newCode);
     this._logger.log(`Email verification token generated for user: ${userId}`);
-    this._logger.debug(`Created email verification code: ${code} for user: ${userId}`);
+    this._logger.verbose(`CODE: ${code}`);
 
     // TODO: Send email with code
 

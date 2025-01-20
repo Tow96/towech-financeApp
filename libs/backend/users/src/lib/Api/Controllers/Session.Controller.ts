@@ -25,6 +25,7 @@ import { sha256 } from '../../fake-oslo/crypto/sha2';
 import { SessionModel, SessionsRepository } from '../../Database/Repositories/Sessions.Repository';
 
 // TODO: Expired session cleanup-job
+const SESSION_COOKIE = 'jid';
 
 @Controller('new')
 export class SessionController {
@@ -71,7 +72,7 @@ export class SessionController {
     await this._sessionRepository.insert(newSession);
 
     // Generate cookie
-    response.cookie('jid', sessionToken, {
+    response.cookie(SESSION_COOKIE, sessionToken, {
       httpOnly: true,
       path: '/',
       secure: false, // TODO: set up SSL
@@ -86,7 +87,9 @@ export class SessionController {
   @Post('/refresh')
   // TODO: Cookie guard
   async refreshToken(@Req() req: Request): Promise<void> {
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(req.cookies['jid'])));
+    const sessionId = encodeHexLowerCase(
+      sha256(new TextEncoder().encode(req.cookies[SESSION_COOKIE]))
+    );
 
     let session = await this._sessionRepository.getById(sessionId);
     if (!session) throw new UnauthorizedException('Invalid credentials');
@@ -116,7 +119,9 @@ export class SessionController {
   // TODO: Cookie guard
   async logout(@Req() req: Request): Promise<void> {
     // Invalidate session
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(req.cookies['jid'])));
+    const sessionId = encodeHexLowerCase(
+      sha256(new TextEncoder().encode(req.cookies[SESSION_COOKIE]))
+    );
 
     const session = await this._sessionRepository.getById(sessionId);
     if (!session) throw new UnauthorizedException('Invalid credentials');
