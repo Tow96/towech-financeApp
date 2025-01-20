@@ -4,7 +4,6 @@ import { encodeBase32UpperCaseNoPadding } from '../../fake-oslo/encoding';
 import {
   Body,
   Controller,
-  Inject,
   Logger,
   NotFoundException,
   Param,
@@ -12,27 +11,27 @@ import {
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
-import { UsersSchema } from '../../Database/Users.Schema';
 import { ChangePasswordDto } from '../Validation/ChangePassword.Dto';
-import { eq } from 'drizzle-orm';
 import { ResetPasswordDto } from '../Validation/ResetPassword.Dto';
+import { UserInfoRepository } from '../../Database/Repositories/UserInfo.Repository';
+import {
+  PasswordResetModel,
+  PasswordResetRepository,
+} from '../../Database/Repositories/PasswordReset.Repository';
 
 @Controller('user-new/:id/password')
 export class PasswordController {
   private readonly _logger = new Logger(PasswordController.name);
   constructor(
-    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>
+    private readonly _userInfoRepository: UserInfoRepository,
+    private readonly _passwordResetRepository: PasswordResetRepository
   ) {}
 
   @Patch('')
   // TODO: User guard
   async changePassword(@Param('id') id: string, @Body() data: ChangePasswordDto): Promise<void> {
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.id, id),
-    });
+    let userExists = await this._userInfoRepository.getById(id);
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Validate old password
@@ -48,34 +47,25 @@ export class PasswordController {
     });
 
     // Update user
-    await this._db
-      .update(UsersSchema.UserInfoTable)
-      .set({ passwordHash: passwordHash, updatedAt: new Date() })
-      .where(eq(UsersSchema.UserInfoTable.id, id));
+    userExists = { ...userExists, passwordHash: passwordHash, updatedAt: new Date() };
+    await this._userInfoRepository.update(userExists);
 
     this._logger.log(`Updated password for user: ${id}`);
   }
 
   @Post('/send-reset')
   async sendPasswordResetEmail(@Param('id') userId: string): Promise<void> {
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.id, userId),
-    });
+    const userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
-    const [previousCode] = await this._db
-      .select()
-      .from(UsersSchema.PasswordResetTable)
-      .where(eq(UsersSchema.PasswordResetTable.id, userId));
+    // If a code was generated within 10 minutes, disallow
+    const previousCode = await this._passwordResetRepository.getByUserId(userId);
     const minimumTime = new Date().getTime() - 10 * 60 * 1000; // 10 min
     if (previousCode !== undefined && previousCode.createdAt.getTime() > minimumTime)
       throw new UnprocessableEntityException('A reset code can only be generated every 10 minutes');
 
-    // If older than 10 minutes, delete previous token
-    if (previousCode)
-      await this._db
-        .delete(UsersSchema.PasswordResetTable)
-        .where(eq(UsersSchema.PasswordResetTable.id, userId));
+    // Delete previous token
+    if (previousCode) await this._passwordResetRepository.delete(previousCode);
 
     // Generate random OTP
     const bytes = new Uint8Array(5);
@@ -89,12 +79,13 @@ export class PasswordController {
     });
 
     // Store the new token
-    await this._db.insert(UsersSchema.PasswordResetTable).values({
+    const newCode: PasswordResetModel = {
       id: uuidV4(),
       userId: userId,
       hashedCode: hashedCode,
       createdAt: new Date(),
-    });
+    };
+    await this._passwordResetRepository.insert(newCode);
     this._logger.log(`Password reset token generated for user: ${userId}`);
     this._logger.debug(`Created password reset token: ${code} for user: ${userId}`);
 
@@ -105,15 +96,10 @@ export class PasswordController {
 
   @Post('/reset')
   async resetPassword(@Param('id') userId: string, @Body() data: ResetPasswordDto): Promise<void> {
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.id, userId),
-    });
+    let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
-    const [code] = await this._db
-      .select()
-      .from(UsersSchema.PasswordResetTable)
-      .where(eq(UsersSchema.PasswordResetTable.userId, userId));
+    const code = await this._passwordResetRepository.getByUserId(userId);
     if (!code) throw new UnprocessableEntityException('Invalid code'); // Saying another thing is TMI
 
     const timeLimit = new Date().getTime() - 24 * 60 * 60 * 1000; // 24 hours
@@ -123,10 +109,8 @@ export class PasswordController {
     if (!(await verify(code.hashedCode, data.resetCode)))
       throw new UnprocessableEntityException('Invalid code');
 
-    // delete code
-    await this._db
-      .delete(UsersSchema.PasswordResetTable)
-      .where(eq(UsersSchema.PasswordResetTable.id, userId));
+    // Delete code
+    await this._passwordResetRepository.delete(code);
 
     // update user
     const passwordHash = await hash(data.newPassword, {
@@ -135,10 +119,8 @@ export class PasswordController {
       outputLen: 32,
       parallelism: 1,
     });
-    await this._db
-      .update(UsersSchema.UserInfoTable)
-      .set({ passwordHash: passwordHash, updatedAt: new Date() })
-      .where(eq(UsersSchema.UserInfoTable.id, userId));
+    userExists = { ...userExists, passwordHash: passwordHash, updatedAt: new Date() };
+    await this._userInfoRepository.update(userExists);
 
     this._logger.log(`User: ${userId}, successfully reset their password`);
   }

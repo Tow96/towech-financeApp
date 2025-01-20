@@ -23,21 +23,21 @@ import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { GetUsersDto } from '../Dto/GetUsers.Dto';
 import { GetUserDto } from '../Dto/GetUser.Dto';
 import { ChangeNameDto } from '../Validation/ChangeName.Dto';
+import { UserInfoModel, UserInfoRepository } from '../../Database/Repositories/UserInfo.Repository';
 
 @Controller('user-new')
 export class UserController {
   private readonly _logger = new Logger(UserController.name);
   constructor(
-    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>
+    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>,
+    private readonly _userInfoRepository: UserInfoRepository
   ) {}
 
   @Post('register')
   // TODO: Admin/Master guard
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.email, createUser.email),
-    });
+    const userExists = await this._userInfoRepository.isEmailRegistered(createUser.email);
     if (userExists)
       throw new UnprocessableEntityException(
         `User with email "${createUser.email}" already registered.`
@@ -51,19 +51,16 @@ export class UserController {
     });
 
     // Create user
-    const [newUser] = await this._db
-      .insert(UsersSchema.UserInfoTable)
-      .values({
-        id: uuidV4(),
-        createdAt: new Date(),
-        updatedAt: new Date(0),
-        name: createUser.name,
-        email: createUser.email,
-        emailVerified: false,
-        passwordHash: hashedPassword,
-      })
-      .returning();
-    this._logger.log(`Inserted new user with email "${newUser.email}" and id: ${newUser.id}.`);
+    const newUser: UserInfoModel = {
+      id: uuidV4(),
+      createdAt: new Date(),
+      updatedAt: new Date(0),
+      name: createUser.name,
+      email: createUser.email,
+      emailVerified: false,
+      passwordHash: hashedPassword,
+    };
+    await this._userInfoRepository.insert(newUser);
 
     // TODO: Send registration email
 
@@ -103,30 +100,20 @@ export class UserController {
   @Delete(':id')
   // TODO: user/admin/master guard
   async deleteUser(@Param('id') id: string): Promise<void> {
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.id, id),
-    });
+    const userExists = await this._userInfoRepository.getById(id);
     if (!userExists) throw new NotFoundException('User not found.');
 
-    // Delete user
-    await this._db.delete(UsersSchema.UserInfoTable).where(eq(UsersSchema.UserInfoTable.id, id));
-    this._logger.log(`Deleted user with id ${id}.`);
+    await this._userInfoRepository.delete(userExists);
   }
 
   @Patch(':id/name')
   // TODO: user guard
   async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
-    const userExists = await this._db.query.UserInfoTable.findFirst({
-      where: eq(UsersSchema.UserInfoTable.id, id),
-    });
+    let userExists = await this._userInfoRepository.getById(id);
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Update user
-    await this._db
-      .update(UsersSchema.UserInfoTable)
-      .set({ name: data.name, updatedAt: new Date() })
-      .where(eq(UsersSchema.UserInfoTable.id, id));
-
-    this._logger.log(`Updated name of user with id ${id}.`);
+    userExists = { ...userExists, name: data.name, updatedAt: new Date() };
+    await this._userInfoRepository.update(userExists);
   }
 }

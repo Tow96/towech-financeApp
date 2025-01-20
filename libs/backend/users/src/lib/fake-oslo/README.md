@@ -1,4 +1,4 @@
-Straight upon copied from @oslojs/encoding (1.1.0)
+Straight up copied from @oslojs/encoding (1.1.0)
 
 Since the webpack for nx currently doesn't support ESM this library had to be straight up copied here.
 
