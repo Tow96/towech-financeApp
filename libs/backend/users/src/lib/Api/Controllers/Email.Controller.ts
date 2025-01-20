@@ -29,11 +29,14 @@ export class EmailController {
     private readonly _emailVerificationRepository: EmailVerificationRepository
   ) {}
 
-  @Patch('')
+  @Patch('/')
   // TODO: User guard
   async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
     let userExists = await this._userInfoRepository.getById(id);
     if (!userExists) throw new NotFoundException('User not found.');
+
+    const emailRegistered = await this._userInfoRepository.isEmailRegistered(data.email);
+    if (emailRegistered) throw new UnprocessableEntityException('Email already registered.');
 
     // Update user
     userExists = { ...userExists, email: data.email, emailVerified: false, updatedAt: new Date() };

@@ -7,7 +7,7 @@ import { UsersSchema } from '../Users.Schema';
 
 export type UserInfoModel = typeof UsersSchema.UserInfoTable.$inferSelect;
 
-const tableName = getTableName(UsersSchema.UserInfoTable);
+const tableName = `users.${getTableName(UsersSchema.UserInfoTable)}`;
 
 @Injectable()
 export class UserInfoRepository {
@@ -24,11 +24,11 @@ export class UserInfoRepository {
   }
 
   async getById(id: string): Promise<UserInfoModel | undefined> {
+    this._logger.verbose(`Fetching if entry exists with id: ${id} in table: ${tableName}.`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.UserInfoTable)
       .where(eq(UsersSchema.UserInfoTable.id, id));
-    this._logger.verbose(`Fetched entry with id: ${id} in table: ${tableName}.`);
     return value;
   }
 
@@ -39,11 +39,13 @@ export class UserInfoRepository {
   }
 
   async isEmailRegistered(email: string): Promise<boolean> {
+    this._logger.verbose(
+      `Fetching if entry exists with email: ${email} exists in table: ${tableName}.`
+    );
     const data = await this._db
       .select()
       .from(UsersSchema.UserInfoTable)
       .where(eq(UsersSchema.UserInfoTable.email, email));
-    this._logger.verbose(`Fetching if user with email: ${email} exists in table: ${tableName})}.`);
 
     return data.length > 0;
   }

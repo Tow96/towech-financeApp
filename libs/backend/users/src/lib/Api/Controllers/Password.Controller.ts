@@ -28,7 +28,7 @@ export class PasswordController {
     private readonly _passwordResetRepository: PasswordResetRepository
   ) {}
 
-  @Patch('')
+  @Patch('/')
   // TODO: User guard
   async changePassword(@Param('id') id: string, @Body() data: ChangePasswordDto): Promise<void> {
     let userExists = await this._userInfoRepository.getById(id);

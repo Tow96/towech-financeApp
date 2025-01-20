@@ -6,7 +6,7 @@ import { USER_SCHEMA_CONNECTION } from '../Users.Provider';
 import { UsersSchema } from '../Users.Schema';
 
 export type PasswordResetModel = typeof UsersSchema.PasswordResetTable.$inferSelect;
-const tableName = getTableName(UsersSchema.PasswordResetTable);
+const tableName = `users.${getTableName(UsersSchema.PasswordResetTable)}`;
 
 @Injectable()
 export class PasswordResetRepository {
@@ -18,16 +18,16 @@ export class PasswordResetRepository {
   async delete(model: PasswordResetModel): Promise<void> {
     await this._db
       .delete(UsersSchema.PasswordResetTable)
-      .where(eq(UsersSchema.PasswordResetTable, model.id));
+      .where(eq(UsersSchema.PasswordResetTable.id, model.id));
     this._logger.verbose(`Deleted entry with id: ${model.id} in table: ${tableName}.`);
   }
 
   async getByUserId(userId: string): Promise<PasswordResetModel | undefined> {
+    this._logger.verbose(`Fetching if entry exists with userId: ${userId} in table: ${tableName}.`);
     const [value] = await this._db
       .select()
       .from(UsersSchema.PasswordResetTable)
       .where(eq(UsersSchema.PasswordResetTable.userId, userId));
-    this._logger.verbose(`Fetched entry with id: ${value.id} in table: ${tableName}.`);
     return value;
   }
 

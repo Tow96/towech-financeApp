@@ -33,7 +33,7 @@ export class UserController {
     private readonly _userInfoRepository: UserInfoRepository
   ) {}
 
-  @Post('register')
+  @Post('/register')
   // TODO: Admin/Master guard
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
@@ -68,7 +68,7 @@ export class UserController {
     return newUser.id;
   }
 
-  @Get('')
+  @Get('/')
   // TODO: admin guard
   async getAllUsers(): Promise<GetUsersDto[]> {
     return this._db
@@ -80,7 +80,7 @@ export class UserController {
       .from(UsersSchema.UserInfoTable);
   }
 
-  @Get(':id')
+  @Get('/:id')
   // TODO: user guard
   async getUser(@Param('id') id: string): Promise<GetUserDto> {
     const userQuery = await this._db
@@ -97,7 +97,7 @@ export class UserController {
     return userQuery[0];
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   // TODO: user/admin/master guard
   async deleteUser(@Param('id') id: string): Promise<void> {
     const userExists = await this._userInfoRepository.getById(id);
@@ -106,7 +106,7 @@ export class UserController {
     await this._userInfoRepository.delete(userExists);
   }
 
-  @Patch(':id/name')
+  @Patch('/:id/name')
   // TODO: user guard
   async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
     let userExists = await this._userInfoRepository.getById(id);

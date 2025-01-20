@@ -6,7 +6,7 @@ import { USER_SCHEMA_CONNECTION } from '../Users.Provider';
 import { UsersSchema } from '../Users.Schema';
 
 export type EmailVerificationModel = typeof UsersSchema.EmailVerificationTable.$inferSelect;
-const tableName = getTableName(UsersSchema.EmailVerificationTable);
+const tableName = `users.${getTableName(UsersSchema.EmailVerificationTable)}`;
 
 @Injectable()
 export class EmailVerificationRepository {
@@ -23,11 +23,12 @@ export class EmailVerificationRepository {
   }
 
   async getByUserId(userId: string): Promise<EmailVerificationModel | undefined> {
+    this._logger.verbose(`Fetching if entry exists with userId: ${userId} in table: ${tableName}.`);
+
     const [value] = await this._db
       .select()
       .from(UsersSchema.EmailVerificationTable)
       .where(eq(UsersSchema.EmailVerificationTable.userId, userId));
-    this._logger.verbose(`Fetched entry with id: ${value.id} in table: ${tableName}.`);
     return value;
   }
 
