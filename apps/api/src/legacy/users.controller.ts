@@ -278,7 +278,7 @@ export class UserController {
       const channel = await Queue.setUpChannelAndExchange(connection);
 
       // extracts the payload, expiration is verified later
-      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
+      const payload: any = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
         ignoreExpiration: true,
       });
 
@@ -331,7 +331,7 @@ export class UserController {
       const channel = await Queue.setUpChannelAndExchange(connection);
 
       // extracts the payload, expiration is verified later
-      const payload = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
+      const payload: any = jwt.verify(token, process.env.PASSWORD_TOKEN_KEY || '', {
         ignoreExpiration: true,
       });
 

@@ -1,3 +1,4 @@
+export { encodeHexLowerCase, encodeHexUpperCase, decodeHex } from './hex';
 export {
   encodeBase32,
   encodeBase32NoPadding,

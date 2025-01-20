@@ -37,7 +37,7 @@ export class UserController {
   // TODO: Admin/Master guard
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
-    const userExists = await this._userInfoRepository.isEmailRegistered(createUser.email);
+    const userExists = await this._userInfoRepository.getByEmail(createUser.email);
     if (userExists)
       throw new UnprocessableEntityException(
         `User with email "${createUser.email}" already registered.`

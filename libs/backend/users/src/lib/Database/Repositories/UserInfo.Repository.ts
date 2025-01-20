@@ -23,6 +23,16 @@ export class UserInfoRepository {
     this._logger.verbose(`Deleted entry with id: ${model.id} in table: ${tableName}}.`);
   }
 
+  async getByEmail(email: string): Promise<UserInfoModel | undefined> {
+    this._logger.verbose(`Fetching if entry exists with email: ${email} in table: ${tableName}.`);
+    const [value] = await this._db
+      .select()
+      .from(UsersSchema.UserInfoTable)
+      .where(eq(UsersSchema.UserInfoTable.email, email));
+
+    return value;
+  }
+
   async getById(id: string): Promise<UserInfoModel | undefined> {
     this._logger.verbose(`Fetching if entry exists with id: ${id} in table: ${tableName}.`);
     const [value] = await this._db
@@ -36,18 +46,6 @@ export class UserInfoRepository {
     await this._db.insert(UsersSchema.UserInfoTable).values({ ...model });
 
     this._logger.verbose(`Inserted entry with id: ${model.id} in table: ${tableName}.`);
-  }
-
-  async isEmailRegistered(email: string): Promise<boolean> {
-    this._logger.verbose(
-      `Fetching if entry exists with email: ${email} exists in table: ${tableName}.`
-    );
-    const data = await this._db
-      .select()
-      .from(UsersSchema.UserInfoTable)
-      .where(eq(UsersSchema.UserInfoTable.email, email));
-
-    return data.length > 0;
   }
 
   async update(model: UserInfoModel): Promise<void> {

@@ -37,8 +37,8 @@ export const SessionTable = schema.table('sessions', {
   userId: text('user_id')
     .notNull()
     .references(() => UserInfoTable.id, { onDelete: 'cascade' }),
-  expiresAt: integer().notNull(),
-  type: text('type'),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  permanentSession: boolean('permanent_session').notNull(),
 });
 
 // Schema used in code

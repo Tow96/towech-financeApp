@@ -11,6 +11,7 @@ import { UserProvider, USER_SCHEMA_CONNECTION } from './Database/Users.Provider'
 import { EmailVerificationRepository } from './Database/Repositories/EmailVerification.Repository';
 import { UserInfoRepository } from './Database/Repositories/UserInfo.Repository';
 import { PasswordResetRepository } from './Database/Repositories/PasswordReset.Repository';
+import { SessionsRepository } from './Database/Repositories/Sessions.Repository';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
@@ -19,6 +20,7 @@ import { PasswordResetRepository } from './Database/Repositories/PasswordReset.R
     EmailVerificationRepository,
     UserInfoRepository,
     PasswordResetRepository,
+    SessionsRepository,
   ],
   exports: [USER_SCHEMA_CONNECTION],
 })

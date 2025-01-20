@@ -35,7 +35,7 @@ export class EmailController {
     let userExists = await this._userInfoRepository.getById(id);
     if (!userExists) throw new NotFoundException('User not found.');
 
-    const emailRegistered = await this._userInfoRepository.isEmailRegistered(data.email);
+    const emailRegistered = await this._userInfoRepository.getByEmail(data.email);
     if (emailRegistered) throw new UnprocessableEntityException('Email already registered.');
 
     // Update user
