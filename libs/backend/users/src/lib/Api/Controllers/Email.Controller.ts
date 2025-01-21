@@ -32,4 +32,3 @@ export class EmailController {
     return this._emailVerificationService.verifyEmail(userId, data.token);
   }
 }
-// 116

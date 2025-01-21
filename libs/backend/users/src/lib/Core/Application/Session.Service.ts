@@ -1,17 +1,7 @@
-import { v4 as uuidV4 } from 'uuid';
-import { hash, verifySync } from '@node-rs/argon2';
-import {
-  encodeBase32LowerCaseNoPadding,
-  encodeBase32UpperCaseNoPadding,
-  encodeHexLowerCase,
-} from '../../fake-oslo/encoding';
+import { verifySync } from '@node-rs/argon2';
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '../../fake-oslo/encoding';
 
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { UserInfoRepository } from '../../Database/Repositories/UserInfo.Repository';
 import { SessionModel, SessionsRepository } from '../../Database/Repositories/Sessions.Repository';

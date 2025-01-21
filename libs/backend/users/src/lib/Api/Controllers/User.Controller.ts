@@ -9,25 +9,24 @@ import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { ChangeNameDto } from '../Validation/ChangeName.Dto';
 import { GetUserDto, GetUsersDto, UserInfoService } from '../../Core/Application/UserInfo.Service';
+import { UserService } from '../../Core/Application/User.Service';
 
 @Controller('user-new')
 export class UserController {
-  constructor(private readonly _userInfoService: UserInfoService) {}
+  constructor(
+    private readonly _userInfoService: UserInfoService,
+    private readonly _userService: UserService
+  ) {}
 
   @Post('/register')
   @UseGuards(AdminCreatorGuard)
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
-    const newUserId = await this._userInfoService.registerUser(
+    return this._userService.registerUser(
       createUser.name,
       createUser.email,
       createUser.password,
       createUser.role
     );
-
-    // TODO: Send registration email
-
-    // Return
-    return newUserId;
   }
 
   @Get('/')
@@ -54,4 +53,3 @@ export class UserController {
     return this._userInfoService.changeName(userId, data.name);
   }
 }
-// 126

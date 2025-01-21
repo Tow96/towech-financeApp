@@ -40,4 +40,3 @@ export class PasswordController {
     return this._passwordService.resetPassword(userId, data.resetCode, data.newPassword);
   }
 }
-// 136

@@ -22,6 +22,7 @@ import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
 import { UserInfoService } from './Core/Application/UserInfo.Service';
 import { EmailVerificationService } from './Core/Application/EmailVerification.Service';
 import { PasswordService } from './Core/Application/Password.Service';
+import { UserService } from './Core/Application/User.Service';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
@@ -36,6 +37,7 @@ import { PasswordService } from './Core/Application/Password.Service';
     RequestingUserGuard,
 
     // Services
+    UserService,
     UserInfoService,
     EmailVerificationService,
     PasswordService,

@@ -70,4 +70,3 @@ export class SessionController {
     return this._sessionService.logoutAll(userId);
   }
 }
-// 156
