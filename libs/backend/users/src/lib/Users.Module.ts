@@ -19,6 +19,9 @@ import { AdminRequestingUserGuard } from './Api/Guards/AdminUser.Guard';
 import { AdminCreatorGuard } from './Api/Guards/AdminCreator.Guard';
 import { AdminGuard } from './Api/Guards/Admin.Guard';
 import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
+import { UserInfoService } from './Core/Application/UserInfo.Service';
+import { EmailVerificationService } from './Core/Application/EmailVerification.Service';
+import { PasswordService } from './Core/Application/Password.Service';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
@@ -31,6 +34,11 @@ import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
     AdminCreatorGuard,
     AdminRequestingUserGuard,
     RequestingUserGuard,
+
+    // Services
+    UserInfoService,
+    EmailVerificationService,
+    PasswordService,
 
     // Repos
     UserProvider,

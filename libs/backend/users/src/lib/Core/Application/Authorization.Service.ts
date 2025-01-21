@@ -25,7 +25,7 @@ export class AuthorizationService {
   private readonly _creatorKey?: string;
   private readonly _logger = new Logger(AuthorizationService.name);
 
-  constructor(private readonly _configService: ConfigService) {
+  constructor(readonly _configService: ConfigService) {
     this._jwtSecret = _configService.getOrThrow<string>('JWT_SECRET');
     this._creatorKey = _configService.get('CREATOR_KEY');
     console.log(this._jwtSecret);
