@@ -1,30 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-import { LoggerModule } from 'nestjs-pino';
-
-import {
-  CORRELATION_ID_HEADER,
-  CorrelationIdMiddleware,
-} from './Middleware/CorrelationId.Middleware';
-import { PrettyTransport } from './Transports/Pretty.Transport';
+import { CorrelationIdMiddleware } from './Middleware/CorrelationId.Middleware';
 import { HttpLogMiddleware } from './Middleware/Http.Middleware';
+import { PinoModule } from './Pino.Module';
 
 @Module({
-  imports: [
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: process.env['NODE_ENV'] === 'development' ? PrettyTransport : undefined,
-        level: process.env['NODE_ENV'] === 'development' ? 'trace' : 'info',
-        messageKey: 'message',
-        customProps: (req) => ({ correlationId: req.headers[CORRELATION_ID_HEADER] }),
-        autoLogging: false,
-        serializers: {
-          req: () => undefined,
-          res: () => undefined,
-        },
-      },
-    }),
-  ],
+  imports: [PinoModule],
 })
 export class LoggingModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
