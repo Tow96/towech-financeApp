@@ -4,7 +4,6 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { USER_SCHEMA_CONNECTION } from '../Users.Provider';
 import { UsersSchema } from '../Users.Schema';
-import { SessionEntity } from '../../Core/Domain/Session.Entity';
 
 export type SessionModel = typeof UsersSchema.SessionTable.$inferSelect;
 const tableName = `users.${getTableName(UsersSchema.SessionTable)}`;
@@ -39,15 +38,10 @@ export class SessionsRepository {
     return value;
   }
 
-  async insert(entity: SessionEntity): Promise<void> {
-    await this._db.insert(UsersSchema.SessionTable).values({
-      id: entity.Id,
-      expiresAt: entity.ExpiresAt,
-      permanentSession: entity.PermanentSession,
-      userId: entity.UserId,
-    });
+  async insert(model: SessionModel): Promise<void> {
+    await this._db.insert(UsersSchema.SessionTable).values({ ...model });
 
-    this._logger.debug(`Inserted entry with id: ${entity.Id} in table: ${tableName}`);
+    this._logger.debug(`Inserted entry with id: ${model.id} in table: ${tableName}`);
   }
 
   async update(model: SessionModel): Promise<void> {

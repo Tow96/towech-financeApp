@@ -20,8 +20,9 @@ export const PinoModule: DynamicModule = LoggerModule.forRootAsync({
         messageKey: 'message',
         serializers: DefaultSerializer,
 
-        customProps: (req) => ({
+        customProps: (req, res) => ({
           correlationId: req.headers[CORRELATION_ID_HEADER],
+          statusCode: res.statusCode,
         }),
       },
     };

@@ -1,10 +1,13 @@
 import { verifySync } from '@node-rs/argon2';
+import { eq } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Response, Request } from 'express';
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '../../fake-oslo/encoding';
 
 import {
   Body,
   Controller,
+  Inject,
   Logger,
   NotFoundException,
   Param,
@@ -14,25 +17,25 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
+import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { LoginDto } from '../Validation/Login.Dto';
 import { UserInfoRepository } from '../../Database/Repositories/UserInfo.Repository';
+import { UsersSchema } from '../../Database/Users.Schema';
 import { sha256 } from '../../fake-oslo/crypto/sha2';
-import { SessionsRepository } from '../../Database/Repositories/Sessions.Repository';
-import { SessionEntity } from '../../Core/Domain/Session.Entity';
+import { SessionModel, SessionsRepository } from '../../Database/Repositories/Sessions.Repository';
 
 // TODO: Expired session cleanup-job
-// TODO: Add CSRF
 const SESSION_COOKIE = 'jid';
 
 @Controller('new')
 export class SessionController {
   private readonly _logger = new Logger(SessionController.name);
   constructor(
+    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>,
     private readonly _userInfoRepository: UserInfoRepository,
     private readonly _sessionRepository: SessionsRepository
   ) {}
 
-  // noinspection SpellCheckingInspection
   @Post('/login')
   async login(
     @Body() data: LoginDto,
@@ -47,18 +50,25 @@ export class SessionController {
     if (!verifySync(userExists.passwordHash, data.password))
       throw new UnauthorizedException('Invalid credentials.');
 
-    // Generate session token
+    // Generate session id
     const tokenBytes = new Uint8Array(20);
     crypto.getRandomValues(tokenBytes);
     const sessionToken = encodeBase32LowerCaseNoPadding(tokenBytes);
+    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(sessionToken)));
+
+    // Set expiration
+    const expiration = data.keepSession
+      ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30d if session is kept
+      : new Date(Date.now() + 30 * 60 * 1000); // 30m if session is not kept
 
     // Create session
     // TODO: limit the amount of sessions per user
-    const newSession = SessionEntity.create({
-      token: sessionToken,
+    const newSession: SessionModel = {
+      id: sessionId,
       userId: userExists.id,
-      isPermanent: data.keepSession,
-    });
+      expiresAt: expiration,
+      permanentSession: data.keepSession,
+    };
     await this._sessionRepository.insert(newSession);
 
     // Generate cookie
@@ -67,7 +77,7 @@ export class SessionController {
       path: '/',
       secure: false, // TODO: set up SSL
       sameSite: 'none', // TODO: set up same-site
-      expires: newSession.ExpiresAt,
+      expires: expiration,
     });
 
     // TODO: Generate auth_key
