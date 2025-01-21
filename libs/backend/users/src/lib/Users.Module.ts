@@ -23,6 +23,7 @@ import { UserInfoService } from './Core/Application/UserInfo.Service';
 import { EmailVerificationService } from './Core/Application/EmailVerification.Service';
 import { PasswordService } from './Core/Application/Password.Service';
 import { UserService } from './Core/Application/User.Service';
+import { SessionService } from './Core/Application/Session.Service';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
@@ -41,6 +42,7 @@ import { UserService } from './Core/Application/User.Service';
     UserInfoService,
     EmailVerificationService,
     PasswordService,
+    SessionService,
 
     // Repos
     UserProvider,

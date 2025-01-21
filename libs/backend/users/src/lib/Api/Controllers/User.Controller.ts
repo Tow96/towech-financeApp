@@ -21,7 +21,7 @@ export class UserController {
   @Post('/register')
   @UseGuards(AdminCreatorGuard)
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
-    return this._userService.registerUser(
+    return this._userService.register(
       createUser.name,
       createUser.email,
       createUser.password,
@@ -32,19 +32,19 @@ export class UserController {
   @Get('/')
   @UseGuards(AdminGuard)
   async getAllUsers(): Promise<GetUsersDto[]> {
-    return this._userInfoService.getAllUsers();
+    return this._userService.getAll();
   }
 
   @Get('/:userId')
   @UseGuards(RequestingUserGuard)
   async getUser(@Param('userId') userId: string): Promise<GetUserDto> {
-    return this._userInfoService.getUser(userId);
+    return this._userService.get(userId);
   }
 
   @Delete('/:userId')
   @UseGuards(AdminRequestingUserGuard)
   async deleteUser(@Param('userId') userId: string): Promise<void> {
-    return this._userInfoService.deleteUser(userId);
+    return this._userService.delete(userId);
   }
 
   @Patch('/:userId/name')
