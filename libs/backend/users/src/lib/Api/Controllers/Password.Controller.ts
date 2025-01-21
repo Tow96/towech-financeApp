@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   UnprocessableEntityException,
+  UseGuards,
 } from '@nestjs/common';
 
 import { ChangePasswordDto } from '../Validation/ChangePassword.Dto';
@@ -19,8 +20,9 @@ import {
   PasswordResetModel,
   PasswordResetRepository,
 } from '../../Database/Repositories/PasswordReset.Repository';
+import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
 
-@Controller('user-new/:id/password')
+@Controller('user-new/:userId/password')
 export class PasswordController {
   private readonly _logger = new Logger(PasswordController.name);
   constructor(
@@ -29,9 +31,12 @@ export class PasswordController {
   ) {}
 
   @Patch('/')
-  // TODO: User guard
-  async changePassword(@Param('id') id: string, @Body() data: ChangePasswordDto): Promise<void> {
-    let userExists = await this._userInfoRepository.getById(id);
+  @UseGuards(RequestingUserGuard)
+  async changePassword(
+    @Param('userId') userId: string,
+    @Body() data: ChangePasswordDto
+  ): Promise<void> {
+    let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Validate old password
@@ -50,11 +55,11 @@ export class PasswordController {
     userExists = { ...userExists, passwordHash: passwordHash, updatedAt: new Date() };
     await this._userInfoRepository.update(userExists);
 
-    this._logger.log(`Updated password for user: ${id}`);
+    this._logger.log(`Updated password for user: ${userId}`);
   }
 
   @Post('/send-reset')
-  async sendPasswordResetEmail(@Param('id') userId: string): Promise<void> {
+  async sendPasswordResetEmail(@Param('userId') userId: string): Promise<void> {
     const userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
@@ -95,7 +100,10 @@ export class PasswordController {
   }
 
   @Post('/reset')
-  async resetPassword(@Param('id') userId: string, @Body() data: ResetPasswordDto): Promise<void> {
+  async resetPassword(
+    @Param('userId') userId: string,
+    @Body() data: ResetPasswordDto
+  ): Promise<void> {
     let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 

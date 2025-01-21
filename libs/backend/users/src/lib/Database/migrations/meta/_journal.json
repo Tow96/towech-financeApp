@@ -15,6 +15,13 @@
       "when": 1737398239548,
       "tag": "0001_motionless_roughhouse",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737473924604,
+      "tag": "0002_futuristic_sentinel",
+      "breakpoints": true
     }
   ]
 }

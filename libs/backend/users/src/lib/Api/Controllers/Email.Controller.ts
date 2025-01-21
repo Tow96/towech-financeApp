@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   UnprocessableEntityException,
+  UseGuards,
 } from '@nestjs/common';
 
 import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
@@ -20,8 +21,10 @@ import {
   EmailVerificationModel,
   EmailVerificationRepository,
 } from '../../Database/Repositories/EmailVerification.Repository';
+import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
+import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
-@Controller('user-new/:id/email')
+@Controller('user-new/:userId/email')
 export class EmailController {
   private readonly _logger = new Logger(EmailController.name);
   constructor(
@@ -30,9 +33,9 @@ export class EmailController {
   ) {}
 
   @Patch('/')
-  // TODO: User guard
-  async changeEmail(@Param('id') id: string, @Body() data: ChangeEmailDto): Promise<void> {
-    let userExists = await this._userInfoRepository.getById(id);
+  @UseGuards(RequestingUserGuard)
+  async changeEmail(@Param('userId') userId: string, @Body() data: ChangeEmailDto): Promise<void> {
+    let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
     const emailRegistered = await this._userInfoRepository.getByEmail(data.email);
@@ -44,8 +47,8 @@ export class EmailController {
   }
 
   @Post('/send-verification')
-  // TODO: User/admin guard
-  async sendVerificationEmail(@Param('id') userId: string): Promise<void> {
+  @UseGuards(AdminRequestingUserGuard)
+  async sendVerificationEmail(@Param('userId') userId: string): Promise<void> {
     const userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
@@ -86,7 +89,7 @@ export class EmailController {
   }
 
   @Post('/verify')
-  async verifyEmail(@Param('id') userId: string, @Body() data: VerifyEmailDto): Promise<void> {
+  async verifyEmail(@Param('userId') userId: string, @Body() data: VerifyEmailDto): Promise<void> {
     let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 

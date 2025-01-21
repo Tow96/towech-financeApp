@@ -1,4 +1,4 @@
-import { boolean, integer, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 
 // Used to declare the tables
 export const schema = pgSchema('users');
@@ -12,6 +12,7 @@ export const UserInfoTable = schema.table('info', {
   email: text('email').unique().notNull(),
   emailVerified: boolean('email_verified').notNull(),
   passwordHash: text('password_hash').notNull(),
+  role: text('role').notNull().default('user'),
 });
 
 export const EmailVerificationTable = schema.table('email_verification', {

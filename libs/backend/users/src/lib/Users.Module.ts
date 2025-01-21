@@ -6,16 +6,33 @@ import { EmailController } from './Api/Controllers/Email.Controller';
 import { PasswordController } from './Api/Controllers/Password.Controller';
 import { SessionController } from './Api/Controllers/Session.Controller';
 
+// Services
+import { AuthorizationService } from './Core/Application/Authorization.Service';
+
 // Repositories
 import { UserProvider, USER_SCHEMA_CONNECTION } from './Database/Users.Provider';
 import { EmailVerificationRepository } from './Database/Repositories/EmailVerification.Repository';
 import { UserInfoRepository } from './Database/Repositories/UserInfo.Repository';
 import { PasswordResetRepository } from './Database/Repositories/PasswordReset.Repository';
 import { SessionsRepository } from './Database/Repositories/Sessions.Repository';
+import { AdminRequestingUserGuard } from './Api/Guards/AdminUser.Guard';
+import { AdminCreatorGuard } from './Api/Guards/AdminCreator.Guard';
+import { AdminGuard } from './Api/Guards/Admin.Guard';
+import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
   providers: [
+    // Services
+    AuthorizationService,
+
+    // Guards
+    AdminGuard,
+    AdminCreatorGuard,
+    AdminRequestingUserGuard,
+    RequestingUserGuard,
+
+    // Repos
     UserProvider,
     EmailVerificationRepository,
     UserInfoRepository,

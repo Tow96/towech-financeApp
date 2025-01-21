@@ -11,11 +11,17 @@ import {
   NotFoundException,
   Param,
   Post,
-  Logger,
   UnprocessableEntityException,
   Patch,
   Get,
+  UseGuards,
 } from '@nestjs/common';
+
+// Guards
+import { AdminCreatorGuard } from '../Guards/AdminCreator.Guard';
+import { AdminGuard } from '../Guards/Admin.Guard';
+import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
+import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { UsersSchema } from '../../Database/Users.Schema';
@@ -27,14 +33,13 @@ import { UserInfoModel, UserInfoRepository } from '../../Database/Repositories/U
 
 @Controller('user-new')
 export class UserController {
-  private readonly _logger = new Logger(UserController.name);
   constructor(
     @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>,
     private readonly _userInfoRepository: UserInfoRepository
   ) {}
 
   @Post('/register')
-  // TODO: Admin/Master guard
+  @UseGuards(AdminCreatorGuard)
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
     // Check if user exists
     const userExists = await this._userInfoRepository.getByEmail(createUser.email);
@@ -58,6 +63,7 @@ export class UserController {
       name: createUser.name,
       email: createUser.email,
       emailVerified: false,
+      role: createUser.role === 'admin' ? 'admin' : 'user',
       passwordHash: hashedPassword,
     };
     await this._userInfoRepository.insert(newUser);
@@ -69,7 +75,7 @@ export class UserController {
   }
 
   @Get('/')
-  // TODO: admin guard
+  @UseGuards(AdminGuard)
   async getAllUsers(): Promise<GetUsersDto[]> {
     return this._db
       .select({
@@ -80,9 +86,9 @@ export class UserController {
       .from(UsersSchema.UserInfoTable);
   }
 
-  @Get('/:id')
-  // TODO: user guard
-  async getUser(@Param('id') id: string): Promise<GetUserDto> {
+  @Get('/:userId')
+  @UseGuards(RequestingUserGuard)
+  async getUser(@Param('userId') userId: string): Promise<GetUserDto> {
     const userQuery = await this._db
       .select({
         id: UsersSchema.UserInfoTable.id,
@@ -90,26 +96,26 @@ export class UserController {
         name: UsersSchema.UserInfoTable.name,
       })
       .from(UsersSchema.UserInfoTable)
-      .where(eq(UsersSchema.UserInfoTable.id, id));
+      .where(eq(UsersSchema.UserInfoTable.id, userId));
 
     if (userQuery.length == 0) throw new NotFoundException('User not found.');
 
     return userQuery[0];
   }
 
-  @Delete('/:id')
-  // TODO: user/admin/master guard
-  async deleteUser(@Param('id') id: string): Promise<void> {
-    const userExists = await this._userInfoRepository.getById(id);
+  @Delete('/:userId')
+  @UseGuards(AdminRequestingUserGuard)
+  async deleteUser(@Param('userId') userId: string): Promise<void> {
+    const userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
     await this._userInfoRepository.delete(userExists);
   }
 
-  @Patch('/:id/name')
-  // TODO: user guard
-  async changeName(@Param('id') id: string, @Body() data: ChangeNameDto): Promise<void> {
-    let userExists = await this._userInfoRepository.getById(id);
+  @Patch('/:userId/name')
+  @UseGuards(RequestingUserGuard)
+  async changeName(@Param('userId') userId: string, @Body() data: ChangeNameDto): Promise<void> {
+    let userExists = await this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found.');
 
     // Update user

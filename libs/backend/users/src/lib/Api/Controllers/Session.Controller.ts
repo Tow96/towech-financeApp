@@ -1,13 +1,10 @@
 import { verifySync } from '@node-rs/argon2';
-import { eq } from 'drizzle-orm';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Response, Request } from 'express';
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '../../fake-oslo/encoding';
 
 import {
   Body,
   Controller,
-  Inject,
   Logger,
   NotFoundException,
   Param,
@@ -15,128 +12,145 @@ import {
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 
-import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { LoginDto } from '../Validation/Login.Dto';
 import { UserInfoRepository } from '../../Database/Repositories/UserInfo.Repository';
-import { UsersSchema } from '../../Database/Users.Schema';
 import { sha256 } from '../../fake-oslo/crypto/sha2';
 import { SessionModel, SessionsRepository } from '../../Database/Repositories/Sessions.Repository';
+import { AuthDto, AuthorizationService } from '../../Core/Application/Authorization.Service';
+import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
-// TODO: Expired session cleanup-job
 const SESSION_COOKIE = 'jid';
+const TEMPORARY_SESSION_DURATION = 1000 * 60 * 30; // 30 min
+const PERMANENT_SESSION_DURATION = 1000 * 60 * 60 * 24 * 30; // 30 days
+const generateSessionExpiration = (isPermanent: boolean) =>
+  new Date(Date.now() + (isPermanent ? PERMANENT_SESSION_DURATION : TEMPORARY_SESSION_DURATION));
+
+const encodeToken = (token: string): string =>
+  encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
 @Controller('new')
 export class SessionController {
   private readonly _logger = new Logger(SessionController.name);
   constructor(
-    @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>,
+    private readonly _authorizationService: AuthorizationService,
     private readonly _userInfoRepository: UserInfoRepository,
     private readonly _sessionRepository: SessionsRepository
   ) {}
 
-  @Post('/login')
-  async login(
-    @Body() data: LoginDto,
-    @Res({ passthrough: true }) response: Response
-  ): Promise<void> {
-    // TODO: Add throttling
-
-    const userExists = await this._userInfoRepository.getByEmail(data.email);
-    if (!userExists) throw new UnauthorizedException('Invalid credentials.');
-
-    // Validate password
-    if (!verifySync(userExists.passwordHash, data.password))
-      throw new UnauthorizedException('Invalid credentials.');
-
-    // Generate session id
-    const tokenBytes = new Uint8Array(20);
-    crypto.getRandomValues(tokenBytes);
-    const sessionToken = encodeBase32LowerCaseNoPadding(tokenBytes);
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(sessionToken)));
-
-    // Set expiration
-    const expiration = data.keepSession
-      ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30d if session is kept
-      : new Date(Date.now() + 30 * 60 * 1000); // 30m if session is not kept
-
-    // Create session
-    // TODO: limit the amount of sessions per user
-    const newSession: SessionModel = {
-      id: sessionId,
-      userId: userExists.id,
-      expiresAt: expiration,
-      permanentSession: data.keepSession,
-    };
-    await this._sessionRepository.insert(newSession);
-
-    // Generate cookie
-    response.cookie(SESSION_COOKIE, sessionToken, {
+  private setSessionCookie(res: Response, sessionId: string, expiration: Date) {
+    res.cookie(SESSION_COOKIE, sessionId, {
       httpOnly: true,
       path: '/',
       secure: false, // TODO: set up SSL
       sameSite: 'none', // TODO: set up same-site
       expires: expiration,
     });
+  }
 
-    // TODO: Generate auth_key
-    return;
+  @Post('/login')
+  async login(
+    @Body() data: LoginDto,
+    @Res({ passthrough: true }) response: Response
+  ): Promise<AuthDto> {
+    // TODO: Add throttling
+
+    this._logger.log('Validating user');
+    const userExists = await this._userInfoRepository.getByEmail(data.email);
+    if (!userExists) throw new UnauthorizedException('Invalid credentials.');
+
+    this._logger.log('Validating password');
+    if (!verifySync(userExists.passwordHash, data.password))
+      throw new UnauthorizedException('Invalid credentials.');
+
+    this._logger.log('Creating session');
+    const tokenBytes = new Uint8Array(20);
+    crypto.getRandomValues(tokenBytes);
+    const sessionToken = encodeBase32LowerCaseNoPadding(tokenBytes);
+    const newSession: SessionModel = {
+      id: encodeToken(sessionToken),
+      userId: userExists.id,
+      expiresAt: generateSessionExpiration(data.keepSession),
+      permanentSession: data.keepSession,
+    };
+    this._logger.verbose(`SESSION_TOKEN: ${sessionToken}`);
+
+    this._logger.log('Storing session');
+    await this._sessionRepository.insert(newSession);
+
+    this._logger.log('Creating session cookie');
+    this.setSessionCookie(response, sessionToken, newSession.expiresAt);
+
+    this._logger.log('Generating auth-token');
+    return this._authorizationService.generateAuthToken(userExists);
   }
 
   @Post('/refresh')
-  // TODO: Cookie guard
-  async refreshToken(@Req() req: Request): Promise<void> {
-    const sessionId = encodeHexLowerCase(
-      sha256(new TextEncoder().encode(req.cookies[SESSION_COOKIE]))
-    );
-
+  async refreshToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<AuthDto> {
+    this._logger.log('Validating session');
+    const sessionToken = req.cookies[SESSION_COOKIE];
+    const sessionId = encodeToken(req.cookies[SESSION_COOKIE]);
     let session = await this._sessionRepository.getById(sessionId);
     if (!session) throw new UnauthorizedException('Invalid credentials');
 
+    this._logger.log('Validating user');
+    const userExists = await this._userInfoRepository.getById(session.userId);
+    if (!userExists) throw new UnauthorizedException('Invalid credentials.');
+
     // Delete session if expired
     if (Date.now() >= session.expiresAt.getTime()) {
+      this._logger.log('Expired session, deleting');
       await this._sessionRepository.delete(session);
+      this.setSessionCookie(res, '', new Date(0));
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const sessionExpiration = session.permanentSession
-      ? 30 * 24 * 60 * 60 * 1000 // 30d if permanent
-      : 30 * 60 * 1000; // 30m if temporary
-
-    // Refresh session
-    if (Date.now() >= session.expiresAt.getTime() - sessionExpiration / 2) {
-      session = { ...session, expiresAt: new Date(Date.now() + sessionExpiration) };
+    // Refresh session if its expiration is less than half than the duration
+    const tresholdTime =
+      session.expiresAt.getTime() -
+      (session.permanentSession ? PERMANENT_SESSION_DURATION : TEMPORARY_SESSION_DURATION) / 2;
+    if (Date.now() > tresholdTime) {
+      this._logger.log('Refreshing session');
+      session = { ...session, expiresAt: generateSessionExpiration(session.permanentSession) };
       await this._sessionRepository.update(session);
+      this.setSessionCookie(res, sessionToken, session.expiresAt);
     }
 
-    // TODO: Generate auth_key
-
-    return;
+    this._logger.log('Generating auth-token');
+    return this._authorizationService.generateAuthToken(userExists);
   }
 
   @Post('/logout')
-  // TODO: Cookie guard
-  async logout(@Req() req: Request): Promise<void> {
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<void> {
     // Invalidate session
     const sessionId = encodeHexLowerCase(
       sha256(new TextEncoder().encode(req.cookies[SESSION_COOKIE]))
     );
+    this._logger.log('Removing session cookie');
+    this.setSessionCookie(res, '', new Date(0));
 
+    this._logger.log('Validating session');
     const session = await this._sessionRepository.getById(sessionId);
     if (!session) throw new UnauthorizedException('Invalid credentials');
 
-    // Delete session
+    this._logger.log('Deleting session');
     await this._sessionRepository.delete(session);
   }
 
-  @Post('/logout-all/:id')
-  // TODO: user/admin guard
-  async logoutAllSessions(@Param('id') userId: string): Promise<void> {
-    // Invalidate all sessions
+  @Post('/logout-all/:userId')
+  @UseGuards(AdminRequestingUserGuard)
+  async logoutAllSessions(@Param('userId') userId: string): Promise<void> {
+    this._logger.log('Retrieving user');
     const userExists = this._userInfoRepository.getById(userId);
     if (!userExists) throw new NotFoundException('User not found');
 
+    this._logger.log('Deleting sessions');
     await this._sessionRepository.deleteAll(userId);
   }
 }
+// 182
