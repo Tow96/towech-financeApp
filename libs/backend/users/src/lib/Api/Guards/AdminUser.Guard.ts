@@ -14,6 +14,6 @@ export class AdminRequestingUserGuard implements CanActivate {
     const token = header.split('Bearer ')[1];
     const userId = params.userId;
 
-    return this._authorizationService.isAdminOrRequestingUser(token, userId) === AuthResults.Pass;
+    return this._authorizationService.isAdminOrRequestingUser(token, userId) === AuthResults.PASS;
   }
 }

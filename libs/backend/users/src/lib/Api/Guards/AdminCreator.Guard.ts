@@ -12,6 +12,6 @@ export class AdminCreatorGuard implements CanActivate {
     const header = request.header('Authorization') || '';
     const token = header.split('Bearer ')[1];
 
-    return this._authorizationService.isAdminOrCreator(token) === AuthResults.Pass;
+    return this._authorizationService.isAdminOrCreator(token) === AuthResults.PASS;
   }
 }

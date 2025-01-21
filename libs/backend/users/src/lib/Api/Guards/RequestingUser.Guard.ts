@@ -14,6 +14,6 @@ export class RequestingUserGuard implements CanActivate {
     const token = header.split('Bearer ')[1];
     const userId = params.userId;
 
-    return this._authorizationService.isRequestingUser(token, userId) === AuthResults.Pass;
+    return this._authorizationService.isRequestingUser(token, userId) === AuthResults.PASS;
   }
 }

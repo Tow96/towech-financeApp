@@ -1,6 +1,7 @@
+import { relations } from 'drizzle-orm';
 import { boolean, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 
-// Used to declare the tables
+// DB SCHEMA ----------------------------------------
 export const schema = pgSchema('users');
 
 export const UserInfoTable = schema.table('info', {
@@ -16,8 +17,8 @@ export const UserInfoTable = schema.table('info', {
 });
 
 export const EmailVerificationTable = schema.table('email_verification', {
-  id: text('id').primaryKey().notNull(),
-  userId: text('user_id')
+  id: text('id')
+    .primaryKey()
     .notNull()
     .references(() => UserInfoTable.id, { onDelete: 'cascade' }),
   hashedCode: text('hashed_code').notNull(),
@@ -25,8 +26,8 @@ export const EmailVerificationTable = schema.table('email_verification', {
 });
 
 export const PasswordResetTable = schema.table('password_reset', {
-  id: text('id').primaryKey().notNull(),
-  userId: text('user_id')
+  id: text('id')
+    .primaryKey()
     .notNull()
     .references(() => UserInfoTable.id, { onDelete: 'cascade' }),
   hashedCode: text('hashed_code').notNull(),
@@ -42,7 +43,7 @@ export const SessionTable = schema.table('sessions', {
   permanentSession: boolean('permanent_session').notNull(),
 });
 
-// Schema used in code
+// DrizzleSchema --------------------------------------
 export const UsersSchema = {
   UserInfoTable: UserInfoTable,
   EmailVerificationTable: EmailVerificationTable,
