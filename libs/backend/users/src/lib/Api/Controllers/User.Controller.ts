@@ -7,6 +7,7 @@ import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
 import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 // Services
+import { GetUserDto, UserQueries } from '../../Core/Application/Queries/User.Queries';
 import { UserService } from '../../Core/Application/User.Service';
 
 // Validation
@@ -15,7 +16,10 @@ import { ChangeNameDto } from '../Validation/ChangeName.Dto';
 
 @Controller('user-new')
 export class UserController {
-  constructor(private readonly _userService: UserService) {}
+  constructor(
+    private readonly _userQueries: UserQueries,
+    private readonly _userService: UserService
+  ) {}
 
   @Post('/register')
   @UseGuards(AdminCreatorGuard)
@@ -30,16 +34,14 @@ export class UserController {
 
   @Get('/')
   @UseGuards(AdminGuard)
-  async getAllUsers(): Promise<{ id: string; email: string; name: string }[]> {
-    return this._userService.getAll();
+  async getAllUsers(): Promise<GetUserDto[]> {
+    return this._userQueries.getAll();
   }
 
   @Get('/:userId')
   @UseGuards(RequestingUserGuard)
-  async getUser(
-    @Param('userId') userId: string
-  ): Promise<{ id: string; email: string; name: string }> {
-    return this._userService.get(userId);
+  async getUser(@Param('userId') userId: string): Promise<GetUserDto> {
+    return this._userQueries.get(userId);
   }
 
   @Delete('/:userId')

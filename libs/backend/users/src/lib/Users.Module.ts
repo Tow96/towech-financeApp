@@ -17,6 +17,7 @@ import { AdminCreatorGuard } from './Api/Guards/AdminCreator.Guard';
 import { AdminGuard } from './Api/Guards/Admin.Guard';
 import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
 import { UserService } from './Core/Application/User.Service';
+import { UserRepository } from './Database/User.Repository';
 
 @Module({
   controllers: [UserController, EmailController, PasswordController, SessionController],
@@ -36,6 +37,7 @@ import { UserService } from './Core/Application/User.Service';
 
     // Repos
     UserProvider,
+    UserRepository,
   ],
   exports: [USER_SCHEMA_CONNECTION],
 })
