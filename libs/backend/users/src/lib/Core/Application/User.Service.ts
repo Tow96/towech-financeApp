@@ -5,7 +5,6 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
@@ -13,12 +12,8 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { UsersSchema } from '../../Database/Users.Schema';
 import { eq } from 'drizzle-orm';
 import { UserEntity } from '../Domain/Entities/User.Entity';
-import {
-  encodeBase32LowerCaseNoPadding,
-  encodeBase32UpperCaseNoPadding,
-} from '../../fake-oslo/encoding';
-import { SessionEntity } from '../Domain/Entities/Session.Entity';
-import { AuthorizationService, TokenDto } from './Authorization.Service';
+import { encodeBase32UpperCaseNoPadding } from '../../fake-oslo/encoding';
+import { AuthorizationService } from './Authorization.Service';
 import { UserRepository } from '../../Database/User.Repository';
 
 @Injectable()
@@ -29,36 +24,6 @@ export class UserService {
     private readonly _userRepository: UserRepository,
     private readonly _authorizationService: AuthorizationService
   ) {}
-
-  async createSession(
-    email: string,
-    password: string,
-    isPermanent: boolean
-  ): Promise<{ id: string; expiration: Date; auth: TokenDto }> {
-    this._logger.log(`Creating session for user.`);
-    // Map data
-    const user = await this._userRepository.fetchUserByEmail(email);
-    this._logger.log(`Found user: ${user.Id}`);
-
-    // Create session
-    const tokenBytes = new Uint8Array(20);
-    crypto.getRandomValues(tokenBytes);
-    const sessionId = encodeBase32LowerCaseNoPadding(tokenBytes);
-    const session = user.addSession(password, sessionId, isPermanent);
-    if (!session) throw new UnauthorizedException('Invalid credentials');
-
-    this._logger.verbose(sessionId);
-    this._logger.log(`Created session for user: ${user.Id}`);
-    await this._userRepository.persistChanges(user);
-
-    const auth = this._authorizationService.generateAuthToken({
-      accountVerified: user.EmailVerified,
-      role: user.Role,
-      userId: user.Id,
-    });
-
-    return { id: sessionId, expiration: session.ExpiresAt, auth };
-  }
 
   async changeEmail(userId: string, email: string): Promise<void> {
     this._logger.log(`Updating email for user: ${userId}`);
@@ -116,22 +81,6 @@ export class UserService {
       .where(eq(UsersSchema.UserInfoTable.id, userId));
   }
 
-  async deleteSession(sessionId: string) {
-    const encodedId = SessionEntity.encodeId(sessionId);
-    this._logger.log(`Deleting session: ${encodedId}`);
-
-    const user = await this._userRepository.fetchUserBySession(encodedId);
-    user.deleteSession(encodedId);
-
-    await this._userRepository.persistChanges(user);
-  }
-
-  async deleteAllUserSessions(userId: string) {
-    const user = await this._userRepository.fetchUserById(userId);
-    user.deleteAllSessions();
-    await this._userRepository.persistChanges(user);
-  }
-
   async generateEmailVerificationCode(userId: string): Promise<void> {
     this._logger.log(`Generating email verification code for user: ${userId}.`);
 
@@ -171,25 +120,6 @@ export class UserService {
     await this._userRepository.persistChanges(user);
 
     // TODO: Send email
-  }
-
-  async refreshSession(
-    sessionId: string
-  ): Promise<{ id: string; expiration: Date; auth: TokenDto }> {
-    const encodedId = SessionEntity.encodeId(sessionId);
-    this._logger.log(`Refreshing session: ${encodedId}`);
-
-    const user = await this._userRepository.fetchUserBySession(encodedId);
-    const session = user.refreshSession(encodedId);
-    await this._userRepository.persistChanges(user);
-
-    const auth = this._authorizationService.generateAuthToken({
-      accountVerified: user.EmailVerified,
-      role: user.Role,
-      userId: user.Id,
-    });
-
-    return { id: sessionId, expiration: session?.ExpiresAt || new Date(0), auth };
   }
 
   async register(name: string, email: string, password: string, role: string): Promise<string> {
