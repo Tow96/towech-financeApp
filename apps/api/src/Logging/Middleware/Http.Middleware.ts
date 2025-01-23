@@ -7,11 +7,9 @@ export class HttpLogMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const { method, baseUrl: url } = req;
-    this._logger.debug(`${method} ${url} called`, 'Incoming Request');
 
     res.on('close', () => {
       const { statusCode } = res;
-
       this._logger.log(`${method} ${url} - ${statusCode}`, 'Request Response');
     });
 

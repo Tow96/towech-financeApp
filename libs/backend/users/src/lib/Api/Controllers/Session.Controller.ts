@@ -1,18 +1,22 @@
 import { Response, Request } from 'express';
+import { Body, Controller, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 
-import { Body, Controller, Logger, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
-
-import { LoginDto } from '../Validation/Login.Dto';
-import { AuthDto } from '../../Core/Application/Authorization.Service';
+// Guards
 import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
-import { SessionService } from '../../Core/Application/Session.Service';
+
+// Services
+import { UserService } from '../../Core/Application/User.Service';
+
+// Validation
+import { LoginDto } from '../Validation/Login.Dto';
+import { TokenDto } from '../../Core/Application/Authorization.Service';
 
 const SESSION_COOKIE = 'jid';
 
+// TODO: Set CSRF
 @Controller('new')
 export class SessionController {
-  private readonly _logger = new Logger(SessionController.name);
-  constructor(private readonly _sessionService: SessionService) {}
+  constructor(private readonly _userService: UserService) {}
 
   private setSessionCookie(res: Response, sessionId: string, expiration: Date) {
     res.cookie(SESSION_COOKIE, sessionId, {
@@ -28,45 +32,41 @@ export class SessionController {
   async login(
     @Body() data: LoginDto,
     @Res({ passthrough: true }) response: Response
-  ): Promise<AuthDto> {
+  ): Promise<TokenDto> {
     // TODO: Add throttling
 
-    const out = await this._sessionService.login(data.email, data.password, data.keepSession);
+    const session = await this._userService.createSession(
+      data.email,
+      data.password,
+      data.keepSession
+    );
+    this.setSessionCookie(response, session.id, session.expiration);
 
-    this._logger.log('Creating session cookie');
-    this.setSessionCookie(response, out.token, out.model.expiresAt);
-
-    return out.auth;
+    return session.auth;
   }
 
   @Post('/refresh')
   async refreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response
-  ): Promise<AuthDto> {
-    this._logger.log('Validating session');
-    const sessionToken = req.cookies[SESSION_COOKIE];
-    try {
-      const out = await this._sessionService.refresh(sessionToken);
-      this.setSessionCookie(res, out.token, out.model.expiresAt);
-      return out.auth;
-    } catch (e) {
-      this.setSessionCookie(res, '', new Date(0));
-      throw e;
-    }
+  ): Promise<TokenDto> {
+    const sessionId = req.cookies[SESSION_COOKIE];
+
+    const session = await this._userService.refreshSession(sessionId);
+    this.setSessionCookie(res, session.id, session.expiration);
+
+    return session.auth;
   }
 
   @Post('/logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<void> {
-    this._logger.log('Removing session cookie');
+    await this._userService.deleteSession(req.cookies[SESSION_COOKIE]);
     this.setSessionCookie(res, '', new Date(0));
-
-    return this._sessionService.logout(req.cookies[SESSION_COOKIE]);
   }
 
   @Post('/logout-all/:userId')
   @UseGuards(AdminRequestingUserGuard)
   async logoutAllSessions(@Param('userId') userId: string): Promise<void> {
-    return this._sessionService.logoutAll(userId);
+    return this._userService.deleteAllUserSessions(userId);
   }
 }

@@ -1,18 +1,18 @@
-import { Body, Controller, Logger, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post, UseGuards } from '@nestjs/common';
 
+// Guards
+import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
+
+// Services
+import { UserService } from '../../Core/Application/User.Service';
+
+// Validation
 import { ChangePasswordDto } from '../Validation/ChangePassword.Dto';
 import { ResetPasswordDto } from '../Validation/ResetPassword.Dto';
-import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
-import { UserInfoService } from '../../Core/Application/UserInfo.Service';
-import { PasswordService } from '../../Core/Application/Password.Service';
 
 @Controller('user-new/:userId/password')
 export class PasswordController {
-  private readonly _logger = new Logger(PasswordController.name);
-  constructor(
-    private readonly _userInfoService: UserInfoService,
-    private readonly _passwordService: PasswordService
-  ) {}
+  constructor(private readonly _userService: UserService) {}
 
   @Patch('/')
   @UseGuards(RequestingUserGuard)
@@ -20,16 +20,12 @@ export class PasswordController {
     @Param('userId') userId: string,
     @Body() data: ChangePasswordDto
   ): Promise<void> {
-    return this._userInfoService.changePassword(userId, data.oldPassword, data.newPassword);
+    return this._userService.changePassword(userId, data.oldPassword, data.newPassword);
   }
 
   @Post('/send-reset')
   async sendPasswordResetEmail(@Param('userId') userId: string): Promise<void> {
-    const code = await this._passwordService.generatePasswordResetCode(userId);
-    this._logger.verbose(`CODE: ${code}`);
-
-    // TODO: Send email with code
-    return;
+    return this._userService.generatePasswordResetCode(userId);
   }
 
   @Post('/reset')
@@ -37,6 +33,6 @@ export class PasswordController {
     @Param('userId') userId: string,
     @Body() data: ResetPasswordDto
   ): Promise<void> {
-    return this._passwordService.resetPassword(userId, data.resetCode, data.newPassword);
+    return this._userService.resetPassword(userId, data.resetCode, data.newPassword);
   }
 }

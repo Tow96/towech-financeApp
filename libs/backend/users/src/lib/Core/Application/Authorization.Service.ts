@@ -2,21 +2,17 @@ import * as jwt from 'jsonwebtoken';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { UserInfoModel } from '../../Database/Repositories/UserInfo.Repository';
-
-export type AuthDto = {
-  token: string;
+export type TokenPayload = {
   userId: string;
   accountVerified: boolean;
   role: string;
 };
-
-export type TokenContent = Omit<AuthDto, 'token'>;
+export type TokenDto = TokenPayload & { token: string };
 
 export enum AuthResults {
-  'Invalid',
-  'Forbidden',
-  'Pass',
+  'INVALID' = 0,
+  'FORBIDDEN' = 1,
+  'PASS' = 2,
 }
 
 @Injectable()
@@ -31,21 +27,16 @@ export class AuthorizationService {
     console.log(this._jwtSecret);
   }
 
-  generateAuthToken(user: UserInfoModel): AuthDto {
-    const content: TokenContent = {
-      userId: user.id,
-      accountVerified: user.emailVerified,
-      role: user.role,
-    };
-    const token = jwt.sign(content, this._jwtSecret, { expiresIn: '1m' });
-    this._logger.debug(`Generated token for user: ${user.id}`);
+  generateAuthToken(payload: TokenPayload): TokenDto {
+    const token = jwt.sign(payload, this._jwtSecret, { expiresIn: '5m' });
+    this._logger.debug(`Generated token for user: ${payload.userId}`);
 
-    return { ...content, token };
+    return { ...payload, token };
   }
 
-  private validateToken(token: string): TokenContent | undefined {
+  private validateToken(token: string): TokenPayload | undefined {
     try {
-      return jwt.verify(token, this._jwtSecret) as TokenContent;
+      return jwt.verify(token, this._jwtSecret) as TokenPayload;
     } catch (e: any) {
       this._logger.verbose(e.message);
       return undefined;
@@ -54,27 +45,27 @@ export class AuthorizationService {
 
   isAdmin(token: string): AuthResults {
     const user = this.validateToken(token);
-    if (!user) return AuthResults.Invalid;
+    if (!user) return AuthResults.INVALID;
 
-    return user.role === 'admin' ? AuthResults.Pass : AuthResults.Forbidden;
+    return user.role === 'admin' ? AuthResults.PASS : AuthResults.FORBIDDEN;
   }
 
   isAdminOrCreator(token: string): AuthResults {
-    if (this._creatorKey !== undefined && token === this._creatorKey) return AuthResults.Pass;
+    if (this._creatorKey !== undefined && token === this._creatorKey) return AuthResults.PASS;
 
     return this.isAdmin(token);
   }
 
   isRequestingUser(token: string, userId: string): AuthResults {
     const user = this.validateToken(token);
-    if (!user) return AuthResults.Invalid;
+    if (!user) return AuthResults.INVALID;
 
-    return user.userId === userId ? AuthResults.Pass : AuthResults.Forbidden;
+    return user.userId === userId ? AuthResults.PASS : AuthResults.FORBIDDEN;
   }
 
   isAdminOrRequestingUser(token: string, userId: string): AuthResults {
     const isAdmin = this.isAdmin(token);
-    if (isAdmin === AuthResults.Pass) return AuthResults.Pass;
+    if (isAdmin === AuthResults.PASS) return AuthResults.PASS;
 
     return this.isRequestingUser(token, userId);
   }
