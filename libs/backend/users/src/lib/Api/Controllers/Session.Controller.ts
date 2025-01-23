@@ -5,18 +5,18 @@ import { Body, Controller, Param, Post, Req, Res, UseGuards } from '@nestjs/comm
 import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 // Services
-import { UserService } from '../../Core/Application/User.Service';
+import { SessionCommands } from '../../Core/Application/Commands/Session.Commands';
+import { TokenDto } from '../../Core/Application/Authorization.Service';
 
 // Validation
 import { LoginDto } from '../Validation/Login.Dto';
-import { TokenDto } from '../../Core/Application/Authorization.Service';
 
 const SESSION_COOKIE = 'jid';
 
 // TODO: Set CSRF
 @Controller('new')
 export class SessionController {
-  constructor(private readonly _userService: UserService) {}
+  constructor(private readonly _sessionCommands: SessionCommands) {}
 
   private setSessionCookie(res: Response, sessionId: string, expiration: Date) {
     res.cookie(SESSION_COOKIE, sessionId, {
@@ -35,7 +35,7 @@ export class SessionController {
   ): Promise<TokenDto> {
     // TODO: Add throttling
 
-    const session = await this._userService.createSession(
+    const session = await this._sessionCommands.createSession(
       data.email,
       data.password,
       data.keepSession
@@ -52,7 +52,7 @@ export class SessionController {
   ): Promise<TokenDto> {
     const sessionId = req.cookies[SESSION_COOKIE];
 
-    const session = await this._userService.refreshSession(sessionId);
+    const session = await this._sessionCommands.refreshSession(sessionId);
     this.setSessionCookie(res, session.id, session.expiration);
 
     return session.auth;
@@ -60,13 +60,14 @@ export class SessionController {
 
   @Post('/logout')
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<void> {
-    await this._userService.deleteSession(req.cookies[SESSION_COOKIE]);
+    await this._sessionCommands.deleteSession(req.cookies[SESSION_COOKIE]);
     this.setSessionCookie(res, '', new Date(0));
   }
 
   @Post('/logout-all/:userId')
   @UseGuards(AdminRequestingUserGuard)
   async logoutAllSessions(@Param('userId') userId: string): Promise<void> {
-    return this._userService.deleteAllUserSessions(userId);
+    return this._sessionCommands.deleteAllUserSessions(userId);
   }
 }
+// 73

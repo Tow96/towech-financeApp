@@ -54,19 +54,6 @@ export class UserService {
     await this._userRepository.persistChanges(user);
   }
 
-  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void> {
-    this._logger.log(`Changing password for user: ${userId}.`);
-
-    // Map data
-    const user = await this._userRepository.fetchUserById(userId);
-
-    // Update and save
-    const updated = user.setPassword(oldPassword, newPassword);
-    if (!updated) throw new UnprocessableEntityException('Invalid password');
-
-    await this._userRepository.persistChanges(user);
-  }
-
   async delete(userId: string): Promise<void> {
     const [userExists] = await this._db
       .select({ id: UsersSchema.UserInfoTable.id })
@@ -102,26 +89,6 @@ export class UserService {
     // TODO: Send email
   }
 
-  async generatePasswordResetCode(userId: string): Promise<void> {
-    this._logger.log(`Generating password reset code for user: ${userId}.`);
-
-    // Map user
-    const user = await this._userRepository.fetchUserById(userId);
-
-    // Create code
-    const bytes = new Uint8Array(5);
-    crypto.getRandomValues(bytes);
-    const code = encodeBase32UpperCaseNoPadding(bytes);
-
-    const updated = user.generatePasswordResetCode(code);
-    if (!updated) throw new UnprocessableEntityException('Code generated too recently.');
-
-    this._logger.verbose(`CODE: ${code}`);
-    await this._userRepository.persistChanges(user);
-
-    // TODO: Send email
-  }
-
   async register(name: string, email: string, password: string, role: string): Promise<string> {
     this._logger.log(`Checking if user with email "${email}" is already registered.`);
     const emailRegistered = await this._db
@@ -140,19 +107,6 @@ export class UserService {
     // TODO: Send email
 
     return newUser.Id;
-  }
-
-  async resetPassword(userId: string, code: string, newPassword: string): Promise<void> {
-    this._logger.log(`Resetting password for user: ${userId}`);
-
-    // Map user
-    const user = await this._userRepository.fetchUserById(userId);
-
-    // Verify
-    const status = user.resetPassword(code, newPassword);
-    if (!status) throw new UnprocessableEntityException('Invalid code');
-
-    await this._userRepository.persistChanges(user);
   }
 
   async verifyEmail(userId: string, code: string): Promise<void> {
