@@ -1,4 +1,5 @@
 import { hashSync, verifySync } from '@node-rs/argon2';
+import { OTPModel } from '../Models';
 
 export enum OTPStatus {
   'VALID' = 0,
@@ -27,8 +28,8 @@ export class OneTimePasswordEntity {
     return new OneTimePasswordEntity(hashedCode, new Date(), OTPStatus.CREATED);
   }
 
-  public static getFromDb(codeHash: string, createdAt: Date): OneTimePasswordEntity {
-    return new OneTimePasswordEntity(codeHash, createdAt, OTPStatus.VALID);
+  public static getFromDb({ createdAt, hashedCode }: OTPModel): OneTimePasswordEntity {
+    return new OneTimePasswordEntity(hashedCode, createdAt, OTPStatus.VALID);
   }
 
   private static hashCode = (code: string): string =>

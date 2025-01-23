@@ -2,6 +2,7 @@ import { hashSync, verifySync } from '@node-rs/argon2';
 
 import { OneTimePasswordEntity } from './OneTimePassword.Entity';
 import { SessionEntity } from './Session.Entity';
+import { UserModel } from '../Models';
 
 const OTP_DEBOUNCE = 1000 * 60 * 10; // 10 minutes
 
@@ -58,55 +59,26 @@ export class UserEntity {
     );
   }
 
-  public static getFromDb(data: {
-    info: {
-      id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      name: string;
-      email: string;
-      emailVerified: boolean;
-      passwordHash: string;
-      role: string;
-    };
-    email_verification: {
-      createdAt: Date;
-      hashedCode: string;
-    } | null;
-    password_reset: {
-      createdAt: Date;
-      hashedCode: string;
-    } | null;
-    sessions: { id: string; expiresAt: Date; permanentSession: boolean }[];
-  }) {
-    const email_verification = data.email_verification
-      ? OneTimePasswordEntity.getFromDb(
-          data.email_verification.hashedCode,
-          data.email_verification.createdAt
-        )
-      : null;
-    const password_reset = data.password_reset
-      ? OneTimePasswordEntity.getFromDb(
-          data.password_reset.hashedCode,
-          data.password_reset.createdAt
-        )
-      : null;
-    const sessions = data.sessions.map((x) =>
-      SessionEntity.getFromDb(x.id, x.permanentSession, x.expiresAt)
-    );
+  public static getFromDb({ info, email_verification, password_reset, sessions }: UserModel) {
+    const emailVerification =
+      email_verification && OneTimePasswordEntity.getFromDb(email_verification);
+
+    const passwordReset = password_reset && OneTimePasswordEntity.getFromDb(password_reset);
+
+    const sessionArr = sessions.map((session) => SessionEntity.getFromDb(session));
 
     return new UserEntity(
-      data.info.id,
-      data.info.createdAt,
-      data.info.updatedAt,
-      data.info.name,
-      data.info.email,
-      data.info.emailVerified,
-      data.info.passwordHash,
-      data.info.role,
-      email_verification,
-      password_reset,
-      sessions
+      info.id,
+      info.createdAt,
+      info.updatedAt,
+      info.name,
+      info.email,
+      info.emailVerified,
+      info.passwordHash,
+      info.role,
+      emailVerification,
+      passwordReset,
+      sessionArr
     );
   }
 

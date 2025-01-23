@@ -12,13 +12,13 @@ import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { UsersSchema } from '../../Database/Users.Schema';
 import { eq } from 'drizzle-orm';
-import { UserEntity } from '../Domain/User.Entity';
-import { OTPStatus } from '../Domain/OneTimePassword.Entity';
+import { UserEntity } from '../Domain/Entities/User.Entity';
+import { OTPStatus } from '../Domain/Entities/OneTimePassword.Entity';
 import {
   encodeBase32LowerCaseNoPadding,
   encodeBase32UpperCaseNoPadding,
 } from '../../fake-oslo/encoding';
-import { SessionEntity, SessionStatus } from '../Domain/Session.Entity';
+import { SessionEntity, SessionStatus } from '../Domain/Entities/Session.Entity';
 import { AuthorizationService, TokenDto } from './Authorization.Service';
 
 @Injectable()

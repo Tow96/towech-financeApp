@@ -1,5 +1,6 @@
-import { sha256 } from '../../fake-oslo/crypto/sha2';
-import { encodeHexLowerCase } from '../../fake-oslo/encoding';
+import { sha256 } from '../../../fake-oslo/crypto/sha2';
+import { encodeHexLowerCase } from '../../../fake-oslo/encoding';
+import { SessionModel } from '../Models';
 
 const TEMPORARY_SESSION_DURATION = 1000 * 60 * 30; // 30 min
 const PERMANENT_SESSION_DURATION = 1000 * 60 * 60 * 24 * 30; // 30 days
@@ -32,8 +33,8 @@ export class SessionEntity {
     return new SessionEntity(encodedId, isPermanent, expiration, SessionStatus.CREATED);
   }
 
-  public static getFromDb(id: string, isPermanent: boolean, expiresAt: Date) {
-    return new SessionEntity(id, isPermanent, expiresAt, SessionStatus.VALID);
+  public static getFromDb({ id, permanentSession, expiresAt }: SessionModel) {
+    return new SessionEntity(id, permanentSession, expiresAt, SessionStatus.VALID);
   }
 
   private updateStatus(): SessionStatus {

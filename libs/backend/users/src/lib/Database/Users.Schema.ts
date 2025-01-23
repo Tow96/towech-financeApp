@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import { boolean, pgSchema, text, timestamp } from 'drizzle-orm/pg-core';
 
 // DB SCHEMA ----------------------------------------
