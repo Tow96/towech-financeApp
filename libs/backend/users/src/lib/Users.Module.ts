@@ -13,7 +13,8 @@ import { AdminRequestingUserGuard } from './Api/Guards/AdminUser.Guard';
 import { RequestingUserGuard } from './Api/Guards/RequestingUser.Guard';
 
 // Services
-import { UserService } from './Core/Application/User.Service';
+import { UserInfoCommands } from './Core/Application/Commands/UserInfo.Commands';
+import { EmailVerificationCommands } from './Core/Application/Commands/EmailVerification.Commands';
 import { PasswordResetCommands } from './Core/Application/Commands/PasswordReset.Commands';
 import { SessionCommands } from './Core/Application/Commands/Session.Commands';
 import { UserQueries } from './Core/Application/Queries/User.Queries';
@@ -33,7 +34,8 @@ import { UserRepository } from './Database/User.Repository';
     RequestingUserGuard,
 
     // Services
-    UserService,
+    UserInfoCommands,
+    EmailVerificationCommands,
     PasswordResetCommands,
     SessionCommands,
     UserQueries,

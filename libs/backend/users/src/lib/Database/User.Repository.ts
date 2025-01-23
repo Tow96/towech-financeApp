@@ -71,6 +71,15 @@ export class UserRepository {
     return this.fetchUserById(query.userId);
   }
 
+  public async isEmailRegistered(email: string): Promise<boolean> {
+    const emailRegistered = await this._db
+      .select({ email: UsersSchema.UserInfoTable.email })
+      .from(UsersSchema.UserInfoTable)
+      .where(eq(UsersSchema.UserInfoTable.email, email));
+
+    return emailRegistered.length > 0;
+  }
+
   public async persistChanges(user: UserEntity): Promise<void> {
     this._logger.log(`User updated, saving changes.`);
     // TODO: Use batch to improve efficiency

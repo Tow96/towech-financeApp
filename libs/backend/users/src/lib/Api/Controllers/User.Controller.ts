@@ -8,7 +8,7 @@ import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 // Services
 import { GetUserDto, UserQueries } from '../../Core/Application/Queries/User.Queries';
-import { UserService } from '../../Core/Application/User.Service';
+import { UserInfoCommands } from '../../Core/Application/Commands/UserInfo.Commands';
 
 // Validation
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
@@ -18,13 +18,13 @@ import { ChangeNameDto } from '../Validation/ChangeName.Dto';
 export class UserController {
   constructor(
     private readonly _userQueries: UserQueries,
-    private readonly _userService: UserService
+    private readonly _userInfoCommands: UserInfoCommands
   ) {}
 
   @Post('/register')
   @UseGuards(AdminCreatorGuard)
   async registerUser(@Body() createUser: RegisterUserDto): Promise<string> {
-    return this._userService.register(
+    return this._userInfoCommands.register(
       createUser.name,
       createUser.email,
       createUser.password,
@@ -47,12 +47,12 @@ export class UserController {
   @Delete('/:userId')
   @UseGuards(AdminRequestingUserGuard)
   async deleteUser(@Param('userId') userId: string): Promise<void> {
-    return this._userService.delete(userId);
+    return this._userInfoCommands.delete(userId);
   }
 
   @Patch('/:userId/name')
   @UseGuards(RequestingUserGuard)
   async changeName(@Param('userId') userId: string, @Body() data: ChangeNameDto): Promise<void> {
-    return this._userService.changeName(userId, data.name);
+    return this._userInfoCommands.changeName(userId, data.name);
   }
 }
