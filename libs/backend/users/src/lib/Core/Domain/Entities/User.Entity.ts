@@ -158,6 +158,8 @@ export class UserEntity {
     // If verification succeeds, verify the account and remove code
     this._emailVerified = true;
     this._emailVerificationCode.delete();
+    this._updatedAt = new Date();
+    this._status = UserStatus.UPDATED;
     return true;
   }
 
@@ -185,6 +187,8 @@ export class UserEntity {
     // If verification succeeds replace password and remove code
     this._passwordHash = UserEntity.hashPassword(newPassword);
     this._passwordResetCode.delete();
+    this._updatedAt = new Date();
+    this._status = UserStatus.UPDATED;
     return true;
   }
 
