@@ -7,6 +7,7 @@ import { PasswordController } from './Api/Controllers/Password.Controller';
 import { SessionController } from './Api/Controllers/Session.Controller';
 
 // Services
+import { UserQueries } from './Core/Application/Queries/User.Queries';
 import { AuthorizationService } from './Core/Application/Authorization.Service';
 
 // Repositories
@@ -21,6 +22,7 @@ import { UserService } from './Core/Application/User.Service';
   controllers: [UserController, EmailController, PasswordController, SessionController],
   providers: [
     // Services
+    UserQueries,
     AuthorizationService,
 
     // Guards

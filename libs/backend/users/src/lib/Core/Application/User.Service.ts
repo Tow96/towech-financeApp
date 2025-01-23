@@ -12,7 +12,7 @@ import { USER_SCHEMA_CONNECTION } from '../../Database/Users.Provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { UsersSchema } from '../../Database/Users.Schema';
 import { eq } from 'drizzle-orm';
-import { UserEntity } from '../Domain/Entities/User.Entity';
+import { UserEntity, UserStatus } from '../Domain/Entities/User.Entity';
 import { OTPStatus } from '../Domain/Entities/OneTimePassword.Entity';
 import {
   encodeBase32LowerCaseNoPadding,
@@ -28,30 +28,6 @@ export class UserService {
     @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>,
     private readonly _authorizationService: AuthorizationService
   ) {}
-  // Queries --------------------------------------------------------------------------------------
-  async getAll(): Promise<{ id: string; email: string; name: string }[]> {
-    return this._db
-      .select({
-        id: UsersSchema.UserInfoTable.id,
-        email: UsersSchema.UserInfoTable.email,
-        name: UsersSchema.UserInfoTable.name,
-      })
-      .from(UsersSchema.UserInfoTable);
-  }
-
-  async get(userId: string): Promise<{ id: string; email: string; name: string }> {
-    const [data] = await this._db
-      .select({
-        id: UsersSchema.UserInfoTable.id,
-        email: UsersSchema.UserInfoTable.email,
-        name: UsersSchema.UserInfoTable.name,
-      })
-      .from(UsersSchema.UserInfoTable)
-      .where(eq(UsersSchema.UserInfoTable.id, userId));
-
-    if (!data) throw new NotFoundException('User not found');
-    return data;
-  }
 
   // Commands -------------------------------------------------------------------------------------
   private async fetchUserFromDbByEmail(email: string): Promise<UserEntity> {
@@ -133,20 +109,40 @@ export class UserService {
 
     // TODO: Use batch to improve efficiency
 
-    // TODO: Switch to use status for tracking changes
-    await this._db
-      .update(UsersSchema.UserInfoTable)
-      .set({
+    // If the user was deleted, remove it and finish
+    if (user.Status === UserStatus.DELETED) {
+      await this._db
+        .delete(UsersSchema.UserInfoTable)
+        .where(eq(UsersSchema.UserInfoTable.id, user.Id));
+      return;
+    }
+    if (user.Status === UserStatus.CREATED) {
+      await this._db.insert(UsersSchema.UserInfoTable).values({
         id: user.Id,
         createdAt: user.CreatedAt,
+        updatedAt: user.UpdatedAt,
+        name: user.Name,
         email: user.Email,
         emailVerified: user.EmailVerified,
-        name: user.Name,
         passwordHash: user.PasswordHash,
         role: user.Role,
-        updatedAt: user.UpdatedAt,
-      } as typeof UsersSchema.UserInfoTable.$inferInsert)
-      .where(eq(UsersSchema.UserInfoTable.id, user.Id));
+      } as typeof UsersSchema.UserInfoTable.$inferInsert);
+    }
+    if (user.Status === UserStatus.UPDATED) {
+      await this._db
+        .update(UsersSchema.UserInfoTable)
+        .set({
+          id: user.Id,
+          createdAt: user.CreatedAt,
+          email: user.Email,
+          emailVerified: user.EmailVerified,
+          name: user.Name,
+          passwordHash: user.PasswordHash,
+          role: user.Role,
+          updatedAt: user.UpdatedAt,
+        } as typeof UsersSchema.UserInfoTable.$inferInsert)
+        .where(eq(UsersSchema.UserInfoTable.id, user.Id));
+    }
 
     if (user.EmailVerificationCode) {
       if (user.EmailVerificationCode.Status === OTPStatus.CREATED)
@@ -260,9 +256,7 @@ export class UserService {
     this._logger.verbose(user);
 
     // Update and save
-    const updated = user.setBasicInfo({ email: email });
-
-    if (!updated) return this._logger.log('No changes.');
+    user.setBasicInfo({ email: email });
     this.saveChanges(user);
   }
 
@@ -273,9 +267,7 @@ export class UserService {
     const user = await this.fetchUserFromDbById(userId);
 
     // Update and save
-    const updated = user.setBasicInfo({ name: name });
-
-    if (!updated) return this._logger.log('No changes.');
+    user.setBasicInfo({ name: name });
     this.saveChanges(user);
   }
 
@@ -394,16 +386,7 @@ export class UserService {
     const newUser = UserEntity.create(uuidV4(), email, name, password, role);
 
     this._logger.log(`Saving changes`);
-    await this._db.insert(UsersSchema.UserInfoTable).values({
-      id: newUser.Id,
-      createdAt: newUser.CreatedAt,
-      updatedAt: newUser.UpdatedAt,
-      name: newUser.Name,
-      email: newUser.Email,
-      emailVerified: newUser.EmailVerified,
-      passwordHash: newUser.PasswordHash,
-      role: newUser.Role,
-    } as typeof UsersSchema.UserInfoTable.$inferInsert);
+    await this.saveChanges(newUser);
 
     // TODO: Send email
 
