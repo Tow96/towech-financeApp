@@ -24,7 +24,6 @@ export class AuthorizationService {
   constructor(readonly _configService: ConfigService) {
     this._jwtSecret = _configService.getOrThrow<string>('JWT_SECRET');
     this._creatorKey = _configService.get('CREATOR_KEY');
-    console.log(this._jwtSecret);
   }
 
   generateAuthToken(payload: TokenPayload): TokenDto {

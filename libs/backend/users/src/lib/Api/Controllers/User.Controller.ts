@@ -13,12 +13,14 @@ import { UserInfoCommands } from '../../Core/Application/Commands/UserInfo.Comma
 // Validation
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { ChangeNameDto } from '../Validation/ChangeName.Dto';
+import { MailingService } from '@financeapp/backend-mailing';
 
 @Controller('user-new')
 export class UserController {
   constructor(
     private readonly _userQueries: UserQueries,
-    private readonly _userInfoCommands: UserInfoCommands
+    private readonly _userInfoCommands: UserInfoCommands,
+    private readonly _mailingService: MailingService
   ) {}
 
   @Post('/register')

@@ -1,0 +1,9 @@
+{
+  "name": "backend-mailing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/mailing/src",
+  "projectType": "library",
+  "tags": ["type:infrastructure", "scope:backend"],
+  "// targets": "to see all targets run: nx show project backend-mailing --web",
+  "targets": {}
+}

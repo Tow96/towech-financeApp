@@ -4,12 +4,16 @@ import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common
 // Repos
 import { UserRepository } from '../../../Database/User.Repository';
 import { UserEntity } from '../../Domain/Entities/User.Entity';
+import { UserEmailService } from '../UserMail.Service';
 
 @Injectable()
 export class UserInfoCommands {
   private readonly _logger = new Logger(UserInfoCommands.name);
 
-  constructor(private readonly _userRepository: UserRepository) {}
+  constructor(
+    private readonly _userRepository: UserRepository,
+    private readonly _mailingService: UserEmailService
+  ) {}
 
   async changeName(userId: string, name: string): Promise<void> {
     this._logger.log(`Updating name for user: ${userId}.`);
@@ -32,7 +36,7 @@ export class UserInfoCommands {
     user.delete();
 
     // Persist
-    this._userRepository.persistChanges(user);
+    await this._userRepository.persistChanges(user);
   }
 
   async register(name: string, email: string, password: string, role: string): Promise<string> {
@@ -51,7 +55,7 @@ export class UserInfoCommands {
     await this._userRepository.persistChanges(newUser);
 
     // Return
-    // TODO: Send email
+    await this._mailingService.sendRegistrationEmail(newUser);
     return newUser.Id;
   }
 }

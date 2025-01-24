@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { MailingModule } from '@financeapp/backend-mailing';
 
 // Controllers
 import { UserController } from './Api/Controllers/User.Controller';
@@ -23,8 +24,10 @@ import { AuthorizationService } from './Core/Application/Authorization.Service';
 // Repositories
 import { UserProvider, USER_SCHEMA_CONNECTION } from './Database/Users.Provider';
 import { UserRepository } from './Database/User.Repository';
+import { UserEmailService } from './Core/Application/UserMail.Service';
 
 @Module({
+  imports: [MailingModule],
   controllers: [UserController, EmailController, PasswordController, SessionController],
   providers: [
     // Guards
@@ -40,6 +43,7 @@ import { UserRepository } from './Database/User.Repository';
     SessionCommands,
     UserQueries,
     AuthorizationService,
+    UserEmailService,
 
     // Repos
     UserProvider,
