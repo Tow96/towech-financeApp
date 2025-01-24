@@ -13,17 +13,17 @@ import { LoginDto } from '../Validation/Login.Dto';
 
 const SESSION_COOKIE = 'jid';
 
-// TODO: Set CSRF
 @Controller('new')
 export class SessionController {
   constructor(private readonly _sessionCommands: SessionCommands) {}
 
+  // TODO: Set session cookie safety and CSRF
   private setSessionCookie(res: Response, sessionId: string, expiration: Date) {
     res.cookie(SESSION_COOKIE, sessionId, {
       httpOnly: true,
       path: '/',
-      secure: false, // TODO: set up SSL
-      sameSite: 'none', // TODO: set up same-site
+      secure: false,
+      sameSite: 'none',
       expires: expiration,
     });
   }
@@ -33,8 +33,6 @@ export class SessionController {
     @Body() data: LoginDto,
     @Res({ passthrough: true }) response: Response
   ): Promise<TokenDto> {
-    // TODO: Add throttling
-
     const session = await this._sessionCommands.createSession(
       data.email,
       data.password,

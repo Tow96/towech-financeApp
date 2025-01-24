@@ -9,6 +9,7 @@
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/throttler": "^6.4.0",
     "@node-rs/argon2": "^2.0.2",
     "@sendgrid/mail": "^8.1.4",
     "axios": "^1.6.0",
