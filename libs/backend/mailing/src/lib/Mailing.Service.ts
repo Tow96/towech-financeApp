@@ -20,12 +20,13 @@ export class MailingService {
     key: this.MAILGUN_KEY,
   });
 
-  private readonly MAIL_LINK_URL = this._configService.getOrThrow<string>('MAIL_LINK_URL');
+  private readonly FRONTEND_DASHBOARD =
+    this._configService.getOrThrow<string>('FRONTEND_DASHBOARD');
   private readonly _mailGenerator = new MailGen({
-    theme: 'default',
+    theme: 'salted',
     product: {
       name: 'Towech-FinanceApp',
-      link: this.MAIL_LINK_URL,
+      link: this.FRONTEND_DASHBOARD,
       //TODO: Create and add logo
     },
   });

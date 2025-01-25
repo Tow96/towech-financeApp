@@ -1,6 +1,9 @@
 import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { encodeBase32UpperCaseNoPadding } from '../../../fake-oslo/encoding';
 
+// Services
+import { UserEmailService } from '../UserMail.Service';
+
 // Repos
 import { UserRepository } from '../../../Database/User.Repository';
 
@@ -8,7 +11,10 @@ import { UserRepository } from '../../../Database/User.Repository';
 export class PasswordResetCommands {
   private readonly _logger = new Logger(PasswordResetCommands.name);
 
-  constructor(private readonly _userRepository: UserRepository) {}
+  constructor(
+    private readonly _userRepository: UserRepository,
+    private readonly _mailingService: UserEmailService
+  ) {}
 
   async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<void> {
     this._logger.log(`Changing password for user: ${userId}.`);
@@ -21,6 +27,9 @@ export class PasswordResetCommands {
 
     // Persist
     await this._userRepository.persistChanges(user);
+
+    // Return
+    await this._mailingService.sendPasswordChangeEmail(user);
   }
 
   async generatePasswordResetCode(userId: string): Promise<void> {
@@ -40,7 +49,8 @@ export class PasswordResetCommands {
     await this._userRepository.persistChanges(user);
     this._logger.verbose(`CODE: ${code}`);
 
-    // TODO: Send email
+    // Return
+    await this._mailingService.sendPasswordResetEmail(user, code);
   }
 
   async resetPassword(userId: string, code: string, newPassword: string): Promise<void> {
@@ -54,5 +64,8 @@ export class PasswordResetCommands {
 
     // Persist
     await this._userRepository.persistChanges(user);
+
+    // Return
+    await this._mailingService.sendPasswordChangeEmail(user);
   }
 }

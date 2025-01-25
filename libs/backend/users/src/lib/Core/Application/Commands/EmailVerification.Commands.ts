@@ -1,6 +1,9 @@
 import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { encodeBase32UpperCaseNoPadding } from '../../../fake-oslo/encoding';
 
+// Services
+import { UserEmailService } from '../UserMail.Service';
+
 // Repos
 import { UserRepository } from '../../../Database/User.Repository';
 
@@ -8,7 +11,10 @@ import { UserRepository } from '../../../Database/User.Repository';
 export class EmailVerificationCommands {
   private readonly _logger = new Logger(EmailVerificationCommands.name);
 
-  constructor(private readonly _userRepository: UserRepository) {}
+  constructor(
+    private readonly _userRepository: UserRepository,
+    private readonly _mailingService: UserEmailService
+  ) {}
 
   async changeEmail(userId: string, email: string): Promise<void> {
     this._logger.log(`Updating email for user: ${userId}`);
@@ -42,12 +48,12 @@ export class EmailVerificationCommands {
     await this._userRepository.persistChanges(user);
     this._logger.verbose(`CODE: ${code}`);
 
-    // TODO: Send email
+    // Return
+    await this._mailingService.sendVerificationEmail(user, code);
   }
 
   async verifyEmail(userId: string, code: string): Promise<void> {
     this._logger.log(`Verifying email for user: ${userId}`);
-
     // Map user
     const user = await this._userRepository.fetchUserById(userId);
 
@@ -57,5 +63,8 @@ export class EmailVerificationCommands {
 
     // Persist
     await this._userRepository.persistChanges(user);
+
+    // Return
+    await this._mailingService.sendEmailVerifiedEmail(user);
   }
 }
