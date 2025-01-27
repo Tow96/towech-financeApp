@@ -120,10 +120,7 @@ const DashboardPage = (): ReactElement => {
     <main>
       <TransactionPageStore.Provider value={{ transactionState, dispatchTransactionState }}>
         <div>
-          <WalletSelector />{' '}
-          <Button className="Transactions__AddTop" onClick={() => setAddModal(true)}>
-            New Transaction
-          </Button>
+          <WalletSelector /> <Button onClick={() => setAddModal(true)}>New Transaction</Button>
         </div>
         {loaded ? (
           <div className="Transactions">
