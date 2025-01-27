@@ -10,29 +10,29 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import * as FaIcons from 'react-icons/fa';
 
 // hooks
-import { MainStore, TransactionPageStore } from '../../Hooks/ContextStore';
-import useTransactions from '../../Hooks/UseTransactions';
+import { MainStore, TransactionPageStore } from '../../Legacy/Hooks/ContextStore';
+import useTransactions from '../../Legacy/Hooks/UseTransactions';
 
 // Components
-import Button from '../../Components/Button';
-import Page from '../../Components/Page';
-import DataMonthSelector from '../../Components/Transactions/DataMonthSelector';
-import TransactionViewer from '../../Components/Transactions/TransactionViewer';
-import WalletTotals from '../../Components/Transactions/WalletTotals';
-import TransactionForm from '../../Components/Transactions/TransactionForm';
-import Loading from '../../Components/Loading';
-import WalletSelector from '../../Components/Transactions/WalletSelector';
-import EmptyTransactions from '../../Components/Transactions/EmptyTransactions';
+import Button from '../../Legacy/Components/Button';
+import Page from '../../Legacy/Components/Page';
+import DataMonthSelector from '../../Legacy/Components/Transactions/DataMonthSelector';
+import TransactionViewer from '../../Legacy/Components/Transactions/TransactionViewer';
+import WalletTotals from '../../Legacy/Components/Transactions/WalletTotals';
+import TransactionForm from '../../Legacy/Components/Transactions/TransactionForm';
+import Loading from '../../Legacy/Components/Loading';
+import WalletSelector from '../../Legacy/Components/Transactions/WalletSelector';
+import EmptyTransactions from '../../Legacy/Components/Transactions/EmptyTransactions';
 
 // Models
-import { Objects } from '../../models';
+import { Objects } from '../../Legacy/models';
 
 // Services
-import TransactionService from '../../Services/TransactionService';
-import CategoryService from '../../Services/CategoryService';
+import TransactionService from '../../Legacy/Services/TransactionService';
+import CategoryService from '../../Legacy/Services/CategoryService';
 
 // Utilities
-import { ParseDataMonth } from '../../Utils/ParseDataMonth';
+import { ParseDataMonth } from '../../Legacy/Utils/ParseDataMonth';
 
 // Styles
 import './Transactions.css';
@@ -47,7 +47,8 @@ import './WalletTotals.css';
 
 const Transactions = (): JSX.Element => {
   // Context
-  const { authToken, dispatchAuthToken, wallets, dispatchWallets, dispatchCategories } = useContext(MainStore);
+  const { authToken, dispatchAuthToken, wallets, dispatchWallets, dispatchCategories } =
+    useContext(MainStore);
   const searchParams = useSearchParams();
   const router = useRouter();
   if (!authToken.token) router.push(`/?redirect=home?wallet=${searchParams.get('wallet') || '-1'}`);
@@ -78,7 +79,9 @@ const Transactions = (): JSX.Element => {
           dispatchWallets({ type: 'SET', payload: { wallets: res.data } });
 
           // Also generates and sets the selectedWallet to contain the children
-          const firstSelectedWallet = res.data.find((x) => x._id === (searchParams.get('wallet') || '-1'));
+          const firstSelectedWallet = res.data.find(
+            (x) => x._id === (searchParams.get('wallet') || '-1')
+          );
 
           dispatchTransactionState({
             type: 'SELECT-WALLET',
@@ -105,7 +108,11 @@ const Transactions = (): JSX.Element => {
 
   // Gets the transactions from the API of the selected wallet
   const loadTransactions = async (walletId: string, dataMonth: string): Promise<void> => {
-    const res = await transactionService.getWalletTransactions(walletId, dataMonth, setLoadingTransactions);
+    const res = await transactionService.getWalletTransactions(
+      walletId,
+      dataMonth,
+      setLoadingTransactions
+    );
     dispatchTransactionState({
       type: 'SET',
       payload: {
@@ -151,7 +158,12 @@ const Transactions = (): JSX.Element => {
                   )}
                 </div>
                 {/*Add wallet button - mobile only*/}
-                <Button accent round className="Transactions__AddFloat" onClick={() => setAddModal(true)}>
+                <Button
+                  accent
+                  round
+                  className="Transactions__AddFloat"
+                  onClick={() => setAddModal(true)}
+                >
                   <FaIcons.FaPlus />
                 </Button>
                 {/*Add wallet form*/}

@@ -16,9 +16,11 @@ module.exports = [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
           depConstraints: [
+            { sourceTag: 'scope:backend', onlyDependOnLibsWithTags: ['scope:backend'] },
+            { sourceTag: 'scope:frontend', onlyDependOnLibsWithTags: ['scope:frontend'] },
             {
               sourceTag: 'type:feature',
-              onlyDependOnLibsWithTags: ['type:infrastructure'],
+              onlyDependOnLibsWithTags: ['type:infrastructure', 'type:common'],
             },
             {
               sourceTag: 'type:infrastructure',
@@ -28,7 +30,6 @@ module.exports = [
               sourceTag: 'type:app',
               onlyDependOnLibsWithTags: ['*'],
             },
-            { sourceTag: 'scope:backend', onlyDependOnLibsWithTags: ['scope:backend'] },
           ],
         },
       ],

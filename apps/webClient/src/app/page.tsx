@@ -9,20 +9,20 @@
 import { useContext, useEffect, useState } from 'react';
 
 // Components
-import Button from '../Components/Button';
-import Checkbox from '../Components/Checkbox';
-import Input from '../Components/Input';
-import Loading from '../Components/Loading';
+import Button from '../Legacy/Components/Button';
+import Checkbox from '../Legacy/Components/Checkbox';
+import Input from '../Legacy/Components/Input';
+import Loading from '../Legacy/Components/Loading';
 
 // hooks
-import UseForm from '../Hooks/UseForm';
-import { MainStore } from '../Hooks/ContextStore';
+import UseForm from '../Legacy/Hooks/UseForm';
+import { MainStore } from '../Legacy/Hooks/ContextStore';
 
 // Services
-import AuthenticationService from '../Services/AuthenticationService';
+import AuthenticationService from '../Legacy/Services/AuthenticationService';
 
 // Utilities
-import CheckNested from '../Utils/CheckNested';
+import CheckNested from '../Legacy/Utils/CheckNested';
 
 // Styles
 import './Login.css';

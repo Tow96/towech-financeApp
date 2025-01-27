@@ -10,18 +10,18 @@ import { useRouter } from 'next/navigation';
 import * as FaIcons from 'react-icons/fa';
 
 // hooks
-import { MainStore } from '../../Hooks/ContextStore';
+import { MainStore } from '../../Legacy/Hooks/ContextStore';
 // import WalletForm from './WalletForm';
 
 // Components
-import Button from '../../Components/Button';
-import Page from '../../Components/Page';
-import NoWalletsCard from '../../Components/Wallets/NoWalletsCard';
-import WalletCard from '../../Components/Wallets/WalletCard';
-import WalletForm from '../../Components/Wallets/WalletForm';
+import Button from '../../Legacy/Components/Button';
+import Page from '../../Legacy/Components/Page';
+import NoWalletsCard from '../../Legacy/Components/Wallets/NoWalletsCard';
+import WalletCard from '../../Legacy/Components/Wallets/WalletCard';
+import WalletForm from '../../Legacy/Components/Wallets/WalletForm';
 
 // Services
-import TransactionService from '../../Services/TransactionService';
+import TransactionService from '../../Legacy/Services/TransactionService';
 
 // Styles
 import './Wallets.css';

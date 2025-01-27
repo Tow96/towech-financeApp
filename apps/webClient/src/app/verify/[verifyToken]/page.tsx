@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 // Services
-import UserService from '../../../Services/UserService';
+import UserService from '../../../Legacy/Services/UserService';
 
 // Styles
 import './VerifyAccount.css';

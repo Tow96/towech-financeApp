@@ -9,17 +9,17 @@ import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Components
-import Page from '../../Components/Page';
-import SettingCard from '../../Components/Settings/SettingCard';
-import EditNameForm from '../../Functions/Settings/EditNameForm';
-import ChangePasswordForm from '../../Functions/Settings/ChangePasswordForm';
-import ChangeEmailForm from '../../Functions/Settings/ChangeEmailForm';
-import ResendVerification from '../../Functions/Settings/ResendVerification';
-import ManageUsers from '../../Functions/Settings/ManageUsers';
-import LogoutAll from '../../Functions/Settings/LogoutAll';
+import Page from '../../Legacy/Components/Page';
+import SettingCard from '../../Legacy/Components/Settings/SettingCard';
+import EditNameForm from '../../Legacy/Functions/Settings/EditNameForm';
+import ChangePasswordForm from '../../Legacy/Functions/Settings/ChangePasswordForm';
+import ChangeEmailForm from '../../Legacy/Functions/Settings/ChangeEmailForm';
+import ResendVerification from '../../Legacy/Functions/Settings/ResendVerification';
+import ManageUsers from '../../Legacy/Functions/Settings/ManageUsers';
+import LogoutAll from '../../Legacy/Functions/Settings/LogoutAll';
 
 // Hooks
-import { MainStore } from '../../Hooks/ContextStore';
+import { MainStore } from '../../Legacy/Hooks/ContextStore';
 
 // Styles
 import './Settings.css';
@@ -94,8 +94,16 @@ export default function Settings() {
           />
         </div>
         <EditNameForm state={editNameModal} setState={setEditNameModal} resultState={editUser} />
-        <ChangePasswordForm state={changePassModal} setState={setChangePassModal} resultState={editUser} />
-        <ChangeEmailForm state={changeEmailModal} setState={setChangeEmailModal} resultState={editUser} />
+        <ChangePasswordForm
+          state={changePassModal}
+          setState={setChangePassModal}
+          resultState={editUser}
+        />
+        <ChangeEmailForm
+          state={changeEmailModal}
+          setState={setChangeEmailModal}
+          resultState={editUser}
+        />
         <ResendVerification state={resendVerification} setState={setResendVerification} />
         <LogoutAll state={logoutModal} setState={setLogoutModal} />
         <ManageUsers.Menu state={manageUsers} setState={setManageUsers} />

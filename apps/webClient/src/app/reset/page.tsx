@@ -9,18 +9,18 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Components
-import Button from '../../Components/Button';
-import Input from '../../Components/Input';
+import Button from '../../Legacy/Components/Button';
+import Input from '../../Legacy/Components/Input';
 
 // hooks
-import UseForm from '../../Hooks/UseForm';
-import { MainStore } from '../../Hooks/ContextStore';
+import UseForm from '../../Legacy/Hooks/UseForm';
+import { MainStore } from '../../Legacy/Hooks/ContextStore';
 
 // Services
-import UserService from '../../Services/UserService';
+import UserService from '../../Legacy/Services/UserService';
 
 // Utilities
-import CheckNested from '../../Utils/CheckNested';
+import CheckNested from '../../Legacy/Utils/CheckNested';
 
 // Styles
 import './PasswordReset.css';
