@@ -21,9 +21,6 @@ export class SessionController {
   private setSessionCookie(res: Response, sessionId: string, expiration: Date) {
     res.cookie(SESSION_COOKIE, sessionId, {
       httpOnly: true,
-      path: '/',
-      secure: false,
-      sameSite: 'none',
       expires: expiration,
     });
   }

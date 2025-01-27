@@ -24,7 +24,7 @@ const rootURL = process.env.NEXT_PUBLIC_WEBAPI || '';
 async function getAuthToken(tokenDispatch: React.Dispatch<TokenAction>): Promise<string> {
   try {
     const res: AxiosResponse<Responses.AuthenticationResponse> = await axios.post(
-      `${rootURL}/authentication/refresh`,
+      `${rootURL}/refresh`,
       null,
       {
         withCredentials: true,

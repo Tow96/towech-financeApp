@@ -26,7 +26,7 @@ export default class AuthenticationService {
     this.token = token || ({} as TokenState);
     this.tokenDispatch = tokenDispatch;
     this.instance = new CustomAxios(this.token, this.tokenDispatch);
-    this.SERVICE_URL = this.instance.ROOT_URL + '/authentication';
+    this.SERVICE_URL = this.instance.ROOT_URL;
   }
 
   async login(

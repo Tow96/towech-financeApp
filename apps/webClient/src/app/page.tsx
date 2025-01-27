@@ -58,7 +58,7 @@ export default function Login() {
       setErrors({});
 
       // trims the email and changes to lowercase
-      loginForm.values.username = loginForm.values.username.trim().toLowerCase();
+      loginForm.values.email = loginForm.values.email.trim().toLowerCase();
       const res = await authService.login(loginForm.values, setLoading);
 
       dispatchAuthToken({ type: 'LOGIN', payload: res.data });
@@ -86,7 +86,7 @@ export default function Login() {
           <Input
             error={errors.login ? true : false}
             label="Email"
-            name="username"
+            name="email"
             type="text"
             value={loginForm.values.username}
             onChange={loginForm.onChange}

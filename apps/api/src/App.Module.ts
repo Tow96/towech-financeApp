@@ -10,12 +10,12 @@ import { RateLimitingService } from './RateLimiting/RateLimiting.Service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
-    RateLimitingModule,
+    // RateLimitingModule,
     LoggingModule,
 
     LegacyModule,
     UsersModule,
   ],
-  providers: [RateLimitingService],
+  // providers: [RateLimitingService],
 })
 export class AppModule {}
