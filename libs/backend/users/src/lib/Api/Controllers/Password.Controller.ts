@@ -10,7 +10,7 @@ import { PasswordResetCommands } from '../../Core/Application/Commands/PasswordR
 import { ChangePasswordDto } from '../Validation/ChangePassword.Dto';
 import { ResetPasswordDto } from '../Validation/ResetPassword.Dto';
 
-@Controller('user-new/:userId/password')
+@Controller('users/:userId/password')
 export class PasswordController {
   constructor(private readonly _passwordReset: PasswordResetCommands) {}
 

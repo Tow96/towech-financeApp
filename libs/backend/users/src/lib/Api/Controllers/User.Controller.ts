@@ -15,7 +15,7 @@ import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { ChangeNameDto } from '../Validation/ChangeName.Dto';
 import { MailingService } from '@financeapp/backend-mailing';
 
-@Controller('user-new')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly _userQueries: UserQueries,

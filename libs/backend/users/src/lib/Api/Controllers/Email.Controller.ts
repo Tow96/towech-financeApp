@@ -11,7 +11,7 @@ import { EmailVerificationCommands } from '../../Core/Application/Commands/Email
 import { ChangeEmailDto } from '../Validation/ChangeEmail.Dto';
 import { VerifyEmailDto } from '../Validation/VerifyEmail.Dto';
 
-@Controller('user-new/:userId/email')
+@Controller('users/:userId/email')
 export class EmailController {
   constructor(private readonly _emailVerification: EmailVerificationCommands) {}
 

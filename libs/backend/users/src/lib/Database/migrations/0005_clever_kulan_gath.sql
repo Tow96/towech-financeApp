@@ -1,0 +1,1 @@
+ALTER TABLE "users"."info" ADD COLUMN "legacy_id" text;

@@ -36,6 +36,13 @@
       "when": 1737564586460,
       "tag": "0004_late_vector",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1737828927693,
+      "tag": "0005_clever_kulan_gath",
+      "breakpoints": true
     }
   ]
 }

@@ -6,14 +6,14 @@ import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 // Services
 import { SessionCommands } from '../../Core/Application/Commands/Session.Commands';
-import { TokenDto } from '../../Core/Application/Authorization.Service';
+import { TokenDto } from '@financeapp/backend-authorization';
 
 // Validation
 import { LoginDto } from '../Validation/Login.Dto';
 
 const SESSION_COOKIE = 'jid';
 
-@Controller('new')
+@Controller()
 export class SessionController {
   constructor(private readonly _sessionCommands: SessionCommands) {}
 
@@ -68,4 +68,3 @@ export class SessionController {
     return this._sessionCommands.deleteAllUserSessions(userId);
   }
 }
-// 73

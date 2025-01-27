@@ -27,7 +27,8 @@ export class UserEntity {
     private _emailVerificationCode: OneTimePasswordEntity | null,
     private _passwordResetCode: OneTimePasswordEntity | null,
     private readonly _sessions: SessionEntity[],
-    private _status: UserStatus
+    private _status: UserStatus,
+    private readonly _legacyId: string | null
   ) {}
 
   get Id() { return this._id; } // prettier-ignore
@@ -42,6 +43,7 @@ export class UserEntity {
   get Role() { return this._role; } // prettier-ignore
   get Sessions() { return this._sessions; } // prettier-ignore
   get Status() { return this._status; } // prettier-ignore
+  get LegacyId() { return this._legacyId; } // prettier-ignore
 
   public static create(
     id: string,
@@ -65,7 +67,8 @@ export class UserEntity {
       null,
       null,
       [],
-      UserStatus.CREATED
+      UserStatus.CREATED,
+      null
     );
   }
 
@@ -89,7 +92,8 @@ export class UserEntity {
       emailVerification,
       passwordReset,
       sessionArr,
-      UserStatus.UNCHANGED
+      UserStatus.UNCHANGED,
+      info.legacyId
     );
   }
 

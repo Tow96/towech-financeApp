@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@financeApp/backend-presentation": ["libs/backend/presentation/src/index.ts"],
+      "@financeapp/backend-authorization": ["libs/backend/authorization/src/index.ts"],
       "@financeapp/backend-mailing": ["libs/backend/mailing/src/index.ts"],
       "@financeapp/backend-users": ["libs/backend/users/src/index.ts"]
     }

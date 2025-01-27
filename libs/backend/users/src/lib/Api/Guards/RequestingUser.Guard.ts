@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AuthorizationService, AuthResults } from '../../Core/Application/Authorization.Service';
+import { AuthorizationService, AuthResults } from '@financeapp/backend-authorization';
 
 @Injectable()
 export class RequestingUserGuard implements CanActivate {

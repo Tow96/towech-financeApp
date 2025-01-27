@@ -1,9 +1,9 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { AuthorizationService, TokenDto } from '@financeapp/backend-authorization';
 import { encodeBase32LowerCaseNoPadding } from '../../../fake-oslo/encoding';
 
 // Repos
 import { UserRepository } from '../../../Database/User.Repository';
-import { AuthorizationService, TokenDto } from '../Authorization.Service';
 
 // Entities
 import { SessionEntity } from '../../Domain/Entities/Session.Entity';
@@ -46,6 +46,7 @@ export class SessionCommands {
       accountVerified: user.EmailVerified,
       role: user.Role,
       userId: user.Id,
+      legacyId: user.LegacyId,
     });
     return { id: sessionId, expiration: session.ExpiresAt, auth };
   }
@@ -93,6 +94,7 @@ export class SessionCommands {
       accountVerified: user.EmailVerified,
       role: user.Role,
       userId: user.Id,
+      legacyId: user.LegacyId,
     });
     return { id: sessionId, expiration: session?.ExpiresAt || new Date(0), auth };
   }

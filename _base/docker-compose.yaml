@@ -1,15 +1,6 @@
 version: '3.5'
 
 services:
-  # Database:
-  #   container_name: mongodb
-  #   image: mongo:latest
-
-  #   networks:
-  #     - main-network
-
-  #   ports:
-  #     - 27017:27017
 
   message-queue:
     container_name: rabbitmq
@@ -31,23 +22,6 @@ services:
 
     env_file:
       - ./environments/rabbitMQ.env
-
-  user-worker:
-    container_name: user-worker1
-    image: ghcr.io/towech-financeapp/userservice:1.2.1
-
-    depends_on:
-      message-queue:
-        condition: service_healthy
-
-    volumes:
-      - ./logs/UserService:/usr/app/logs
-
-    networks:
-      - main-network
-
-    env_file:
-      - ./environments/UserService.env
 
   transaction-worker:
     container_name: transaction-worker1

@@ -19,15 +19,15 @@ import { EmailVerificationCommands } from './Core/Application/Commands/EmailVeri
 import { PasswordResetCommands } from './Core/Application/Commands/PasswordReset.Commands';
 import { SessionCommands } from './Core/Application/Commands/Session.Commands';
 import { UserQueries } from './Core/Application/Queries/User.Queries';
-import { AuthorizationService } from './Core/Application/Authorization.Service';
 
 // Repositories
+import { AuthorizationModule } from '@financeapp/backend-authorization';
 import { UserProvider, USER_SCHEMA_CONNECTION } from './Database/Users.Provider';
 import { UserRepository } from './Database/User.Repository';
 import { UserEmailService } from './Core/Application/UserMail.Service';
 
 @Module({
-  imports: [MailingModule],
+  imports: [MailingModule, AuthorizationModule],
   controllers: [UserController, EmailController, PasswordController, SessionController],
   providers: [
     // Guards
@@ -42,7 +42,6 @@ import { UserEmailService } from './Core/Application/UserMail.Service';
     PasswordResetCommands,
     SessionCommands,
     UserQueries,
-    AuthorizationService,
     UserEmailService,
 
     // Repos

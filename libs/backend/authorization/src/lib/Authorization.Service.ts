@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 export type TokenPayload = {
   userId: string;
+  legacyId: string | null;
   accountVerified: boolean;
   role: string;
 };

@@ -13,6 +13,7 @@ export const UserInfoTable = schema.table('info', {
   emailVerified: boolean('email_verified').notNull(),
   passwordHash: text('password_hash').notNull(),
   role: text('role').notNull().default('user'),
+  legacyId: text('legacy_id'),
 });
 
 export const EmailVerificationTable = schema.table('email_verification', {
