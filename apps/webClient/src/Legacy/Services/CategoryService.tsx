@@ -15,13 +15,13 @@ import { TokenAction, TokenState } from '../Hooks/UseToken';
 import { Responses } from '../models';
 
 export default class CategoryService {
-  private token: TokenState;
+  private token: string;
   private tokenDispatch: React.Dispatch<TokenAction> | undefined;
   private instance: CustomAxios;
   private SERVICE_URL: string;
 
-  constructor(token?: TokenState, tokenDispatch?: React.Dispatch<TokenAction>) {
-    this.token = token || ({} as TokenState);
+  constructor(token?: string, tokenDispatch?: React.Dispatch<TokenAction>) {
+    this.token = token || '';
     this.tokenDispatch = tokenDispatch;
     this.instance = new CustomAxios(this.token, this.tokenDispatch);
     this.SERVICE_URL = this.instance.ROOT_URL + '';

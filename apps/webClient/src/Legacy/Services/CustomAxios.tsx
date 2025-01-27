@@ -92,11 +92,11 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
  * This offers an extra layer of protection to the cookies of the system
  */
 export default class CustomAxios {
-  private token: TokenState;
+  private token: string;
   private tokenDispatch: React.Dispatch<TokenAction> | undefined;
   public ROOT_URL = rootURL;
 
-  constructor(token: TokenState, tokenDispatch?: React.Dispatch<TokenAction>) {
+  constructor(token: string, tokenDispatch?: React.Dispatch<TokenAction>) {
     this.token = token;
     this.tokenDispatch = tokenDispatch;
   }
@@ -107,7 +107,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).get(url);
+      const res = await mAxios(this.token, this.tokenDispatch).get(url);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -123,7 +123,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).post(url, payload);
+      const res = await mAxios(this.token, this.tokenDispatch).post(url, payload);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -139,7 +139,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).post(url, payload, {
+      const res = await mAxios(this.token, this.tokenDispatch).post(url, payload, {
         withCredentials: true,
       });
       if (loading) loading(false);
@@ -157,7 +157,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).patch(url, payload);
+      const res = await mAxios(this.token, this.tokenDispatch).patch(url, payload);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -173,7 +173,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).put(url, payload);
+      const res = await mAxios(this.token, this.tokenDispatch).put(url, payload);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -188,7 +188,7 @@ export default class CustomAxios {
   ): Promise<AxiosResponse<any>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token.token, this.tokenDispatch).delete(url);
+      const res = await mAxios(this.token, this.tokenDispatch).delete(url);
       if (loading) loading(false);
       return res;
     } catch (err) {

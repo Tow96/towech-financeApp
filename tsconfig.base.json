@@ -19,10 +19,10 @@
       "@financeapp/backend-authorization": ["libs/backend/authorization/src/index.ts"],
       "@financeapp/backend-mailing": ["libs/backend/mailing/src/index.ts"],
       "@financeapp/backend-users": ["libs/backend/users/src/index.ts"],
-      "@financeapp/frontend-common": ["apps/webclient/libs/frontend/common/src/index.ts"],
-      "@financeapp/frontend-common/server": ["apps/webclient/libs/frontend/common/src/server.ts"],
-      "@financeapp/frontend-toasts": ["apps/webclient/libs/frontend/toasts/src/index.ts"],
-      "@financeapp/frontend-toasts/server": ["apps/webclient/libs/frontend/toasts/src/server.ts"]
+      "@financeapp/frontend-authentication": ["libs/frontend/authentication/src/index.ts"],
+      "@financeapp/frontend-common": ["libs/frontend/common/src/index.ts"],
+      "@financeapp/frontend-navbar": ["libs/frontend/navbar/src/index.ts"],
+      "@financeapp/frontend-toasts": ["libs/frontend/toasts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

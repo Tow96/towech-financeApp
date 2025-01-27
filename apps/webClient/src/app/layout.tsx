@@ -2,7 +2,8 @@ import './globals.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
-import TanstackProvider from '../utils/TanstackProvider';
+
+import { TanstackProvider } from '@financeapp/frontend-common';
 import { ToastProvider } from '@financeapp/frontend-toasts';
 import { LegacyProvider } from '../Legacy/Services/LegacyProvider';
 
