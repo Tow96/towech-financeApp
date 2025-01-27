@@ -1,3 +1,4 @@
+import { getRandomValues } from 'crypto';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { AuthorizationService, TokenDto } from '@financeapp/backend-authorization';
 import { encodeBase32LowerCaseNoPadding } from '../../../fake-oslo/encoding';
@@ -31,7 +32,7 @@ export class SessionCommands {
 
     // Change
     const tokenBytes = new Uint8Array(20);
-    crypto.getRandomValues(tokenBytes);
+    getRandomValues(tokenBytes);
     const sessionId = encodeBase32LowerCaseNoPadding(tokenBytes);
     const session = user.addSession(password, sessionId, isPermanent);
     if (!session) throw new UnauthorizedException('Invalid credentials');

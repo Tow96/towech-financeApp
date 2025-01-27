@@ -1,3 +1,4 @@
+import { getRandomValues } from 'crypto';
 import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
 import { encodeBase32UpperCaseNoPadding } from '../../../fake-oslo/encoding';
 
@@ -39,7 +40,7 @@ export class PasswordResetCommands {
 
     // Change
     const bytes = new Uint8Array(5);
-    crypto.getRandomValues(bytes);
+    getRandomValues(bytes);
     const code = encodeBase32UpperCaseNoPadding(bytes);
 
     const updated = user.generatePasswordResetCode(code);
