@@ -6,7 +6,7 @@ FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY dist/apps/api/package*.json ./
+COPY dist/apps/Api/package*.json ./
 RUN npm install --omit=dev
 
 # Runner ------------------------------------------------------------------------------------------
@@ -25,12 +25,12 @@ RUN apk add --update nodejs dumb-init \
 
 USER ${USER}
 ENV HOSTNAME "0.0.0.0"
-ENV NODE_ENV=production
-ENV PORT=3000
+ENV NODE_ENV production
+ENV PORT 3000
   
 COPY --from=deps --chown=${USER}:${GROUP} /app/node_modules ./node_modules
 COPY --from=deps --chown=${USER}:${GROUP} /app/package.json ./package.json
-COPY --chown=${USER}:${GROUP} dist/apps/api .
+COPY --chown=${USER}:${GROUP} dist/apps/Api .
 
 EXPOSE 3000
 CMD ["dumb-init", "node", "main.js"]

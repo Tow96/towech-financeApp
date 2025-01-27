@@ -5,6 +5,7 @@ dist
 tmp
 out-tsc
 logs
+deploy
 
 # environment variables
 *.env*

@@ -17,24 +17,6 @@ import { BaseUser } from '../Models/Objects/user';
 import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from '@financeapp/backend-authorization';
 
-// Checks if a jwt Token is valid
-const isAuth = (token: string, isRefresh = false): jwt.JwtPayload => {
-  if (!process.env.REFRESH_TOKEN_KEY || !process.env.AUTH_TOKEN_KEY) {
-    // logger.error('No jwt encryption keys provided');
-    throw AmqpMessage.errorMessage('No jwt encryption keys');
-  }
-
-  try {
-    const decodedToken = jwt.verify(
-      token,
-      isRefresh ? process.env.REFRESH_TOKEN_KEY : process.env.AUTH_TOKEN_KEY
-    );
-    return decodedToken as jwt.JwtPayload;
-  } catch (err) {
-    throw AmqpMessage.errorMessage('Invalid token', 401);
-  }
-};
-
 @Injectable()
 export class CheckAuthMiddleware implements NestMiddleware {
   private readonly _jwtSecret = this._configService.getOrThrow<string>('JWT_SECRET');
