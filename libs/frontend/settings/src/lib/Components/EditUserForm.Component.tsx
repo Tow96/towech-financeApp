@@ -3,7 +3,7 @@ import { ReactElement, useEffect } from 'react';
 
 // Hooks
 import { useAddToast } from '@financeapp/frontend-toasts';
-import { EditUserDto, useEditUser, useUser } from './User.Service';
+import { EditUserDto, useEditUser, useUser } from '../User.Service';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 // Components
