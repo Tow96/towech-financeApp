@@ -7,20 +7,18 @@ import { RequestingUserGuard } from '../Guards/RequestingUser.Guard';
 import { AdminRequestingUserGuard } from '../Guards/AdminUser.Guard';
 
 // Services
-import { GetUserDto, UserQueries } from '../../Core/Application/Queries/User.Queries';
+import { GetUserDto, GetUsersDto, UserQueries } from '../../Core/Application/Queries/User.Queries';
 import { UserInfoCommands } from '../../Core/Application/Commands/UserInfo.Commands';
 
 // Validation
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
 import { UpdateUserDto } from '../Validation/UpdateUser.Dto';
-import { MailingService } from '@financeapp/backend-mailing';
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly _userQueries: UserQueries,
-    private readonly _userInfoCommands: UserInfoCommands,
-    private readonly _mailingService: MailingService
+    private readonly _userInfoCommands: UserInfoCommands
   ) {}
 
   @Post('/register')
@@ -36,7 +34,7 @@ export class UserController {
 
   @Get('/')
   @UseGuards(AdminGuard)
-  async getAllUsers(): Promise<GetUserDto[]> {
+  async getAllUsers(): Promise<GetUsersDto[]> {
     return this._userQueries.getAll();
   }
 

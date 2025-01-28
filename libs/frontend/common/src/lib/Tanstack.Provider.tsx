@@ -10,8 +10,7 @@ export enum TanstackKeys {
 }
 
 // Move this into useState if disconnects are happening
-const queryClient = new QueryClient();
-queryClient.setQueryDefaults([TanstackKeys.AUTH], { retry: 0 });
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1000 * 30 } } });
 
 // Wrapper --------------------------------------------------------------------
 const TanstackProvider = ({ children }: { children: ReactNode }): ReactElement => (

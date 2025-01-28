@@ -58,10 +58,11 @@ export class CheckConfirmedMiddleware implements NestMiddleware {
       if (!req.user)
         throw AmqpMessage.errorMessage('Server Error, there is no user in the request', 501);
 
-      if (!req.user.accountConfirmed)
-        throw AmqpMessage.errorMessage('Email not confirmed', 403, {
-          confirmation: 'E-mail not verified',
-        });
+      // TODO: Disabled for the time being
+      // if (!req.user.accountConfirmed)
+      //   throw AmqpMessage.errorMessage('Email not confirmed', 403, {
+      //     confirmation: 'E-mail not verified',
+      //   });
 
       next();
     } catch (err: unknown) {

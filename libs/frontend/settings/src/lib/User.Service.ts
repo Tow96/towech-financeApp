@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiContext, TanstackKeys } from '@financeapp/frontend-common';
-import { AuthenticationDto, useAuthentication } from '@financeapp/frontend-authentication';
+import { useAuthentication } from '@financeapp/frontend-authentication';
 
 // Models -----------------------------------------------------------
 type UserDto = {
@@ -8,6 +8,7 @@ type UserDto = {
   name: string;
   email: string;
   role: string;
+  accountVerified: boolean;
 };
 
 export type EditUserDto = {
@@ -42,5 +43,15 @@ export const useEditUser = () => {
       return data;
     },
     onSuccess: (res) => client.setQueryData([TanstackKeys.USER], { ...user, ...res }),
+  });
+};
+
+export const useSendVerification = () => {
+  const { data: auth } = useAuthentication();
+  return useMutation({
+    mutationKey: [TanstackKeys.USER, 'resend mail'],
+    mutationFn: async () => {
+      if (auth) await api.post(`users/${auth.userId}/email/send-verification`, auth.token);
+    },
   });
 };

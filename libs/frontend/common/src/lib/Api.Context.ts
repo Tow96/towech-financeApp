@@ -37,6 +37,9 @@ export class ApiContext {
   async patch<T>(url: string, token: string, payload?: unknown): Promise<T> {
     return (await this.axiosInstance.patch<T>(url, payload, this.config(token))).data;
   }
+  async post<T>(url: string, token: string, payload?: unknown): Promise<T> {
+    return (await this.axiosInstance.post<T>(url, payload, this.config(token))).data;
+  }
   async postWithCookie<T>(url: string, payload?: unknown): Promise<T> {
     return (await this.axiosInstance.post<T>(url, payload, this.cookieConfig)).data;
   }

@@ -25,6 +25,7 @@ export const useAuthentication = () =>
   useQuery({
     queryKey: [TanstackKeys.AUTH],
     queryFn: async () => await api.postWithCookie<AuthenticationDto>('/refresh'),
+    staleTime: 1000 * 60 * 4, // 4 min
   });
 
 // Mutation Hooks ---------------------------------------------------

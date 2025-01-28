@@ -11,6 +11,14 @@ export type GetUserDto = {
   email: string;
   name: string;
   role: string;
+  accountVerified: boolean;
+};
+
+export type GetUsersDto = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
 };
 
 @Injectable()
@@ -19,7 +27,7 @@ export class UserQueries {
     @Inject(USER_SCHEMA_CONNECTION) private readonly _db: NodePgDatabase<typeof UsersSchema>
   ) {}
 
-  async getAll(): Promise<GetUserDto[]> {
+  async getAll(): Promise<GetUsersDto[]> {
     return this._db
       .select({
         id: UsersSchema.UserInfoTable.id,
@@ -37,6 +45,7 @@ export class UserQueries {
         email: UsersSchema.UserInfoTable.email,
         name: UsersSchema.UserInfoTable.name,
         role: UsersSchema.UserInfoTable.role,
+        accountVerified: UsersSchema.UserInfoTable.emailVerified,
       })
       .from(UsersSchema.UserInfoTable)
       .where(eq(UsersSchema.UserInfoTable.id, userId));
