@@ -12,7 +12,7 @@ import { UserInfoCommands } from '../../Core/Application/Commands/UserInfo.Comma
 
 // Validation
 import { RegisterUserDto } from '../Validation/RegisterUser.Dto';
-import { ChangeNameDto } from '../Validation/ChangeName.Dto';
+import { UpdateUserDto } from '../Validation/UpdateUser.Dto';
 import { MailingService } from '@financeapp/backend-mailing';
 
 @Controller('users')
@@ -52,9 +52,9 @@ export class UserController {
     return this._userInfoCommands.delete(userId);
   }
 
-  @Patch('/:userId/name')
+  @Patch('/:userId')
   @UseGuards(RequestingUserGuard)
-  async changeName(@Param('userId') userId: string, @Body() data: ChangeNameDto): Promise<void> {
-    return this._userInfoCommands.changeName(userId, data.name);
+  async changeName(@Param('userId') userId: string, @Body() data: UpdateUserDto): Promise<void> {
+    return this._userInfoCommands.update(userId, data.name);
   }
 }

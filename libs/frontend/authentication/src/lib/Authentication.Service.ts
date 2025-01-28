@@ -5,10 +5,10 @@
  */
 // Libraries ---------------------------------------------------------
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { HttpContext, TanstackKeys } from '@financeapp/frontend-common';
+import { ApiContext, TanstackKeys } from '@financeapp/frontend-common';
 
 // Model ------------------------------------------------------------
-type AuthenticationDto = {
+export type AuthenticationDto = {
   accountVerified: string;
   role: string;
   userId: string;
@@ -19,13 +19,12 @@ type AuthenticationDto = {
 export type LoginDto = { email: string; password: string; keepSession: boolean };
 
 // Adapter ----------------------------------------------------------
-const api = new HttpContext();
-// const updateUser = (user: Partial<User>, state: User): User => ({ ...state, ...user });
+const api = new ApiContext();
 
 export const useAuthentication = () =>
   useQuery({
     queryKey: [TanstackKeys.AUTH],
-    queryFn: async () => await api.post<AuthenticationDto>('/refresh'),
+    queryFn: async () => await api.postWithCookie<AuthenticationDto>('/refresh'),
   });
 
 // Mutation Hooks ---------------------------------------------------
@@ -33,7 +32,8 @@ export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [TanstackKeys.AUTH, 'login'],
-    mutationFn: async (cred: LoginDto) => await api.post<AuthenticationDto>('/login', cred),
+    mutationFn: async (cred: LoginDto) =>
+      await api.postWithCookie<AuthenticationDto>('/login', cred),
     onSuccess: (res) => client.setQueryData([TanstackKeys.AUTH], res),
   });
 };
@@ -42,7 +42,7 @@ export const useLogout = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [TanstackKeys.AUTH, 'logout'],
-    mutationFn: async () => await api.delete(`/logout`),
+    mutationFn: async () => await api.postWithCookie(`/logout`),
     onSuccess: () => client.setQueryData([TanstackKeys.AUTH], null),
     onError: () => client.setQueryData([TanstackKeys.AUTH], null),
   });

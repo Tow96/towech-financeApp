@@ -17,20 +17,6 @@ export class EmailVerificationCommands {
     private readonly _mailingService: UserEmailService
   ) {}
 
-  async changeEmail(userId: string, email: string): Promise<void> {
-    this._logger.log(`Updating email for user: ${userId}`);
-    // Map data
-    const emailRegistered = await this._userRepository.isEmailRegistered(email);
-    if (emailRegistered)
-      throw new UnprocessableEntityException(`User with email "${email}" already registered.`);
-    const user = await this._userRepository.fetchUserById(userId);
-    this._logger.verbose(user);
-
-    // Update and save
-    user.setBasicInfo({ email: email });
-    await this._userRepository.persistChanges(user);
-  }
-
   async generateEmailVerificationCode(userId: string): Promise<void> {
     this._logger.log(`Generating email verification code for user: ${userId}.`);
     // Map

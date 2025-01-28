@@ -15,13 +15,18 @@ export class UserInfoCommands {
     private readonly _mailingService: UserEmailService
   ) {}
 
-  async changeName(userId: string, name: string): Promise<void> {
-    this._logger.log(`Updating name for user: ${userId}.`);
+  async update(userId: string, name?: string, email?: string): Promise<void> {
+    this._logger.log(`Updating info for user: ${userId}.`);
     // Map
     const user = await this._userRepository.fetchUserById(userId);
+    if (email) {
+      const emailRegistered = await this._userRepository.isEmailRegistered(email);
+      if (emailRegistered)
+        throw new UnprocessableEntityException(`User with email "${email}" already registered.`);
+    }
 
     // Change
-    user.setBasicInfo({ name: name });
+    user.setBasicInfo({ name, email });
 
     // Persist
     await this._userRepository.persistChanges(user);
