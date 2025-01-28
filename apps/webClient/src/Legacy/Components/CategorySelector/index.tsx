@@ -1,11 +1,11 @@
-/** CategorySelecor
- * Copyright (c) 2021, Towechlabs
+/** CategorySelector
+ * Copyright (c) 2021, TowechLabs
  * All rights reserved
  *
  * Selector for categories
  */
 // Libraries
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
 // Components
 import Modal from '../Modal';
@@ -25,7 +25,7 @@ import './CategorySelector.css';
 interface CategorySelectorProps {
   error?: boolean;
   value?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   name?: string;
   visible: boolean;
   edit?: boolean;
@@ -33,18 +33,18 @@ interface CategorySelectorProps {
   transfer?: boolean;
 }
 
-const CategorySelector = (props: CategorySelectorProps): JSX.Element => {
+const CategorySelector = (props: CategorySelectorProps): ReactElement => {
   const { categories } = useContext(MainStore);
   const [categoryType, setCategoryType] = useState(2);
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null as Objects.Category | null);
 
-  // Start useEffect, only updates the when the form is visible
+  // Start useEffect, only updates when the form is visible
   useEffect(() => {
     if (props.visible && props.value !== (selectedCategory?._id || '-1')) {
       searchAndSetView(props.value || '-1');
     }
-  }, [props.visible]);
+  }, [props.visible]); // eslint-disable-line
 
   // Functions
   const searchAndSetView = (id: string): void => {
@@ -110,7 +110,7 @@ const CategorySelector = (props: CategorySelectorProps): JSX.Element => {
         onClick={() => setShowModal(true)}
       >
         <IdIcons.Variable
-          iconid={selectedCategory?.icon_id || 0}
+          iconId={selectedCategory?.icon_id || 0}
           className="CategorySelector__Icon"
         />
         <div className="CategorySelector__Name">{selectedCategory?.name || 'Select Category'}</div>
@@ -146,26 +146,6 @@ const CategorySelector = (props: CategorySelectorProps): JSX.Element => {
           </div>
           {/* Categories */}
           <div className="CategorySelector__Container__List">
-            {/* None selector */}
-            {/* {props.parentSelector && (
-              <div
-                className="CategorySelector__Container__List__Category"
-                onClick={() => setCategoryCallback(categoryType === 1 ? '-3' : '-4')}
-              >
-                <IdIcons.Variable
-                  iconid={0}
-                  className={getSelectedCategoryClass({
-                    parent_id: '-1',
-                    _id: categoryType === 1 ? '-3' : '-4',
-                    icon_id: 0,
-                    name: categoryType === 1 ? 'None (Income)' : 'None (Expense)',
-                  } as Objects.Category)}
-                />
-                <div className="NewTransactionForm__CategorySelector__Category__Name">
-                  {categoryType === 1 ? 'None (Income)' : 'None (Expense)'}
-                </div>
-              </div>
-            )} */}
             {/* Other Categories */}
             {categoryType === 0 ? (
               <CategoryCard
@@ -213,7 +193,7 @@ interface CategoryCardProps {
   setCategory: (id: string) => void;
 }
 
-const CategoryCard = (props: CategoryCardProps): JSX.Element => {
+const CategoryCard = (props: CategoryCardProps): ReactElement => {
   const getSelectedCategoryClass = (category: Objects.Category): string => {
     let output = 'CategorySelector__CategoryCard__Icon';
 
@@ -241,7 +221,7 @@ const CategoryCard = (props: CategoryCardProps): JSX.Element => {
         }
       >
         <IdIcons.Variable
-          iconid={props.category.icon_id}
+          iconId={props.category.icon_id}
           className={getSelectedCategoryClass(props.category)}
         />
         <div>{props.category.name}</div>

@@ -1,5 +1,5 @@
 /** wallets/layout.tsx
- * Copyright (c) 2024, Towechlabs
+ * Copyright (c) 2024, TowechLabs
  *
  * Layout for the wallets page.
  */

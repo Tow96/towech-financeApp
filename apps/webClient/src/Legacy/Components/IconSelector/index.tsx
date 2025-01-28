@@ -1,11 +1,11 @@
 /** IconSelector.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Component that allows a user to select icons
  */
 // Libraries
-import React, { SVGProps, useEffect, useState } from 'react';
+import React, { ReactElement, SVGProps, useEffect, useState } from 'react';
 
 // Components
 import Modal from '../Modal';
@@ -16,11 +16,11 @@ import './IconSelector.css';
 
 interface IconSelectorProps extends SVGProps<SVGSVGElement> {
   name?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   value?: number;
 }
 
-const IconSelector = (props: IconSelectorProps): JSX.Element => {
+const IconSelector = (props: IconSelectorProps): ReactElement => {
   const [display, setDisplay] = useState(props.value || 0);
   const [showSelector, setShowSelector] = useState(false);
 
@@ -46,16 +46,16 @@ const IconSelector = (props: IconSelectorProps): JSX.Element => {
 
   return (
     <div className="IconSelector">
-      <IdIcons.Variable iconid={display} onClick={() => setShowSelector(true)} {...props} />
+      <IdIcons.Variable iconId={display} onClick={() => setShowSelector(true)} {...props} />
       <Modal setModal={setShowSelector} showModal={showSelector} title="Select icon">
         <div className="IconSelector__Grid">
           {(() => {
-            const icons: JSX.Element[] = [];
+            const icons: ReactElement[] = [];
             for (let i = 1; i <= IdIcons.amount; i++) {
               icons.push(
                 <IdIcons.Variable
                   key={i}
-                  iconid={i}
+                  iconId={i}
                   className="IconSelector__Grid__Icon"
                   onClick={() => selectIcon(i)}
                 />

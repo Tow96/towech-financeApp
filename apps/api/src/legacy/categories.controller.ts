@@ -1,5 +1,5 @@
 /** index.js
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * index for all the category routes
@@ -9,12 +9,12 @@ import { GetCategoriesResponse } from './Models/responses';
 import { Category } from './Models/objects';
 import { WorkerGetAllCategories } from './Models/requests';
 import Queue, { AmqpMessage } from 'tow96-amqpwrapper';
-
 @Controller('categories')
 export class CategoryController {
   private categoryQueue = (process.env.CATEGORY_QUEUE as string) || 'categoryQueue';
 
   @Get('')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getCategories(@Req() req: any, @Res() res: any) {
     try {
       const connection = await Queue.startConnection();
@@ -51,7 +51,11 @@ export class CategoryController {
 
       res
         .status(response.status)
-        .send({ Income: incomeCats, Expense: expenseCats, Archived: archivedCats } as GetCategoriesResponse);
+        .send({
+          Income: incomeCats,
+          Expense: expenseCats,
+          Archived: archivedCats,
+        } as GetCategoriesResponse);
     } catch (e) {
       res.status(500).send(e);
     }

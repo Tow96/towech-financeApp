@@ -6,18 +6,19 @@
  */
 // Styles
 import './Checkbox.css';
+import { ReactElement } from 'react';
 
 interface Props {
-  accent?: any;
+  accent?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   checked?: boolean;
-  dark?: any;
+  dark?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   label?: string;
   name?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const Checkbox = (props: Props): JSX.Element => {
-  // Checks the the alternate theme flags and applies it with following hierarchy
+const Checkbox = (props: Props): ReactElement => {
+  // Checks the alternate theme flags and applies it with following hierarchy
   // Accent
   // Dark
   // Light

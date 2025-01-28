@@ -9,7 +9,6 @@ import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 
 import { jwtDecode } from 'jwt-decode';
 
 // Stores
-import { TokenAction, TokenState } from '../Hooks/UseToken';
 import { Responses } from '../models';
 
 // Functions
@@ -19,9 +18,8 @@ const rootURL = process.env.NEXT_PUBLIC_WEBAPI || '';
 /** getAuthToken
  * Makes a request to refresh the authentication token
  *
- * @param {React.Dispatch<tokenAction>} tokenDispatch Dispatch for the token
  */
-async function getAuthToken(tokenDispatch: React.Dispatch<TokenAction>): Promise<string> {
+async function getAuthToken(): Promise<string> {
   try {
     const res: AxiosResponse<Responses.AuthenticationResponse> = await axios.post(
       `${rootURL}/refresh`,
@@ -30,10 +28,9 @@ async function getAuthToken(tokenDispatch: React.Dispatch<TokenAction>): Promise
         withCredentials: true,
       }
     );
-    tokenDispatch({ type: 'REFRESH', payload: res.data });
     return res.data.token;
   } catch (err) {
-    tokenDispatch({ type: 'LOGOUT', payload: { token: '' } });
+    console.error(err);
     return '';
   }
 }
@@ -43,42 +40,39 @@ async function getAuthToken(tokenDispatch: React.Dispatch<TokenAction>): Promise
  * constantly refresh the authentication token
  *
  * @param {string} token Current token
- * @param {React.Dispatch<tokenAction>} tokenDispatch Dispatch to update the token
  */
-const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): AxiosInstance => {
+const mAxios = (token: string): AxiosInstance => {
   // Axios instance for making requests
   const axiosInstance = axios.create();
 
   // If a token dispatch is given, the interceptors are set
-  if (tokenDispatch) {
-    axiosInstance.interceptors.request.use(
-      async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-        let nuToken = token;
+  axiosInstance.interceptors.request.use(
+    async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+      let nuToken = token;
 
-        // If there is no authToken, gets a new one
-        if (!token) {
-          nuToken = await getAuthToken(tokenDispatch);
-        }
-        // If there is one, checks if it isn't expired
-        else {
-          const decodedToken: any = jwtDecode(token);
-          // If the authToken is expired, gets a newOne
-          if (decodedToken.exp * 1000 < Date.now()) {
-            nuToken = await getAuthToken(tokenDispatch);
-          }
-        }
-
-        // sets the token as header
-        config.headers.set('Authorization', `Bearer ${nuToken}`);
-
-        return config;
-      },
-      (error) => {
-        // console.log('Api-request-error');
-        return Promise.reject(error);
+      // If there is no authToken, gets a new one
+      if (!token) {
+        nuToken = await getAuthToken();
       }
-    );
-  }
+      // If there is one, checks if it isn't expired
+      else {
+        const decodedToken: { exp: number } = jwtDecode(token);
+        // If the authToken is expired, gets a newOne
+        if (decodedToken.exp * 1000 < Date.now()) {
+          nuToken = await getAuthToken();
+        }
+      }
+
+      // sets the token as header
+      config.headers.set('Authorization', `Bearer ${nuToken}`);
+
+      return config;
+    },
+    (error) => {
+      // console.log('Api-request-error');
+      return Promise.reject(error);
+    }
+  );
 
   return axiosInstance;
 };
@@ -93,21 +87,19 @@ const mAxios = (token: string, tokenDispatch?: React.Dispatch<TokenAction>): Axi
  */
 export default class CustomAxios {
   private token: string;
-  private tokenDispatch: React.Dispatch<TokenAction> | undefined;
   public ROOT_URL = rootURL;
 
-  constructor(token: string, tokenDispatch?: React.Dispatch<TokenAction>) {
+  constructor(token: string) {
     this.token = token;
-    this.tokenDispatch = tokenDispatch;
   }
 
   async get(
     url: string,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<unknown>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token, this.tokenDispatch).get(url);
+      const res = await mAxios(this.token).get(url);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -118,30 +110,12 @@ export default class CustomAxios {
 
   async post(
     url: string,
-    payload: any,
+    payload: unknown,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<unknown>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token, this.tokenDispatch).post(url, payload);
-      if (loading) loading(false);
-      return res;
-    } catch (err) {
-      if (loading) loading(false);
-      throw err;
-    }
-  }
-
-  async postCookie(
-    url: string,
-    payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
-    if (loading) loading(true);
-    try {
-      const res = await mAxios(this.token, this.tokenDispatch).post(url, payload, {
-        withCredentials: true,
-      });
+      const res = await mAxios(this.token).post(url, payload);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -152,28 +126,12 @@ export default class CustomAxios {
 
   async patch(
     url: string,
-    payload: any,
+    payload: unknown,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<unknown>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token, this.tokenDispatch).patch(url, payload);
-      if (loading) loading(false);
-      return res;
-    } catch (err) {
-      if (loading) loading(false);
-      throw err;
-    }
-  }
-
-  async put(
-    url: string,
-    payload: any,
-    loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
-    if (loading) loading(true);
-    try {
-      const res = await mAxios(this.token, this.tokenDispatch).put(url, payload);
+      const res = await mAxios(this.token).patch(url, payload);
       if (loading) loading(false);
       return res;
     } catch (err) {
@@ -185,10 +143,10 @@ export default class CustomAxios {
   async delete(
     url: string,
     loading?: React.Dispatch<React.SetStateAction<boolean>>
-  ): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<unknown>> {
     if (loading) loading(true);
     try {
-      const res = await mAxios(this.token, this.tokenDispatch).delete(url);
+      const res = await mAxios(this.token).delete(url);
       if (loading) loading(false);
       return res;
     } catch (err) {

@@ -6,12 +6,13 @@
  */
 // Styles
 import './Loading.css';
+import { ReactElement } from 'react';
 
 interface Props {
   className?: string;
 }
 
-const Loading = (props: Props): JSX.Element => {
+const Loading = (props: Props): ReactElement => {
   let theme = 'lds-dual-ring';
   if (props.className) theme += ` ${props.className}`;
 

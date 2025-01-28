@@ -1,5 +1,5 @@
 /** ParseMoneyAmount.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  * Function that converts an amount into a readable format
  */

@@ -15,7 +15,6 @@ import { MainStore } from '../../../Legacy/Hooks/ContextStore';
 
 // Components
 import Button from '../../../Legacy/Components/Button';
-import Page from '../../../Legacy/Components/Page';
 import NoWalletsCard from '../../../Legacy/Components/Wallets/NoWalletsCard';
 import WalletCard from '../../../Legacy/Components/Wallets/WalletCard';
 import WalletForm from '../../../Legacy/Components/Wallets/WalletForm';
@@ -39,7 +38,7 @@ const WalletsPage = (): ReactElement => {
   });
 
   // Starts the services
-  const transactionService = new TransactionService(user?.token, () => {});
+  const transactionService = new TransactionService(user?.token);
 
   // Hooks
   const [loaded, setLoaded] = useState(false);

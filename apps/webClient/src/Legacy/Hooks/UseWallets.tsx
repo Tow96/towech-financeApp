@@ -1,5 +1,5 @@
 /** UseWallets.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Reducer for all the changes that the wallets can receive
@@ -30,9 +30,9 @@ const cleanAndSort = (input: Objects.Wallet[]): Objects.Wallet[] => {
   });
 
   let output: Objects.Wallet[] = [];
-  // Fetches the subwallets, sorts them and adds them
+  // Fetches the subWallets, sorts them and adds them
   mainWallets.map((mW) => {
-    // Gets the subwallets for the main wallet
+    // Gets the subWallets for the main wallet
     let subWallets = input.filter((x) => {
       return x.parent_id === mW._id;
     });
@@ -61,9 +61,9 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
 
       // only adds the wallets that are not already in the state
       action.payload.wallets.map((wallet) => {
-        // If the added wallet is a subwallet, it also gets added to it's parent
+        // If the added wallet is a subWallet, it also gets added to it's parent
         if (wallet.parent_id !== null && wallet.parent_id !== undefined) {
-          // Gets the index of the parent wallet and adds the wallet if unexistent
+          // Gets the index of the parent wallet and adds the wallet if un-existent
           const parentIndex = state.findIndex((x) => x._id === wallet.parent_id);
 
           // Only adds if the parent wallet exists
@@ -87,9 +87,9 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
 
       // only changes the wallets that are already in the state
       action.payload.wallets.map((wallet) => {
-        // If the payload wallet is a subwallet the parent wallet also gets edited
+        // If the payload wallet is a subWallet the parent wallet also gets edited
         if (wallet.parent_id !== null && wallet.parent_id !== undefined) {
-          // Gets the index of the parent wallet and adds the wallet if unexistent
+          // Gets the index of the parent wallet and adds the wallet if un-existent
           const parentIndex = state.findIndex((x) => x._id === wallet.parent_id);
 
           // Only edits the wallet if found
@@ -97,7 +97,7 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
             let index = state[parentIndex].child_id?.findIndex((x) => x._id === wallet._id);
             if (index === undefined) index = -1;
 
-            if (index >= 0) state[parentIndex].child_id![index] = wallet;
+            if (index >= 0) state[parentIndex].child_id![index] = wallet; // eslint-disable-line @typescript-eslint/no-non-null-assertion
           }
         }
 
@@ -114,16 +114,16 @@ const reducer = (state: Objects.Wallet[], action: WalletAction): Objects.Wallet[
         return index < 0;
       });
 
-      // Then removes any subwallet that was given
+      // Then removes any subWallet that was given
       action.payload.wallets.map((wallet) => {
         if (wallet.parent_id !== null && wallet.parent_id !== undefined) {
-          // Gets the index of the parent wallet and adds the wallet if unexistent
+          // Gets the index of the parent wallet and adds the wallet if un-existent
           const parentIndex = state.findIndex((x) => x._id === wallet.parent_id);
 
           // Only removes the wallet if found
           if (parentIndex !== -1) {
             item[parentIndex].child_id = item[parentIndex].child_id?.filter((x) => {
-              x._id === wallet._id; // eslint-disable-line
+              x._id === wallet._id; // eslint-disable-line @typescript-eslint/no-unused-expressions
             });
           }
         }
@@ -161,7 +161,7 @@ const useWallets = (
   // The initial state is an empty array
   const initialState: Objects.Wallet[] = initial || [];
 
-  // Reducer creation and returnal
+  // Reducer creation and return
   const [wallets, dispatch] = useReducer(reducer, initialState);
   return [wallets, dispatch];
 };

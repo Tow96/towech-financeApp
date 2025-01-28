@@ -26,8 +26,8 @@ const DashboardPage = (): ReactElement => {
   const { data: user } = useAuthentication();
   const params = useSearchParams();
 
-  const transactionService = new TransactionService(user?.token || '', () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
-  const categoryService = new CategoryService(user?.token || '', () => {}); // eslint-disable-line @typescript-eslint/no-empty-function
+  const transactionService = new TransactionService(user?.token || '');
+  const categoryService = new CategoryService(user?.token || '');
 
   const [loaded, setLoaded] = useState(false);
   const [loadingTransactions, setLoadingTransactions] = useState(false);
@@ -62,7 +62,7 @@ const DashboardPage = (): ReactElement => {
 
           // Also generates and sets the selectedWallet to contain the children
           const firstSelectedWallet = res.data.find(
-            (x: any) => x._id === (params.get('wallet') || '-1')
+            (x: any) => x._id === (params.get('wallet') || '-1') // eslint-disable-line @typescript-eslint/no-explicit-any
           );
 
           dispatchTransactionState({
@@ -95,12 +95,14 @@ const DashboardPage = (): ReactElement => {
         });
       });
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (!loaded) return;
-    loadTransactions(transactionState.selectedWallet._id, transactionState.dataMonth);
-  }, [transactionState.selectedWallet, transactionState.dataMonth]);
+    loadTransactions(transactionState.selectedWallet._id, transactionState.dataMonth).catch((e) =>
+      console.error(e)
+    );
+  }, [transactionState.selectedWallet, transactionState.dataMonth]); // eslint-disable-line
 
   const loadTransactions = async (walletId: string, dataMonth: string): Promise<void> => {
     const res = await transactionService.getWalletTransactions(

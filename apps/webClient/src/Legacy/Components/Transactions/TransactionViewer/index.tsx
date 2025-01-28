@@ -1,10 +1,10 @@
 /** index.tsx
  * Copyright (c) 2021, Jose Tow
  * All rights reserved
- * Componet that shows all the given transactions
+ * Component that shows all the given transactions
  */
 // Libraries
-import { useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 
 // Models
 import { Objects } from '../../../models';
@@ -22,7 +22,7 @@ interface Props {
   hidden: boolean;
 }
 
-const Index = (props: Props): JSX.Element => {
+const Index = (props: Props): ReactElement => {
   const { transactionState } = useContext(TransactionPageStore);
 
   return (

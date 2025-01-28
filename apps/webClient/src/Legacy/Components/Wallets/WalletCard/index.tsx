@@ -4,7 +4,7 @@
  *
  * Component that shows the Wallet elements
  */
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 
 // Hooks
 import WalletForm from '../WalletForm';
@@ -24,7 +24,7 @@ interface WalletCardProps {
   wallet: Objects.Wallet;
 }
 
-const WalletCard = (props: WalletCardProps): JSX.Element => {
+const WalletCard = (props: WalletCardProps): ReactElement => {
   // Hooks
   const [showEdit, setEdit] = useState(false);
 
@@ -32,7 +32,7 @@ const WalletCard = (props: WalletCardProps): JSX.Element => {
     <>
       <div className="WalletCard" onClick={() => setEdit(true)}>
         <div className="WalletCard__Main">
-          <IdIcons.Variable iconid={props.wallet.icon_id} className="WalletCard__Icon" />
+          <IdIcons.Variable iconId={props.wallet.icon_id} className="WalletCard__Icon" />
           <div className="WalletCard__Info">
             <div className="WalletCard__Info__Name">{props.wallet.name}</div>
             <div className="WalletCard__Info__Money">

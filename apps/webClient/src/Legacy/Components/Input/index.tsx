@@ -6,7 +6,7 @@
  */
 
 // Styles
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import './Input.css';
 
 interface Props {
@@ -14,17 +14,17 @@ interface Props {
   disabled?: boolean;
   label?: string;
   name?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   placeholder?: string;
   type?: 'text' | 'password' | 'number';
-  value?: any;
+  value?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const Input = (props: Props): JSX.Element => {
+const Input = (props: Props) => {
   // const inputRef = useRef(new HTMLInputElement);
   const [value, setValue] = useState(props.value || '');
 
-  // Checks the the alternate theme flags and applies it with following hierarchy
+  // Checks the alternate theme flags and applies it with following hierarchy
   let theme = 'input';
 
   // Adds the error outline if triggered
@@ -43,7 +43,7 @@ const Input = (props: Props): JSX.Element => {
     if (newValue === value) return;
 
     setValue(newValue);
-  }, [props.value]);
+  }, [props.value]); // eslint-disable-line
 
   // Formats a given string into a number and a string with commas
   const formatNumber = (input: string): string[] => {
@@ -53,8 +53,9 @@ const Input = (props: Props): JSX.Element => {
     let workingValue = value === '0' ? input.replace('0', '') : input;
 
     // First removes dots after the first
-    const splitted = workingValue.split('.');
-    workingValue = splitted.length > 1 ? `${splitted.shift()}.${splitted.join('')}` : `${splitted[0]}`;
+    const splitValue = workingValue.split('.');
+    workingValue =
+      splitValue.length > 1 ? `${splitValue.shift()}.${splitValue.join('')}` : `${splitValue[0]}`;
 
     // Then removes all symbols that are not numbers or dots
     workingValue = workingValue.replace(/[^0-9.]/g, '');
@@ -76,7 +77,7 @@ const Input = (props: Props): JSX.Element => {
   };
 
   // Function that runs everytime the input content changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     let newValue = e.target.value;
 
     // Number filter

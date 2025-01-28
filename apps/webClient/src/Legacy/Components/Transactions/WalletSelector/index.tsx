@@ -1,11 +1,11 @@
 /** index.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Header that allows to change the selected wallet
  */
 // Libraries
-import { useState, useContext } from 'react';
+import { useState, useContext, ReactElement } from 'react';
 import { useRouter } from 'next/navigation';
 
 // hooks
@@ -31,7 +31,7 @@ interface WalletProps {
   total?: number;
 }
 
-const TransactionHeader = (): JSX.Element => {
+const TransactionHeader = (): ReactElement => {
   const { wallets } = useContext(MainStore);
   const { transactionState, dispatchTransactionState } = useContext(TransactionPageStore);
   const router = useRouter();
@@ -86,7 +86,7 @@ const TransactionHeader = (): JSX.Element => {
         <div className="Transactions__WalletSelector__Icon">
           <div className="Transactions__WalletSelector__Icon__Triangle" />
           <IdIcons.Variable
-            iconid={displayed.id}
+            iconId={displayed.id}
             className="Transactions__WalletSelector__Icon__Circle"
           />
         </div>
@@ -119,7 +119,7 @@ const TransactionHeader = (): JSX.Element => {
   );
 };
 
-const TransactionHeaderWallet = (props: WalletProps): JSX.Element => {
+const TransactionHeaderWallet = (props: WalletProps): ReactElement => {
   return (
     <div
       className="Transactions__WalletSelector__WalletCard"
@@ -133,7 +133,7 @@ const TransactionHeaderWallet = (props: WalletProps): JSX.Element => {
         }
       >
         <IdIcons.Variable
-          iconid={props.wallet ? props.wallet.icon_id : -1}
+          iconId={props.wallet ? props.wallet.icon_id : -1}
           className={
             props.wallet?.parent_id === undefined || props.wallet?.parent_id === null
               ? 'Transactions__WalletSelector__WalletCard__Icon'

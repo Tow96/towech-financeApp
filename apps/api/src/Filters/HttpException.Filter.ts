@@ -20,17 +20,4 @@ export class HttpExceptionFilter implements ExceptionFilter {
         return response.status(500).send('internal server error');
     }
   }
-
-  private SendErrorMessage(
-    status: number,
-    exception: Error,
-    response: Response
-  ): Response<unknown, Record<string, unknown>> {
-    const json = {
-      message: exception.message,
-      error: exception.constructor.name,
-      status,
-    };
-    return response.status(status).send(json);
-  }
 }

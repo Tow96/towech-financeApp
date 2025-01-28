@@ -8,8 +8,8 @@ services:
     hostname: rabbitmq
 
     ports:
-      - 15672:15672
-      - 5672:5672
+      - '15672:15672'
+      - '5672:5672'
 
     networks:
       - main-network
@@ -88,7 +88,7 @@ services:
       - main-network
 
     ports:
-      - 3000:80
+      - '3000:80'
 
 networks:
   main-network:

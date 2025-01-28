@@ -1,8 +1,8 @@
-/** UseDatapicker.tsx
- * Copyright (c) 2022, Towechlabs
+/** UseDataPicker.tsx
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
- * Hook that holds all the variables for the datapicker, is used
+ * Hook that holds all the variables for the dataPicker, is used
  * to reduce the amount of reloads that the datepicker does
  */
 import React, { useReducer } from 'react';
@@ -49,7 +49,11 @@ const getWeeksForMonth = (date: Date): Date[][] => {
 
     // Adds the date and goes to the next
     currentWeek.push(currentDate);
-    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+    currentDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + 1
+    );
     counter++;
   }
 
@@ -87,7 +91,7 @@ const reducer = (state: DatepickerState, action: DatepickerAction): DatepickerSt
     case 'SET-PICKER':
       item = {
         ...state,
-        showPicker: action.payload.bool ? true : false,
+        showPicker: !!action.payload.bool,
         viewedDate: state.selectedDate,
         weekGrid: getWeeksForMonth(state.selectedDate),
         monthGrid: getMonthsForYear(state.selectedDate),
@@ -106,7 +110,7 @@ const reducer = (state: DatepickerState, action: DatepickerAction): DatepickerSt
     case 'SET-MODE':
       item = {
         ...state,
-        yearMode: action.payload.bool ? true : false,
+        yearMode: !!action.payload.bool,
       };
       return item;
     case 'SET-MONTH':

@@ -6,20 +6,21 @@
  */
 // Styles
 import './Button.css';
+import { ReactElement } from 'react';
 
 interface Props {
   accent?: boolean;
   dark?: boolean;
   warn?: boolean;
-  children?: JSX.Element | string;
+  children?: ReactElement | string;
   className?: string;
   round?: boolean;
   type?: 'button' | 'submit' | 'reset' | undefined;
-  onClick?: any;
+  onClick?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const Button = (props: Props): JSX.Element => {
-  // Checks the the alternate theme flags and applies it with following hierarchy
+const Button = (props: Props): ReactElement => {
+  // Checks the alternate theme flags and applies it with following hierarchy
   // Accent
   // Dark
   // Light

@@ -1,5 +1,5 @@
 /** UseTransactions.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Reducer for all the changes that the transactions can receive
@@ -37,9 +37,6 @@ export interface TransAction {
 /** useWallets
  * Reducer that stores the user transactions
  *
- * @param {Objects.TransactionState} initial initial state of the transactions
- *
- * @returns {Objects.TransactionState} Wallets
  * @returns {React.Dispatch<TransAction>} The function to dispatch actions
  */
 // Functions
@@ -48,7 +45,7 @@ const cleanAndSort = (
   selectedWallet: Objects.Wallet,
   dataMonth: string
 ): FrontendTransaction[] => {
-  // Removes transactions outside the datamonth and wallet/subwallets
+  // Removes transactions outside the dataMonth and wallet/subWallets
   const cleaned = [] as FrontendTransaction[];
   input.map((x) => {
     const validWallets = [selectedWallet._id];
@@ -101,7 +98,7 @@ const cleanAndSort = (
     }
   }
 
-  const output = transferClean.sort((a, b) => {
+  return transferClean.sort((a, b) => {
     if (a.transactionDate > b.transactionDate) return -1;
     if (a.transactionDate < b.transactionDate) return 1;
 
@@ -111,8 +108,6 @@ const cleanAndSort = (
 
     return 0;
   });
-
-  return output;
 };
 
 // Reads the transactions and separates the income and expenses as well as the total in the header
@@ -241,7 +236,7 @@ const useTransactions = (
     transactions: [],
   };
 
-  // Reducer creation and returnal
+  // Reducer creation and return
   const [transactions, dispatch] = useReducer(reducer, initialState);
   return [transactions, dispatch];
 };

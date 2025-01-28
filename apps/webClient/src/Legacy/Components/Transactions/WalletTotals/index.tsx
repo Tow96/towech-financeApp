@@ -1,20 +1,21 @@
 /** Index.tsx
  * Copyright (c) 2021, Jose Tow
  * All rights reserved
- * Componet that shows the sum of income and expense of the transactions
+ * Component that shows the sum of income and expense of the transactions
  */
 // Utils
 import ParseMoneyAmount from '../../../Utils/ParseMoneyAmount';
 
 // Styles
 import './WalletTotals.css';
+import { ReactElement } from 'react';
 
 interface Props {
   totals: { earnings: number; expenses: number };
   hidden?: boolean;
 }
 
-const WalletTotals = (props: Props): JSX.Element => {
+const WalletTotals = (props: Props): ReactElement => {
   return (
     <div className={props.hidden ? 'Transactions__Totals inactive' : 'Transactions__Totals'}>
       <div className="Transactions__Totals__Items">

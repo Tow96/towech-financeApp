@@ -134,8 +134,8 @@ export const Navbar = (): ReactElement => {
 const NavbarDismissArea = (props: {
   collapsed: boolean;
   setCollapsed: (_: boolean) => void;
-}): ReactElement => {
-  if (props.collapsed) return <></>;
+}): ReactElement | null => {
+  if (props.collapsed) return null;
   return (
     <div
       data-testid="dismiss-area"

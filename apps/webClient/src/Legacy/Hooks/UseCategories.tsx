@@ -1,11 +1,11 @@
 /** UseCategories.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Hook that holds all the categories of a user, meant to be used in conjunction with
  * a store to create a cache
  */
-import React, { useReducer } from 'react';
+import { Dispatch, useReducer } from 'react';
 
 // Models
 import { Objects } from '../models';
@@ -39,9 +39,9 @@ const cleanAndSort = (input: Objects.Category[]): Objects.Category[] => {
   });
 
   let output: Objects.Category[] = [];
-  // Fetches the subwallets, sorts them and adds them
+  // Fetches the subWallets, sorts them and adds them
   mainCategories.map((mC) => {
-    // Gets the subwallets for the main wallet
+    // Gets the subWallets for the main wallet
     let subCategories = input.filter((x) => {
       return x.parent_id === mC._id;
     });
@@ -101,16 +101,13 @@ const reducer = (state: CategoryState, action: CategoryAction): CategoryState =>
  * @param {CategoryState} initial initial state of the categories
  *
  * @returns {CategoryState} categories
- * @returns {React.Dispatch<categoryAction>} The function to dispatch actions
  *
  */
-const useCategories = (
-  initial?: CategoryState
-): [CategoryState, React.Dispatch<CategoryAction>] => {
+const useCategories = (initial?: CategoryState): [CategoryState, Dispatch<CategoryAction>] => {
   // The initial state is an empty array
   const initialState: CategoryState = initial || { Income: [], Expense: [], Archived: [] };
 
-  // Reducer creation and returnal
+  // Reducer creation and return
   const [categories, dispatch] = useReducer(reducer, initialState);
   return [categories, dispatch];
 };

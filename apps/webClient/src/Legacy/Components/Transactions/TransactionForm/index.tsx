@@ -4,7 +4,7 @@
  *
  * The component shown when adding a new transaction, it is a modal
  */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 
 // Components
@@ -40,18 +40,18 @@ interface Props {
   initialTransaction?: Objects.Transaction;
 }
 
-const Index = (props: Props): JSX.Element => {
+const Index = (props: Props): ReactElement => {
   // Authentication Token Context
   const { dispatchWallets } = useContext(MainStore);
   const { data: user } = useAuthentication();
   const { transactionState, dispatchTransactionState } = useContext(TransactionPageStore);
 
-  // Starts the servicees
-  const transactionService = new TransactionService(user?.token, () => {});
+  // Starts the services
+  const transactionService = new TransactionService(user?.token);
 
   // Hooks
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({} as any);
+  const [errors, setErrors] = useState({} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [deleteWarn, setDeleteWarn] = useState(false);
 
   const transactionForm = UseForm(null, {
@@ -81,7 +81,7 @@ const Index = (props: Props): JSX.Element => {
         },
       });
     }
-  }, [props.state]);
+  }, [props.state]); // eslint-disable-line
 
   // Callbacks for each type of HTTP operation
   async function newTransactionCallback() {
@@ -116,10 +116,11 @@ const Index = (props: Props): JSX.Element => {
         payload: { transactions: res.data.newTransactions },
       });
       props.setState(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setLoading(false);
       if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err); //eslint-disable-line no-console
+      else console.log(err);
     }
   }
 
@@ -154,11 +155,12 @@ const Index = (props: Props): JSX.Element => {
         type: 'EDIT',
         payload: { transactions: res.data.newTransactions },
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setLoading(false);
       if (err.response.status === 304) props.setState(false);
       else if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err.response); //eslint-disable-line no-console
+      else console.log(err.response);
     }
   }
 
@@ -182,14 +184,15 @@ const Index = (props: Props): JSX.Element => {
         type: 'DELETE',
         payload: { transactions: res.data.newTransactions },
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err.response); // eslint-disable-line no-console
+      console.log(err.response);
     }
   }
 
   async function transferTransactionCallback() {
     try {
-      const errorHolder = {} as any;
+      const errorHolder = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
       // If no wallets were entered, returns an error
       if (transactionForm.values.from_id === '' || transactionForm.values.from_id === '-1') {
@@ -229,9 +232,10 @@ const Index = (props: Props): JSX.Element => {
       });
 
       props.setState(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err); //eslint-disable-line no-console
+      else console.log(err);
     }
   }
 
@@ -267,7 +271,7 @@ const Index = (props: Props): JSX.Element => {
           <div className="TransactionForm__Content">
             {/* Form */}
             <Input
-              error={errors.amount ? true : false}
+              error={!!errors.amount}
               label="Amount"
               name="amount"
               type="number"
@@ -276,11 +280,11 @@ const Index = (props: Props): JSX.Element => {
             />
             {/* Category selector */}
             <CategorySelector
-              edit={props.initialTransaction ? true : false}
+              edit={!!props.initialTransaction}
               error={errors.category_id}
               name="category_id"
               onChange={transactionForm.onChange}
-              transfer={props.initialTransaction?.transfer_id ? true : false}
+              transfer={!!props.initialTransaction?.transfer_id}
               value={transactionForm.values.category_id}
               visible={props.state}
             ></CategorySelector>
@@ -295,7 +299,7 @@ const Index = (props: Props): JSX.Element => {
                     value={transactionForm.values.wallet_id}
                     visible={props.state}
                     error={errors.wallet_id}
-                    disabled={props.initialTransaction?.transfer_id ? true : false}
+                    disabled={!!props.initialTransaction?.transfer_id}
                   />
                 </div>
 
@@ -348,7 +352,7 @@ const Index = (props: Props): JSX.Element => {
 
             {/* Concept field */}
             <Input
-              error={errors.name ? true : false}
+              error={!!errors.name}
               label="Concept"
               name="concept"
               type="text"
@@ -409,25 +413,25 @@ const Index = (props: Props): JSX.Element => {
 interface WalletSelectorProps {
   error?: boolean;
   value?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   name?: string;
   visible: boolean;
   disabled?: boolean;
 }
 
-const WalletSelector = (props: WalletSelectorProps): JSX.Element => {
+const WalletSelector = (props: WalletSelectorProps): ReactElement => {
   const { wallets } = useContext(MainStore);
 
   // Hooks
   const [showModal, setShowModal] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState(null as Objects.Wallet | null);
 
-  // Start useEffect only updates the when the form is visible
+  // Start useEffect only updates when the form is visible
   useEffect(() => {
     if (props.visible && props.value !== (selectedWallet?._id || '-1')) {
       searchAndSetView(props.value || '-1');
     }
-  }, [props.visible, props.value]);
+  }, [props.visible, props.value]); // eslint-disable-line
 
   // Functions
   const searchAndSetView = (id: string): void => {
@@ -472,7 +476,7 @@ const WalletSelector = (props: WalletSelectorProps): JSX.Element => {
         onClick={() => setShowModal(true)}
       >
         <IdIcons.Variable
-          iconid={selectedWallet?.icon_id || 0}
+          iconId={selectedWallet?.icon_id || 0}
           className="TransactionForm__WalletSelector__Icon"
         />
         <div className="TransactionForm__WalletSelector__Name">
@@ -499,7 +503,7 @@ const WalletSelector = (props: WalletSelectorProps): JSX.Element => {
                 }
               >
                 <IdIcons.Variable
-                  iconid={wallet.icon_id}
+                  iconId={wallet.icon_id}
                   className={getSelectedWalletClass(wallet)}
                 />
                 <div className="TransactionForm__WalletSelector__WalletCard__Name">

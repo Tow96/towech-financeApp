@@ -4,8 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from '@financeapp/backend-users';
 import { LegacyModule } from './legacy/legacy.module';
 import { LoggingModule } from './Logging/Logging.Module';
-import { RateLimitingModule } from './RateLimiting/RateLimiting.Module';
-import { RateLimitingService } from './RateLimiting/RateLimiting.Service';
+// import { RateLimitingModule } from './RateLimiting/RateLimiting.Module';
+// import { RateLimitingService } from './RateLimiting/RateLimiting.Service';
 
 @Module({
   imports: [

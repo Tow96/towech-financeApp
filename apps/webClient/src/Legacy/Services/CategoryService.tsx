@@ -8,28 +8,26 @@ import React from 'react';
 import { AxiosResponse } from 'axios';
 import CustomAxios from './CustomAxios';
 
-// Stores
-import { TokenAction, TokenState } from '../Hooks/UseToken';
-
 // Models
 import { Responses } from '../models';
 
 export default class CategoryService {
-  private token: string;
-  private tokenDispatch: React.Dispatch<TokenAction> | undefined;
+  private readonly token: string;
   private instance: CustomAxios;
-  private SERVICE_URL: string;
+  private readonly SERVICE_URL: string;
 
-  constructor(token?: string, tokenDispatch?: React.Dispatch<TokenAction>) {
+  constructor(token?: string) {
     this.token = token || '';
-    this.tokenDispatch = tokenDispatch;
-    this.instance = new CustomAxios(this.token, this.tokenDispatch);
+    this.instance = new CustomAxios(this.token);
     this.SERVICE_URL = this.instance.ROOT_URL + '';
   }
 
   async getCategories(
     loading?: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<AxiosResponse<Responses.GetCategoriesResponse>> {
-    return await this.instance.get(`${this.SERVICE_URL}/categories`, loading);
+    return (await this.instance.get(
+      `${this.SERVICE_URL}/categories`,
+      loading
+    )) as AxiosResponse<Responses.GetCategoriesResponse>;
   }
 }

@@ -5,7 +5,7 @@
  * Component that shows the Transaction elements
  */
 // Libraries
-import { useContext, useState } from 'react';
+import { ReactElement, useContext, useState } from 'react';
 
 // Components
 import NewTransactionForm from '../../TransactionForm';
@@ -25,8 +25,8 @@ interface Props {
   transaction: FrontendTransaction;
 }
 
-const Index = (props: Props): JSX.Element => {
-  // Contextx
+const Index = (props: Props): ReactElement => {
+  // Context
   const { wallets } = useContext(MainStore);
   const { transactionState } = useContext(TransactionPageStore);
 
@@ -74,19 +74,19 @@ const Index = (props: Props): JSX.Element => {
     return `+ ${amount}`;
   };
 
-  const getWalletIcons = (): JSX.Element => {
+  const getWalletIcons = (): ReactElement => {
     if (props.transaction.transfer_id) {
       return (
         <>
           {props.transaction.from_wallet && (
             <IdIcons.Variable
-              iconid={getWalletIconId(props.transaction.from_wallet)}
+              iconId={getWalletIconId(props.transaction.from_wallet)}
               className="TransactionCard__Icon__Sub"
             />
           )}
           {props.transaction.to_wallet && (
             <IdIcons.Variable
-              iconid={getWalletIconId(props.transaction.to_wallet)}
+              iconId={getWalletIconId(props.transaction.to_wallet)}
               className="TransactionCard__Icon__Sub r"
             />
           )}
@@ -97,7 +97,7 @@ const Index = (props: Props): JSX.Element => {
     if (transactionState.selectedWallet._id !== props.transaction.wallet_id) {
       return (
         <IdIcons.Variable
-          iconid={getWalletIconId(props.transaction.wallet_id)}
+          iconId={getWalletIconId(props.transaction.wallet_id)}
           className="TransactionCard__Icon__Sub r"
         />
       );
@@ -114,7 +114,7 @@ const Index = (props: Props): JSX.Element => {
         <div className="TransactionCard__Main">
           <div className="TransactionCard__Icon">
             <IdIcons.Variable
-              iconid={getTransactionIconId()}
+              iconId={getTransactionIconId()}
               className="TransactionCard__Icon__Main"
             />
             {getWalletIcons()}

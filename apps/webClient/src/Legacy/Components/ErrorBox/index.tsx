@@ -1,5 +1,5 @@
-/** Errorbox.tsx
- * Copyright (c) 2022, Towechlabs
+/** ErrorBox.tsx
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Component that shows a list containing errors
@@ -13,13 +13,14 @@ import Button from '../Button';
 
 // Styles
 import './Errorbox.css';
+import { Dispatch, ReactElement } from 'react';
 
 interface Props {
-  errors: any;
-  setErrors: React.Dispatch<any>;
+  errors: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  setErrors: Dispatch<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const Errorbox = (props: Props): JSX.Element => {
+const ErrorBox = (props: Props): ReactElement => {
   return (
     <div className={Object.keys(props.errors).length > 0 ? 'errorBox active' : 'errorBox'}>
       {Object.keys(props.errors).length > 0 && (
@@ -36,6 +37,7 @@ const Errorbox = (props: Props): JSX.Element => {
           </div>
           <div>
             <ul>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {Object.values(props.errors).map((value: any) => (
                 <li key={value}>{value}</li>
               ))}
@@ -47,4 +49,4 @@ const Errorbox = (props: Props): JSX.Element => {
   );
 };
 
-export default Errorbox;
+export default ErrorBox;

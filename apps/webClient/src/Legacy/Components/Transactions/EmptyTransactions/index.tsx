@@ -6,9 +6,10 @@
  */
 //Libraries
 import Link from 'next/link';
+import { ReactElement } from 'react';
 
 export default class Index {
-  static RedirectToWallets = (): JSX.Element => {
+  static RedirectToWallets = (): ReactElement => {
     return (
       <div className="NoTransactions">
         <h1>

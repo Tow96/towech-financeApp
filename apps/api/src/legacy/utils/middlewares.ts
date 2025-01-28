@@ -22,6 +22,7 @@ export class CheckAuthMiddleware implements NestMiddleware {
   private readonly _jwtSecret = this._configService.getOrThrow<string>('JWT_SECRET');
   constructor(private readonly _configService: ConfigService) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async use(req: any, res: Response, next: NextFunction) {
     try {
       const header = req.header('Authorization') || '';
@@ -43,7 +44,7 @@ export class CheckAuthMiddleware implements NestMiddleware {
         return false;
       }
       next();
-    } catch (err: any) {
+    } catch (err: unknown) {
       AmqpMessage.sendHttpError(res, err);
     }
   }
@@ -51,6 +52,7 @@ export class CheckAuthMiddleware implements NestMiddleware {
 
 @Injectable()
 export class CheckConfirmedMiddleware implements NestMiddleware {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async use(req: any, res: Response, next: NextFunction) {
     try {
       if (!req.user)
@@ -62,7 +64,7 @@ export class CheckConfirmedMiddleware implements NestMiddleware {
         });
 
       next();
-    } catch (err: any) {
+    } catch (err: unknown) {
       AmqpMessage.sendHttpError(res, err);
     }
   }

@@ -14,6 +14,7 @@ export class TransactionController {
   private transactionQueue = (process.env.TRANSACTION_QUEUE as string) || 'transactionQueue';
 
   @Post('')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createTransaction(@Req() req: any, @Res() res: any, @Body() body: any) {
     try {
       const connection = await Queue.startConnection();
@@ -37,7 +38,11 @@ export class TransactionController {
       });
 
       // Waits for the response from the workers
-      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
 
       res.status(response.status).send(response.payload);
     } catch (e) {
@@ -46,7 +51,12 @@ export class TransactionController {
   }
 
   @Get(':transactionId')
-  async getTransaction(@Req() req: any, @Res() res: any, @Param('transactionId') transactionId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getTransaction(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('transactionId') transactionId: string
+  ) {
     try {
       const connection = await Queue.startConnection();
       const channel = await Queue.setUpChannelAndExchange(connection);
@@ -62,7 +72,11 @@ export class TransactionController {
       });
 
       // Waits for the response from the workers
-      const response: AmqpMessage<Transaction> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<Transaction> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       res.status(response.status).send(response.payload);
     } catch (e) {
       AmqpMessage.sendHttpError(res, e);
@@ -71,9 +85,9 @@ export class TransactionController {
 
   @Patch(':transactionId')
   async updateTransaction(
-    @Req() req: any,
-    @Res() res: any,
-    @Body() body: any,
+    @Req() req: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    @Res() res: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    @Body() body: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     @Param('transactionId') transactionId: string
   ) {
     try {
@@ -99,7 +113,11 @@ export class TransactionController {
       });
 
       // Waits for the response from the workers
-      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
 
       res.status(response.status).send(response.payload);
     } catch (e) {
@@ -108,7 +126,12 @@ export class TransactionController {
   }
 
   @Delete(':transactionId')
-  async deleteTransaction(@Req() req: any, @Res() res: any, @Param('transactionId') transactionId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async deleteTransaction(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('transactionId') transactionId: string
+  ) {
     try {
       const connection = await Queue.startConnection();
       const channel = await Queue.setUpChannelAndExchange(connection);
@@ -124,7 +147,11 @@ export class TransactionController {
       });
 
       // Waits for the response from the workers
-      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
 
       res.status(response.status).send(response.payload);
     } catch (e) {

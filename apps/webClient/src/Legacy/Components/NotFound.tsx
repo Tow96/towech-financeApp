@@ -4,10 +4,10 @@
  *
  * 404 - Error component
  */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Link from 'next/link';
 
-const NotFound = (): JSX.Element => {
+const NotFound = (): ReactElement => {
   return (
     <>
       <h1>404 - Not Found!</h1>

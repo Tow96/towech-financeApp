@@ -52,11 +52,11 @@ export class SessionEntity {
 
   /** Extends the expiration of the session */
   public refresh(): void {
-    const tresholdTime = this._isPermanent
+    const thresholdTime = this._isPermanent
       ? this._expiresAt.getTime() - PERMANENT_SESSION_DURATION / 2
       : this._expiresAt.getTime() - TEMPORARY_SESSION_DURATION / 2;
 
-    if (Date.now() < tresholdTime) return;
+    if (Date.now() < thresholdTime) return;
 
     this._expiresAt = SessionEntity.generateSessionExpiration(this._isPermanent);
     this._status = SessionStatus.UPDATED;

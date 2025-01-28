@@ -167,23 +167,25 @@ export class UserRepository {
           .where(eq(UsersSchema.PasswordResetTable.id, user.Id));
     }
 
-    user.Sessions.forEach(async (x) => {
-      if (x.Status === SessionStatus.CREATED)
-        await this._db.insert(UsersSchema.SessionTable).values({
-          id: x.EncodedId,
-          expiresAt: x.ExpiresAt,
-          permanentSession: x.IsPermanent,
-          userId: user.Id,
-        });
-      if (x.Status === SessionStatus.UPDATED)
-        await this._db
-          .update(UsersSchema.SessionTable)
-          .set({ expiresAt: x.ExpiresAt })
-          .where(eq(UsersSchema.SessionTable.id, x.EncodedId));
-      if (x.Status === SessionStatus.DELETED || x.Status === SessionStatus.EXPIRED)
-        await this._db
-          .delete(UsersSchema.SessionTable)
-          .where(eq(UsersSchema.SessionTable.id, x.EncodedId));
-    });
+    await Promise.all(
+      user.Sessions.map(async (x): Promise<void> => {
+        if (x.Status === SessionStatus.CREATED)
+          await this._db.insert(UsersSchema.SessionTable).values({
+            id: x.EncodedId,
+            expiresAt: x.ExpiresAt,
+            permanentSession: x.IsPermanent,
+            userId: user.Id,
+          });
+        if (x.Status === SessionStatus.UPDATED)
+          await this._db
+            .update(UsersSchema.SessionTable)
+            .set({ expiresAt: x.ExpiresAt })
+            .where(eq(UsersSchema.SessionTable.id, x.EncodedId));
+        if (x.Status === SessionStatus.DELETED || x.Status === SessionStatus.EXPIRED)
+          await this._db
+            .delete(UsersSchema.SessionTable)
+            .where(eq(UsersSchema.SessionTable.id, x.EncodedId));
+      })
+    );
   }
 }

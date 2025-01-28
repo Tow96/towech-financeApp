@@ -5,7 +5,7 @@
  * Custom modal component
  */
 // import React, { useRef, useEffect, useCallback } from 'react';
-import React, { useRef } from 'react';
+import React, { ReactElement, useRef } from 'react';
 import './Modal.css';
 import * as FaIcons from 'react-icons/fa';
 
@@ -14,18 +14,18 @@ import Loading from '../Loading';
 import Button from '../Button';
 
 interface Props {
-  accept?: string | JSX.Element;
-  children?: string | JSX.Element | JSX.Element[];
+  accept?: string | ReactElement;
+  children?: string | ReactElement | ReactElement[];
   showModal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  onAccept?: any;
-  onClose?: any;
+  onAccept?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  onClose?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   title?: string;
   loading?: boolean;
   float?: boolean;
 }
 
-const Modal = (props: Props): JSX.Element => {
+const Modal = (props: Props): ReactElement => {
   let theme = 'Modal__Body';
   if (props.float) theme += ' floated';
   if (props.loading) theme += ' loading';
@@ -39,6 +39,7 @@ const Modal = (props: Props): JSX.Element => {
   };
 
   // Function that handles the closing of the modal using ref
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const closeModalRef = (e: any) => {
     if (modalRef.current === e.target) {
       closeModal();
@@ -72,7 +73,7 @@ const Modal = (props: Props): JSX.Element => {
     <div className={props.showModal ? 'Modal active' : 'Modal'}>
       <div
         className={props.showModal ? 'Modal__background active' : 'Modal__background'}
-        ref={modalRef as any}
+        ref={modalRef as any} // eslint-disable-line @typescript-eslint/no-explicit-any
         onClick={closeModalRef}
       >
         <div className={props.float ? 'ModalFloat__Content' : 'Modal__Content'}>

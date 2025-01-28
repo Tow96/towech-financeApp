@@ -1,5 +1,5 @@
 'use client';
-import { ReactElement, ReactNode, useEffect } from 'react';
+import { isValidElement, ReactElement, ReactNode, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 
 import { SpinnerComponent } from '@financeapp/frontend-common';
@@ -23,7 +23,7 @@ export const AuthenticationProvider = ({
   }, [user.status, user.data, protectedRoute]);
 
   // Render -------------------------------------------------------------------
-  if (!user.isPending) return <>{children}</>;
+  if (!user.isPending) return isValidElement(children) ? (children as ReactElement) : <div></div>;
   return (
     <div className="flex h-screen w-full items-center justify-center" data-testid="auth-loading">
       <SpinnerComponent />

@@ -2,7 +2,7 @@
  * Function obtained from:
  * https://stackoverflow.com/questions/2631001/test-for-existence-of-nested-javascript-object-key
  *
- * checks an object for the existance of a nested key without throwing errors
+ * checks an object for the existence of a nested key without throwing errors
  * e.g. (
  *  foo = {level1: {level2: {level3: 'bar'}}}
  *
@@ -11,6 +11,7 @@
  * )
  */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CheckNested = (obj: any, level: string, ...rest: string[]): boolean => {
   if (obj === undefined) return false;
   if (rest.length === 0 && Object.prototype.hasOwnProperty.call(obj, level)) return true;

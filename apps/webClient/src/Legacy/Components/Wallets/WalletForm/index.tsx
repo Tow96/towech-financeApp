@@ -4,14 +4,14 @@
  *
  * The component shown when adding or editing a Wallet, it is a modal
  */
-import React, { useContext, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 
 // Components
 import { MainStore } from '../../../Hooks/ContextStore';
 import { IdIcons } from '../../../Icons';
 import Button from '../../Button';
-import Errorbox from '../../ErrorBox';
+import ErrorBox from '../../ErrorBox';
 import IconSelector from '../../IconSelector';
 import Input from '../../Input';
 import Modal from '../../Modal';
@@ -38,17 +38,17 @@ interface Props {
   initialWallet?: Objects.Wallet;
 }
 
-const WalletForm = (props: Props): JSX.Element => {
+const WalletForm = (props: Props): ReactElement => {
   // Context
   const { dispatchWallets } = useContext(MainStore);
   const { data: user } = useAuthentication();
 
   // Starts the services
-  const transactionService = new TransactionService(user?.token, () => {});
+  const transactionService = new TransactionService(user?.token);
 
   // Hooks
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({} as any);
+  const [errors, setErrors] = useState({} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [deleteWarn, setDeleteWarn] = useState(false);
   const [showSubWallets, setShowSubWallets] = useState(false);
 
@@ -70,9 +70,10 @@ const WalletForm = (props: Props): JSX.Element => {
       walletForm.clear();
       dispatchWallets({ type: 'ADD', payload: { wallets: [res.data] } });
       props.set(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err.response); // eslint-disable-line no-console
+      else console.log(err.response);
     }
   }
 
@@ -92,11 +93,12 @@ const WalletForm = (props: Props): JSX.Element => {
       // Sets the wallet and closes the modal
       dispatchWallets({ type: 'EDIT', payload: { wallets: [res.data] } });
       props.set(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // If there is a 304 status, then the modal is closed
       if (err.response.status == 304) props.set(false);
       else if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err.response); // eslint-disable-line no-console
+      else console.log(err.response);
     }
   }
 
@@ -110,22 +112,23 @@ const WalletForm = (props: Props): JSX.Element => {
       await transactionService.deleteWallet(props.initialWallet._id, setLoading);
 
       dispatchWallets({ type: 'DELETE', payload: { wallets: [props.initialWallet] } });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err.response); // eslint-disable-line no-console
+      console.log(err.response);
     }
   }
 
   const acceptIcon = <FaIcons.FaSave />;
 
-  // Returns the amount of money that doesn't belong to subwallets
+  // Returns the amount of money that doesn't belong to subWallets
   const calculateFree = (): string => {
     if (!props.initialWallet) return '0.00';
 
     let money = props.initialWallet.money || 0;
 
-    // Reads every subwallet
+    // Reads every subWallet
     props.initialWallet.child_id?.map((x) => {
-      // Only substracts if the child wallet is into debt, this way, the debt is reflected on the parent as well
+      // Only subtracts if the child wallet is into debt, this way, the debt is reflected on the parent as well
       if ((x.money || 0) > 0) {
         money -= x.money || 0;
       }
@@ -163,7 +166,7 @@ const WalletForm = (props: Props): JSX.Element => {
               />
               <div className="WalletForm__Main__FirstRow__Name">
                 <Input
-                  error={errors.name ? true : false}
+                  error={!!errors.name}
                   label="Name"
                   name="name"
                   type="text"
@@ -175,18 +178,18 @@ const WalletForm = (props: Props): JSX.Element => {
             <div className="WalletForm__Main__SecondRow">
               <div className="WalletForm__Main__SecondRow__Money">
                 <Input
-                  error={errors.amount ? true : false}
+                  error={!!errors.amount}
                   name="money"
                   type="number"
                   label="Money"
-                  disabled={props.initialWallet ? true : false}
+                  disabled={!!props.initialWallet}
                   value={walletForm.values.money}
                   onChange={walletForm.onChange}
                 />
               </div>
               <div className="WalletForm__Main__SecondRow__Currency">
                 <Input
-                  error={errors.currency ? true : false}
+                  error={!!errors.currency}
                   name="currency"
                   type="text"
                   label="Currency"
@@ -197,20 +200,20 @@ const WalletForm = (props: Props): JSX.Element => {
             </div>
 
             {/* Error Box */}
-            <Errorbox errors={errors} setErrors={setErrors}></Errorbox>
+            <ErrorBox errors={errors} setErrors={setErrors}></ErrorBox>
           </div>
 
-          {/* Subwallets and delete wallet button, only available if editing the wallet */}
+          {/* SubWallets and delete wallet button, only available if editing the wallet */}
           {props.initialWallet && (
             <>
-              {/* Subwallets */}
+              {/* SubWallets */}
               <div className="WalletForm__Subwallets">
-                <div className="WalletForm__Subwallets__Title">Subwallets</div>
+                <div className="WalletForm__Subwallets__Title">SubWallets</div>
                 <div className="WalletForm__Subwallets__Container">
-                  {/* Money in the wallet that it hasn't been asigned to a subwallet */}
+                  {/* Money in the wallet that it hasn't been assigned to a subWallet */}
                   {(props.initialWallet.child_id?.length || 0) > 0 && (
                     <div className="WalletForm__Subwallets__Unassigned">
-                      Unasigned:&nbsp;&nbsp;&nbsp;{calculateFree()}
+                      Unassigned:&nbsp;&nbsp;&nbsp;{calculateFree()}
                     </div>
                   )}
                   {/* SubWallets */}
@@ -235,7 +238,7 @@ const WalletForm = (props: Props): JSX.Element => {
                     <div className="WalletForm__Subwallets__Add__Icon">
                       <FaIcons.FaPlusCircle />
                     </div>
-                    <div>Add new subwallet</div>
+                    <div>Add new SubWallet</div>
                   </div>
                 </div>
 
@@ -289,12 +292,13 @@ interface SubWalletProps {
   initialWallet?: Objects.Wallet;
 }
 
-const SubWalletForm = (props: SubWalletProps): JSX.Element => {
-  const { authToken, dispatchAuthToken, dispatchWallets } = useContext(MainStore);
-  const transactionService = new TransactionService(authToken, dispatchAuthToken);
+const SubWalletForm = (props: SubWalletProps): ReactElement => {
+  const { dispatchWallets } = useContext(MainStore);
+  const { data: user } = useAuthentication();
+  const transactionService = new TransactionService(user?.token);
 
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({} as any);
+  const [errors, setErrors] = useState({} as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   const [showDelete, setDelete] = useState(false);
 
   // Creates the new walletForm
@@ -316,9 +320,10 @@ const SubWalletForm = (props: SubWalletProps): JSX.Element => {
       subWalletForm.clear();
       dispatchWallets({ type: 'ADD', payload: { wallets: [res.data] } });
       props.set(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err.response); // eslint-disable-line no-console
+      else console.log(err.response);
     }
   }
 
@@ -338,11 +343,12 @@ const SubWalletForm = (props: SubWalletProps): JSX.Element => {
       // Sets the wallet and closes the modal
       dispatchWallets({ type: 'EDIT', payload: { wallets: [res.data] } });
       props.set(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // If there is a 304 status, then the modal is closed
       if (err.response.status == 304) props.set(false);
       else if (CheckNested(err, 'response', 'data', 'errors')) setErrors(err.response.data.errors);
-      else console.log(err.response); // eslint-disable-line no-console
+      else console.log(err.response);
     }
   }
 
@@ -356,8 +362,9 @@ const SubWalletForm = (props: SubWalletProps): JSX.Element => {
       await transactionService.deleteWallet(props.initialWallet._id, setLoading);
 
       dispatchWallets({ type: 'DELETE', payload: { wallets: [props.initialWallet] } });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err.response); // eslint-disable-line no-console
+      console.log(err.response);
     }
   }
 
@@ -390,7 +397,7 @@ const SubWalletForm = (props: SubWalletProps): JSX.Element => {
 
             <div className="WalletForm__Main__FirstRow__Name">
               <Input
-                error={errors.name ? true : false}
+                error={!!errors.name}
                 label="Name"
                 name="name"
                 type="text"
@@ -400,7 +407,7 @@ const SubWalletForm = (props: SubWalletProps): JSX.Element => {
             </div>
           </div>
 
-          {/* Delete subwallet button */}
+          {/* Delete subWallet button */}
           {props.initialWallet && (
             <div>
               <Button warn className="WalletForm__Delete" onClick={() => setDelete(true)}>
@@ -442,7 +449,7 @@ interface SubWalletCardProps {
   wallet: Objects.Wallet;
 }
 
-const SubWalletCard = (props: SubWalletCardProps): JSX.Element => {
+const SubWalletCard = (props: SubWalletCardProps): ReactElement => {
   // Hooks
   const [showEdit, setEdit] = useState(false);
 
@@ -450,7 +457,7 @@ const SubWalletCard = (props: SubWalletCardProps): JSX.Element => {
     <>
       <div className="SubWalletCard" onClick={() => setEdit(true)}>
         <div className="SubWalletCard__Main">
-          <IdIcons.Variable iconid={props.wallet.icon_id} className="SubWalletCard__Icon" />
+          <IdIcons.Variable iconId={props.wallet.icon_id} className="SubWalletCard__Icon" />
           <div className="SubWalletCard__Info">
             <div className="SubWalletCard__Info__Name">{props.wallet.name}</div>
             <div className="SubWalletCard__Info__Money">

@@ -13,7 +13,7 @@ export enum UserStatus {
 
 const OTP_DEBOUNCE = 1000 * 60 * 10; // 10 minutes
 
-// User entity, its used to maintain consistency when creating sessions
+// User entity, it's used to maintain consistency when creating sessions
 export class UserEntity {
   constructor(
     private readonly _id: string,
@@ -113,7 +113,7 @@ export class UserEntity {
       updated = true;
     }
 
-    // If the email is changed, then it needs to be reverified
+    // If the email is changed, then it needs to be re-verified
     // it also removes the current verification code
     if (data.email && data.email !== this._email) {
       this._email = data.email;

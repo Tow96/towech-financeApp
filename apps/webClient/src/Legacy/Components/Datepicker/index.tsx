@@ -1,14 +1,14 @@
 /** Datepicker.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Custom datepicker component
  */
 // Libraries
-import React, { useEffect, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 
 // Hooks
-import useDatapicker from './UseDatepicker';
+import useDatePicker from './UseDatepicker';
 
 // Styles
 import './Datepicker.css';
@@ -16,7 +16,7 @@ import './Datepicker.css';
 interface Props {
   label: string;
   name?: string;
-  onChange?: any;
+  onChange?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   value?: Date;
 }
 
@@ -44,14 +44,17 @@ const displayDate = (date: Date): string => {
   return `${day}/${month}/${year}`;
 };
 
-const Datepicker = (props: Props): JSX.Element => {
-  const [state, dispatch] = useDatapicker(props.value ? new Date(props.value) : new Date());
+const Datepicker = (props: Props): ReactElement => {
+  const [state, dispatch] = useDatePicker(props.value ? new Date(props.value) : new Date());
 
   const pickerRef = useRef();
 
   useEffect(() => {
-    dispatch({ type: 'SET-DATE', payload: { date: props.value ? new Date(props.value) : new Date() } });
-  }, [props.value]);
+    dispatch({
+      type: 'SET-DATE',
+      payload: { date: props.value ? new Date(props.value) : new Date() },
+    });
+  }, [props.value]); // eslint-disable-line
 
   // Functions
   const setDayCallback = (day: Date): void => {
@@ -68,6 +71,7 @@ const Datepicker = (props: Props): JSX.Element => {
     dispatch({ type: 'SET-DATE', payload: { date: day } });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const closePickerRef = (e: any) => {
     if (pickerRef.current === e.target) {
       dispatch({ type: 'SET-PICKER', payload: { bool: false } });
@@ -114,46 +118,45 @@ const Datepicker = (props: Props): JSX.Element => {
     dispatch({ type: 'SET-VIEW', payload: { date: nuDate } });
   };
 
-  // // Keypress detector
-  // const keyPress = useCallback(
-  //   (e: KeyboardEvent) => {
-  //     if (e.key === 'Escape' && showPicker) {
-  //       closePickerRef(e);
-  //     }
-  //   },
-  //   [setShowPicker, showPicker],
-  // );
-
-  // // useEffect for the keypress
-  // useEffect(() => {
-  //   document.addEventListener('keydown', keyPress);
-  //   return () => document.removeEventListener('keydown', keyPress);
-  // }, [keyPress]);
-
   return (
     <>
       {/* Input field */}
-      <div className="Datepicker" onClick={() => dispatch({ type: 'SET-PICKER', payload: { bool: true } })}>
+      <div
+        className="Datepicker"
+        onClick={() => dispatch({ type: 'SET-PICKER', payload: { bool: true } })}
+      >
         <input className="Datepicker__field" value={displayDate(state.selectedDate)} />
         {props.label && <label className="Datepicker__label">{props.label}</label>}
       </div>
 
       {/* Selector, doesn't use the modal component so this component is independent */}
       <div className={state.showPicker ? 'Datepicker__Container active' : 'Datepicker__Container'}>
-        <div className="Datepicker__Container__Background" ref={pickerRef as any} onClick={closePickerRef}>
+        <div
+          className="Datepicker__Container__Background"
+          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+          ref={pickerRef as any}
+          onClick={closePickerRef}
+        >
           <div className="Datepicker__Container__Content">
             {/* Month and year selector */}
             <div className="Datepicker__Container__Content__Title">
-              <div className="Datepicker__Container__Content__Title__Button" onClick={() => changeView(-1)}>
+              <div
+                className="Datepicker__Container__Content__Title__Button"
+                onClick={() => changeView(-1)}
+              >
                 {'<'}
               </div>
               <div
                 className="Datepicker__Container__Content__Title__Name"
                 onClick={() => dispatch({ type: 'SET-MODE', payload: { bool: !state.yearMode } })}
               >
-                {!state.yearMode && `${months[state.viewedDate.getMonth()]},`} {state.viewedDate.getFullYear()}
+                {!state.yearMode && `${months[state.viewedDate.getMonth()]},`}{' '}
+                {state.viewedDate.getFullYear()}
               </div>
-              <div className="Datepicker__Container__Content__Title__Button" onClick={() => changeView(1)}>
+              <div
+                className="Datepicker__Container__Content__Title__Button"
+                onClick={() => changeView(1)}
+              >
                 {'>'}
               </div>
             </div>
@@ -164,7 +167,11 @@ const Datepicker = (props: Props): JSX.Element => {
                 <div className="Datepicker__Container__Content__Month">
                   {/* Month grid */}
                   {state.monthGrid.map((row, indexA) => (
-                    <div role="row" key={getDayKey(indexA)} className="Datepicker__Container__Content__Month__Week">
+                    <div
+                      role="row"
+                      key={getDayKey(indexA)}
+                      className="Datepicker__Container__Content__Month__Week"
+                    >
                       {row.map((month, indexB) => (
                         <div
                           key={getDayKey(indexA, indexB)}
@@ -191,7 +198,10 @@ const Datepicker = (props: Props): JSX.Element => {
                   {/* Day of the week view */}
                   <div className="Datepicker__Container__Content__Month__Weekdays">
                     {weekdays.map((day) => (
-                      <div className="Datepicker__Container__Content__Month__Weekdays__Day" key={day}>
+                      <div
+                        className="Datepicker__Container__Content__Month__Weekdays__Day"
+                        key={day}
+                      >
                         {day}
                       </div>
                     ))}
@@ -199,7 +209,11 @@ const Datepicker = (props: Props): JSX.Element => {
 
                   {/* Day grid */}
                   {state.weekGrid.map((week, indexA) => (
-                    <div role="row" key={getDayKey(indexA)} className="Datepicker__Container__Content__Month__Week">
+                    <div
+                      role="row"
+                      key={getDayKey(indexA)}
+                      className="Datepicker__Container__Content__Month__Week"
+                    >
                       {week.map((day, indexB) => (
                         <div
                           key={getDayKey(indexA, indexB)}

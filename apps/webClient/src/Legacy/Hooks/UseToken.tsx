@@ -47,10 +47,6 @@ function reducer(state: TokenState, action: TokenAction): TokenState {
 /** useToken
  * Reducer that stores and manager the user token
  *
- * @param {string} storageLocation Key of the storage location of the token
- *
- * @returns {tokenState} state of the token
- * @returns {React.Dispatch<tokenAction>} The function to dispatch actions
  *
  */
 const useToken = (): [TokenState, React.Dispatch<TokenAction>] => {

@@ -2,12 +2,13 @@
  * Copyright (c) 2021, Jose Tow
  * All rights reserved
  *
- * The Componet for what is shown when the user has no Wallets
+ * The Component for what is shown when the user has no Wallets
  */
 
 import './NoWalletsCard.css';
+import { ReactElement } from 'react';
 
-const NoWalletsCard = (): JSX.Element => {
+const NoWalletsCard = (): ReactElement => {
   return (
     <div className="NoWallets">
       <h1>You don&apos;t have any wallets, yet.</h1>

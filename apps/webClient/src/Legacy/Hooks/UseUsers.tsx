@@ -1,10 +1,10 @@
 /** UseUsers.tsx
- * Copyright (c) 2022, Towechlabs
+ * Copyright (c) 2022, TowechLabs
  * All rights reserved
  *
  * Reducer for all the changes that the users can receive
  */
-import React, { useReducer } from 'react';
+import { Dispatch, useReducer } from 'react';
 // Models
 import { Objects } from '../models';
 
@@ -16,20 +16,17 @@ export interface UserAction {
 /** useWallets
  * Reducer that stores the user transactions
  *
- * @param {Objects.TransactionState} initial initial state of the transactions
- *
- * @returns {Objects.TransactionState} Wallets
  * @returns {React.Dispatch<TransAction>} The function to dispatch actions
  */
 // Functions
 const cleanAndSort = (input: Objects.User.BaseUser[]): Objects.User.BaseUser[] => {
-  // Removes transactions outside the datamonth and wallet/subwallets
+  // Removes transactions outside the dataMonth and wallet/subWallets
   const cleaned = [] as Objects.User.BaseUser[];
   input.forEach((x) => {
     cleaned.push(x);
   });
 
-  const output = cleaned.sort((a, b) => {
+  return cleaned.sort((a, b) => {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return 1;
 
@@ -39,8 +36,6 @@ const cleanAndSort = (input: Objects.User.BaseUser[]): Objects.User.BaseUser[] =
 
     return 0;
   });
-
-  return output;
 };
 
 // Reads the transactions and separates the income and expenses as well as the total in the header
@@ -100,11 +95,11 @@ const reducer = (state: Objects.User.BaseUser[], action: UserAction): Objects.Us
 
 const UseUsers = (
   initial?: Objects.User.BaseUser[]
-): [Objects.User.BaseUser[], React.Dispatch<UserAction>] => {
+): [Objects.User.BaseUser[], Dispatch<UserAction>] => {
   // The initial state is an empty array
   const initialState: Objects.User.BaseUser[] = initial || [];
 
-  // Reducer creation and returnal
+  // Reducer creation and return
   const [transactions, dispatch] = useReducer(reducer, initialState);
   return [transactions, dispatch];
 };

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { SVGProps } from 'react';
+import { ReactElement, SVGProps } from 'react';
 
 interface iconIdProps extends SVGProps<SVGSVGElement> {
-  iconid: number;
+  iconId: number;
 }
 
 export default class IdIcons {
   static amount = 35;
 
-  static Variable = (props: iconIdProps): JSX.Element => {
-    switch (props.iconid) {
+  static Variable = (props: iconIdProps): ReactElement => {
+    switch (props.iconId) {
       case -2:
         return this.Icon3(props, '#fab700', '#d28f00');
       case 0:
@@ -90,7 +90,13 @@ export default class IdIcons {
   };
 
   static defaultIcon = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_1_svg__cls-2{fill:#ab0036}'}</style>
       </defs>
@@ -117,7 +123,13 @@ export default class IdIcons {
   );
 
   static Icon0 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -140,7 +152,13 @@ export default class IdIcons {
   );
 
   static Icon1 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_4_svg__e{fill:#ab0036}'}</style>
       </defs>
@@ -175,16 +193,29 @@ export default class IdIcons {
               fill: '#dbc583',
             }}
           />
-          <path className="Recurso_4_svg__e" d="M75 47.22H57.5v-17.5h-15v17.5H25v15h17.5v17.5h15v-17.5H75v-15Z" />
+          <path
+            className="Recurso_4_svg__e"
+            d="M75 47.22H57.5v-17.5h-15v17.5H25v15h17.5v17.5h15v-17.5H75v-15Z"
+          />
         </g>
       </g>
     </svg>
   );
 
   static Icon2 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
-        <style>{'.Recurso_7_svg__e{fill:#fff}.Recurso_7_svg__h{fill:#18bc65}.Recurso_7_svg__i{fill:#00ab36}'}</style>
+        <style>
+          {
+            '.Recurso_7_svg__e{fill:#fff}.Recurso_7_svg__h{fill:#18bc65}.Recurso_7_svg__i{fill:#00ab36}'
+          }
+        </style>
       </defs>
       <g id="Recurso_7_svg__b">
         <circle
@@ -361,7 +392,13 @@ export default class IdIcons {
   );
 
   static Icon3 = (props: SVGProps<SVGSVGElement>, color1: string, color2: string) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -410,7 +447,13 @@ export default class IdIcons {
   );
 
   static Icon5 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_10_svg__h{fill:#cbc852}'}</style>
       </defs>
@@ -459,7 +502,13 @@ export default class IdIcons {
   );
 
   static Icon6 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>
           {
@@ -525,7 +574,13 @@ export default class IdIcons {
   );
 
   static Icon7 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_14_svg__f{fill:#00ab36}'}</style>
       </defs>
@@ -558,7 +613,13 @@ export default class IdIcons {
   );
 
   static Icon8 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_15_svg__g{fill:#00ab36}'}</style>
       </defs>
@@ -600,7 +661,13 @@ export default class IdIcons {
   );
 
   static Icon9 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_17_svg__h{fill:#1b1464}'}</style>
       </defs>
@@ -638,7 +705,13 @@ export default class IdIcons {
   );
 
   static Icon10 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_18_svg__h{fill:#fab700}.Recurso_18_svg__i{fill:#1b1464}'}</style>
       </defs>
@@ -680,7 +753,13 @@ export default class IdIcons {
   );
 
   static Icon11 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_19_svg__i{fill:#1b1464}'}</style>
       </defs>
@@ -729,7 +808,13 @@ export default class IdIcons {
   );
 
   static Icon12 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_20_svg__i{fill:#1b1464}'}</style>
       </defs>
@@ -772,7 +857,13 @@ export default class IdIcons {
   );
 
   static Icon13 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>
           {
@@ -832,10 +923,18 @@ export default class IdIcons {
   );
 
   static Icon14 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>
-          {'.Recurso_23_svg__e{fill:#dfa300}.Recurso_23_svg__g{fill:#ab0036}.Recurso_23_svg__i{fill:#1b1464}'}
+          {
+            '.Recurso_23_svg__e{fill:#dfa300}.Recurso_23_svg__g{fill:#ab0036}.Recurso_23_svg__i{fill:#1b1464}'
+          }
         </style>
       </defs>
       <g id="Recurso_23_svg__b">
@@ -862,7 +961,10 @@ export default class IdIcons {
             className="Recurso_23_svg__g"
             d="M49.38 43.83 35.69 56.67c-.6.57-.2 1.58.62 1.58H63.7c.83 0 1.23-1.01.62-1.58L50.63 43.83a.913.913 0 0 0-1.25 0Z"
           />
-          <path className="Recurso_23_svg__e" d="m50 46.2-12.5 12h25L50 46.2zM37.5 58.2h25v17h-25z" />
+          <path
+            className="Recurso_23_svg__e"
+            d="m50 46.2-12.5 12h25L50 46.2zM37.5 58.2h25v17h-25z"
+          />
           <path
             style={{
               fill: '#42210b',
@@ -875,7 +977,13 @@ export default class IdIcons {
   );
 
   static Icon15 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_24_svg__g{fill:#00b0f0}.Recurso_24_svg__h{fill:#1b1464}'}</style>
       </defs>
@@ -908,7 +1016,13 @@ export default class IdIcons {
   );
 
   static Icon16 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -927,7 +1041,13 @@ export default class IdIcons {
   );
 
   static Icon17 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <defs>
         <style>{'.Recurso_26_svg__h{fill:none;stroke:#e2de00;stroke-miterlimit:10}'}</style>
       </defs>
@@ -961,7 +1081,13 @@ export default class IdIcons {
   );
 
   static Icon18 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -992,7 +1118,13 @@ export default class IdIcons {
   );
 
   static Icon19 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -1082,7 +1214,13 @@ export default class IdIcons {
   );
 
   static Icon21 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -1148,7 +1286,13 @@ export default class IdIcons {
   );
 
   static Icon23 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -1250,10 +1394,21 @@ export default class IdIcons {
         id="Recurso_36_svg__Capa_1-2"
       />
       <g id="Recurso_36_svg__Capa_2-2">
-        <rect className="Recurso_36_svg__cls-6" x={27.5} y={23} width={45} height={54} rx={2.69} ry={2.69} />
+        <rect
+          className="Recurso_36_svg__cls-6"
+          x={27.5}
+          y={23}
+          width={45}
+          height={54}
+          rx={2.69}
+          ry={2.69}
+        />
         <path className="Recurso_36_svg__cls-2" d="M27.5 57.5h45v5h-45zM27.5 37.5h45v5h-45z" />
         <path className="Recurso_36_svg__cls-1" d="M37 23h6v54h-6zM57 23h6v54h-6z" />
-        <path className="Recurso_36_svg__cls-2" d="M27.5 27.5h45v5h-45zM27.5 47.5h45v5h-45zM27.5 67.5h45v5h-45z" />
+        <path
+          className="Recurso_36_svg__cls-2"
+          d="M27.5 27.5h45v5h-45zM27.5 47.5h45v5h-45zM27.5 67.5h45v5h-45z"
+        />
         <path
           className="Recurso_36_svg__cls-3"
           d="M45.85 22h6.34c.73 0 1.13.84.67 1.41L49.93 27l-3.41 4.18a.87.87 0 0 1-1.34 0L41.77 27l-2.93-3.59c-.46-.56-.06-1.41.67-1.41h6.34Z"
@@ -1302,7 +1457,10 @@ export default class IdIcons {
             fill: '#fff355',
           }}
         />
-        <path className="Recurso_37_svg__cls-2" d="M45.66 43.49h2.89v40.53h-2.89zM51.45 43.49h2.89v40.53h-2.89z" />
+        <path
+          className="Recurso_37_svg__cls-2"
+          d="M45.66 43.49h2.89v40.53h-2.89zM51.45 43.49h2.89v40.53h-2.89z"
+        />
         <path
           style={{
             fill: '#c4c4c4',
@@ -1375,7 +1533,13 @@ export default class IdIcons {
           }
         </style>
       </defs>
-      <circle className="Recurso_39_svg__cls-3" cx={50} cy={50} r={50} id="Recurso_39_svg__Capa_1-2" />
+      <circle
+        className="Recurso_39_svg__cls-3"
+        cx={50}
+        cy={50}
+        r={50}
+        id="Recurso_39_svg__Capa_1-2"
+      />
       <g id="Recurso_39_svg__Capa_2-2">
         <path className="Recurso_39_svg__cls-5" d="M35 22h30v60H35z" />
         <path
@@ -1399,7 +1563,13 @@ export default class IdIcons {
   );
 
   static Icon29 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -1449,9 +1619,19 @@ export default class IdIcons {
       <defs>
         <style>{'.Recurso_41_svg__cls-2{fill:#c4c4c4}.Recurso_41_svg__cls-3{fill:#5ab679}'}</style>
       </defs>
-      <circle className="Recurso_41_svg__cls-3" cx={50} cy={50} r={50} id="Recurso_41_svg__Capa_1-2" />
+      <circle
+        className="Recurso_41_svg__cls-3"
+        cx={50}
+        cy={50}
+        r={50}
+        id="Recurso_41_svg__Capa_1-2"
+      />
       <g id="Recurso_41_svg__Capa_2-2">
-        <path className="Recurso_41_svg__cls-2" transform="rotate(43.78 48.616 49.451)" d="M45.62 25.94h6v47h-6z" />
+        <path
+          className="Recurso_41_svg__cls-2"
+          transform="rotate(43.78 48.616 49.451)"
+          d="M45.62 25.94h6v47h-6z"
+        />
         <circle className="Recurso_41_svg__cls-2" cx={67.14} cy={29.8} r={7} />
         <path
           className="Recurso_41_svg__cls-3"
@@ -1486,7 +1666,9 @@ export default class IdIcons {
     >
       <defs>
         <style>
-          {'.Recurso_42_svg__cls-1{fill:#fff}.Recurso_42_svg__cls-3{fill:#27ade4}.Recurso_42_svg__cls-5{fill:#c4c4c4}'}
+          {
+            '.Recurso_42_svg__cls-1{fill:#fff}.Recurso_42_svg__cls-3{fill:#27ade4}.Recurso_42_svg__cls-5{fill:#c4c4c4}'
+          }
         </style>
       </defs>
       <circle
@@ -1553,14 +1735,31 @@ export default class IdIcons {
           className="Recurso_38_svg__cls-3"
           d="M21 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM39 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM63 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM81 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99Z"
         />
-        <path className="Recurso_38_svg__cls-1" d="M50 32 6.7 58h86.6L50 32zM50 68l-9.15 10h18.3L50 68z" />
-        <rect className="Recurso_38_svg__cls-3" x={46.5} y={18} width={7} height={60} rx={3.5} ry={3.5} />
+        <path
+          className="Recurso_38_svg__cls-1"
+          d="M50 32 6.7 58h86.6L50 32zM50 68l-9.15 10h18.3L50 68z"
+        />
+        <rect
+          className="Recurso_38_svg__cls-3"
+          x={46.5}
+          y={18}
+          width={7}
+          height={60}
+          rx={3.5}
+          ry={3.5}
+        />
       </g>
     </svg>
   );
 
   static Icon33 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}
@@ -1646,7 +1845,10 @@ export default class IdIcons {
             fill: '#fc0',
           }}
         />
-        <path className="Recurso_40_svg__cls-1" d="M48 20.07C32.36 21.1 20 34.1 20 50s12.36 28.9 28 29.93V20.07Z" />
+        <path
+          className="Recurso_40_svg__cls-1"
+          d="M48 20.07C32.36 21.1 20 34.1 20 50s12.36 28.9 28 29.93V20.07Z"
+        />
         <text
           transform="translate(37.18 67.75)"
           style={{
@@ -1666,7 +1868,13 @@ export default class IdIcons {
   );
 
   static Icon35 = (props: SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      width="1em"
+      height="1em"
+      {...props}
+    >
       <circle
         cx={50}
         cy={50}

@@ -1,7 +1,7 @@
 /** ParseDataMonth.tsx
- * Copyright (c) 2021, Towechlabs
+ * Copyright (c) 2021, TowechLabs
  * All rights reserved
- * Function that converts a datamonth parameter into a proper datamonth
+ * Function that converts a data month parameter into a proper data month
  */
 const ParseDataMonth = (dataMonth: string | null): string => {
   // Returns the current month if it is -1 or invalid

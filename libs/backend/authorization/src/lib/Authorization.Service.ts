@@ -37,8 +37,8 @@ export class AuthorizationService {
   private validateToken(token: string): TokenPayload | undefined {
     try {
       return jwt.verify(token, this._jwtSecret) as TokenPayload;
-    } catch (e: any) {
-      this._logger.verbose(e.message);
+    } catch (e: unknown) {
+      this._logger.verbose(e);
       return undefined;
     }
   }

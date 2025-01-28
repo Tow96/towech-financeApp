@@ -5,7 +5,3 @@ export interface Hash {
   update: (data: Uint8Array) => void;
   digest: () => Uint8Array;
 }
-
-export interface HashAlgorithm {
-  new (): Hash;
-}

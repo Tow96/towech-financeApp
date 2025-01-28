@@ -4,7 +4,7 @@
  *
  * Contains the hooks and callbacks for the state of the elements of a form
  *
- * @param callback Function that will be executed when the form is submited
+ * @param callback Function that will be executed when the form is submitted
  * @param initialState The inputs of the form
  *
  * @returns clear      (cleans the form)
@@ -14,6 +14,7 @@
  */
 import { useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UseForm = (callback: any, initialState: any) => {
   const [values, setValues] = useState(initialState);
 
@@ -23,6 +24,7 @@ const UseForm = (callback: any, initialState: any) => {
   };
 
   // Function ran when the contents of the form change
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (data: any) => {
     // const onChange = (_, data) => {
     // console.log(data.target);
@@ -38,15 +40,18 @@ const UseForm = (callback: any, initialState: any) => {
         setValues({ ...values, [data.target.name]: data.target.value });
         break;
       case 'select-one':
-        setValues({ ...values, [data.target.name]: data.target.options[data.target.selectedIndex].value });
+        setValues({
+          ...values,
+          [data.target.name]: data.target.options[data.target.selectedIndex].value,
+        });
         break;
       default:
-        console.log(`No onChange routine for type: ${data.target.type}`); //eslint-disable-line no-console
-      // console.log(data.target);
+        console.log(`No onChange routine for type: ${data.target.type}`);
     }
   };
 
   // Runs the callback function when the form is submitted
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (event: any) => {
     event.preventDefault(); // Stops the page from reloading when pressing enter
     callback();

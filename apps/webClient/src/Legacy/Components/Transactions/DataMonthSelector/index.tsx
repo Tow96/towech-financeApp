@@ -1,11 +1,11 @@
 /** index.tsx
- * Copyright (c) 2021, Towechlabs
+ * Copyright (c) 2021, TowechLabs
  * All rights reserved
  * Component that handles the selection of months to display
  */
 'use client';
 // Libraries
-import { useContext, useState } from 'react';
+import { ReactElement, useContext, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Hooks
@@ -24,7 +24,7 @@ const addMonths = (dataMonth: string, amount: number): string => {
   // adds the month
   month += amount;
 
-  // if the month is smaller than 1, the substracts years until finished
+  // if the month is smaller than 1, the subtracts years until finished
   while (month < 1) {
     year--;
     month += 12;
@@ -51,11 +51,11 @@ const isCurrentMonth = (selectedDataMonth: string): boolean => {
   return currDataMonth !== selectedDataMonth;
 };
 
-const Index = (): JSX.Element => {
+const Index = (): ReactElement => {
   const { transactionState, dispatchTransactionState } = useContext(TransactionPageStore);
   const searchParams = useSearchParams();
 
-  // Roter
+  // Router
   const router = useRouter();
 
   // Hooks for the selection buttons
@@ -72,7 +72,7 @@ const Index = (): JSX.Element => {
     });
     setPrevMonth(addMonths(prevMonth, amount));
 
-    // redirects to the new datamonth
+    // redirects to the new data month
     const walletId = searchParams.get('wallet') || '-1'; // GetParameters(location.search, 'wallet') || '-1';
     router.push(`/home?wallet=${walletId}&month=${addMonths(transactionState.dataMonth, amount)}`);
   };
@@ -91,7 +91,7 @@ const Index = (): JSX.Element => {
     });
     setPrevMonth(addMonths(currentDataMonth, -1));
 
-    // redirects to the current datamonth
+    // redirects to the current data month
     const walletId = searchParams.get('wallet') || '-1';
     router.push(`/home?wallet=${walletId}&month=${currentDataMonth}`);
   };
