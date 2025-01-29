@@ -74,7 +74,9 @@ const Index = (): ReactElement => {
 
     // redirects to the new data month
     const walletId = searchParams.get('wallet') || '-1'; // GetParameters(location.search, 'wallet') || '-1';
-    router.push(`/home?wallet=${walletId}&month=${addMonths(transactionState.dataMonth, amount)}`);
+    router.push(
+      `/dashboard?wallet=${walletId}&month=${addMonths(transactionState.dataMonth, amount)}`
+    );
   };
 
   const goToToday = (): void => {
@@ -93,7 +95,7 @@ const Index = (): ReactElement => {
 
     // redirects to the current data month
     const walletId = searchParams.get('wallet') || '-1';
-    router.push(`/home?wallet=${walletId}&month=${currentDataMonth}`);
+    router.push(`/dashboard?wallet=${walletId}&month=${currentDataMonth}`);
   };
 
   return (

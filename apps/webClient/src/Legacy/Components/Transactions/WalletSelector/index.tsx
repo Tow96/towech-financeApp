@@ -42,7 +42,7 @@ const TransactionHeader = (): ReactElement => {
   // Functions
   const selectWallet = (wallet?: Objects.Wallet) => {
     if ((wallet?._id || '-1') !== transactionState.selectedWallet._id) {
-      router.push(`/home?wallet=${wallet?._id || '-1'}&month=${transactionState.dataMonth}`);
+      router.push(`/dashboard?wallet=${wallet?._id || '-1'}&month=${transactionState.dataMonth}`);
 
       dispatchTransactionState({ type: 'SELECT-WALLET', payload: { selectedWallet: wallet } });
     }
