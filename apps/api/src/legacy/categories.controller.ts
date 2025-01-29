@@ -49,13 +49,11 @@ export class CategoryController {
         }
       });
 
-      res
-        .status(response.status)
-        .send({
-          Income: incomeCats,
-          Expense: expenseCats,
-          Archived: archivedCats,
-        } as GetCategoriesResponse);
+      res.status(response.status).send({
+        Income: incomeCats,
+        Expense: expenseCats,
+        Archived: archivedCats,
+      } as GetCategoriesResponse);
     } catch (e) {
       res.status(500).send(e);
     }

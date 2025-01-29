@@ -14,7 +14,10 @@ export class UserEmailService {
     this._configService.getOrThrow<string>('FRONTEND_RESET_PASS');
   private readonly _logger = new Logger('UserEmailService');
 
-  constructor(private _configService: ConfigService, private readonly _mailing: MailingService) {}
+  constructor(
+    private _configService: ConfigService,
+    private readonly _mailing: MailingService
+  ) {}
 
   public async sendRegistrationEmail(user: UserEntity): Promise<void> {
     this._logger.log(`Sending registration email to  user: ${user.Id}`);

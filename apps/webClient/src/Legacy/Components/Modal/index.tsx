@@ -30,7 +30,7 @@ const Modal = (props: Props): ReactElement => {
   if (props.float) theme += ' floated';
   if (props.loading) theme += ' loading';
 
-  const modalRef = useRef();
+  const modalRef = useRef(null);
 
   // Function that closes the modal
   const closeModal = () => {

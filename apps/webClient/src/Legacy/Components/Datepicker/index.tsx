@@ -47,7 +47,7 @@ const displayDate = (date: Date): string => {
 const Datepicker = (props: Props): ReactElement => {
   const [state, dispatch] = useDatePicker(props.value ? new Date(props.value) : new Date());
 
-  const pickerRef = useRef();
+  const pickerRef = useRef(null);
 
   useEffect(() => {
     dispatch({
@@ -221,8 +221,8 @@ const Datepicker = (props: Props): ReactElement => {
                             compareDates(day, state.selectedDate)
                               ? 'Datepicker__Container__Content__Month__Week__Day selected'
                               : compareMonths(day, state.viewedDate)
-                              ? 'Datepicker__Container__Content__Month__Week__Day'
-                              : 'Datepicker__Container__Content__Month__Week__Day outside'
+                                ? 'Datepicker__Container__Content__Month__Week__Day'
+                                : 'Datepicker__Container__Content__Month__Week__Day outside'
                           }
                           onClick={() => {
                             setDayCallback(day);

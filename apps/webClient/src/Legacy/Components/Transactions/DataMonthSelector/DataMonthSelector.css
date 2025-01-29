@@ -38,7 +38,10 @@
   padding: 0;
   position: relative;
   top: 0px;
-  transition: top 350ms, height 200ms, visibility 350ms;
+  transition:
+    top 350ms,
+    height 200ms,
+    visibility 350ms;
   visibility: hidden;
   width: 100%;
 }
@@ -47,7 +50,10 @@
   font-size: inherit;
   height: 40px;
   top: 0;
-  transition: top 350ms, height 200ms, visibility 350ms;
+  transition:
+    top 350ms,
+    height 200ms,
+    visibility 350ms;
   padding: inherit;
   visibility: visible;
 }

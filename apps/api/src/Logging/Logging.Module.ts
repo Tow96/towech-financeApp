@@ -9,7 +9,7 @@ import { PinoModule } from './Pino.Module';
 })
 export class LoggingModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
-    consumer.apply(HttpLogMiddleware).forRoutes('*');
+    consumer.apply(CorrelationIdMiddleware).forRoutes('{*splat}');
+    consumer.apply(HttpLogMiddleware).forRoutes('{*splat}');
   }
 }
