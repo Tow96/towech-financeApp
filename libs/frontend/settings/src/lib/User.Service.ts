@@ -82,3 +82,10 @@ export const useChangePassword = () => {
     },
   });
 };
+
+export const usePasswordReset = () => {
+  return useMutation({
+    mutationKey: [TanstackKeys.USER, 'reset password'],
+    mutationFn: async (id: string) => api.post(`users/${id}/password/send-reset`, ''),
+  });
+};
