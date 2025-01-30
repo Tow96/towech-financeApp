@@ -23,11 +23,11 @@ export const ChangePasswordSchema = z
     newPassword: z.string().nonempty('New password is required'),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.oldPassword === data.newPassword, {
+  .refine((data) => data.oldPassword !== data.newPassword, {
     message: 'Passwords must not be the same',
     path: ['newPassword'],
   })
-  .refine((data) => data.newPassword !== data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: 'Confirm Password must match new password',
     path: ['confirmPassword'],
   });
