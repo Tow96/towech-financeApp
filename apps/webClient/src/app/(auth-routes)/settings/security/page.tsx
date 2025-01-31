@@ -2,6 +2,7 @@ import { ReactElement } from 'react';
 import {
   ChangePasswordFormComponent,
   SendPasswordResetComponent,
+  LogoutAllSessionsComponent,
 } from '@financeapp/frontend-settings';
 
 const SecuritySettingsPage = (): ReactElement => (
@@ -9,6 +10,8 @@ const SecuritySettingsPage = (): ReactElement => (
     <ChangePasswordFormComponent />
     <div className="my-3 block border-b-2 border-riverbed-900" />
     <SendPasswordResetComponent />
+    <div className="my-3 block border-b-2 border-riverbed-900" />
+    <LogoutAllSessionsComponent />
   </main>
 );
 

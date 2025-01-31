@@ -26,6 +26,7 @@ export const useAuthentication = () =>
     queryKey: [TanstackKeys.AUTH],
     queryFn: async () => await api.postWithCookie<AuthenticationDto>('/refresh'),
     staleTime: 1000 * 60 * 4, // 4 min
+    retry: 0,
   });
 
 // Mutation Hooks ---------------------------------------------------
@@ -33,6 +34,7 @@ export const useLogin = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [TanstackKeys.AUTH, 'login'],
+    retry: 0,
     mutationFn: async (cred: LoginDto) =>
       await api.postWithCookie<AuthenticationDto>('/login', cred),
     onSuccess: (res) => client.setQueryData([TanstackKeys.AUTH], res),
@@ -43,8 +45,9 @@ export const useLogout = () => {
   const client = useQueryClient();
   return useMutation({
     mutationKey: [TanstackKeys.AUTH, 'logout'],
+    retry: 0,
     mutationFn: async () => await api.postWithCookie(`/logout`),
-    onSuccess: () => client.setQueryData([TanstackKeys.AUTH], null),
-    onError: () => client.setQueryData([TanstackKeys.AUTH], null),
+    onSuccess: () => client.removeQueries({ queryKey: [TanstackKeys.AUTH] }),
+    onError: () => client.removeQueries({ queryKey: [TanstackKeys.AUTH] }),
   });
 };

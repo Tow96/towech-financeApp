@@ -1,7 +1,7 @@
 'use client';
 import { ReactElement, useEffect } from 'react';
 // Hooks
-import { useSendVerification, useUser } from '@financeapp/frontend-settings';
+import { useSendVerification, useUser } from '../User.Service';
 import { useAddToast } from '@financeapp/frontend-toasts';
 // Components
 import { Button } from '@financeapp/frontend-common';

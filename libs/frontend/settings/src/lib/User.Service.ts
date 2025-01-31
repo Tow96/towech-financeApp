@@ -89,3 +89,13 @@ export const usePasswordReset = () => {
     mutationFn: async (id: string) => api.post(`users/${id}/password/send-reset`, ''),
   });
 };
+
+export const useLogoutAll = () => {
+  const { data: auth } = useAuthentication();
+  return useMutation({
+    mutationKey: [TanstackKeys.USER, 'logout all sessions'],
+    mutationFn: async (id: string) => {
+      if (auth) await api.post(`logout-all/${id}`, auth.token);
+    },
+  });
+};
