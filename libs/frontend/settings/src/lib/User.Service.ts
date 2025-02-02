@@ -83,6 +83,16 @@ export const useChangePassword = () => {
   });
 };
 
+export const useDeleteUser = () => {
+  const { data: auth } = useAuthentication();
+  return useMutation({
+    mutationKey: [TanstackKeys.USER, 'delete password'],
+    mutationFn: async (id: string) => {
+      if (auth) await api.delete(`users/${id}`, auth.token);
+    },
+  });
+};
+
 export const usePasswordReset = () => {
   return useMutation({
     mutationKey: [TanstackKeys.USER, 'reset password'],

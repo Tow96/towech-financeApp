@@ -9,9 +9,9 @@ import { Button, Modal } from '@financeapp/frontend-common';
 
 export const LogoutAllSessionsComponent = (): ReactElement => {
   const { data: user } = useAuthentication();
-  const modalParam = 'show-logout';
 
   // Logout modal ---------------------------------------------------
+  const modalParam = 'show-logout';
   const router = useRouter();
   const path = usePathname();
   const params = useSearchParams();

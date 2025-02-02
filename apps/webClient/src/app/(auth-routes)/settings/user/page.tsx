@@ -1,6 +1,10 @@
 import { ReactElement } from 'react';
 // Components
-import { EditUserFormComponent, VerifyUserComponent } from '@financeapp/frontend-settings';
+import {
+  EditUserFormComponent,
+  DeleteUserComponent,
+  VerifyUserComponent,
+} from '@financeapp/frontend-settings';
 
 const UserSettingsPage = (): ReactElement => (
   <main>
@@ -8,7 +12,7 @@ const UserSettingsPage = (): ReactElement => (
     <div className="my-3 block border-b-2 border-riverbed-900" />
     <VerifyUserComponent />
     <div className="my-3 block border-b-2 border-riverbed-900" />
-    <section data-testid="delete-user">TODO: Delete user button</section>
+    <DeleteUserComponent />
   </main>
 );
 

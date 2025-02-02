@@ -31,6 +31,9 @@ export class ApiContext {
     );
   }
 
+  async delete<T>(url: string, token: string): Promise<T> {
+    return (await this.axiosInstance.delete<T>(url, this.config(token))).data;
+  }
   async get<T>(url: string, token: string): Promise<T> {
     return (await this.axiosInstance.get<T>(url, this.config(token))).data;
   }
