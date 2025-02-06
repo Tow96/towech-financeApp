@@ -35,7 +35,7 @@ export const ChangePasswordFormComponent = (): ReactElement => {
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit">Save</Button>
+          <Button type="submit" text="Save" />
         </div>
       </form>
     </section>

@@ -12,13 +12,12 @@ export const DeleteUserButtonComponent = (): ReactElement => {
     <section className="flex gap-4 items-end mb-2 sm:mb-0">
       <h2 className="text-2xl flex-1">Delete user</h2>
       <Button
+        text="Delete user"
         color="danger"
         disabled={button.isPending}
         loading={button.isPending}
         onClick={() => button.openModal()}
-      >
-        Delete user
-      </Button>
+      />
       <Modal color="danger" title="Delete user" param={modalParam} onOk={() => button.delete()}>
         This will delete the user, along with all its information, this cannot be undone
       </Modal>

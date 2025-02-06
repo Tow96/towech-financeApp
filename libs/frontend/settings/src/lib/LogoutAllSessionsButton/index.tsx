@@ -12,9 +12,7 @@ export const LogoutAllSessionsButtonComponent = (): ReactElement => {
     <section className="sm:flex">
       <h2 className="text-2xl">Logout from all devices</h2>
       <div className="flex flex-1 justify-end">
-        <Button color="danger" onClick={() => logoutBttn.openModal()}>
-          Logout
-        </Button>
+        <Button text="Logout" color="danger" onClick={() => logoutBttn.openModal()} />
       </div>
       <Modal
         color="danger"

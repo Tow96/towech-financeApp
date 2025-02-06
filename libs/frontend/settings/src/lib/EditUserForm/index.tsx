@@ -17,9 +17,12 @@ export const EditUserFormComponent = (): ReactElement => {
           <Input label="Email" disabled={form.isPending} register={form.registerEmail} />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" loading={form.isPending} disabled={!form.isValid || form.isPending}>
-            Save
-          </Button>
+          <Button
+            text="Save"
+            type="submit"
+            loading={form.isPending}
+            disabled={!form.isValid || form.isPending}
+          />
         </div>
       </form>
     </section>

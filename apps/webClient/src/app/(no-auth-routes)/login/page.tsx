@@ -61,7 +61,7 @@ const LoginPage = (): ReactElement => {
           {/* Keep session + submit */}
           <div className="flex justify-between px-1 pt-2">
             <Checkbox label="Keep Session" register={form.register('keepSession')} />
-            <Button type="submit">Login</Button>
+            <Button type="submit" text="Login" />
           </div>
         </form>
       </section>

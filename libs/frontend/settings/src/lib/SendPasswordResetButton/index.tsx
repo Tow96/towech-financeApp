@@ -13,12 +13,11 @@ export const SendPasswordResetButtonComponent = (): ReactElement => {
       <h2 className="text-2xl">Forgotten Password</h2>
       <div className="flex flex-1 justify-end">
         <Button
+          text="Send reset email"
           disabled={button.isPending}
           loading={button.isPending}
           onClick={() => button.send()}
-        >
-          Send reset email
-        </Button>
+        />
       </div>
     </section>
   );

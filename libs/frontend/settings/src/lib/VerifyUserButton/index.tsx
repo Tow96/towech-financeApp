@@ -23,12 +23,11 @@ export const VerifyUserComponent = (): ReactElement => {
       {!button.isVerified && (
         <div className="flex flex-1 justify-end">
           <Button
+            text="Resend email"
             onClick={() => button.send()}
             disabled={button.isPending}
             loading={button.isPending}
-          >
-            Resend email
-          </Button>
+          />
         </div>
       )}
     </section>
