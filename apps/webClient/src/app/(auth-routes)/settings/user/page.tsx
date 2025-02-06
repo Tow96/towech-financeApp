@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 // Components
 import {
   EditUserFormComponent,
-  DeleteUserComponent,
+  DeleteUserButtonComponent,
   VerifyUserComponent,
 } from '@financeapp/frontend-settings';
 
@@ -12,7 +12,7 @@ const UserSettingsPage = (): ReactElement => (
     <div className="my-3 block border-b-2 border-riverbed-900" />
     <VerifyUserComponent />
     <div className="my-3 block border-b-2 border-riverbed-900" />
-    <DeleteUserComponent />
+    <DeleteUserButtonComponent />
   </main>
 );
 
