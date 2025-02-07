@@ -12,41 +12,46 @@ export const ManageUsersTableComponent = (): ReactElement => {
     });
 
   return (
-    <section>
+    <section className="h-full flex-1 flex-col">
       <div className="flex">
         <h2>Users</h2>
         <input type="text" placeholder="Filter" />
         <Button icon="user-plus" text="Add User" />
       </div>
-      <div className="block max-h-96 overflow-y-auto mt-4">
-        <table className="w-full">
-          <thead className="bg-riverbed-950 sticky top-0 z-50">
+
+      <div className="flex h-[95%] flex-1 overflow-y-auto md:max-h-96">
+        <table className="block h-0 w-full flex-1 border-collapse md:table">
+          <thead className="bg-riverbed-950 absolute -top-full z-50 md:sticky md:top-0">
             <tr>
-              <th className="py-2 text-start">Name</th>
-              <th className="py-2 text-start">Email</th>
-              <th className="py-2 text-center">Actions</th>
+              <th className="px-3 py-2 text-start">Name</th>
+              <th className="px-3 py-2 text-start">Email</th>
+              <th className="px-3 py-2 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody className="max-h-96 overflow-y-auto">
+          <tbody className="block md:table-row-group md:max-h-96 md:overflow-y-auto">
             {data.map((user) => (
               <tr
                 key={user.id}
-                className="even:bg-riverbed-600 odd:bg-riverbed-800 text-riverbed-50"
+                className="border-riverbed-800 bg-riverbed-600 md:odd:bg-riverbed-800 md:even:bg-riverbed-600 mt-8 block border drop-shadow-md md:mt-0 md:table-row md:border-none md:drop-shadow-none"
               >
-                <td>
-                  <div className="flex">
-                    <p>{user.name}</p>
-                    {user.role === 'admin' && <FontAwesomeIcon icon="user-tie" className="pl-2" />}
+                <td className="block px-3 py-3 md:table-cell">
+                  <div className="flex items-center before:pr-4 before:content-['Name:'] md:before:content-none">
+                    {user.role === 'admin' && <FontAwesomeIcon icon="user-tie" className="pr-2" />}
+                    <p className="flex-1 truncate">{user.name}</p>
                   </div>
                 </td>
-                <td>
-                  <div className="flex">
+                <td className="block px-3 py-3 md:table-cell md:before:content-none">
+                  <div className="flex before:pr-4 before:content-['Email:'] md:before:content-none">
                     <p className={getEmailClass(user.accountVerified)}>{user.email}</p>
                   </div>
                 </td>
-                <td>
-                  <div className="flex justify-center">
-                    <Button icon="key" size="sm" text="Verify email" />
+                <td className="block px-3 md:table-cell md:before:content-none">
+                  <div className="flex before:pr-4 before:content-['Actions:'] md:justify-center md:before:content-none">
+                    {!user.accountVerified ? (
+                      <Button icon="envelope-circle-check" size="sm" text="Verify email" />
+                    ) : (
+                      <div className="w-10" />
+                    )}
                     <Button icon="key" size="sm" text="Reset password" />
                     <Button icon="trash" size="sm" color="danger" text="Delete" />
                   </div>

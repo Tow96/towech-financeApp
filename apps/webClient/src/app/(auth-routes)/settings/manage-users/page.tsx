@@ -10,7 +10,7 @@ const ManageUsersPage = (): ReactElement => {
 
   if (auth?.role !== 'admin') redirect('/dashboard');
   return (
-    <main>
+    <main className="flex h-full flex-col">
       <ManageUsersTableComponent />
     </main>
   );
