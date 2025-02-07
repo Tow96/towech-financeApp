@@ -1,9 +1,11 @@
 import { ReactElement } from 'react';
-import { dummyData as data } from './dummy';
 import { Button, classNames } from '@financeapp/frontend-common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useManageUsers } from './ManageUsers.Hook';
 
 export const ManageUsersTableComponent = (): ReactElement => {
+  const { data } = useManageUsers();
+
   const getEmailClass = (verified: boolean) =>
     classNames({
       'bg-cinnabar-800': !verified,
@@ -13,9 +15,8 @@ export const ManageUsersTableComponent = (): ReactElement => {
 
   return (
     <section className="h-full flex-1 flex-col">
-      <div className="flex">
-        <h2>Users</h2>
-        <input type="text" placeholder="Filter" />
+      <div className="mb-5 flex items-center">
+        <h2 className="flex-1 text-2xl">Users</h2>
         <Button icon="user-plus" text="Add User" />
       </div>
 
@@ -29,7 +30,7 @@ export const ManageUsersTableComponent = (): ReactElement => {
             </tr>
           </thead>
           <tbody className="block md:table-row-group md:max-h-96 md:overflow-y-auto">
-            {data.map((user) => (
+            {data?.map((user) => (
               <tr
                 key={user.id}
                 className="border-riverbed-800 bg-riverbed-600 md:odd:bg-riverbed-800 md:even:bg-riverbed-600 mt-8 block border drop-shadow-md md:mt-0 md:table-row md:border-none md:drop-shadow-none"
