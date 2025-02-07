@@ -43,7 +43,7 @@ export const ToastComponent = ({ toast }: { toast: Toast }): ReactElement => {
       <div
         role="alert"
         ref={transitionRef}
-        className="mb-4 flex h-12 translate-x-96 items-center rounded-md bg-riverbed-900 shadow-lg drop-shadow-lg"
+        className="bg-riverbed-900 mb-4 flex h-12 translate-x-96 items-center rounded-md shadow-lg drop-shadow-lg"
       >
         <div data-testid="accent" className={`h-full w-4 rounded-l-md ${color}`}></div>
         <div role="alertdialog" className={`w-36 pl-4 pr-2 ${text}`}>

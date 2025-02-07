@@ -75,7 +75,7 @@ export const Navbar = (): ReactElement => {
         >
           <nav
             ref={transitionNavRef}
-            className="sm:button-shadow z-10 flex w-full flex-col bg-riverbed-800 sm:h-screen"
+            className="sm:button-shadow bg-riverbed-800 z-10 flex w-full flex-col sm:h-screen"
           >
             {/* Toggle + header */}
             <div className="flex items-center">
@@ -92,10 +92,10 @@ export const Navbar = (): ReactElement => {
             </div>
             {/* Contents */}
             <div
-              className={`absolute -left-20 flex h-screen flex-grow flex-col bg-riverbed-800 sm:static ${sideBarClass}`}
+              className={`bg-riverbed-800 absolute -left-20 flex h-screen flex-grow flex-col sm:static ${sideBarClass}`}
             >
               {/* Top divider (desktop only) */}
-              <div className="mx-3 mt-3 hidden border-b-2 border-riverbed-900 sm:block"></div>
+              <div className="border-riverbed-900 mx-3 mt-3 hidden border-b-2 sm:block"></div>
               {/* Main contents */}
               <div className="flex-grow">
                 {links.map((lk, i) => (
@@ -112,7 +112,7 @@ export const Navbar = (): ReactElement => {
                 ))}
               </div>
               {/* Logout */}
-              <div className="mx-3 mt-3 border-b-2 border-riverbed-900"></div>
+              <div className="border-riverbed-900 mx-3 mt-3 border-b-2"></div>
               <div>
                 <NavbarItem
                   icon={'right-from-bracket'}

@@ -18,7 +18,7 @@ export const ChangePasswordFormComponent = (): ReactElement => {
           error={form.oldPassword.error}
           disabled={form.isPending}
         />
-        <div className="w-full md:gap-2 md:flex">
+        <div className="w-full md:flex md:gap-2">
           <Input
             label="New password"
             type="password"

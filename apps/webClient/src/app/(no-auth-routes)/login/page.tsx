@@ -41,8 +41,8 @@ const LoginPage = (): ReactElement => {
 
   // Render -------------------------------------
   return (
-    <main className="mt-12 flex justify-center ">
-      <section className="w-[31rem] rounded-3xl bg-riverbed-700 p-6">
+    <main className="mt-12 flex justify-center">
+      <section className="bg-riverbed-700 w-[31rem] rounded-3xl p-6">
         {/* Title */}
         <h1 className="text-4xl font-extrabold">Login</h1>
         {/* Login Form */}

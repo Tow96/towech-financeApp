@@ -9,8 +9,8 @@ export const DeleteUserButtonComponent = (): ReactElement => {
 
   // Render ---------------------------------------------------------
   return (
-    <section className="flex gap-4 items-end mb-2 sm:mb-0">
-      <h2 className="text-2xl flex-1">Delete user</h2>
+    <section className="mb-2 flex items-end gap-4 sm:mb-0">
+      <h2 className="flex-1 text-2xl">Delete user</h2>
       <Button
         text="Delete user"
         color="danger"

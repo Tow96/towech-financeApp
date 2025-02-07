@@ -54,17 +54,17 @@ export const Modal = (props: Props): ReactElement | null => {
   if (!showDialog) return null;
   return (
     <dialog ref={dialogRef} className="w-4/5 shadow-2xl drop-shadow-2xl sm:w-96">
-      <div className="bg-riverbed-800 p-5 text-riverbed-50">
+      <div className="bg-riverbed-800 text-riverbed-50 p-5">
         <div className="flex items-start justify-between">
           <h2 className="text-xl sm:text-2xl">{props.title}</h2>
           <button
             onClick={closeDialog}
-            className="active:input-shadow aspect-square w-8 rounded-full text-lg font-extrabold hover:bg-riverbed-700 active:bg-riverbed-900"
+            className="active:input-shadow hover:bg-riverbed-700 active:bg-riverbed-900 aspect-square w-8 rounded-full text-lg font-extrabold"
           >
             X
           </button>
         </div>
-        <div className="my-3 block border-b-2 border-riverbed-900"></div>
+        <div className="border-riverbed-900 my-3 block border-b-2"></div>
         <div className="pb-4 sm:text-sm">{props.children}</div>
         <div className="flex justify-end">
           <Button color={props.color} onClick={confirmDialog}>

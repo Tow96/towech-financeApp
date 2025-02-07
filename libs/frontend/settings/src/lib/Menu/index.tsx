@@ -8,7 +8,7 @@ export const SettingsMenu = (): ReactElement => {
   const { data: auth } = useAuthentication();
 
   return (
-    <nav className="overflow-hidden flex justify-around bg-riverbed-800 sm:w-28 sm:flex-col sm:justify-normal md:w-36 shadow-md">
+    <nav className="bg-riverbed-800 flex justify-around overflow-hidden shadow-md sm:w-28 sm:flex-col sm:justify-normal md:w-36">
       <SettingsMenuItem icon="user" name="User" href="user" />
       <SettingsMenuItem icon="lock" name="Security" href="security" />
       {auth?.role === 'admin' && (

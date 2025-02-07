@@ -9,11 +9,11 @@ export const VerifyUserComponent = (): ReactElement => {
 
   return (
     <section className="flex flex-col sm:flex-row">
-      <div className="flex gap-4 items-end mb-2 sm:mb-0">
+      <div className="mb-2 flex items-end gap-4 sm:mb-0">
         <h2 className="text-2xl">Email status:</h2>
         <p
           role="caption"
-          className={`font-extrabold text-xl ${
+          className={`text-xl font-extrabold ${
             button.isVerified ? 'text-mint-300' : 'text-cinnabar-300'
           }`}
         >
