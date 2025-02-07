@@ -83,7 +83,7 @@ export const Button = ({
       {size === 'md' && <div className={textClasses}>{text}</div>}
       {/* Text in tooltip (only in sm) */}
       {size === 'sm' && isTooltipVisible && (
-        <div className="absolute top-[110%] bg-black text-white -translate-x-[25%] p-2 text-sm z-50 rounded-lg">
+        <div className="absolute top-[110%] bg-black text-white -translate-x-[25%] p-2 text-sm z-10 rounded-lg">
           {text}
         </div>
       )}
