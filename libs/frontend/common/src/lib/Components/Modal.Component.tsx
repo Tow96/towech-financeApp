@@ -67,9 +67,7 @@ export const Modal = (props: Props): ReactElement | null => {
         <div className="border-riverbed-900 my-3 block border-b-2"></div>
         <div className="pb-4 sm:text-sm">{props.children}</div>
         <div className="flex justify-end">
-          <Button color={props.color} onClick={confirmDialog}>
-            Ok
-          </Button>
+          <Button color={props.color} onClick={confirmDialog} text="Ok" />
         </div>
       </div>
     </dialog>

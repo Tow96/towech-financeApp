@@ -10,14 +10,14 @@ type UsersDto = {
   accountVerified: boolean;
 };
 
-export const TANSTACK_USER_KEY = 'users';
+export const TANSTACK_USERS_KEY = 'users';
 
 export const useManageUsers = () => {
   const api = new ApiContext();
   const auth = useAuthentication();
 
   return useQuery({
-    queryKey: [TANSTACK_USER_KEY],
+    queryKey: [TANSTACK_USERS_KEY],
     queryFn: async () => await api.get<UsersDto[]>(`users/`, auth.data?.token || ''),
     enabled: auth.isSuccess,
   });

@@ -2,9 +2,10 @@
 import { ReactElement } from 'react';
 import { Button, classNames } from '@financeapp/frontend-common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useManageUsers } from './ManageUsers.Hook';
+import { useManageUsers } from '../_Common/ManageUsers.Hook';
 import { useVerifyUser } from '../_Common/VerifyUser.Hook';
 import { usePasswordReset } from '../_Common';
+import { AddUserButton } from '../AddUserButton';
 
 export const ManageUsersTableComponent = (): ReactElement => {
   const { data } = useManageUsers();
@@ -22,7 +23,7 @@ export const ManageUsersTableComponent = (): ReactElement => {
     <section className="h-full flex-1 flex-col">
       <div className="mb-5 flex items-center">
         <h2 className="flex-1 text-2xl">Users</h2>
-        <Button icon="user-plus" text="Add User" />
+        <AddUserButton />
       </div>
 
       <div className="flex h-[95%] flex-1 overflow-y-auto md:max-h-96">

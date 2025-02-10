@@ -14,4 +14,5 @@ export const ChangePasswordSchema = z
     message: 'Confirm Password must match new password',
     path: ['confirmPassword'],
   });
+
 export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
