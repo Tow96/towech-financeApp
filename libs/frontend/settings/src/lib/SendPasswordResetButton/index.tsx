@@ -1,11 +1,12 @@
 'use client';
 import { ReactElement } from 'react';
 // Hooks
-import { usePasswordReset } from './SendPasswordReset.Hook';
+import { usePasswordReset, useUser } from '../_Common';
 // Components
 import { Button } from '@financeapp/frontend-common';
 
 export const SendPasswordResetButtonComponent = (): ReactElement => {
+  const { data: user } = useUser();
   const button = usePasswordReset();
 
   return (
@@ -16,7 +17,7 @@ export const SendPasswordResetButtonComponent = (): ReactElement => {
           text="Send reset email"
           disabled={button.isPending}
           loading={button.isPending}
-          onClick={() => button.send()}
+          onClick={() => button.send(user?.id || '')}
         />
       </div>
     </section>

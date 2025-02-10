@@ -1,7 +1,6 @@
 import { ApiContext } from '@financeapp/frontend-common';
 import { useMutation } from '@tanstack/react-query';
 import { TANSTACK_USER_KEY } from '../_Common/User.Hook';
-import { useAuthentication } from '@financeapp/frontend-authentication';
 import { useAddToast } from '@financeapp/frontend-toasts';
 import { useEffect } from 'react';
 
@@ -14,7 +13,6 @@ const usePasswordResetCallback = () => {
 };
 
 export const usePasswordReset = () => {
-  const { data: user } = useAuthentication();
   const addToast = useAddToast();
   const resetPass = usePasswordResetCallback();
   useEffect(() => {
@@ -25,6 +23,6 @@ export const usePasswordReset = () => {
 
   return {
     isPending: resetPass.isPending,
-    send: () => resetPass.mutate(user?.userId || ''),
+    send: resetPass.mutate,
   };
 };

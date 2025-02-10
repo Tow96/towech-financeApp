@@ -1,10 +1,15 @@
+'use client';
 import { ReactElement } from 'react';
 import { Button, classNames } from '@financeapp/frontend-common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useManageUsers } from './ManageUsers.Hook';
+import { useVerifyUser } from '../_Common/VerifyUser.Hook';
+import { usePasswordReset } from '../_Common';
 
 export const ManageUsersTableComponent = (): ReactElement => {
   const { data } = useManageUsers();
+  const verifyUserService = useVerifyUser();
+  const resetPasswordService = usePasswordReset();
 
   const getEmailClass = (verified: boolean) =>
     classNames({
@@ -49,12 +54,22 @@ export const ManageUsersTableComponent = (): ReactElement => {
                 <td className="block px-3 md:table-cell md:before:content-none">
                   <div className="flex before:pr-4 before:content-['Actions:'] md:justify-center md:before:content-none">
                     {!user.accountVerified ? (
-                      <Button icon="envelope-circle-check" size="sm" text="Verify email" />
+                      <Button
+                        icon="envelope-circle-check"
+                        size="sm"
+                        text="Verify email"
+                        onClick={() => verifyUserService.send(user.id)}
+                      />
                     ) : (
                       <div className="w-10" />
                     )}
-                    <Button icon="key" size="sm" text="Reset password" />
-                    <Button icon="trash" size="sm" color="danger" text="Delete" />
+                    <Button
+                      icon="key"
+                      size="sm"
+                      text="Reset password"
+                      onClick={() => resetPasswordService.send(user.id)}
+                    />
+                    {/* <Button icon="trash" size="sm" color="danger" text="Delete" /> */}
                   </div>
                 </td>
               </tr>

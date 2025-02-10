@@ -1,7 +1,7 @@
 import { useAuthentication } from '@financeapp/frontend-authentication';
 import { ApiContext } from '@financeapp/frontend-common';
 import { useMutation } from '@tanstack/react-query';
-import { TANSTACK_USER_KEY, useUser } from '../_Common/User.Hook';
+import { TANSTACK_USER_KEY } from './User.Hook';
 import { useAddToast } from '@financeapp/frontend-toasts';
 import { useEffect } from 'react';
 
@@ -10,15 +10,13 @@ const useSendVerificationCallback = () => {
   const { data: auth } = useAuthentication();
   return useMutation({
     mutationKey: [TANSTACK_USER_KEY, 'resend mail'],
-    mutationFn: async () => {
-      if (auth) await api.post(`users/${auth.userId}/email/send-verification`, auth.token);
+    mutationFn: async (id: string) => {
+      if (auth) await api.post(`users/${id}/email/send-verification`, auth.token);
     },
   });
 };
 
-export const useVerifyUserButton = () => {
-  const { data: user } = useUser();
-
+export const useVerifyUser = () => {
   // Verification email sending -------------------------------------
   const sendVerificationEmail = useSendVerificationCallback();
   const addToast = useAddToast();
@@ -31,7 +29,6 @@ export const useVerifyUserButton = () => {
 
   return {
     isPending: sendVerificationEmail.isPending,
-    isVerified: user?.accountVerified,
     send: sendVerificationEmail.mutate,
   };
 };

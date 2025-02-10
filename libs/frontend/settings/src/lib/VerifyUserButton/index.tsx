@@ -2,10 +2,11 @@
 import { ReactElement } from 'react';
 // Components
 import { Button } from '@financeapp/frontend-common';
-import { useVerifyUserButton } from './VerifyUserButton.Hook';
+import { useUser, useVerifyUser } from '../_Common';
 
 export const VerifyUserComponent = (): ReactElement => {
-  const button = useVerifyUserButton();
+  const { data: user } = useUser();
+  const button = useVerifyUser();
 
   return (
     <section className="flex flex-col sm:flex-row">
@@ -14,17 +15,17 @@ export const VerifyUserComponent = (): ReactElement => {
         <p
           role="caption"
           className={`text-xl font-extrabold ${
-            button.isVerified ? 'text-mint-300' : 'text-cinnabar-300'
+            user?.accountVerified ? 'text-mint-300' : 'text-cinnabar-300'
           }`}
         >
-          {button.isVerified ? 'Verified' : 'Unverified'}
+          {user?.accountVerified ? 'Verified' : 'Unverified'}
         </p>
       </div>
-      {!button.isVerified && (
+      {!user?.accountVerified && (
         <div className="flex flex-1 justify-end">
           <Button
             text="Resend email"
-            onClick={() => button.send()}
+            onClick={() => button.send(user?.id || '')}
             disabled={button.isPending}
             loading={button.isPending}
           />
