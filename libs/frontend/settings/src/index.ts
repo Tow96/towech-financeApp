@@ -6,3 +6,4 @@ export * from './lib/ManageUsersTable';
 export * from './lib/Menu';
 export * from './lib/SendPasswordResetButton';
 export * from './lib/VerifyUserButton';
+export * from './lib/VerifyUserForm';

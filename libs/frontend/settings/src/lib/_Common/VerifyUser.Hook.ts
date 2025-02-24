@@ -11,7 +11,7 @@ const useSendVerificationCallback = () => {
   return useMutation({
     mutationKey: [TANSTACK_USER_KEY, 'resend mail'],
     mutationFn: async (id: string) => {
-      if (auth) await api.post(`users/${id}/email/send-verification`, auth.token);
+      if (auth) await api.post(`users/email/send-verification/${id}`, auth.token);
     },
   });
 };

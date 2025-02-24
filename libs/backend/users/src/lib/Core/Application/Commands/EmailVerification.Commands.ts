@@ -39,10 +39,10 @@ export class EmailVerificationCommands {
     await this._mailingService.sendVerificationEmail(user, code);
   }
 
-  async verifyEmail(userId: string, code: string): Promise<void> {
-    this._logger.log(`Verifying email for user: ${userId}`);
+  async verifyEmail(email: string, code: string): Promise<void> {
+    this._logger.log(`Verifying email: ${email}`);
     // Map user
-    const user = await this._userRepository.fetchUserById(userId);
+    const user = await this._userRepository.fetchUserByEmail(email);
 
     // Change
     const status = user.verifyEmail(code);

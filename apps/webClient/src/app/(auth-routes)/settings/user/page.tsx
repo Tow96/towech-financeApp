@@ -3,14 +3,14 @@ import { ReactElement } from 'react';
 import {
   EditUserFormComponent,
   DeleteUserButtonComponent,
-  VerifyUserComponent,
+  VerifyUserButtonComponent,
 } from '@financeapp/frontend-settings';
 
 const UserSettingsPage = (): ReactElement => (
   <main>
     <EditUserFormComponent />
     <div className="border-riverbed-900 my-3 block border-b-2" />
-    <VerifyUserComponent />
+    <VerifyUserButtonComponent />
     <div className="border-riverbed-900 my-3 block border-b-2" />
     <DeleteUserButtonComponent />
   </main>

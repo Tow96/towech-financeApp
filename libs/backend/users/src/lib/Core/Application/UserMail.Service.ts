@@ -44,6 +44,10 @@ export class UserEmailService {
 
   public async sendVerificationEmail(user: UserEntity, code: string): Promise<void> {
     this._logger.log(`Sending verification email to  user: ${user.Id}`);
+    const encodedMail = encodeURIComponent(user.Email);
+    const encodedCode = encodeURIComponent(code);
+    const link = `${this.FRONTEND_VERIFY_EMAIL}?email=${encodedMail}&code=${encodedCode}`;
+    this._logger.verbose(link);
     const content: MailGen.Content = {
       body: {
         name: user.Name,
@@ -53,7 +57,7 @@ export class UserEmailService {
           button: {
             color: '#FAB700',
             text: 'Verify email address',
-            link: `${this.FRONTEND_VERIFY_EMAIL}${user.Id}?code=${code}`,
+            link: link,
           },
         },
         outro: 'If you didn’t request this, please ignore this email or contact our support team.',

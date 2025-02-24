@@ -4,7 +4,7 @@ import { ReactElement } from 'react';
 import { Button } from '@financeapp/frontend-common';
 import { useUser, useVerifyUser } from '../_Common';
 
-export const VerifyUserComponent = (): ReactElement => {
+export const VerifyUserButtonComponent = (): ReactElement => {
   const { data: user } = useUser();
   const button = useVerifyUser();
 

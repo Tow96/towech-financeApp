@@ -9,18 +9,18 @@ import { EmailVerificationCommands } from '../../Core/Application/Commands/Email
 // Validation
 import { VerifyEmailDto } from '../Validation/VerifyEmail.Dto';
 
-@Controller('users/:userId/email')
+@Controller('users/email')
 export class EmailController {
   constructor(private readonly _emailVerification: EmailVerificationCommands) {}
 
-  @Post('/send-verification')
+  @Post('/send-verification/:userId')
   @UseGuards(AdminRequestingUserGuard)
   async sendVerificationEmail(@Param('userId') userId: string): Promise<void> {
     return this._emailVerification.generateEmailVerificationCode(userId);
   }
 
   @Post('/verify')
-  async verifyEmail(@Param('userId') userId: string, @Body() data: VerifyEmailDto): Promise<void> {
-    return this._emailVerification.verifyEmail(userId, data.token);
+  async verifyEmail(@Body() data: VerifyEmailDto): Promise<void> {
+    return this._emailVerification.verifyEmail(data.email, data.code);
   }
 }

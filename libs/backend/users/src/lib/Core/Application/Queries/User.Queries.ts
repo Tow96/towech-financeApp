@@ -19,6 +19,7 @@ export type GetUsersDto = {
   email: string;
   name: string;
   role: string;
+  accountVerified: boolean;
 };
 
 @Injectable()
@@ -34,6 +35,7 @@ export class UserQueries {
         email: UsersSchema.UserInfoTable.email,
         name: UsersSchema.UserInfoTable.name,
         role: UsersSchema.UserInfoTable.role,
+        accountVerified: UsersSchema.UserInfoTable.emailVerified,
       })
       .from(UsersSchema.UserInfoTable);
   }
