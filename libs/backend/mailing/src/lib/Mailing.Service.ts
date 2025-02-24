@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Mailgun from 'mailgun.js';
 import MailGen from 'mailgen';
-import { IMailgunClient } from 'mailgun.js/Interfaces';
+import { IMailgunClient } from 'mailgun.js/Interfaces/MailgunClient/IMailgunClient';
 
 const FormData = require('form-data');
 
