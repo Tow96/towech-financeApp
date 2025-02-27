@@ -33,10 +33,10 @@ export class PasswordResetCommands {
     await this._mailingService.sendPasswordChangeEmail(user);
   }
 
-  async generatePasswordResetCode(userId: string): Promise<void> {
-    this._logger.log(`Generating password reset code for user: ${userId}.`);
+  async generatePasswordResetCode(email: string): Promise<void> {
+    this._logger.log(`Generating password reset code for email: ${email}.`);
     // Map
-    const user = await this._userRepository.fetchUserById(userId);
+    const user = await this._userRepository.fetchUserByEmail(email);
 
     // Change
     const bytes = new Uint8Array(5);
@@ -54,10 +54,10 @@ export class PasswordResetCommands {
     await this._mailingService.sendPasswordResetEmail(user, code);
   }
 
-  async resetPassword(userId: string, code: string, newPassword: string): Promise<void> {
-    this._logger.log(`Resetting password for user: ${userId}`);
+  async resetPassword(email: string, code: string, newPassword: string): Promise<void> {
+    this._logger.log(`Resetting password for email: ${email}`);
     // Map
-    const user = await this._userRepository.fetchUserById(userId);
+    const user = await this._userRepository.fetchUserByEmail(email);
 
     // Change
     const status = user.resetPassword(code, newPassword);

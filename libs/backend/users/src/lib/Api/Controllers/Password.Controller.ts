@@ -10,11 +10,11 @@ import { PasswordResetCommands } from '../../Core/Application/Commands/PasswordR
 import { ChangePasswordDto } from '../Validation/ChangePassword.Dto';
 import { ResetPasswordDto } from '../Validation/ResetPassword.Dto';
 
-@Controller('users/:userId/password')
+@Controller('users/password')
 export class PasswordController {
   constructor(private readonly _passwordReset: PasswordResetCommands) {}
 
-  @Patch('/')
+  @Patch('/:userId')
   @UseGuards(RequestingUserGuard)
   async changePassword(
     @Param('userId') userId: string,
@@ -24,15 +24,12 @@ export class PasswordController {
   }
 
   @Post('/send-reset')
-  async sendPasswordResetEmail(@Param('userId') userId: string): Promise<void> {
-    return this._passwordReset.generatePasswordResetCode(userId);
+  async sendPasswordResetEmail(@Body() data: { email: string }): Promise<void> {
+    return this._passwordReset.generatePasswordResetCode(data.email);
   }
 
   @Post('/reset')
-  async resetPassword(
-    @Param('userId') userId: string,
-    @Body() data: ResetPasswordDto
-  ): Promise<void> {
-    return this._passwordReset.resetPassword(userId, data.resetCode, data.newPassword);
+  async resetPassword(@Body() data: ResetPasswordDto): Promise<void> {
+    return this._passwordReset.resetPassword(data.email, data.resetCode, data.newPassword);
   }
 }

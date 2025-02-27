@@ -8,7 +8,7 @@ const usePasswordResetCallback = () => {
   const api = new ApiContext();
   return useMutation({
     mutationKey: [TANSTACK_USER_KEY, 'reset password'],
-    mutationFn: async (id: string) => api.post(`users/${id}/password/send-reset`, ''),
+    mutationFn: async (email: string) => api.post(`users/password/send-reset`, '', { email }),
   });
 };
 

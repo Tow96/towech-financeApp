@@ -17,7 +17,7 @@ export const SendPasswordResetButtonComponent = (): ReactElement => {
           text="Send reset email"
           disabled={button.isPending}
           loading={button.isPending}
-          onClick={() => button.send(user?.id || '')}
+          onClick={() => button.send(user?.email || '')}
         />
       </div>
     </section>

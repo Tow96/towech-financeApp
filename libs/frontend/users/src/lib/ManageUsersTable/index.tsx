@@ -68,7 +68,7 @@ export const ManageUsersTableComponent = (): ReactElement => {
                       icon="key"
                       size="sm"
                       text="Reset password"
-                      onClick={() => resetPasswordService.send(user.id)}
+                      onClick={() => resetPasswordService.send(user.email)}
                     />
                     {/* <Button icon="trash" size="sm" color="danger" text="Delete" /> */}
                   </div>

@@ -15,7 +15,7 @@ const useChangePasswordCallback = () => {
   return useMutation({
     mutationKey: [TANSTACK_USER_KEY, 'change password'],
     mutationFn: async (data: ChangePasswordDto) => {
-      if (auth) await api.patch(`users/${auth.userId}/password`, auth.token, data);
+      if (auth) await api.patch(`users/password/${auth.userId}`, auth.token, data);
     },
   });
 };
