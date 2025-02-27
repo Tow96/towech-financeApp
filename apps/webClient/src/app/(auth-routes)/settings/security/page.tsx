@@ -3,7 +3,7 @@ import {
   ChangePasswordFormComponent,
   SendPasswordResetButtonComponent,
   LogoutAllSessionsButtonComponent,
-} from '@financeapp/frontend-settings';
+} from '@financeapp/frontend-users';
 
 const SecuritySettingsPage = (): ReactElement => (
   <main>

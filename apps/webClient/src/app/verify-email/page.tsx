@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 // Components
-import { VerifyUserFormComponent } from '@financeapp/frontend-settings';
+import { VerifyUserFormComponent } from '@financeapp/frontend-users';
 
 const VerifyEmailPage = (): ReactElement => {
   return (

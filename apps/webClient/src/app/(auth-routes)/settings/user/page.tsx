@@ -4,7 +4,7 @@ import {
   EditUserFormComponent,
   DeleteUserButtonComponent,
   VerifyUserButtonComponent,
-} from '@financeapp/frontend-settings';
+} from '@financeapp/frontend-users';
 
 const UserSettingsPage = (): ReactElement => (
   <main>

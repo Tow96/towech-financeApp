@@ -22,8 +22,8 @@
       "@financeapp/frontend-authentication": ["libs/frontend/authentication/src/index.ts"],
       "@financeapp/frontend-common": ["libs/frontend/common/src/index.ts"],
       "@financeapp/frontend-navbar": ["libs/frontend/navbar/src/index.ts"],
-      "@financeapp/frontend-settings": ["libs/frontend/settings/src/index.ts"],
-      "@financeapp/frontend-toasts": ["libs/frontend/toasts/src/index.ts"]
+      "@financeapp/frontend-toasts": ["libs/frontend/toasts/src/index.ts"],
+      "@financeapp/frontend-users": ["libs/frontend/users/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

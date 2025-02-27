@@ -1,6 +1,6 @@
 'use client';
 import { useAuthentication } from '@financeapp/frontend-authentication';
-import { ManageUsersTableComponent } from '@financeapp/frontend-settings';
+import { ManageUsersTableComponent } from '@financeapp/frontend-users';
 import { redirect } from 'next/navigation';
 import { ReactElement } from 'react';
 

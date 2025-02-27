@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 import { Metadata } from 'next';
-import { SettingsMenu } from '@financeapp/frontend-settings';
+import { SettingsMenu } from '@financeapp/frontend-users';
 
 export const metadata: Metadata = {
   title: 'Settings',
