@@ -16,6 +16,7 @@ export class WalletController {
   private transactionQueue = (process.env.TRANSACTION_QUEUE as string) || 'transactionQueue';
 
   @Get('')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getWallets(@Req() req: any, @Res() res: any) {
     try {
       const connection = await Queue.startConnection();
@@ -35,6 +36,7 @@ export class WalletController {
   }
 
   @Post('')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createWallet(@Req() req: any, @Res() res: any, @Body() body: any) {
     try {
       const connection = await Queue.startConnection();
@@ -64,6 +66,7 @@ export class WalletController {
   }
 
   @Post('transfer')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createTransference(@Req() req: any, @Res() res: any, @Body() body: any) {
     try {
       const connection = await Queue.startConnection();
@@ -84,7 +87,11 @@ export class WalletController {
       });
 
       // Waits for the response from the workers
-      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<ChangeTransactionResponse> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
       res.status(response.status).send(response.payload);
     } catch (e) {
       AmqpMessage.sendHttpError(res, e);
@@ -92,6 +99,7 @@ export class WalletController {
   }
 
   @Get(':walletId')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getWallet(@Req() req: any, @Res() res: any, @Param('walletId') walletId: string) {
     try {
       const connection = await Queue.startConnection();
@@ -114,7 +122,13 @@ export class WalletController {
   }
 
   @Patch(':walletId')
-  async updateWallet(@Req() req: any, @Res() res: any, @Body() body: any, @Param('walletId') walletId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateWallet(
+    @Req() req: any,
+    @Res() res: any,
+    @Body() body: any,
+    @Param('walletId') walletId: string
+  ) {
     try {
       const connection = await Queue.startConnection();
       const channel = await Queue.setUpChannelAndExchange(connection);
@@ -139,6 +153,7 @@ export class WalletController {
   }
 
   @Delete(':walletId')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async deleteWallet(@Req() req: any, @Res() res: any, @Param('walletId') walletId: string) {
     try {
       const connection = await Queue.startConnection();
@@ -162,17 +177,17 @@ export class WalletController {
 
   @Get(':walletId/transactions')
   async getWalletTransactions(
-    @Req() req: any,
-    @Res() res: any,
+    @Req() req: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    @Res() res: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     @Param('walletId') walletId: string,
-    @Query('datamonth') qDatamonth: string
+    @Query('datamonth') qDataMonth: string
   ) {
     try {
       const connection = await Queue.startConnection();
       const channel = await Queue.setUpChannelAndExchange(connection);
 
-      // Gets the datamonth, the worker will interpret it
-      const datamonth: string = (qDatamonth || '-1').toString();
+      // Gets the data month, the worker will interpret it
+      const dataMonth: string = (qDataMonth || '-1').toString();
 
       const corrId = await Queue.publishWithReply(channel, this.transactionQueue, {
         status: 200,
@@ -180,10 +195,14 @@ export class WalletController {
         payload: {
           _id: walletId,
           user_id: req.user._id,
-          datamonth: datamonth,
+          datamonth: dataMonth,
         } as WorkerGetTransactions,
       });
-      const response: AmqpMessage<Transaction[]> = await Queue.fetchFromQueue(channel, corrId, corrId);
+      const response: AmqpMessage<Transaction[]> = await Queue.fetchFromQueue(
+        channel,
+        corrId,
+        corrId
+      );
 
       res.status(response.status).send(response.payload);
     } catch (e) {

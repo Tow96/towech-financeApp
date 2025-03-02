@@ -4,9 +4,163 @@
  *
  * Styles for the main App component
  */
-@import url('./index.css');
 
+/* TODO: LEGACY CSS */
 .App {
   position: absolute;
   width: 100%;
+}
+
+:root {
+  --black: #000000;
+  --gray1: #202124;
+  --gray2: #4c4d50;
+  --gray3: #c4c4c4;
+  --white: #ffffff;
+
+  --yellow: #fab700;
+  --green: #00ab75;
+  --red: #ab0036;
+
+  --yellowhover: #e1a400;
+  --redhover: #88002b;
+
+  --header-size: 70px;
+  --max-container-size: 800px;
+}
+
+body {
+  background-color: var(--gray1);
+  color: var(--white);
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.loading {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Generic scrollbar */
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray3);
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--white);
+}
+
+.Categories {
+  --cardContainerMargin: 30px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 70px);
+}
+
+.Categories__AddFloat {
+  position: absolute;
+  z-index: 1;
+  bottom: 40px;
+  right: 20px;
+}
+
+.Categories__Container {
+  background-color: var(--black);
+  border-radius: 25px 25px 0 0;
+  margin: var(--cardContainerMargin);
+  margin-bottom: 0;
+  width: 98%;
+}
+
+.Categories__Container__Selector {
+  align-items: center;
+  background-color: var(--black);
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  font-size: 22px;
+  height: 40px;
+  justify-content: space-around;
+}
+
+.Categories__Container__List {
+  height: calc(100% - 40px);
+  overflow: auto;
+}
+
+.selected {
+  color: var(--yellow);
+}
+
+.CategoryCard {
+  align-items: center;
+  display: flex;
+  margin: 0 20px 0 20px;
+  padding: 15px 0 15px 0;
+}
+
+.CategoryCard:not(:first-child) {
+  border-top: 2px solid var(--yellow);
+}
+
+.CategoryCard__Icon {
+  height: 45px;
+  width: 45px;
+}
+
+.CategoryCard__Name {
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.SubCategoryCard {
+  align-items: center;
+  display: flex;
+  margin: 0 20px 0 20px;
+  padding: 10px 0 10px 12px;
+}
+
+.SubCategoryCard__Icon {
+  height: 35px;
+  width: 35px;
+}
+
+.SubCategoryCard__Name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.CategoryForm__FirstRow {
+  display: flex;
+  align-items: center;
+}
+
+.CategoryForm__FirstRow__Icon {
+  height: 65px;
+  width: 65px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.CategoryForm__FirstRow__Name {
+  margin-left: 20px;
+  flex: 1;
 }

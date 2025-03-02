@@ -2,7 +2,7 @@
 
 This repository is to serve a basic example of the complete application as well as to serve as a front for the documentation, the repositories that form the complete app can be found [here](https://github.com/towech-financeapp).
 
-The Towech FinanceApp is a web based application that allows users to manage their personal finances by having multiple wallets, creating/editing transactions and managing transferences between them.
+The Towech FinanceApp is a web based application that allows users to manage their personal finances by having multiple wallets, creating/editing transactions and managing transference between them.
 
 The application uses a _microservice_ approach by containerizing parts of the code so they can be easily scaled in case it is needed. Due to the smaller scope of the application this is completely overkill, however it is meant to easily learn how these kinds of applications can be created.
 
@@ -11,7 +11,7 @@ The application uses a _microservice_ approach by containerizing parts of the co
 1. [Architecture](#Architecture)
    1. [Data](#Arch_Data)
    2. [Application](#Arch_App)
-   3. [Infraestructure](#Arch_Infraestructure)
+   3. [Infrastructure](#Arch_Infraestructure)
 2. [Installation](#Installation)
    1. [External requirements](#Inst_ext)
    2. [Installing example](#Inst_exa)
@@ -39,7 +39,7 @@ The application is divided in parts that communicate together, due to the micros
 
 [**WebClient:**](https://github.com/towech-financeApp/WebClient) A ReactJS based web frontend application that serves as the UI of the project. It allows the users to do all the functions the application has. It communicates with the API.
 
-[**API:**](https://github.com/towech-financeApp/WebApi) An ExpressJS API that handles the authentication parameters, as well as passing any http request to the services to be processed.
+[**API:**](https://github.com/towech-financeApp/WebApi) An Express.jS API that handles the authentication parameters, as well as passing any http request to the services to be processed.
 
 [**UserService:**](https://github.com/towech-financeApp/UserService) Worker that contains all the logic and rules the data regarding the users should follow, such as password changes, adding users, registering the amount of active sessions etc. Also is in charge of the mailing system for the application.
 
@@ -55,7 +55,7 @@ The application is divided in parts that communicate together, due to the micros
 
 Since the application is designed with a microservice approach, the all the components of the application communicate diversely. the API communicates with the outside using HTTP, while communicates with the services using the AMQP protocol.
 
-A deployment of the complete application would looke like this:
+A deployment of the complete application would look like this:
 ![Infrastructure Diagram](media/infra.png)
 
 The example provided in this documentation deploys a very simple example with only one container per component.
@@ -66,7 +66,7 @@ Installation of the system requires at least one instance of every component, as
 
 ### External requirements
 
-The first step is to acquire an email account that the system will use. The application is designed to utilize google with oauth2. A guide to obtaing the token can be found [here](https://developers.google.com/identity/protocols/oauth2). The strings that will be needed are the following:
+The first step is to acquire an email account that the system will use. The application is designed to utilize google with oauth2. A guide to obtaining the token can be found [here](https://developers.google.com/identity/protocols/oauth2). The strings that will be needed are the following:
 
 ```
 EMAIL=<user>@gmail.com

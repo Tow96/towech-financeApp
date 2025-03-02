@@ -1,22 +1,21 @@
 import { Module } from '@nestjs/common';
-import { LegacyModule } from './legacy/legacy.module';
-import { CqrsModule } from '@nestjs/cqrs';
-
-import { ApplicationCommands, ApplicationQueries } from '@financeApp/backend-application';
-import { PersistenceModule } from '@financeApp/backend-infrastructure-persistence';
-import { LoggingModule } from '@financeApp/backend-infrastructure-logging';
-import { ControllerRegistration } from './Controllers/Controller.Registration';
 import { ConfigModule } from '@nestjs/config';
+
+import { UsersModule } from '@financeapp/backend-users';
+import { LegacyModule } from './legacy/legacy.module';
+import { LoggingModule } from './Logging/Logging.Module';
+// import { RateLimitingModule } from './RateLimiting/RateLimiting.Module';
+// import { RateLimitingService } from './RateLimiting/RateLimiting.Service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
-    LegacyModule,
-    CqrsModule,
-    PersistenceModule,
+    // RateLimitingModule,
     LoggingModule,
+
+    LegacyModule,
+    UsersModule,
   ],
-  controllers: [...ControllerRegistration],
-  providers: [...ApplicationCommands, ...ApplicationQueries],
+  // providers: [RateLimitingService],
 })
 export class AppModule {}

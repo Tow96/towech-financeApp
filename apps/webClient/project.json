@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/webclient",
   "projectType": "application",
-  "tags": [],
+  "tags": ["type:app", "scope:frontend"],
   "// targets": "to see all targets run: nx show project webclient --web",
   "targets": {
     "docker-build": {

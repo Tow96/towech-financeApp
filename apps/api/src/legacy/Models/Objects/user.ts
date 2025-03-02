@@ -20,15 +20,3 @@ export interface BaseUser {
   role: 'admin' | 'user';
   username: string;
 }
-
-// The frontend user contains the fields that only the owner of the account can see
-export interface FrontendUser extends BaseUser {
-  refreshTokens: string[] | undefined;
-  resetToken: string | undefined;
-  singleSessionToken: string | undefined;
-}
-
-// The backend user contains data that should only be managed by the authorized services
-export interface BackendUser extends FrontendUser {
-  password: string;
-}
