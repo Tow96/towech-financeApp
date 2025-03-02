@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         return response.status(exception.getStatus()).send(exception.getResponse());
 
       default:
-        this.logger.error(`Unknown exception: ${exception}`);
+        this.logger.error(`Unknown exception: ${JSON.stringify(exception)}`);
         return response.status(500).send('internal server error');
     }
   }

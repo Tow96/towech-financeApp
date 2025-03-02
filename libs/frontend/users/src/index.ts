@@ -4,6 +4,7 @@ export * from './lib/DeleteUserButton';
 export * from './lib/LogoutAllSessionsButton';
 export * from './lib/ManageUsersTable';
 export * from './lib/Menu';
+export * from './lib/ResetPasswordForm';
 export * from './lib/SendPasswordResetButton';
 export * from './lib/VerifyUserButton';
 export * from './lib/VerifyUserForm';

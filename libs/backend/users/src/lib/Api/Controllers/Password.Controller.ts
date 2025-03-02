@@ -30,6 +30,6 @@ export class PasswordController {
 
   @Post('/reset')
   async resetPassword(@Body() data: ResetPasswordDto): Promise<void> {
-    return this._passwordReset.resetPassword(data.email, data.resetCode, data.newPassword);
+    return this._passwordReset.resetPassword(data.email, data.code, data.newPassword);
   }
 }

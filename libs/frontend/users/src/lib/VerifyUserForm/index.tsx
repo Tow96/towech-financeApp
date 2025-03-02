@@ -10,7 +10,7 @@ export const VerifyUserFormComponent = (): ReactElement => {
   const form = useVerifyUserForm();
 
   return (
-    <section>
+    <section className="bg-riverbed-700 w-[31rem] rounded-3xl p-6">
       <h1 className="text-3xl font-bold">Verify account</h1>
       {form.status === 'success' && (
         <div className="mt-4 flex items-center">
