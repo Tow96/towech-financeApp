@@ -1,6 +1,9 @@
 
 ARG ALPINE_VERSION=3.18
-FROM alpine:${ALPINE_VERSION} AS base
+ARG NODE_VERSION=22.13.1
+FROM node:${NODE_VERSION}-alpine AS base
+
+FROM alpine:${ALPINE_VERSION} AS runner
 WORKDIR /usr/src/app
 
 ARG UID=1001
@@ -8,7 +11,12 @@ ARG USER=nextjs
 ARG GID=1001
 ARG GROUP=node
 
-RUN apk add --update nodejs dumb-init \
+COPY --from=base /usr/lib /usr/lib
+COPY --from=base /usr/local/lib /usr/local/lib
+COPY --from=base /usr/local/include /usr/local/include
+COPY --from=base /usr/local/bin /usr/local/bin
+
+RUN apk add --update dumb-init \
   && addgroup -g ${GID} ${GROUP} \
   && adduser -u ${UID} -G ${GROUP} -s /bin/sh -D ${USER} \
   && chown ${USER}:${GROUP} ./

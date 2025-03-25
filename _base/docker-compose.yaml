@@ -71,7 +71,7 @@ services:
       - ./logs/WebApi:/usr/app/logs
 
     env_file:
-      - ./environments/WebAPI.env
+      - ./environments/WebApi.env
 
     ports:
       - '3001:3000'
