@@ -3,11 +3,12 @@
 # compiled output
 dist
 tmp
-/out-tsc
-logs/
+out-tsc
+logs
+deploy
 
 # environment variables
-*.env
+*.env*
 
 # dependencies
 node_modules

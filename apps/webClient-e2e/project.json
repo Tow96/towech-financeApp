@@ -1,9 +1,10 @@
 {
-  "name": "webClient-e2e",
+  "name": "webclient-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/webClient-e2e/src",
+  "projectType": "application",
+  "sourceRoot": "apps/webclient-e2e/src",
   "tags": [],
-  "implicitDependencies": ["webClient"],
-  "// targets": "to see all targets run: nx show project webClient-e2e --web",
+  "implicitDependencies": ["webclient"],
+  "// targets": "to see all targets run: nx show project webclient-e2e --web",
   "targets": {}
 }

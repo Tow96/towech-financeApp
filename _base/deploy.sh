@@ -18,7 +18,7 @@ echo 'EMAIL_CLIENT_SECRET='$email_client_secret >> ./environments/UserService.en
 read -p 'Email Refresh Token: ' email_refresh_token
 echo 'EMAIL_REFRESH_TOKEN='$email_refresh_token >> ./environments/UserService.env
 
-# Deletes the WebClient folder to redownload it
+# Deletes the WebClient folder to re-download it
 if [ -d "./WebClient"]; then
   rm -r ./WebClient
 fi

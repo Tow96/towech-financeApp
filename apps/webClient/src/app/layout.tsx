@@ -1,33 +1,28 @@
+import './globals.css';
+import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { AppProvider } from '../Services/AppProvider';
 import { Raleway } from 'next/font/google';
 
-import 'normalize.css';
-import '../index.css';
-// TODO: Fix css imports
-import '../Components/Page/Page.css';
-import '../Components/NavBar/NavBar.css';
-import '../Components/NavBar/MenuItem.css';
-import './Categories.css';
-import { Suspense } from 'react';
+import { TanstackProvider } from '@financeapp/frontend-common';
+import { ToastProvider } from '@financeapp/frontend-toasts';
+import { LegacyProvider } from '../Legacy/Services/LegacyProvider';
+
+const raleway = Raleway({ subsets: ['latin'], display: 'swap', variable: '--font-raleway' });
 
 export const metadata: Metadata = {
-  title: 'Towech Finance',
-  description: 'Web site created with Next.js.',
+  title: 'Towech Finance App',
+  description: 'Application to manage personal finances',
 };
 
-const raleway = Raleway({
-  subsets: ['latin'],
-  display: 'swap',
-});
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={raleway.className}>
-      <body>
-        <AppProvider>
-          <Suspense>{children}</Suspense>
-        </AppProvider>
+    <html lang="en">
+      <body className={raleway.className}>
+        <LegacyProvider>
+          <ToastProvider>
+            <TanstackProvider>{children}</TanstackProvider>
+          </ToastProvider>
+        </LegacyProvider>
       </body>
     </html>
   );

@@ -1,0 +1,9 @@
+{
+  "name": "backend-authorization",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/authorization/src",
+  "projectType": "library",
+  "tags": ["scope:backend", "type:infrastructure"],
+  "// targets": "to see all targets run: nx show project backend-authorization --web",
+  "targets": {}
+}
