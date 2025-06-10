@@ -9,7 +9,7 @@ const nextConfig = {
   nx: {
     svgr: false, // See: https://github.com/gregberge/svgr
   },
-  output: 'standalone',
+  distDir: '../../dist/apps/webclient',
 };
 
 const plugins = [

@@ -45,22 +45,9 @@
         "devTargetName": "dev",
         "serveStaticTargetName": "serve-static"
       }
-    },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
-    },
-    {
-      "plugin": "@nx-tools/nx-container",
-      "options": {}
     }
   ],
   "targetDefaults": {
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
-    },
     "@nx/js:tsc": {
       "cache": true,
       "dependsOn": ["^build"],
