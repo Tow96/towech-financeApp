@@ -1,10 +1,16 @@
 {
   "ignoreDependencies": [
+    "@eslint/js",
+    "@nestjs/schematics",
+    "@nestjs/testing",
+    "@nx/nest",
+    "@nx/node",
+    "@nx/web",
     "@nx/workspace",
-    "@swc-node/register",
-    "@swc/core",
     "@swc/helpers",
-    "nx",
-    "prettier"
-  ]
+    "prettier",
+    "typescript-eslint"
+  ],
+  "ignore": ["**/*/webpack.config.js"],
+  "webpack": false
 }

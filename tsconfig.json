@@ -4,10 +4,7 @@
   "files": [],
   "references": [
     {
-      "path": "./packages/test"
-    },
-    {
-      "path": "./packages/test"
+      "path": "./apps/api"
     }
   ]
 }
