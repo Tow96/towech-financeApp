@@ -1,0 +1,10 @@
+{
+  "ignoreDependencies": [
+    "@nx/workspace",
+    "@swc-node/register",
+    "@swc/core",
+    "@swc/helpers",
+    "nx",
+    "prettier"
+  ]
+}

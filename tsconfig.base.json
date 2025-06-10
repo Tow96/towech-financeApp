@@ -1,30 +1,25 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "composite": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "isolatedModules": true,
+    "lib": [
+      "es2022"
+    ],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@financeApp/backend-presentation": ["libs/backend/presentation/src/index.ts"],
-      "@financeapp/backend-authorization": ["libs/backend/authorization/src/index.ts"],
-      "@financeapp/backend-mailing": ["libs/backend/mailing/src/index.ts"],
-      "@financeapp/backend-users": ["libs/backend/users/src/index.ts"],
-      "@financeapp/frontend-authentication": ["libs/frontend/authentication/src/index.ts"],
-      "@financeapp/frontend-common": ["libs/frontend/common/src/index.ts"],
-      "@financeapp/frontend-navbar": ["libs/frontend/navbar/src/index.ts"],
-      "@financeapp/frontend-toasts": ["libs/frontend/toasts/src/index.ts"],
-      "@financeapp/frontend-users": ["libs/frontend/users/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+    "strict": true,
+    "target": "es2022",
+    "customConditions": [
+      "development"
+    ]
+  }
 }
