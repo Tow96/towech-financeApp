@@ -7,9 +7,12 @@ export class ClerkAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization || '';
+    const authorization = authHeader.split('Bearer ');
+    if (authorization.length < 2) return false;
 
     try {
-      await clerkClient.verifyToken(request.headers.authorization);
+      await clerkClient.verifyToken(authorization[1]);
     } catch (e) {
       this.logger.error(e);
       return false;
