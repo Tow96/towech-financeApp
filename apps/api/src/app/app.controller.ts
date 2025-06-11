@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ClerkAuthGuard } from '../clerk-auth.guard';
+import clerkClient from '@clerk/clerk-sdk-node';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getData() {
-    return this.appService.getData();
+  // @UseGuards(ClerkAuthGuard)
+  getData(@Req() req) {
+    console.log(req.headers);
+
+    return clerkClient.users.getUserList();
   }
 }

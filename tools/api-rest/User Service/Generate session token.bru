@@ -1,0 +1,16 @@
+meta {
+  name: Generate session token
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://api.clerk.com/v1/sessions/{{sessionId}}/tokens
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  let data = res.body;
+  bru.setEnvVar("jwt", data.jwt);
+}

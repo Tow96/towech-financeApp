@@ -1,4 +1,5 @@
 import './global.css';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata = {
   title: 'Welcome to webclient',
@@ -7,8 +8,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
