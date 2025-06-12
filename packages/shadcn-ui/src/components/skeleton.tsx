@@ -1,4 +1,4 @@
-﻿// Imported from https://ui.shadcn.com/docs/components/skeleton
+// Imported from https://ui.shadcn.com/docs/components/skeleton
 import { cn } from '../lib/utils';
 
 function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {

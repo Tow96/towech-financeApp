@@ -1,4 +1,4 @@
-﻿// Imported from https://ui.shadcn.com/docs/components/sidebar
+// Imported from https://ui.shadcn.com/docs/components/sidebar
 'use client';
 
 import * as React from 'react';

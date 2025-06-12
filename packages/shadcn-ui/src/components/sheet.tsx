@@ -1,4 +1,4 @@
-﻿// Imported from https://ui.shadcn.com/docs/components/sheet
+// Imported from https://ui.shadcn.com/docs/components/sheet
 'use client';
 
 import * as React from 'react';

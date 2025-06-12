@@ -1,4 +1,4 @@
-﻿// Imported from https://ui.shadcn.com/docs/components/input
+// Imported from https://ui.shadcn.com/docs/components/input
 import * as React from 'react';
 
 import { cn } from '../lib/utils';

@@ -1,4 +1,4 @@
-﻿// Taken from https://github.com/shadcn-ui/ui/blob/main/apps/v4/hooks/use-mobile.ts
+// Taken from https://github.com/shadcn-ui/ui/blob/main/apps/v4/hooks/use-mobile.ts
 import * as React from 'react';
 
 export function useIsMobile(mobileBreakpoint = 768) {
@@ -12,7 +12,7 @@ export function useIsMobile(mobileBreakpoint = 768) {
     mql.addEventListener('change', onChange);
     setIsMobile(window.innerWidth < mobileBreakpoint);
     return () => mql.removeEventListener('change', onChange);
-  }, []);
+  }, []); // eslint-disable-line
 
   return !!isMobile;
 }

@@ -1,4 +1,4 @@
-﻿// Imported from https://ui.shadcn.com/docs/components/tooltip
+// Imported from https://ui.shadcn.com/docs/components/tooltip
 'use client';
 
 import * as React from 'react';

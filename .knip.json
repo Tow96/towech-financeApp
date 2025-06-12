@@ -1,6 +1,5 @@
 {
   "ignoreDependencies": [
-    "@eslint/js",
     "@nestjs/schematics",
     "@nestjs/testing",
     "@nx/nest",
