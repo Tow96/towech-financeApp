@@ -2,6 +2,10 @@
   "name": "@financeapp/webclient",
   "version": "0.0.1",
   "private": true,
+  "dependencies": {
+    "@financeapp/shadcn-ui": "*",
+    "@financeapp/users-frontend": "*"
+  },
   "nx": {
     "name": "webclient"
   }
