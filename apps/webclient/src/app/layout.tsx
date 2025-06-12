@@ -1,5 +1,4 @@
 import './global.css';
-import { ClerkProvider } from '@clerk/nextjs';
 import { UsersProvider } from '@financeapp/users-frontend';
 
 export const metadata = {
@@ -9,13 +8,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
+    <UsersProvider>
       <html lang="en">
-        <body>
-          <UsersProvider></UsersProvider>
-          {children}
-        </body>
+        <body>{children}</body>
       </html>
-    </ClerkProvider>
+    </UsersProvider>
   );
 }

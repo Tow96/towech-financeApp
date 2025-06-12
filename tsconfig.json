@@ -11,6 +11,9 @@
     },
     {
       "path": "./packages/users/frontend"
+    },
+    {
+      "path": "./packages/shadcn-ui"
     }
-  ]
+  ],
 }

@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@financeapp/shadcn-ui": ["../../packages/shadcn-ui"]
     },
     "outDir": "dist",
     "rootDir": "src",
@@ -46,5 +47,8 @@
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
+  ],
+  "references": [
+    {"path":  "../../packages/shadcn-ui"}
   ]
 }
