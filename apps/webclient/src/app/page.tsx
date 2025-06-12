@@ -1,9 +1,6 @@
-import { Button } from '@financeapp/shadcn-ui';
+import { redirect } from 'next/navigation';
+import { ReactNode } from 'react';
 
-export default async function Index() {
-  return (
-    <div className="h-screen flex items-center justify-center flex-col gap-5">
-      <Button>TEST</Button>
-    </div>
-  );
-}
+const Index = (): ReactNode => redirect('dashboard');
+
+export default Index;
