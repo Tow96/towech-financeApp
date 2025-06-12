@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/webclient"
+    },
+    {
+      "path": "./packages/users/frontend"
     }
   ]
 }
