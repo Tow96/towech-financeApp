@@ -1,13 +1,10 @@
 {
+  "extends": "../../../tsconfig.base.json",
   "files": [],
   "include": [],
   "references": [
     {
-      "path": "../../shadcn-ui"
-    },
-    {
       "path": "./tsconfig.lib.json"
     }
-  ],
-  "extends": "../../../tsconfig.base.json"
+  ]
 }

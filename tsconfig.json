@@ -14,6 +14,9 @@
     },
     {
       "path": "./packages/shadcn-ui"
+    },
+    {
+      "path": "./packages/users/backend"
     }
   ]
 }

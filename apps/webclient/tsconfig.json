@@ -48,5 +48,12 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "references": [{ "path": "../../packages/shadcn-ui" }]
+  "references": [
+    {
+      "path": "../../packages/users/frontend"
+    },
+    {
+      "path": "../../packages/shadcn-ui"
+    }
+  ]
 }
