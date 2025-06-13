@@ -3,7 +3,6 @@ import { Public } from '../lib/users/lib/public-route.decorator';
 
 @Controller()
 export class AppController {
-
   @Get('health')
   @Public()
   getData() {

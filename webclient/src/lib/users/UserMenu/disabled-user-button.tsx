@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { SidebarMenuButton } from "@/lib/shadcn-ui/components/ui/sidebar";
+import { SidebarMenuButton } from '@/lib/shadcn-ui/components/ui/sidebar';
 import { UserBadge } from './user-badge';
 
 export const DisabledUserButton = (): ReactNode => (

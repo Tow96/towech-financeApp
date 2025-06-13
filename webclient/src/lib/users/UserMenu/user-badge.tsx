@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Avatar, AvatarImage, AvatarFallback } from "@/lib/shadcn-ui/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from '@/lib/shadcn-ui/components/ui/avatar';
 
 interface UserProps {
   name: string;

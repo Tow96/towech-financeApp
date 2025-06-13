@@ -6,13 +6,11 @@ import { User as ClerkUser, verifyToken } from '@clerk/backend';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   private readonly UsersDisabled: boolean;
   private readonly ClerkClient: ClerkClient;
 
-  constructor(
-    private readonly configService: ConfigService,
-    // private readonly logger: Logger
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.UsersDisabled = this.configService.get('USERS_DISABLED') === 'true';
 
     this.ClerkClient = createClerkClient({
@@ -32,7 +30,7 @@ export class UserService {
       const clerkUser = await this.ClerkClient.users.getUser(tokenPayload.sub);
       return new User(clerkUser);
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return null;
     }
   }

@@ -1,5 +1,10 @@
-﻿import {SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem} from "@/lib/shadcn-ui/components/ui/sidebar";
-import {CircleDot} from "lucide-react";
+﻿import {
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/lib/shadcn-ui/components/ui/sidebar';
+import { CircleDot } from 'lucide-react';
 
 const pages = [
   {
@@ -14,7 +19,7 @@ export const WebClientNav = () => {
     <SidebarGroup>
       {/*<SidebarGroupLabel>TODO</SidebarGroupLabel>*/}
       <SidebarMenu>
-        {pages.map((page) => (
+        {pages.map(page => (
           <SidebarMenuItem key={page.name}>
             <SidebarMenuButton asChild tooltip={page.name}>
               <a href={page.url}>

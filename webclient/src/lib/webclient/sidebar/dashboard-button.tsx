@@ -1,5 +1,9 @@
 ﻿import { ReactNode } from 'react';
-import {SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/lib/shadcn-ui/components/ui/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/lib/shadcn-ui/components/ui/sidebar';
 import { Layers2 } from 'lucide-react';
 
 export const DashboardButton = (): ReactNode => {

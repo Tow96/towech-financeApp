@@ -1,9 +1,7 @@
-﻿import {ReactNode} from "react";
+﻿import { ReactNode } from 'react';
 
-const CategoriesPage = ():ReactNode => {
-  return (
-    <div>CATEGORIES</div>
-  );
-}
+const CategoriesPage = (): ReactNode => {
+  return <div>CATEGORIES</div>;
+};
 
 export default CategoriesPage;
