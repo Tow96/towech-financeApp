@@ -22,8 +22,6 @@
     "typescript-eslint",
     "tw-animate-css"
   ],
-  "ignore": [
-    "**/*/webpack.config.js"
-  ],
+  "ignore": ["**/*/webpack.config.js"],
   "webpack": false
 }

@@ -14,6 +14,9 @@
       "default": "./dist/index.js"
     }
   },
+  "dependencies": {
+    "@financeapp/shadcn-ui": "*"
+  },
   "nx": {
     "name": "users-frontend"
   }
