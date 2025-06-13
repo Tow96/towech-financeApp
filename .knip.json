@@ -1,6 +1,5 @@
 {
   "ignoreDependencies": [
-    "ajv",
     "@babel/core",
     "@babel/preset-react",
     "@next/eslint-plugin-next",
@@ -17,6 +16,7 @@
     "eslint-plugin-jsx-a11y",
     "eslint-plugin-react",
     "eslint-plugin-react-hooks",
+    "jsonc-eslint-parser",
     "prettier",
     "tailwindcss",
     "typescript-eslint",

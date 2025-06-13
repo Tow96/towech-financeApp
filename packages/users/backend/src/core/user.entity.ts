@@ -1,7 +1,8 @@
-import { User as ClerkUser } from '@clerk/backend';
+﻿import { User as ClerkUser } from '@clerk/backend';
 
 export class User {
   private clerkUser: ClerkUser;
+
   constructor(clerkUser: ClerkUser) {
     this.clerkUser = clerkUser;
   }
