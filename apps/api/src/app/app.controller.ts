@@ -1,11 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ClerkAuthGuard } from '../clerk-auth.guard';
+import { Controller, Get } from '@nestjs/common';
+import { CurrentUser } from '../users/current-user.decorator';
+import { User } from '@financeapp/users-backend';
 
 @Controller()
 export class AppController {
   @Get('health')
-  @UseGuards(ClerkAuthGuard)
-  getData() {
-    return 'Healthy';
+  getData(@CurrentUser() user: User) {
+    return user.id;
   }
 }

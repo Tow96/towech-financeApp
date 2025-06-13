@@ -25,18 +25,19 @@
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
         "dependsOn": [
-          "build"
+          "build",
+          "users-backend"
         ],
         "options": {
-          "buildTarget": "@financeapp/api:build",
+          "buildTarget": "api:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@financeapp/api:build:development"
+            "buildTarget": "api:build:development"
           },
           "production": {
-            "buildTarget": "@financeapp/api:build:production"
+            "buildTarget": "api:build:production"
           }
         }
       }
