@@ -1,7 +1,8 @@
 ﻿import { ReactNode } from 'react';
 import { Sidebar, SidebarHeader, SidebarContent, SidebarFooter } from '@financeapp/shadcn-ui';
-import { DashboardButton } from './app-sidebar-header';
+import { DashboardButton } from './dashboard-button';
 import { AppSidebarNav } from './app-sidebar-nav';
+import { UserMenuButton } from '@financeapp/users-frontend';
 
 export const AppSidebar = (): ReactNode => {
   return (
@@ -14,7 +15,9 @@ export const AppSidebar = (): ReactNode => {
         <AppSidebarNav />
       </SidebarContent>
 
-      <SidebarFooter>TODO: USER BUTTON</SidebarFooter>
+      <SidebarFooter>
+        <UserMenuButton />
+      </SidebarFooter>
     </Sidebar>
   );
 };
