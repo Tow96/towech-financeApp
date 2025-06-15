@@ -17,7 +17,9 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<ExtendedRequest>();
-    const token = (req.headers['authorization'] as string).split(' ').pop() || '';
+
+    const authorizationHeader = req.headers['authorization'] as string | undefined;
+    const token = authorizationHeader?.split(' ').pop() || '';
 
     // Check if the Public decorator was used.
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_ROUTE_KEY, [

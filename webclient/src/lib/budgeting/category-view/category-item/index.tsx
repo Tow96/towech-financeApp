@@ -5,23 +5,23 @@ import {
   AccordionTrigger,
 } from '@/lib/shadcn-ui/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/ui/avatar';
-import { Category } from '@/lib/categories/category-view';
-import { CategoryItemMenu } from '@/lib/categories/category-view/category-item/category-item-menu';
+import { CategoryItemMenu } from '@/lib/budgeting/category-view/category-item/category-item-menu';
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
+import { CategoryDto } from '../get-all-categories.dto';
 
-export const CategoryItem = ({ category }: { category: Category }): ReactNode => {
+export const CategoryItem = ({ category }: { category: CategoryDto }): ReactNode => {
   return (
     <AccordionItem value={category.id.toString()}>
       {/* Header */}
       <div className="flex items-center">
         <AccordionTrigger
           className="flex items-center"
-          empty={category.children.length === 0}
+          empty={category.subcategories.length === 0}
           disabled={category.archived}>
           {/* Icon */}
           <div>
             <Avatar className="rounded-full w-12 h-12">
-              <AvatarImage src={category.icon} alt={category.name} />
+              <AvatarImage src={category.iconUrl} alt={category.name} />
               <AvatarFallback>{category.name.charAt(0)}</AvatarFallback>
             </Avatar>
           </div>
@@ -32,14 +32,14 @@ export const CategoryItem = ({ category }: { category: Category }): ReactNode =>
       </div>
 
       {/* Subcategories */}
-      {category.children.length > 0 && (
+      {category.subcategories.length > 0 && (
         <AccordionContent>
-          {category.children.map(subcategory => (
+          {category.subcategories.map(subcategory => (
             <div key={subcategory.id} className="flex items-center pl-10 gap-2 py-3">
               {/* Icon */}
               <div>
                 <Avatar className="rounded-full w-10 h-10">
-                  <AvatarImage src={subcategory.icon} alt={subcategory.name} />
+                  <AvatarImage src={subcategory.iconUrl} alt={subcategory.name} />
                   <AvatarFallback>{subcategory.name.charAt(0)}</AvatarFallback>
                 </Avatar>
               </div>

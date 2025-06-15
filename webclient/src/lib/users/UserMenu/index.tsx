@@ -4,7 +4,7 @@ import { EnabledUserButton } from './enabled-user-button';
 import { DisabledUserButton } from './disabled-user-button';
 
 export const UserMenuButton = (): ReactNode => {
-  const disabledUsers = process.env.NEXT_USERS_DISABLED === 'true';
+  const disabledUsers = process.env.NEXT_PUBLIC_USERS_DISABLED === 'true';
 
   return (
     <SidebarMenu>

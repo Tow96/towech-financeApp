@@ -20,8 +20,6 @@ export const EnabledUserButton = (): ReactNode => {
   const { isMobile } = useSidebar();
   const clerk = useClerk();
 
-  console.log(clerk.user);
-
   const user = {
     email: clerk.user?.emailAddresses[0]?.emailAddress ?? '',
     name: clerk.user?.fullName ?? '',

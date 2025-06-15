@@ -1,5 +1,5 @@
 ﻿import { ReactNode } from 'react';
-import { CategoryView } from '@/lib/categories/category-view';
+import { CategoryView } from '@/lib/budgeting/category-view';
 
 const CategoriesPage = (): ReactNode => {
   return <CategoryView />;

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { Accordion } from '@/lib/shadcn-ui/components/ui/accordion';
-import { Category } from '@/lib/categories/category-view/index';
-import { CategoryItem, CategoryItemSkeleton } from '@/lib/categories/category-view/category-item';
+import { CategoryItem, CategoryItemSkeleton } from '@/lib/budgeting/category-view/category-item';
+import { CategoryDto } from './get-all-categories.dto';
 
 interface CategoryListProps {
-  categories: Category[];
+  categories: CategoryDto[];
   loading: boolean;
 }
 
