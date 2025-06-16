@@ -1,4 +1,8 @@
+﻿// External packages
 import { ReactNode } from 'react';
+import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil } from 'lucide-react';
+
+// App packages
 import {
   DropDrawer,
   DropDrawerContent,
@@ -8,7 +12,6 @@ import {
   DropDrawerTrigger,
 } from '@/lib/shadcn-ui/components/ui/dropdrawer';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
-import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil } from 'lucide-react';
 
 interface CategoryItemMenuProps {
   isChild?: boolean;

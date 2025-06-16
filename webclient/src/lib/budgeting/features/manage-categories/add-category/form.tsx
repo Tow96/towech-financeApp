@@ -1,7 +1,10 @@
 ﻿'use client';
+// External packages
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+// App packages
 import {
   Form,
   FormControl,
@@ -15,6 +18,11 @@ import { Input } from '@/lib/shadcn-ui/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/shadcn-ui/components/ui/select';
 
+// Data Store
+import { useAddCategory } from '../../../data-store';
+
+
+// --------------------
 const formSchema = z.object({
   name: z
     .string()
@@ -34,8 +42,10 @@ export const AddCategoryForm = () => {
     },
   });
 
+  const addCategory = useAddCategory()
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    addCategory.mutate(values)
   }
 
   return (

@@ -1,7 +1,14 @@
+// External packages
 import { ReactNode } from 'react';
+
+// App packages
 import { Accordion } from '@/lib/shadcn-ui/components/ui/accordion';
-import { CategoryItem, CategoryItemSkeleton } from '@/lib/budgeting/category-view/category-item';
-import { CategoryDto } from './get-all-categories.dto';
+
+// Data Store
+import { CategoryDto } from '../../../data-store';
+
+// Internal references
+import { CategoryItem, CategoryItemSkeleton } from '../category-item';
 
 interface CategoryListProps {
   categories: CategoryDto[];

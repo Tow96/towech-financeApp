@@ -1,0 +1,1 @@
+﻿export * from './features/manage-categories/categories-view'

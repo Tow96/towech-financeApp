@@ -1,13 +1,20 @@
+// External packages
 import { ReactNode } from 'react';
+
+// App packages
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/lib/shadcn-ui/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/ui/avatar';
-import { CategoryItemMenu } from '@/lib/budgeting/category-view/category-item/category-item-menu';
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
-import { CategoryDto } from '../get-all-categories.dto';
+
+// Data Access
+import { CategoryDto } from '../../../data-store';
+
+// Internal References
+import { CategoryItemMenu } from './menu';
 
 export const CategoryItem = ({ category }: { category: CategoryDto }): ReactNode => {
   return (

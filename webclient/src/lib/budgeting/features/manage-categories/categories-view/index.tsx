@@ -1,24 +1,21 @@
 'use client';
+// External packages
 import { ReactNode } from 'react';
 
+// App packages
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';
 import { Card, CardContent, CardHeader } from '@/lib/shadcn-ui/components/ui/card';
-import { CategoryList } from '@/lib/budgeting/category-view/category-list';
-import { useQuery } from '@tanstack/react-query';
-import { GetAllCategories } from '@/lib/budgeting/category-view/getAllCategories';
-import { GetAllCategoriesDto } from './get-all-categories.dto';
-import { AddCategoryButton } from '@/lib/budgeting/category-view/add-category';
 
-export const CategoryView = (): ReactNode => {
-  // const auth = useAuth();
+// Data store
+import { useCategories } from '../../../data-store';
 
-  const query = useQuery<GetAllCategoriesDto>({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      // const token = (await auth.getToken()) || '';
-      return GetAllCategories('token');
-    },
-  });
+// Internal references
+import { CategoryList } from './category-list';
+import { AddCategoryButton } from '../add-category';
+
+
+export const CategoriesView = (): ReactNode => {
+  const categories = useCategories();
 
   return (
     <Card className="m-4">
@@ -37,12 +34,12 @@ export const CategoryView = (): ReactNode => {
         <CardContent>
           {/* Income Tab content */}
           <TabsContent value="income">
-            <CategoryList categories={query.data?.Income || []} loading={query.isLoading} />
+            <CategoryList categories={categories.data?.Income || []} loading={categories.isLoading} />
           </TabsContent>
 
           {/* Expense Tab content */}
           <TabsContent value="expense">
-            <CategoryList categories={query.data?.Expense || []} loading={query.isLoading} />
+            <CategoryList categories={categories.data?.Expense || []} loading={categories.isLoading} />
           </TabsContent>
         </CardContent>
       </Tabs>

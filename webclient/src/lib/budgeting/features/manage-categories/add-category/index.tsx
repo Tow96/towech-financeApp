@@ -1,5 +1,7 @@
-﻿import { Button } from '@/lib/shadcn-ui/components/ui/button';
+﻿// External packages
 import { Plus } from 'lucide-react';
+
+// App packages
 import {
   Dialog,
   DialogContent,
@@ -7,8 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/lib/shadcn-ui/components/ui/dialog';
+import { Button } from '@/lib/shadcn-ui/components/ui/button';
 
-import { AddCategoryForm } from '@/lib/budgeting/category-view/add-category/add-category-form';
+// Data Store
+
+// Internal references
+import { AddCategoryForm } from './form';
+
 
 export const AddCategoryButton = () => {
   return (
