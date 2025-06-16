@@ -1,1 +1,1 @@
-﻿export * from './features/manage-categories/categories-view'
+﻿export * from './features/manage-categories/categories-view';

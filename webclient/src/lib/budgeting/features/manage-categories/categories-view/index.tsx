@@ -13,7 +13,6 @@ import { useCategories } from '../../../data-store';
 import { CategoryList } from './category-list';
 import { AddCategoryButton } from '../add-category';
 
-
 export const CategoriesView = (): ReactNode => {
   const categories = useCategories();
 
@@ -34,12 +33,18 @@ export const CategoriesView = (): ReactNode => {
         <CardContent>
           {/* Income Tab content */}
           <TabsContent value="income">
-            <CategoryList categories={categories.data?.Income || []} loading={categories.isLoading} />
+            <CategoryList
+              categories={categories.data?.Income || []}
+              loading={categories.isLoading}
+            />
           </TabsContent>
 
           {/* Expense Tab content */}
           <TabsContent value="expense">
-            <CategoryList categories={categories.data?.Expense || []} loading={categories.isLoading} />
+            <CategoryList
+              categories={categories.data?.Expense || []}
+              loading={categories.isLoading}
+            />
           </TabsContent>
         </CardContent>
       </Tabs>

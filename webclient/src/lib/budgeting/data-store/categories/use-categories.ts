@@ -10,13 +10,12 @@ interface GetAllCategoriesDto {
 export const CATEGORY_QUERY_KEY = 'categories';
 
 export const useCategories = () => {
-  // const auth = useAuth();
+  const auth = useAuth();
 
   return useQuery<GetAllCategoriesDto>({
     queryKey: [CATEGORY_QUERY_KEY],
     queryFn: async () => {
-      // const token = (await auth.getToken()) || '';
-      const token = '';
+      const token = (await auth.getToken()) || '';
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/category`, {
         headers: { Authorization: `Bearer ${token}` },

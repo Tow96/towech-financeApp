@@ -16,7 +16,6 @@ import { Button } from '@/lib/shadcn-ui/components/ui/button';
 // Internal references
 import { AddCategoryForm } from './form';
 
-
 export const AddCategoryButton = () => {
   return (
     <Dialog>

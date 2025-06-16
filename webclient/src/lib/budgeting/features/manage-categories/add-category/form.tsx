@@ -10,17 +10,23 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel, FormMessage,
+  FormLabel,
+  FormMessage,
 } from '@/lib/shadcn-ui/components/ui/form';
 import { DialogClose, DialogFooter } from '@/lib/shadcn-ui/components/ui/dialog';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/ui/avatar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/lib/shadcn-ui/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/lib/shadcn-ui/components/ui/select';
 
 // Data Store
 import { useAddCategory } from '../../../data-store';
-
 
 // --------------------
 const formSchema = z.object({
@@ -28,10 +34,9 @@ const formSchema = z.object({
     .string()
     .min(2, { message: 'Name must be at least 2 characters.' })
     .max(50, { message: 'Name cannot exceed 50 characters.' }),
-  type: z
-    .string({
-      required_error: "Please select a type."
-    })
+  type: z.string({
+    required_error: 'Please select a type.',
+  }),
 });
 
 export const AddCategoryForm = () => {
@@ -42,10 +47,10 @@ export const AddCategoryForm = () => {
     },
   });
 
-  const addCategory = useAddCategory()
+  const addCategory = useAddCategory();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addCategory.mutate(values)
+    addCategory.mutate(values);
   }
 
   return (
@@ -105,9 +110,7 @@ export const AddCategoryForm = () => {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit">
-            Create
-          </Button>
+          <Button type="submit">Create</Button>
         </DialogFooter>
       </form>
     </Form>
