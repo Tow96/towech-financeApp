@@ -1,0 +1,18 @@
+meta {
+  name: Create category
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{apiDns}}/category
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Test Category",
+    "type": "Expense"
+  }
+}

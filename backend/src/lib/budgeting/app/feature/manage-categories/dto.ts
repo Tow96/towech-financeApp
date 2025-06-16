@@ -1,8 +1,3 @@
-export interface GetAllCategoriesDto {
-  Income: CategoryDto[];
-  Expense: CategoryDto[];
-}
-
 export interface CategoryDto extends SubcategoryDto {
   subcategories: SubcategoryDto[];
 }

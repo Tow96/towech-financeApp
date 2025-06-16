@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ReadCategoriesController } from './feature/read-categories/read-categories.controller';
+import { ManageCategoriesController } from './feature/manage-categories/manage-categories.controller';
 
 @Module({
   imports: [ConfigModule],
-  controllers: [ReadCategoriesController],
+  controllers: [ManageCategoriesController],
 })
 export class BudgetingModule {}

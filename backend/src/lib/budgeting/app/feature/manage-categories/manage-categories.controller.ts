@@ -1,14 +1,14 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 import { CurrentUser } from '../../../../users/lib/current-user.decorator';
 import { User } from '../../../../users/core/user.entity';
-import { GetAllCategoriesDto } from './get-all-categories.dto';
+import { CategoryDto } from './dto';
 
 @Controller('category')
-export class ReadCategoriesController {
-  private readonly logger = new Logger(ReadCategoriesController.name);
+export class ManageCategoriesController {
+  private readonly logger = new Logger(ManageCategoriesController.name);
 
   @Get()
-  getAllCategories(@CurrentUser() user: User): GetAllCategoriesDto {
+  getAllCategories(@CurrentUser() user: User): GetAllCategoriesResponseDto {
     this.logger.log(`Getting categories for user ${user.id}`);
 
     return {
@@ -92,4 +92,26 @@ export class ReadCategoriesController {
       ],
     };
   }
+
+  @Post()
+  createCategory(
+    @CurrentUser() user: User,
+    @Body() body: CreateCategoryRequestDto
+  ): { id: string } {
+    this.logger.log(
+      `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
+    );
+
+    return { id: 'new' };
+  }
+}
+
+interface GetAllCategoriesResponseDto {
+  Income: CategoryDto[];
+  Expense: CategoryDto[];
+}
+
+interface CreateCategoryRequestDto {
+  name: string;
+  type: string;
 }
