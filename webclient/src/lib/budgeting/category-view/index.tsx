@@ -7,27 +7,31 @@ import { CategoryList } from '@/lib/budgeting/category-view/category-list';
 import { useQuery } from '@tanstack/react-query';
 import { GetAllCategories } from '@/lib/budgeting/category-view/getAllCategories';
 import { GetAllCategoriesDto } from './get-all-categories.dto';
-import { useAuth } from '@clerk/clerk-react';
+import { AddCategoryButton } from '@/lib/budgeting/category-view/add-category';
 
 export const CategoryView = (): ReactNode => {
-  const auth = useAuth();
+  // const auth = useAuth();
 
   const query = useQuery<GetAllCategoriesDto>({
     queryKey: ['categories'],
     queryFn: async () => {
-      const token = (await auth.getToken()) || '';
-      return GetAllCategories(token);
+      // const token = (await auth.getToken()) || '';
+      return GetAllCategories('token');
     },
   });
 
   return (
     <Card className="m-4">
       <Tabs defaultValue="expense">
-        <CardHeader>
+        <CardHeader className="flex">
           <TabsList>
             <TabsTrigger value="income">Income</TabsTrigger>
             <TabsTrigger value="expense">Expense</TabsTrigger>
           </TabsList>
+
+          {/* Spacer */}
+          <div className="flex-1" />
+          <AddCategoryButton />
         </CardHeader>
 
         <CardContent>
