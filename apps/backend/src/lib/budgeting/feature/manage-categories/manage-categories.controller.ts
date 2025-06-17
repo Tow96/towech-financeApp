@@ -104,15 +104,15 @@ export class ManageCategoriesController {
   }
 
   @Post()
-  createCategory(
+  async createCategory(
     @CurrentUser() user: User,
     @Body() body: CreateCategoryRequestDto
-  ): { id: string } {
+  ): Promise<{ id: string }> {
     this.logger.log(
       `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
     );
 
-    console.log(this.categoryRepo.test());
+    console.log(await this.categoryRepo.test());
 
     return { id: 'new' };
   }

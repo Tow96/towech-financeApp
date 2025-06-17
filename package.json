@@ -4,10 +4,15 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "format": "prettier --check ./apps",
-    "format:fix": "prettier --write ./apps"
+    "format:fix": "prettier --write ./apps",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "private": true,
   "workspaces": [
     "./apps/*"
-  ]
+  ],
+  "devDependencies": {
+    "drizzle-kit": "^0.31.1"
+  }
 }

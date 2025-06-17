@@ -1,3 +1,3 @@
 export abstract class ICategoryRepository {
-  abstract test(): string;
+  abstract test(): Promise<string>;
 }
