@@ -11,8 +11,8 @@ import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
 import { BudgetingSchema } from './budgeting.schema';
 
 @Injectable()
-export class PostgresCategoryRepository implements ICategoryRepository {
-  private readonly _logger = new Logger(PostgresCategoryRepository.name);
+export class PostgresBudgetingRepository implements ICategoryRepository {
+  private readonly _logger = new Logger(PostgresBudgetingRepository.name);
 
   constructor(
     @Inject(BUDGETING_SCHEMA_CONNECTION)
