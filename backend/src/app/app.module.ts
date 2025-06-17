@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { UsersModule } from '../lib/users/lib/users.module';
-import { BudgetingModule } from '../lib/budgeting/app/budgeting.module';
+import { BudgetingModule } from '../lib/budgeting/budgeting.module';
 import { LoggingModule } from './logging/logging.module';
 
 @Module({

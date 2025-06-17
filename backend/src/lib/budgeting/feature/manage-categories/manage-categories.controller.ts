@@ -1,11 +1,21 @@
+// External Packages
 import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { CurrentUser } from '../../../../users/lib/current-user.decorator';
-import { User } from '../../../../users/core/user.entity';
+
+// App packages
+import { CurrentUser } from '../../../users/lib/current-user.decorator';
+import { User } from '../../../users/core/user.entity';
+
+// Slice common packages
+import { ICategoryRepository } from '../../common/Core/i-category-repository';
+
+// Internal imports
 import { CategoryDto } from './dto';
 
 @Controller('category')
 export class ManageCategoriesController {
   private readonly logger = new Logger(ManageCategoriesController.name);
+
+  constructor(private readonly categoryRepo: ICategoryRepository) {}
 
   @Get()
   getAllCategories(@CurrentUser() user: User): GetAllCategoriesResponseDto {
@@ -101,6 +111,8 @@ export class ManageCategoriesController {
     this.logger.log(
       `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
     );
+
+    console.log(this.categoryRepo.test());
 
     return { id: 'new' };
   }
