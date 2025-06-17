@@ -3,12 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "dev": "next dev",
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.21.0",

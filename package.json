@@ -1,0 +1,13 @@
+{
+  "name": "@financeapp/source",
+  "version": "2.3.0",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "format": "prettier --check ./apps",
+    "format:fix": "prettier --write ./apps"
+  },
+  "private": true,
+  "workspaces": [
+    "./apps/*"
+  ]
+}
