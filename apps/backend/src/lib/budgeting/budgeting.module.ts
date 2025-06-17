@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ICategoryRepository } from './common/Core/i-category-repository';
 
 // Persistence
-import { PostgresBudgetingRepository } from './common/Database/postgres-budgeting-repository';
+import { PostgresCategoryRepository } from './common/Database/postgres-category-repository';
 
 // Common Services
 import { BudgetingProvider } from './common/Database/budgeting.provider';
@@ -16,8 +16,8 @@ import { ManageCategoriesController } from './feature/manage-categories/manage-c
   imports: [ConfigModule],
   controllers: [ManageCategoriesController],
   providers: [
-    { provide: ICategoryRepository, useClass: PostgresBudgetingRepository },
     BudgetingProvider,
+    { provide: ICategoryRepository, useClass: PostgresCategoryRepository },
   ],
 })
 export class BudgetingModule {}

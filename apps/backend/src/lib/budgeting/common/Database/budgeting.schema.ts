@@ -10,7 +10,7 @@ export const CategoriesTable = budgetingSchema.table('categories', {
   name: varchar('name').notNull(),
   type: varchar('type').notNull(),
   createdAt: timestamp('createdAt', { withTimezone: true }).notNull(),
-  updatedAt: timestamp('updatedAt', { withTimezone: true }),
+  updatedAt: timestamp('updatedAt', { withTimezone: true }).notNull(),
   deletedAt: timestamp('deletedAt', { withTimezone: true }),
 });
 

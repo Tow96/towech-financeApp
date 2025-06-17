@@ -4,7 +4,7 @@ import { Guard } from './guard';
 export interface BaseEntityProps {
   id: string;
   createdAt: Date;
-  upadatedAt: Date | null;
+  updatedAt: Date;
 }
 
 export interface CreateEntityProps<T> {
@@ -53,6 +53,21 @@ export abstract class Entity<EntityProps> {
   }
 
   /**
+   * Returns entity properties.
+   * @return {*}  {Props & EntityProps}
+   * @memberof Entity
+   */
+  public getProps(): EntityProps & BaseEntityProps {
+    const propsCopy = {
+      id: this._id,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      ...this.props,
+    };
+    return Object.freeze(propsCopy);
+  }
+
+  /**
    * Convert an Entity and all sub-entities/Value Objects it
    * contains to a plain object with primitive types. Can be
    * useful when logging an entity during testing/debugging
@@ -87,7 +102,7 @@ export abstract class Entity<EntityProps> {
       throw new Error('Entity props should be an object');
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    if (Object.keys(this.props as any).length > MAX_PROPS) {
+    if (Object.keys(props as any).length > MAX_PROPS) {
       throw new Error(`Entity props should not have more than ${MAX_PROPS} properties`);
     }
   }

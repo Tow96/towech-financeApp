@@ -10,6 +10,7 @@ import { ICategoryRepository } from '../../common/Core/i-category-repository';
 
 // Internal imports
 import { CategoryDto } from './dto';
+import { CategoryEntity, CategoryType } from '../../common/Core/Category.entity';
 
 @Controller('category')
 export class ManageCategoriesController {
@@ -112,9 +113,15 @@ export class ManageCategoriesController {
       `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
     );
 
-    console.log(await this.categoryRepo.test());
+    const newCategory = CategoryEntity.create({
+      ...body,
+      iconId: 2,
+      userId: user.id,
+      parentId: null,
+    });
+    await this.categoryRepo.insertEntity(newCategory);
 
-    return { id: 'new' };
+    return { id: newCategory.id };
   }
 }
 
@@ -125,5 +132,5 @@ interface GetAllCategoriesResponseDto {
 
 interface CreateCategoryRequestDto {
   name: string;
-  type: string;
+  type: CategoryType;
 }
