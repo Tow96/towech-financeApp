@@ -12,7 +12,7 @@ import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
 import { BudgetingSchema } from './budgeting.schema';
 import { CategoryMapper } from './mappers/category.mapper';
 import { CategoryEntity } from '../Core/Category.entity';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 @Injectable()
 export class PostgresCategoryRepository implements ICategoryRepository {
@@ -23,6 +23,20 @@ export class PostgresCategoryRepository implements ICategoryRepository {
     @Inject(BUDGETING_SCHEMA_CONNECTION)
     private readonly _db: NodePgDatabase<typeof BudgetingSchema>
   ) {}
+
+  async categoryExists(userId: string, name: string): Promise<boolean> {
+    const exists = await this._db
+      .select()
+      .from(BudgetingSchema.categoriesTable)
+      .where(
+        and(
+          eq(BudgetingSchema.categoriesTable.userId, userId),
+          eq(BudgetingSchema.categoriesTable.name, name.trim().toLowerCase())
+        )
+      );
+
+    return exists.length > 0;
+  }
 
   async getAll(userId: string): Promise<CategoryEntity[]> {
     this._logger.debug(`Fetching all categories for ${userId} from db`);

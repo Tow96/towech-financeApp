@@ -1,5 +1,13 @@
 // External Packages
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  UnprocessableEntityException,
+  HttpStatus,
+  Logger,
+  Post,
+} from '@nestjs/common';
 
 // App packages
 import { CurrentUser } from '../../../users/lib/current-user.decorator';
@@ -109,6 +117,10 @@ export class ManageCategoriesController {
     @CurrentUser() user: User,
     @Body() body: CreateCategoryRequestDto
   ): Promise<{ id: string }> {
+    const categoryExists = await this.categoryRepo.categoryExists(user.id, body.name);
+    if (categoryExists)
+      throw new UnprocessableEntityException({ message: 'Category already exists' });
+
     this.logger.log(
       `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
     );

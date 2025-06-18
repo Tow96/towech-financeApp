@@ -1,5 +1,5 @@
 ﻿// External packages
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 
 // App packages
 import { Entity } from '../../../_common/primitives';
@@ -34,14 +34,14 @@ export enum CategoryType {
 
 export class CategoryEntity extends Entity<CategoryProps> {
   static create(create: CreateCategoryProps): CategoryEntity {
-    const id = uuidv4();
+    const id = uuidV4();
     const props: CategoryProps = { ...create, deletedAt: null };
 
     return new CategoryEntity({ id, props });
   }
 
   validate(): void {
-    this.props.name = this.props.name.trim();
+    this.props.name = this.props.name.trim().toLowerCase();
     if (this.props.name.length === 0) throw new Error('Name cannot be empty');
     if (this.props.name.length > 50) throw new Error('Name cannot be longer than 50 characters');
 
