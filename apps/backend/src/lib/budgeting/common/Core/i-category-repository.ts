@@ -1,12 +1,10 @@
-import { CategoryEntity } from './Category.entity';
+import { CategoryAggregate } from './category-aggregate';
 
 export abstract class ICategoryRepository {
   abstract categoryExists(userId: string, name: string): Promise<boolean>;
 
-  abstract getAll(userId: string): Promise<CategoryEntity[]>;
-  abstract getById(id: string): Promise<CategoryEntity | null>;
+  abstract getAll(userId: string): Promise<CategoryAggregate[]>;
+  abstract getById(id: string): Promise<CategoryAggregate | null>;
 
-  abstract insertEntity(entity: CategoryEntity): Promise<string>;
-  abstract updateEntity(entity: CategoryEntity): Promise<void>;
-  abstract deleteEntity(id: string): Promise<void>;
+  abstract saveChanges(aggregate: CategoryAggregate): Promise<void>;
 }

@@ -1,4 +1,4 @@
-import { CategoryEntity, CategoryType } from '../../Core/Category.entity';
+import { CategoryEntity, CategoryType } from '../../Core/category-aggregate';
 import { CategoryModel } from '../models';
 
 export class CategoryMapper {

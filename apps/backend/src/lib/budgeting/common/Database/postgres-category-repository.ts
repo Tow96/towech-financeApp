@@ -11,7 +11,7 @@ import { ICategoryRepository } from '../Core/i-category-repository';
 import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
 import { BudgetingSchema } from './budgeting.schema';
 import { CategoryMapper } from './mappers/category.mapper';
-import { CategoryEntity } from '../Core/Category.entity';
+import { CategoryEntity } from '../Core/category-aggregate';
 import { eq, and } from 'drizzle-orm';
 
 @Injectable()

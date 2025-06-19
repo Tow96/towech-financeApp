@@ -1,30 +1,22 @@
 // External Packages
-import {
-  Body,
-  Controller,
-  Get,
-  UnprocessableEntityException,
-  HttpStatus,
-  Logger,
-  Post,
-} from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Logger, Post } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 
 // App packages
 import { CurrentUser } from '../../../users/lib/current-user.decorator';
 import { User } from '../../../users/core/user.entity';
 
 // Slice common packages
-import { ICategoryRepository } from '../../common/Core/i-category-repository';
-
 // Internal imports
 import { CategoryDto } from './dto';
-import { CategoryEntity, CategoryType } from '../../common/Core/Category.entity';
+import { CategoryType } from '../../common/Core/category-aggregate';
+import { CommandResult, CreateCategoryCommand } from './Commands/create-category.command';
 
 @Controller('category')
 export class ManageCategoriesController {
   private readonly logger = new Logger(ManageCategoriesController.name);
 
-  constructor(private readonly categoryRepo: ICategoryRepository) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   @Get()
   getAllCategories(@CurrentUser() user: User): GetAllCategoriesResponseDto {
@@ -117,23 +109,15 @@ export class ManageCategoriesController {
     @CurrentUser() user: User,
     @Body() body: CreateCategoryRequestDto
   ): Promise<{ id: string }> {
-    const categoryExists = await this.categoryRepo.categoryExists(user.id, body.name);
-    if (categoryExists)
-      throw new UnprocessableEntityException({ message: 'Category already exists' });
+    // TODO: Validate inputs
 
-    this.logger.log(
-      `Creating new category of type: ${body.type} with name: ${body.name} for user: ${user.id}`
+    const result = await this.commandBus.execute(
+      new CreateCategoryCommand(user.id, 2, body.name, body.type)
     );
 
-    const newCategory = CategoryEntity.create({
-      ...body,
-      iconId: 2,
-      userId: user.id,
-      parentId: null,
-    });
-    await this.categoryRepo.insertEntity(newCategory);
+    if (result.status === CommandResult.Conflict) throw new ConflictException(result.message);
 
-    return { id: newCategory.id };
+    return { id: result.message };
   }
 }
 
