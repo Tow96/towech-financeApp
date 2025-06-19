@@ -1,1 +1,0 @@
-ALTER TABLE "budgeting"."sub-categories" DROP COLUMN "user_id";

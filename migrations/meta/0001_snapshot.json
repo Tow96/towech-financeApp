@@ -1,5 +1,5 @@
 {
-  "id": "ddc3e981-2e7f-4054-9cc3-e642158c2308",
+  "id": "53eae4bc-c8e2-428d-8aec-aa379ba5a13c",
   "prevId": "b1d6f996-9276-4f99-bdf2-849aca128472",
   "version": "7",
   "dialect": "postgresql",
@@ -76,12 +76,6 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
         },
         "parent_id": {
           "name": "parent_id",
