@@ -22,7 +22,6 @@ export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
     await Promise.all(
       this.domainEvents.map(event => {
         logger.debug(`"${event.constructor.name}" event published for aggregate: ${this.id}`);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         return eventEmitter.emitAsync(event.constructor.name, event);
       })
     );

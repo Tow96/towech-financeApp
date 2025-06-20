@@ -34,7 +34,7 @@ export class CreateCategoryHandler implements ICommandHandler<CreateCategoryComm
     //TODO: Check if icon Id is valid
 
     const categoryExists = await this.categoryRepo.categoryExists(command.userId, command.name);
-    if (!categoryExists)
+    if (categoryExists)
       return { status: CommandResult.Conflict, message: 'Category with same name already exists!' };
 
     this.logger.log(

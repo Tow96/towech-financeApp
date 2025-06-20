@@ -6,23 +6,23 @@ export const budgetingSchema = pgSchema('budgeting');
 export const CategoriesTable = budgetingSchema.table('categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: varchar('user_id').notNull(),
-  iconId: integer().notNull(),
+  iconId: integer('icon_id').notNull(),
   name: varchar('name').notNull(),
   type: varchar('type').notNull(),
-  createdAt: timestamp('createdAt', { withTimezone: true }).notNull(),
-  updatedAt: timestamp('updatedAt', { withTimezone: true }).notNull(),
-  deletedAt: timestamp('deletedAt', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
 
 export const SubCategoriesTable = budgetingSchema.table('sub-categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   parentId: uuid('parent_id'),
-  iconId: integer().notNull(),
+  iconId: integer('icon_id').notNull(),
   name: varchar('name').notNull(),
   type: varchar('type').notNull(),
-  createdAt: timestamp('createdAt', { withTimezone: true }).notNull(),
-  updatedAt: timestamp('updatedAt', { withTimezone: true }).notNull(),
-  deletedAt: timestamp('deletedAt', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
 
 export const categoryRelations = relations(CategoriesTable, ({ many }) => ({

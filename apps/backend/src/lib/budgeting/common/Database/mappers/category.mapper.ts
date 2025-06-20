@@ -1,9 +1,10 @@
-import { CategoryEntity, CategoryType } from '../../Core/category-aggregate';
+import { CategoryAggregate, CategoryType } from '../../Core/category-aggregate';
 import { CategoryModel } from '../models';
 
 export class CategoryMapper {
-  toPersistence(entity: CategoryEntity): CategoryModel {
+  toPersistence(entity: CategoryAggregate): CategoryModel {
     const copy = entity.getProps();
+
     return {
       id: copy.id,
       createdAt: copy.createdAt,
@@ -13,17 +14,15 @@ export class CategoryMapper {
       type: copy.type,
       userId: copy.userId,
       deletedAt: copy.deletedAt,
-      parentId: copy.parentId,
     };
   }
 
-  toEntity(model: CategoryModel): CategoryEntity {
-    return new CategoryEntity({
+  toDomain(model: CategoryModel): CategoryAggregate {
+    return new CategoryAggregate({
       id: model.id,
       createdAt: new Date(model.createdAt),
       updatedAt: new Date(model.updatedAt),
       props: {
-        parentId: model.parentId,
         deletedAt: model.deletedAt === null ? null : new Date(model.deletedAt),
         userId: model.userId,
         type: model.userId as CategoryType,

@@ -119,8 +119,8 @@ export class ManageCategoriesController {
 
     return { id: result.message };
   }
-}
 
+}
 interface GetAllCategoriesResponseDto {
   Income: CategoryDto[];
   Expense: CategoryDto[];

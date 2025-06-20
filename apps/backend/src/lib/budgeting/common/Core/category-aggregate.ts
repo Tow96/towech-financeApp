@@ -23,22 +23,20 @@ interface CreateCategoryProps {
 }
 
 export class CategoryAggregate extends AggregateRoot<CategoryProps> {
-  static create(create: CreateCategoryProps, fromDb: boolean = false): CategoryAggregate {
+  static create(create: CreateCategoryProps): CategoryAggregate {
     const id = uuidV4();
     const props: CategoryProps = { ...create, deletedAt: null };
 
     const category: CategoryAggregate = new CategoryAggregate({ id, props });
 
-    if (!fromDb) {
-      category.addEvent(
-        new CategoryCreatedEvent({
-          aggregateId: id,
-          name: props.name,
-          type: props.type,
-          userId: props.userId,
-        })
-      );
-    }
+    category.addEvent(
+      new CategoryCreatedEvent({
+        aggregateId: id,
+        name: props.name,
+        type: props.type,
+        userId: props.userId,
+      })
+    );
 
     return category;
   }
