@@ -1,17 +1,13 @@
-﻿import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CategoryAggregate, CategoryType } from '../../../common/Core/category-aggregate';
+﻿// External packages
+import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
+
+// App packages
+import { CommandQueryResult, Result } from '../../../../_common/command-query-result';
+import { CategoryAggregate, CategoryType } from '../../../common/Core/category-aggregate';
+
+// Internal imports
 import { ICategoryRepository } from '../../../common/Core/i-category-repository';
-
-export enum CommandResult {
-  Success = 'SUCCESS',
-  Conflict = 'CONFLICT',
-}
-
-interface Result<T> {
-  status: CommandResult;
-  message: T;
-}
 
 export class CreateCategoryCommand extends Command<Result<string>> {
   constructor(
@@ -35,7 +31,7 @@ export class CreateCategoryHandler implements ICommandHandler<CreateCategoryComm
 
     const categoryExists = await this.categoryRepo.categoryExists(command.userId, command.name);
     if (categoryExists)
-      return { status: CommandResult.Conflict, message: 'Category with same name already exists!' };
+      return { status: CommandQueryResult.Conflict, message: 'Category with same name already exists!' };
 
     this.logger.log(
       `Creating new category of type: ${command.type} with name: ${command.name} for user: ${command.userId}`
@@ -46,6 +42,6 @@ export class CreateCategoryHandler implements ICommandHandler<CreateCategoryComm
     });
 
     await this.categoryRepo.saveChanges(newCategory);
-    return { status: CommandResult.Success, message: newCategory.id };
+    return { status: CommandQueryResult.Success, message: newCategory.id };
   }
 }

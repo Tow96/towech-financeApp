@@ -1,11 +1,11 @@
 meta {
-  name: Create category
+  name: Update category
   type: http
-  seq: 2
+  seq: 3
 }
 
-post {
-  url: {{apiDns}}/category
+put {
+  url: {{apiDns}}/category/76f4b13e-0999-4cb4-847c-00743e27fd18
   body: json
   auth: inherit
 }
@@ -17,8 +17,7 @@ headers {
 
 body:json {
   {
-    "name": "Test Category",
-    "type": "EXPENSE",
-    "iconId": 3
+    "name": "Gas",
+    "iconId": 4
   }
 }

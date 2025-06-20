@@ -12,6 +12,11 @@ import { BudgetingProvider } from './common/Database/budgeting.provider';
 // Features
 import { ManageCategoriesController } from './feature/manage-categories/manage-categories.controller';
 import { CreateCategoryHandler } from './feature/manage-categories/Commands/create-category.command';
+import { ArchiveCategoryHandler } from './feature/manage-categories/Commands/archive-category.command';
+import { RestoreCategoryHandler } from './feature/manage-categories/Commands/restore-category.command';
+import { UpdateCategoryHandler } from './feature/manage-categories/Commands/update-category.command';
+import { GetCategoryOwnerHandler } from './feature/manage-categories/Queries/get-category-owner.query';
+import { GetUserCategoriesHandler } from './feature/manage-categories/Queries/get-user-categories.query';
 
 @Module({
   imports: [ConfigModule],
@@ -22,7 +27,12 @@ import { CreateCategoryHandler } from './feature/manage-categories/Commands/crea
     { provide: ICategoryRepository, useClass: PostgresCategoryRepository },
 
     // Manage Categories
+    ArchiveCategoryHandler,
     CreateCategoryHandler,
+    RestoreCategoryHandler,
+    UpdateCategoryHandler,
+    GetCategoryOwnerHandler,
+    GetUserCategoriesHandler,
   ],
 })
 export class BudgetingModule {}

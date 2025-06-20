@@ -25,7 +25,7 @@ export class CategoryMapper {
       props: {
         deletedAt: model.deletedAt === null ? null : new Date(model.deletedAt),
         userId: model.userId,
-        type: model.userId as CategoryType,
+        type: model.type as CategoryType,
         name: model.name,
         iconId: model.iconId,
       },

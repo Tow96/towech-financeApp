@@ -30,7 +30,7 @@ export abstract class Entity<EntityProps> {
 
   protected _id: string;
   private readonly _createdAt: Date;
-  private _updatedAt: Date;
+  protected _updatedAt: Date;
 
   get id(): string { return this._id; } // prettier-ignore
   get createdAt(): Date { return this._createdAt; } // prettier-ignore

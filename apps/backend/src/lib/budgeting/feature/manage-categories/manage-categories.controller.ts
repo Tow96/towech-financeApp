@@ -1,132 +1,162 @@
 // External Packages
-import { Body, ConflictException, Controller, Get, Logger, Post } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 // App packages
 import { CurrentUser } from '../../../users/lib/current-user.decorator';
 import { User } from '../../../users/core/user.entity';
+import { CommandQueryResult } from '../../../_common/command-query-result';
 
 // Slice common packages
-// Internal imports
-import { CategoryDto } from './dto';
 import { CategoryType } from '../../common/Core/category-aggregate';
-import { CommandResult, CreateCategoryCommand } from './Commands/create-category.command';
+
+// Internal imports
+import { GetUserCategoriesQuery } from './Queries/get-user-categories.query';
+import { CategoryDto, DtoMapper } from './dto.mapper';
+import { CreateCategoryCommand } from './Commands/create-category.command';
+import { GetCategoryOwnerQuery } from './Queries/get-category-owner.query';
+import { UpdateCategoryCommand } from './Commands/update-category.command';
+import { ArchiveCategoryCommand } from './Commands/archive-category.command';
+import { RestoreCategoryCommand } from './Commands/restore-category.command';
 
 @Controller('category')
 export class ManageCategoriesController {
   private readonly logger = new Logger(ManageCategoriesController.name);
+  private readonly mapper = new DtoMapper();
 
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus
+  ) {}
 
   @Get()
-  getAllCategories(@CurrentUser() user: User): GetAllCategoriesResponseDto {
-    this.logger.log(`Getting categories for user ${user.id}`);
+  async getAllCategories(@CurrentUser() user: User): Promise<GetAllCategoriesResponse> {
+    let result = await this.queryBus.execute(new GetUserCategoriesQuery(user.id));
 
-    return {
-      Income: [],
-      Expense: [
-        {
-          id: '1',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 1',
-          archived: false,
-          subcategories: [],
-        },
-        {
-          id: '2',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 2',
-          archived: false,
-          subcategories: [
-            {
-              id: '10',
-              iconUrl: 'https://avatar.iran.liara.run/public',
-              name: 'Subcategory 1',
-              archived: false,
-            },
-            {
-              id: '11',
-              iconUrl: 'https://avatar.iran.liara.run/public',
-              name: 'Subcategory 1',
-              archived: false,
-            },
-            {
-              id: '12',
-              iconUrl: 'https://avatar.iran.liara.run/public',
-              name: 'Subcategory 1',
-              archived: false,
-            },
-          ],
-        },
-        {
-          id: '3',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 3',
-          archived: false,
-          subcategories: [
-            {
-              id: '30',
-              iconUrl: 'https://avatar.iran.liara.run/public',
-              name: 'Subcategory 21',
-              archived: true,
-            },
-          ],
-        },
-        {
-          id: '4',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 4',
-          subcategories: [],
-          archived: true,
-        },
-        {
-          id: '5',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 5',
-          subcategories: [],
-          archived: true,
-        },
-        {
-          id: '6',
-          iconUrl: 'https://avatar.iran.liara.run/public',
-          name: 'Category 6',
-          archived: false,
-          subcategories: [
-            {
-              id: '40',
-              iconUrl: 'https://avatar.iran.liara.run/public',
-              name: 'Subcategory 210',
-              archived: false,
-            },
-          ],
-        },
-      ],
-    };
+    // If there are no income or expense categories, then basic "other" categories are created;
+    let requery = false;
+    if (result.message.filter(c => c.type === CategoryType.expense).length === 0) {
+      await this.commandBus.execute(
+        new CreateCategoryCommand(user.id, 0, 'Other expense', CategoryType.expense)
+      );
+      requery = true;
+    }
+    if (result.message.filter(c => c.type === CategoryType.income).length === 0) {
+      await this.commandBus.execute(
+        new CreateCategoryCommand(user.id, 1, 'Other income', CategoryType.income)
+      );
+      requery = true;
+    }
+
+    if (requery) result = await this.queryBus.execute(new GetUserCategoriesQuery(user.id));
+    return { categories: result.message.map(c => this.mapper.categoryToDto(c)) };
   }
 
   @Post()
   async createCategory(
     @CurrentUser() user: User,
-    @Body() body: CreateCategoryRequestDto
-  ): Promise<{ id: string }> {
+    @Body() body: CreateCategoryRequest
+  ): Promise<CreateCategoryResponse> {
     // TODO: Validate inputs
 
-    const result = await this.commandBus.execute(
-      new CreateCategoryCommand(user.id, 2, body.name, body.type)
-    );
+    const command = new CreateCategoryCommand(user.id, body.iconId, body.name, body.type);
+    const result = await this.commandBus.execute(command);
 
-    if (result.status === CommandResult.Conflict) throw new ConflictException(result.message);
-
+    if (result.status === CommandQueryResult.Conflict) throw new ConflictException(result.message);
     return { id: result.message };
   }
 
-}
-interface GetAllCategoriesResponseDto {
-  Income: CategoryDto[];
-  Expense: CategoryDto[];
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateCategory(
+    @CurrentUser() user: User,
+    @Body() body: UpdateCategoryRequest,
+    @Param('id') id: string
+  ): Promise<void> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    // TODO: Validate inputs
+
+    const command = new UpdateCategoryCommand(id, body.iconId, body.name);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException('Category not found');
+    }
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async archiveCategory(@CurrentUser() user: User, @Param('id') id: string): Promise<void> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    const command = new ArchiveCategoryCommand(id);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException('Category not found');
+    }
+  }
+
+  @Post(':id/restore')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async restoreCategory(@CurrentUser() user: User, @Param('id') id: string): Promise<void> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    const command = new RestoreCategoryCommand(id);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException('Category not found');
+    }
+  }
+
+  private async validateCategoryOwnership(userId: string, categoryId: string): Promise<void> {
+    const ownerQuery = await this.queryBus.execute(new GetCategoryOwnerQuery(categoryId));
+    if (ownerQuery.status === CommandQueryResult.NotFound)
+      throw new NotFoundException(ownerQuery.message);
+    if (ownerQuery.message !== userId) throw new ForbiddenException();
+  }
 }
 
-interface CreateCategoryRequestDto {
+interface GetAllCategoriesResponse {
+  categories: CategoryDto[];
+}
+
+interface CreateCategoryRequest {
+  iconId: number;
   name: string;
   type: CategoryType;
+}
+
+interface CreateCategoryResponse {
+  id: string;
+}
+
+interface UpdateCategoryRequest {
+  iconId?: number;
+  name?: string;
 }

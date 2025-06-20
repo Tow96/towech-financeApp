@@ -8,7 +8,12 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 // Slice packages
 import { ICategoryRepository } from '../Core/i-category-repository';
-import { CategoryCreatedEvent } from '../Core/category-events';
+import {
+  CategoryArchivedEvent,
+  CategoryCreatedEvent,
+  CategoryRestoredEvent,
+  CategoryUpdatedEvent,
+} from '../Core/category-events';
 
 // Internal references
 import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
@@ -45,7 +50,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
     this._logger.debug(`Fetching all categories for ${userId} from db`);
 
     const records = await this._db.query.categoriesTable.findMany({
-      with: { subCategories: true },
+      // with: { subCategories: true },
       where: eq(BudgetingSchema.categoriesTable.userId, userId),
     });
 
@@ -56,13 +61,23 @@ export class PostgresCategoryRepository implements ICategoryRepository {
     this._logger.debug(`Looking in db for category with id ${id}`);
 
     const records = await this._db.query.categoriesTable.findMany({
-      with: { subCategories: true },
+      // with: { subCategories: true },
       where: eq(BudgetingSchema.categoriesTable.id, id),
     });
 
     if (records.length === 0) return null;
 
     return this._categoryMapper.toDomain(records[0]);
+  }
+
+  async getCategoryOwner(id: string): Promise<string | null> {
+    const result = await this._db
+      .select({ userId: BudgetingSchema.categoriesTable.userId })
+      .from(BudgetingSchema.categoriesTable)
+      .where(eq(BudgetingSchema.categoriesTable.id, id));
+
+    if (result.length === 0) return null;
+    return result[0].userId;
   }
 
   async saveChanges(category: CategoryAggregate) {
@@ -76,6 +91,25 @@ export class PostgresCategoryRepository implements ICategoryRepository {
         switch (event.constructor) {
           case CategoryCreatedEvent:
             await tx.insert(BudgetingSchema.categoriesTable).values(model);
+            break;
+          case CategoryUpdatedEvent:
+            await tx
+              .update(BudgetingSchema.categoriesTable)
+              .set(model)
+              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
+            break;
+          case CategoryArchivedEvent:
+            await tx
+              .update(BudgetingSchema.categoriesTable)
+              .set(model)
+              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
+            break;
+          case CategoryRestoredEvent:
+            await tx
+              .update(BudgetingSchema.categoriesTable)
+              .set(model)
+              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
+            break;
         }
       }
     });

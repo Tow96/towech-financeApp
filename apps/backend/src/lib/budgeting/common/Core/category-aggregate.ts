@@ -1,6 +1,11 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { AggregateRoot } from '../../../_common/primitives/aggregate-root.base';
-import { CategoryCreatedEvent } from './category-events';
+import {
+  CategoryArchivedEvent,
+  CategoryCreatedEvent,
+  CategoryRestoredEvent,
+  CategoryUpdatedEvent,
+} from './category-events';
 
 export enum CategoryType {
   income = 'INCOME',
@@ -20,6 +25,11 @@ interface CreateCategoryProps {
   iconId: number;
   name: string;
   type: CategoryType;
+}
+
+interface UpdateCategoryProps {
+  iconId?: number;
+  name?: string;
 }
 
 export class CategoryAggregate extends AggregateRoot<CategoryProps> {
@@ -45,5 +55,46 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
     this.props.name = this.props.name.trim().toLowerCase();
     if (this.props.name.length < 2) throw new Error('name must be at least 3 characters');
     if (this.props.name.length > 50) throw new Error('name cannot be longer than 50 characters');
+  }
+
+  get userId() {
+    return this.props.userId;
+  }
+
+  get type() {
+    return this.props.type;
+  }
+
+  get deletedAt() {
+    return this.props.deletedAt;
+  }
+
+  update(update: UpdateCategoryProps): void {
+    if (update.iconId) this.props.iconId = update.iconId;
+    if (update.name) this.props.name = update.name;
+    this._updatedAt = new Date();
+    this.validate();
+
+    this.addEvent(
+      new CategoryUpdatedEvent({
+        aggregateId: this._id,
+        name: this.props.name,
+        type: this.props.type,
+      })
+    );
+  }
+
+  archive(): void {
+    if (this.props.deletedAt !== null) return;
+
+    this.props.deletedAt = new Date();
+    this.addEvent(new CategoryArchivedEvent({ aggregateId: this._id }));
+  }
+
+  restore(): void {
+    if (this.props.deletedAt === null) return;
+
+    this.props.deletedAt = null;
+    this.addEvent(new CategoryRestoredEvent({ aggregateId: this._id }));
   }
 }

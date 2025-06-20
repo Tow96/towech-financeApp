@@ -1,0 +1,23 @@
+meta {
+  name: Restore category
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{apiDns}}/category/76f4b13e-0999-4cb4-847c-00743e27fd18/restore
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "name": "Gas",
+    "iconId": 4
+  }
+}
