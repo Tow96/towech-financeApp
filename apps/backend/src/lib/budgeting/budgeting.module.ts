@@ -17,6 +17,9 @@ import { RestoreCategoryHandler } from './feature/manage-categories/Commands/res
 import { UpdateCategoryHandler } from './feature/manage-categories/Commands/update-category.command';
 import { GetCategoryOwnerHandler } from './feature/manage-categories/Queries/get-category-owner.query';
 import { GetUserCategoriesHandler } from './feature/manage-categories/Queries/get-user-categories.query';
+import { AddSubCategoryHandler } from './feature/manage-categories/Commands/add-sub-category.command';
+import { DeleteSubCategoryHandler } from './feature/manage-categories/Commands/delete-sub-category.command';
+import { UpdateSubCategoryHandler } from './feature/manage-categories/Commands/update-sub-category.command';
 
 @Module({
   imports: [ConfigModule],
@@ -33,6 +36,9 @@ import { GetUserCategoriesHandler } from './feature/manage-categories/Queries/ge
     UpdateCategoryHandler,
     GetCategoryOwnerHandler,
     GetUserCategoriesHandler,
+    AddSubCategoryHandler,
+    DeleteSubCategoryHandler,
+    UpdateSubCategoryHandler,
   ],
 })
 export class BudgetingModule {}

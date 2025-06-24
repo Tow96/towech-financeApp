@@ -111,9 +111,13 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
     this.addEvent(new CategoryRestoredEvent({ aggregateId: this._id }));
   }
 
-  addSubCategory(create: CreateSubCategoryProps) {
+  addSubCategory(create: CreateSubCategoryProps): string {
     if (this.props.subCategories.length >= this.MAX_SUBCATEGORY_COUNT)
       throw new Error('A Category can only have 10 subcategories');
+    if (
+      this.props.subCategories.filter(s => s.name === create.name.trim().toLowerCase()).length > 0
+    )
+      throw new Error('SubCategory with same name already exists');
 
     const subCategory = SubCategoryEntity.create(create);
 
@@ -127,6 +131,8 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
         type: this.props.type,
       })
     );
+
+    return subCategory.id;
   }
 
   removeSubCategory(id: string) {
@@ -145,6 +151,12 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
   updateSubCategory(id: string, update: UpdateSubCategoryProps): void {
     const subCategory = this.props.subCategories.find(s => s.id === id);
     if (!subCategory) return;
+
+    if (
+      update.name &&
+      this.props.subCategories.filter(s => s.name === update.name.trim().toLowerCase()).length > 0
+    )
+      throw new Error('SubCategory with same name already exists');
 
     subCategory.update(update);
     this.addEvent(
