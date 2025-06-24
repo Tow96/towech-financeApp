@@ -20,6 +20,12 @@ import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
 import { BudgetingSchema } from './budgeting.schema';
 import { CategoryMapper } from './mappers/category.mapper';
 import { CategoryAggregate } from '../Core/category-aggregate';
+import {
+  SubCategoryCreatedEvent,
+  SubCategoryRemovedEvent,
+  SubCategoryUpdatedEvent,
+} from '../Core/subcategory-events';
+import { SubCategoryModel } from './models';
 
 @Injectable()
 export class PostgresCategoryRepository implements ICategoryRepository {
@@ -50,9 +56,11 @@ export class PostgresCategoryRepository implements ICategoryRepository {
     this._logger.debug(`Fetching all categories for ${userId} from db`);
 
     const records = await this._db.query.categoriesTable.findMany({
-      // with: { subCategories: true },
+      with: { subCategories: true },
       where: eq(BudgetingSchema.categoriesTable.userId, userId),
     });
+
+    console.log(records);
 
     return records.map(record => this._categoryMapper.toDomain(record));
   }
@@ -61,7 +69,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
     this._logger.debug(`Looking in db for category with id ${id}`);
 
     const records = await this._db.query.categoriesTable.findMany({
-      // with: { subCategories: true },
+      with: { subCategories: true },
       where: eq(BudgetingSchema.categoriesTable.id, id),
     });
 
@@ -88,6 +96,12 @@ export class PostgresCategoryRepository implements ICategoryRepository {
       for (let i = 0; i < category.domainEvents.length; i++) {
         const event = category.domainEvents[i];
 
+        let castedEvent:
+          | SubCategoryCreatedEvent
+          | SubCategoryUpdatedEvent
+          | SubCategoryRemovedEvent;
+        let subCategory: SubCategoryModel | undefined;
+
         switch (event.constructor) {
           case CategoryCreatedEvent:
             await tx.insert(BudgetingSchema.categoriesTable).values(model);
@@ -109,6 +123,27 @@ export class PostgresCategoryRepository implements ICategoryRepository {
               .update(BudgetingSchema.categoriesTable)
               .set(model)
               .where(eq(BudgetingSchema.categoriesTable.id, model.id));
+            break;
+          case SubCategoryCreatedEvent:
+            castedEvent = event as SubCategoryCreatedEvent;
+            subCategory = model.subCategories.find(s => s.id === castedEvent.categoryId);
+            if (!subCategory) break;
+            await tx.insert(BudgetingSchema.subCategoriesTable).values({ ...subCategory });
+            break;
+          case SubCategoryUpdatedEvent:
+            castedEvent = event as SubCategoryUpdatedEvent;
+            subCategory = model.subCategories.find(s => s.id === castedEvent.categoryId);
+            if (!subCategory) break;
+            await tx
+              .update(BudgetingSchema.subCategoriesTable)
+              .set(subCategory)
+              .where(eq(BudgetingSchema.subCategoriesTable.id, subCategory.id));
+            break;
+          case SubCategoryRemovedEvent:
+            castedEvent = event as SubCategoryRemovedEvent;
+            await tx
+              .delete(BudgetingSchema.subCategoriesTable)
+              .where(eq(BudgetingSchema.subCategoriesTable.id, castedEvent.categoryId));
             break;
         }
       }

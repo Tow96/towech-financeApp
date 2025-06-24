@@ -73,9 +73,8 @@ export abstract class Entity<EntityProps> {
    * useful when logging an entity during testing/debugging
    */
   public toObject(): unknown {
-    const plainProps = convertPropsToObject(this.props); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+    const plainProps = convertPropsToObject(this.props);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result = {
       id: this._id,
       createdAt: this._createdAt,

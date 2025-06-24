@@ -1,4 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+﻿/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Entity } from './entity.base';
 import { ValueObject } from './value-object.base';
 

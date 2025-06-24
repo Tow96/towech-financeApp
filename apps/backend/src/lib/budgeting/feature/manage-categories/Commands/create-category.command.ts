@@ -31,7 +31,10 @@ export class CreateCategoryHandler implements ICommandHandler<CreateCategoryComm
 
     const categoryExists = await this.categoryRepo.categoryExists(command.userId, command.name);
     if (categoryExists)
-      return { status: CommandQueryResult.Conflict, message: 'Category with same name already exists!' };
+      return {
+        status: CommandQueryResult.Conflict,
+        message: 'Category with same name already exists!',
+      };
 
     this.logger.log(
       `Creating new category of type: ${command.type} with name: ${command.name} for user: ${command.userId}`

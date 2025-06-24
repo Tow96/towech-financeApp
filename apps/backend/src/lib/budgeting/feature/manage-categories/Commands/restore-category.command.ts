@@ -22,7 +22,8 @@ export class RestoreCategoryHandler implements ICommandHandler<RestoreCategoryCo
 
   async execute(command: RestoreCategoryCommand): Promise<Result<string>> {
     const category = await this.categoryRepo.getById(command.id);
-    if (category === null) return { status: CommandQueryResult.NotFound, message: 'Category not found' };
+    if (category === null)
+      return { status: CommandQueryResult.NotFound, message: 'Category not found' };
 
     if (category.deletedAt === null)
       return { status: CommandQueryResult.Conflict, message: 'Category not archived' };

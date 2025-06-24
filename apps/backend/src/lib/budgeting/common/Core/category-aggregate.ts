@@ -6,6 +6,16 @@ import {
   CategoryRestoredEvent,
   CategoryUpdatedEvent,
 } from './category-events';
+import {
+  CreateSubCategoryProps,
+  SubCategoryEntity,
+  UpdateSubCategoryProps,
+} from './subcategory-entity';
+import {
+  SubCategoryCreatedEvent,
+  SubCategoryRemovedEvent,
+  SubCategoryUpdatedEvent,
+} from './subcategory-events';
 
 export enum CategoryType {
   income = 'INCOME',
@@ -17,6 +27,7 @@ interface CategoryProps {
   iconId: number;
   name: string;
   type: CategoryType;
+  subCategories: SubCategoryEntity[];
   deletedAt: Date | null;
 }
 
@@ -33,9 +44,11 @@ interface UpdateCategoryProps {
 }
 
 export class CategoryAggregate extends AggregateRoot<CategoryProps> {
+  private readonly MAX_SUBCATEGORY_COUNT = 10;
+
   static create(create: CreateCategoryProps): CategoryAggregate {
     const id = uuidV4();
-    const props: CategoryProps = { ...create, deletedAt: null };
+    const props: CategoryProps = { ...create, subCategories: [], deletedAt: null };
 
     const category: CategoryAggregate = new CategoryAggregate({ id, props });
 
@@ -96,5 +109,51 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
 
     this.props.deletedAt = null;
     this.addEvent(new CategoryRestoredEvent({ aggregateId: this._id }));
+  }
+
+  addSubCategory(create: CreateSubCategoryProps) {
+    if (this.props.subCategories.length >= this.MAX_SUBCATEGORY_COUNT)
+      throw new Error('A Category can only have 10 subcategories');
+
+    const subCategory = SubCategoryEntity.create(create);
+
+    this.props.subCategories.push(subCategory);
+    this.addEvent(
+      new SubCategoryCreatedEvent({
+        aggregateId: this._id,
+        userId: this.props.userId,
+        categoryId: subCategory.id,
+        name: subCategory.name,
+        type: this.props.type,
+      })
+    );
+  }
+
+  removeSubCategory(id: string) {
+    this.props.subCategories = this.props.subCategories.filter(
+      subCategory => subCategory.id !== id
+    );
+
+    this.addEvent(
+      new SubCategoryRemovedEvent({
+        aggregateId: this._id,
+        categoryId: id,
+      })
+    );
+  }
+
+  updateSubCategory(id: string, update: UpdateSubCategoryProps): void {
+    const subCategory = this.props.subCategories.find(s => s.id === id);
+    if (!subCategory) return;
+
+    subCategory.update(update);
+    this.addEvent(
+      new SubCategoryUpdatedEvent({
+        aggregateId: this._id,
+        categoryId: id,
+        name: subCategory.name,
+        type: this.props.type,
+      })
+    );
   }
 }

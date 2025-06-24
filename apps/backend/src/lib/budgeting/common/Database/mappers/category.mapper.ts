@@ -1,7 +1,10 @@
 import { CategoryAggregate, CategoryType } from '../../Core/category-aggregate';
 import { CategoryModel } from '../models';
+import { SubCategoryMapper } from './sub-category.mapper';
 
 export class CategoryMapper {
+  private readonly subMapper = new SubCategoryMapper();
+
   toPersistence(entity: CategoryAggregate): CategoryModel {
     const copy = entity.getProps();
 
@@ -14,6 +17,7 @@ export class CategoryMapper {
       type: copy.type,
       userId: copy.userId,
       deletedAt: copy.deletedAt,
+      subCategories: copy.subCategories.map(s => this.subMapper.toPersistence(copy.id, s)),
     };
   }
 
@@ -28,6 +32,7 @@ export class CategoryMapper {
         type: model.type as CategoryType,
         name: model.name,
         iconId: model.iconId,
+        subCategories: model.subCategories.map(s => this.subMapper.toDomain(s)),
       },
     });
   }

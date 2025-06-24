@@ -1,0 +1,1 @@
+ALTER TABLE "budgeting"."sub-categories" ADD CONSTRAINT "sub-categories_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "budgeting"."categories"("id") ON DELETE no action ON UPDATE no action;
