@@ -32,6 +32,9 @@ import { GetCategoryOwnerQuery } from './Queries/get-category-owner.query';
 import { UpdateCategoryCommand } from './Commands/update-category.command';
 import { ArchiveCategoryCommand } from './Commands/archive-category.command';
 import { RestoreCategoryCommand } from './Commands/restore-category.command';
+import { AddSubCategoryCommand } from './Commands/add-sub-category.command';
+import { UpdateSubCategoryCommand } from './Commands/update-sub-category.command';
+import { DeleteSubCategoryCommand } from './Commands/delete-sub-category.command';
 
 @Controller('category')
 export class ManageCategoriesController {
@@ -134,6 +137,70 @@ export class ManageCategoriesController {
     }
   }
 
+  @Post(':id/subcategory')
+  async addSubcategory(
+    @CurrentUser() user: User,
+    @Body() body: CreateSubcategoryRequest,
+    @Param('id') id: string
+  ): Promise<CreateSubCategoryResponse> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    // TODO: Validate inputs
+    const command = new AddSubCategoryCommand(id, body.iconId, body.name);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException('Category not found');
+      case CommandQueryResult.Success:
+        return { id: result.message };
+    }
+  }
+
+  @Put(':id/subcategory/:subId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateSubcategory(
+    @CurrentUser() user: User,
+    @Body() body: UpdateSubCategoryRequest,
+    @Param('id') id: string,
+    @Param('subId') subCategoryId: string
+  ): Promise<void> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    // TODO: Validate inputs
+    const command = new UpdateSubCategoryCommand(id, subCategoryId, body.iconId, body.name);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException(result.message);
+    }
+  }
+
+  @Delete(':id/subcategory/:subId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteSubCategory(
+    @CurrentUser() user: User,
+    @Param('id') id: string,
+    @Param('subId') subCategoryId: string
+  ): Promise<void> {
+    await this.validateCategoryOwnership(user.id, id);
+
+    const command = new DeleteSubCategoryCommand(id, subCategoryId);
+    const result = await this.commandBus.execute(command);
+
+    switch (result.status) {
+      case CommandQueryResult.Conflict:
+        throw new ConflictException(result.message);
+      case CommandQueryResult.NotFound:
+        throw new NotFoundException('Category not found');
+    }
+  }
+
   private async validateCategoryOwnership(userId: string, categoryId: string): Promise<void> {
     const ownerQuery = await this.queryBus.execute(new GetCategoryOwnerQuery(categoryId));
     if (ownerQuery.status === CommandQueryResult.NotFound)
@@ -157,6 +224,20 @@ interface CreateCategoryResponse {
 }
 
 interface UpdateCategoryRequest {
+  iconId?: number;
+  name?: string;
+}
+
+interface CreateSubcategoryRequest {
+  iconId: number;
+  name: string;
+}
+
+interface CreateSubCategoryResponse {
+  id: string;
+}
+
+interface UpdateSubCategoryRequest {
   iconId?: number;
   name?: string;
 }

@@ -153,8 +153,8 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
     if (!subCategory) return;
 
     if (
-      update.name &&
-      this.props.subCategories.filter(s => s.name === update.name.trim().toLowerCase()).length > 0
+      update.name !== undefined &&
+      this.props.subCategories.filter(s => s.name === update.name?.trim().toLowerCase()).length > 0
     )
       throw new Error('SubCategory with same name already exists');
 

@@ -1,8 +1,10 @@
 ﻿import { CategoryAggregate } from '../../common/Core/category-aggregate';
+import { SubCategoryEntity } from '../../common/Core/subcategory-entity';
 
 export class DtoMapper {
   categoryToDto(entity: CategoryAggregate): CategoryDto {
     const copy = entity.getProps();
+    const subCategories = copy.subCategories.map(s => this.subCategoryToDto(s));
 
     return {
       id: copy.id,
@@ -10,6 +12,17 @@ export class DtoMapper {
       iconId: copy.iconId,
       type: copy.type,
       userId: copy.userId,
+      name: copy.name,
+      subCategories: subCategories,
+    };
+  }
+
+  subCategoryToDto(entity: SubCategoryEntity): SubCategoryDto {
+    const copy = entity.getProps();
+
+    return {
+      id: copy.id,
+      iconId: copy.iconId,
       name: copy.name,
     };
   }
@@ -22,4 +35,11 @@ export interface CategoryDto {
   type: string;
   archived: boolean;
   name: string;
+  subCategories: SubCategoryDto[];
+}
+
+export interface SubCategoryDto {
+  id: string;
+  name: string;
+  iconId: number;
 }

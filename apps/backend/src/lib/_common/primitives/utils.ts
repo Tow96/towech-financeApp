@@ -1,5 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Entity } from './entity.base';
+﻿import { Entity } from './entity.base';
 import { ValueObject } from './value-object.base';
 
 function isEntity(obj: unknown): obj is Entity<unknown> {

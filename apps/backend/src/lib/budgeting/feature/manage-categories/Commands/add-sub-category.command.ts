@@ -38,7 +38,7 @@ export class AddSubCategoryHandler implements ICommandHandler<AddSubCategoryComm
 
       await this.categoryRepository.saveChanges(parentCategory);
       return { status: CommandQueryResult.Success, message: subCategoryId };
-    } catch (exception: unknown) {
+    } catch (exception) {
       return { status: CommandQueryResult.Conflict, message: exception.message };
     }
   }

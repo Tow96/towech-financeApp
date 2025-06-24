@@ -60,8 +60,6 @@ export class PostgresCategoryRepository implements ICategoryRepository {
       where: eq(BudgetingSchema.categoriesTable.userId, userId),
     });
 
-    console.log(records);
-
     return records.map(record => this._categoryMapper.toDomain(record));
   }
 

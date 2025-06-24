@@ -1,0 +1,17 @@
+meta {
+  name: Update SubCategory
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{apiDns}}/category/9e7edf3e-081a-496a-9da0-1415ce5d6f90/subcategory/9f9a7b3f-7593-48c9-b3ec-0a89837623c0
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "cosino"
+  }
+}

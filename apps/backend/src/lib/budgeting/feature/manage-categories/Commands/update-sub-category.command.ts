@@ -12,7 +12,7 @@ export class UpdateSubCategoryCommand extends Command<Result<string>> {
   constructor(
     public readonly categoryId: string,
     public readonly subCategoryId: string,
-    public readonly iconId?: string,
+    public readonly iconId?: number,
     public readonly name?: string
   ) {
     super();
@@ -35,11 +35,14 @@ export class UpdateSubCategoryHandler implements ICommandHandler<UpdateSubCatego
     this.logger.log(`Updating subcategory with id ${command.subCategoryId}`);
 
     try {
-      parentCategory.updateSubCategory(command);
+      parentCategory.updateSubCategory(command.subCategoryId, {
+        iconId: command.iconId,
+        name: command.name,
+      });
 
       await this.categoryRepository.saveChanges(parentCategory);
       return { status: CommandQueryResult.Success, message: 'sub category updated' };
-    } catch (exception: unknown) {
+    } catch (exception) {
       return { status: CommandQueryResult.Conflict, message: exception.message };
     }
   }

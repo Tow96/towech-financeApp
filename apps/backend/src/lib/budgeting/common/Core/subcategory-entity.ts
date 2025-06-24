@@ -12,8 +12,8 @@ export interface CreateSubCategoryProps {
 }
 
 export interface UpdateSubCategoryProps {
-  iconId: number;
-  name: string;
+  iconId?: number;
+  name?: string;
 }
 
 export class SubCategoryEntity extends Entity<SubCategoryProps> {
