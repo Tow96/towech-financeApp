@@ -6,6 +6,7 @@ import { BudgetingModule } from '../lib/budgeting/budgeting.module';
 import { LoggingModule } from './logging/logging.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DistributionModule } from '../lib/distribution/distribution.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     LoggingModule,
     UsersModule,
     BudgetingModule,
+    DistributionModule,
   ],
   controllers: [AppController],
 })

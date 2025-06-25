@@ -147,6 +147,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
       }
     });
 
+    console.log('afafefafe');
     await category.publishEvents(this._logger, this._eventEmitter);
   }
 }
