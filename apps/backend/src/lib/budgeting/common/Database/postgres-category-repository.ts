@@ -105,17 +105,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
             await tx.insert(BudgetingSchema.categoriesTable).values(model);
             break;
           case CategoryUpdatedEvent:
-            await tx
-              .update(BudgetingSchema.categoriesTable)
-              .set(model)
-              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
-            break;
           case CategoryArchivedEvent:
-            await tx
-              .update(BudgetingSchema.categoriesTable)
-              .set(model)
-              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
-            break;
           case CategoryRestoredEvent:
             await tx
               .update(BudgetingSchema.categoriesTable)
@@ -146,8 +136,6 @@ export class PostgresCategoryRepository implements ICategoryRepository {
         }
       }
     });
-
-    console.log('afafefafe');
     await category.publishEvents(this._logger, this._eventEmitter);
   }
 }

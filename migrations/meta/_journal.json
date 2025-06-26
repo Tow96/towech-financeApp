@@ -36,6 +36,13 @@
       "when": 1750787052747,
       "tag": "0004_solid_omega_flight",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750981514938,
+      "tag": "0005_broad_chronomancer",
+      "breakpoints": true
     }
   ]
 }

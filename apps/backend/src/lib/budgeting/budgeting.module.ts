@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 // Domain
 import { ICategoryRepository } from './common/Core/i-category-repository';
 
-// Persistence
+// Database
 import { PostgresCategoryRepository } from './common/Database/postgres-category-repository';
 
 // Common Services

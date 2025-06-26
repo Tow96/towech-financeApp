@@ -7,12 +7,14 @@ import { LoggingModule } from './logging/logging.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DistributionModule } from '../lib/distribution/distribution.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     CqrsModule.forRoot(),
     EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
     LoggingModule,
     UsersModule,
     BudgetingModule,
