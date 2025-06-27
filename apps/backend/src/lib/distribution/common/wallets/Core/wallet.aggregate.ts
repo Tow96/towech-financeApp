@@ -42,6 +42,14 @@ export class WalletAggregate extends AggregateRoot<WalletProps> {
     if (this.props.name.length > 50) throw new Error('name cannot be longer than 50 characters');
   }
 
+  get userId() {
+    return this.props.userId;
+  }
+
+  get deletedAt() {
+    return this.props.deletedAt;
+  }
+
   update(update: UpdateWalletProps): void {
     if (update.iconId) this.props.iconId = update.iconId;
     if (update.name) this.props.name = update.name;

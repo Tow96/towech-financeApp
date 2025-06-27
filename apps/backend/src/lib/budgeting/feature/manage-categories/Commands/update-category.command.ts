@@ -31,6 +31,7 @@ export class UpdateCategoryHandler implements ICommandHandler<UpdateCategoryComm
     if (category === null)
       return { status: CommandQueryResult.NotFound, message: 'Category not found' };
 
+    // Check if there is another category with the same name
     if (command.name) {
       const categoryExists = await this.categoryRepo.categoryExists(category.userId, command.name);
       if (categoryExists)

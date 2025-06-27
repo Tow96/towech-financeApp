@@ -10,7 +10,7 @@ import { DistributionSchema } from './distribution.schema';
 export const DISTRIBUTION_SCHEMA_CONNECTION = 'DISTRIBUTION_SCHEMA_CONNECTION';
 
 export const DistributionProvider: Provider = {
-  provider: DISTRIBUTION_SCHEMA_CONNECTION,
+  provide: DISTRIBUTION_SCHEMA_CONNECTION,
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => {
     const connectionString = configService.getOrThrow<string>('DATABASE_URL');
