@@ -28,7 +28,7 @@ export abstract class Entity<EntityProps> {
 
   protected readonly props: EntityProps;
 
-  protected _id: string;
+  protected readonly _id: string;
   private readonly _createdAt: Date;
   protected _updatedAt: Date;
 
