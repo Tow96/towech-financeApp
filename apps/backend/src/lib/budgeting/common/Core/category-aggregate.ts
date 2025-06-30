@@ -20,6 +20,7 @@ import {
 export enum CategoryType {
   income = 'INCOME',
   expense = 'EXPENSE',
+  transfer = 'TRANSFER',
 }
 
 interface CategoryProps {

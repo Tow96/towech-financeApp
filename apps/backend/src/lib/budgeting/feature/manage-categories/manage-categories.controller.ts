@@ -64,6 +64,9 @@ export class ManageCategoriesController {
       );
       requery = true;
     }
+    if (result.message.filter(c => c.type === CategoryType.transfer).length === 0) {
+      await this.commandBus;
+    }
 
     if (requery) result = await this.queryBus.execute(new GetUserCategoriesQuery(user.id));
     return { categories: result.message.map(c => this.mapper.categoryToDto(c)) };

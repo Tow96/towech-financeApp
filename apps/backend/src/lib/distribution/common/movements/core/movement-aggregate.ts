@@ -7,25 +7,26 @@ import { AggregateRoot } from '../../../../_common/primitives/aggregate-root.bas
 // Slice packages
 import * as events from './movement-events';
 import { SummaryItem } from './summary-item.value-object';
+import { Category, CategoryType } from '../../categories';
 
 interface MovementProps {
-  userId: string;
-  categoryId: string;
-  description: string;
-  date: Date;
-  summary: SummaryItem[];
+  _userId: string;
+  _category: Category;
+  _description: string;
+  _date: Date;
+  _summary: SummaryItem[];
 }
 
 interface CreateMovementProps {
   userId: string;
-  categoryId: string;
+  category: Category;
   description: string;
   date: Date;
   summary: SummaryItem[];
 }
 
 interface UpdateMovementProps {
-  categoryId?: string;
+  category?: Category;
   description?: string;
   date?: Date;
   summary?: SummaryItem[];
@@ -43,19 +44,44 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
   }
 
   validate(): void {
-    this.props.description = this.props.description.trim().toLowerCase();
-    if (this.props.description.length < 1)
+    this.props._description = this.props._description.trim().toLowerCase();
+    if (this.props._description.length < 1)
       throw new Error('Description must be at least 1 character');
 
-    if (this.props.summary.length < 1) throw new Error('No summary');
-    // Either all origins or all destinations must be the same
-    
+    if (this.props._summary.length < 1) throw new Error('No summary');
+
+    // Validate sources and destinations
+    const uniqueOrigins = new Set(this.props._summary.map(i => i.originWalletId));
+    const uniqueDestinations = new Set(this.props._summary.map(i => i.destinationWalletId));
+    const errors: string[] = [];
+
+    switch (this.props._category.type) {
+      case CategoryType.income:
+        if (!(uniqueOrigins.has(null) && uniqueOrigins.size === 1))
+          errors.push('origins can only be null');
+        if (uniqueDestinations.has(null)) errors.push('null cannot be a destination');
+        break;
+      case CategoryType.expense:
+        if (!(uniqueDestinations.has(null) && uniqueDestinations.size === 1))
+          errors.push('destinations can only be null');
+        if (uniqueOrigins.has(null)) errors.push('null cannot be an origin');
+        break;
+      case CategoryType.transfer:
+        if (uniqueOrigins.has(null) || uniqueDestinations.has(null))
+          errors.push('Neither origins nor destinations can be null');
+        if (uniqueOrigins.size > 1 && uniqueDestinations.size > 1)
+          errors.push('Cannot have multiple origins and multiple destinations at the same time');
+        break;
+      default:
+        errors.push(`Validation for type not implemented`);
+    }
+    if (errors.length > 0) throw new Error(errors.join(', '));
   }
 
   update(update: UpdateMovementProps): void {
-    if (update.date) this.props.date = update.date;
-    if (update.description) this.props.description = update.description.trim().toLowerCase();
-    if (update.summary) this.props.summary = update.summary;
+    if (update.date) this.props._date = update.date;
+    if (update.description) this.props._description = update.description.trim().toLowerCase();
+    if (update.summary) this.props._summary = update.summary;
     if (update.categoryId) this.props.categoryId = update.categoryId;
     this._updatedAt = new Date();
     this.validate();

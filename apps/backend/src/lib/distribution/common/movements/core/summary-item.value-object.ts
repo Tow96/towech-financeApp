@@ -5,7 +5,7 @@ import { ValueObject, ValueObjectProps } from '../../../../_common/primitives/va
 
 // Slice packages
 
-export interface SummaryItemProps {
+interface SummaryItemProps {
   originWalletId: string | null;
   destinationWalletId: string | null;
   amount: number;
