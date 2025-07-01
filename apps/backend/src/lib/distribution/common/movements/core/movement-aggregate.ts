@@ -86,6 +86,10 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
     this._updatedAt = new Date();
     this.validate();
 
-    this.addEvent(new events.MovementCreatedEvent({ aggregateId: this.id }));
+    this.addEvent(new events.MovementUpdatedEvent({ aggregateId: this.id }));
+  }
+
+  delete(): void {
+    this.addEvent(new events.MovementDeletedEvent({ aggregateId: this.id }));
   }
 }

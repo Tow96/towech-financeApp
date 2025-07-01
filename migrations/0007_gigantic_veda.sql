@@ -1,0 +1,1 @@
+ALTER TABLE "distribution"."movement_summary" DROP COLUMN "id";

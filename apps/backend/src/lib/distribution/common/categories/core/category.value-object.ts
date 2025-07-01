@@ -25,4 +25,8 @@ export class Category extends ValueObject<CategoryProps> {
   get type() {
     return this.props._type;
   }
+
+  protected validate(props: CategoryProps): void {
+    if (props._id === '' || props._userId === '') throw new Error('Empty values');
+  }
 }
