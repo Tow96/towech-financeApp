@@ -1,11 +1,6 @@
-// App packages
-import { ValueObject } from '../../../../_common/primitives/value-object.base';
-
-export enum CategoryType {
-  income = 'INCOME',
-  expense = 'EXPENSE',
-  transfer = 'TRANSFER',
-}
+﻿// App packages
+import { ValueObject } from '../../../../_common/primitives';
+import { CategoryType } from '../../../../_common/categories';
 
 interface CategoryProps {
   _id: string;

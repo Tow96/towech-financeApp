@@ -4,27 +4,23 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, and } from 'drizzle-orm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-// App packages
-
 // Slice packages
-import { ICategoryRepository } from '../Core/i-category-repository';
 import {
+  ICategoryRepository,
   CategoryArchivedEvent,
   CategoryCreatedEvent,
   CategoryRestoredEvent,
   CategoryUpdatedEvent,
-} from '../Core/category-events';
-
-// Internal references
-import { BUDGETING_SCHEMA_CONNECTION } from './budgeting.provider';
-import { BudgetingSchema } from './budgeting.schema';
-import { CategoryMapper } from './mappers/category.mapper';
-import { CategoryAggregate } from '../Core/category-aggregate';
-import {
+  CategoryAggregate,
   SubCategoryCreatedEvent,
   SubCategoryRemovedEvent,
   SubCategoryUpdatedEvent,
-} from '../Core/subcategory-events';
+} from '../core';
+
+// Internal references
+import { COMMON_SCHEMA_CONNECTION } from '../../common.provider';
+import { CommonSchema } from '../../common.schema';
+import { CategoryMapper } from './mappers/category.mapper';
 import { SubCategoryModel } from './models';
 
 @Injectable()
@@ -33,19 +29,19 @@ export class PostgresCategoryRepository implements ICategoryRepository {
   private readonly _categoryMapper = new CategoryMapper();
 
   constructor(
-    @Inject(BUDGETING_SCHEMA_CONNECTION)
-    private readonly _db: NodePgDatabase<typeof BudgetingSchema>,
+    @Inject(COMMON_SCHEMA_CONNECTION)
+    private readonly _db: NodePgDatabase<typeof CommonSchema>,
     private readonly _eventEmitter: EventEmitter2
   ) {}
 
   async categoryExists(userId: string, name: string): Promise<boolean> {
     const exists = await this._db
       .select()
-      .from(BudgetingSchema.categoriesTable)
+      .from(CommonSchema.categoriesTable)
       .where(
         and(
-          eq(BudgetingSchema.categoriesTable.userId, userId),
-          eq(BudgetingSchema.categoriesTable.name, name.trim().toLowerCase())
+          eq(CommonSchema.categoriesTable.userId, userId),
+          eq(CommonSchema.categoriesTable.name, name.trim().toLowerCase())
         )
       );
 
@@ -57,7 +53,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
 
     const records = await this._db.query.categoriesTable.findMany({
       with: { subCategories: true },
-      where: eq(BudgetingSchema.categoriesTable.userId, userId),
+      where: eq(CommonSchema.categoriesTable.userId, userId),
     });
 
     return records.map(record => this._categoryMapper.toDomain(record));
@@ -68,7 +64,7 @@ export class PostgresCategoryRepository implements ICategoryRepository {
 
     const records = await this._db.query.categoriesTable.findMany({
       with: { subCategories: true },
-      where: eq(BudgetingSchema.categoriesTable.id, id),
+      where: eq(CommonSchema.categoriesTable.id, id),
     });
 
     if (records.length === 0) return null;
@@ -78,9 +74,9 @@ export class PostgresCategoryRepository implements ICategoryRepository {
 
   async getCategoryOwner(id: string): Promise<string | null> {
     const result = await this._db
-      .select({ userId: BudgetingSchema.categoriesTable.userId })
-      .from(BudgetingSchema.categoriesTable)
-      .where(eq(BudgetingSchema.categoriesTable.id, id));
+      .select({ userId: CommonSchema.categoriesTable.userId })
+      .from(CommonSchema.categoriesTable)
+      .where(eq(CommonSchema.categoriesTable.id, id));
 
     if (result.length === 0) return null;
     return result[0].userId;
@@ -102,36 +98,36 @@ export class PostgresCategoryRepository implements ICategoryRepository {
 
         switch (event.constructor) {
           case CategoryCreatedEvent:
-            await tx.insert(BudgetingSchema.categoriesTable).values(model);
+            await tx.insert(CommonSchema.categoriesTable).values(model);
             break;
           case CategoryUpdatedEvent:
           case CategoryArchivedEvent:
           case CategoryRestoredEvent:
             await tx
-              .update(BudgetingSchema.categoriesTable)
+              .update(CommonSchema.categoriesTable)
               .set(model)
-              .where(eq(BudgetingSchema.categoriesTable.id, model.id));
+              .where(eq(CommonSchema.categoriesTable.id, model.id));
             break;
           case SubCategoryCreatedEvent:
             castedEvent = event as SubCategoryCreatedEvent;
             subCategory = model.subCategories.find(s => s.id === castedEvent.categoryId);
             if (!subCategory) break;
-            await tx.insert(BudgetingSchema.subCategoriesTable).values({ ...subCategory });
+            await tx.insert(CommonSchema.subCategoriesTable).values({ ...subCategory });
             break;
           case SubCategoryUpdatedEvent:
             castedEvent = event as SubCategoryUpdatedEvent;
             subCategory = model.subCategories.find(s => s.id === castedEvent.categoryId);
             if (!subCategory) break;
             await tx
-              .update(BudgetingSchema.subCategoriesTable)
+              .update(CommonSchema.subCategoriesTable)
               .set(subCategory)
-              .where(eq(BudgetingSchema.subCategoriesTable.id, subCategory.id));
+              .where(eq(CommonSchema.subCategoriesTable.id, subCategory.id));
             break;
           case SubCategoryRemovedEvent:
             castedEvent = event as SubCategoryRemovedEvent;
             await tx
-              .delete(BudgetingSchema.subCategoriesTable)
-              .where(eq(BudgetingSchema.subCategoriesTable.id, castedEvent.categoryId));
+              .delete(CommonSchema.subCategoriesTable)
+              .where(eq(CommonSchema.subCategoriesTable.id, castedEvent.categoryId));
             break;
         }
       }

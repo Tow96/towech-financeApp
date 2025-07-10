@@ -1,5 +1,7 @@
+// Internal references
 import { CategoryAggregate } from './category-aggregate';
 
+// ----------------------------------------------
 export abstract class ICategoryRepository {
   abstract categoryExists(userId: string, name: string): Promise<boolean>;
 

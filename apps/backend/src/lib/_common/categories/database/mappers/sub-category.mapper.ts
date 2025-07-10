@@ -1,6 +1,10 @@
-﻿import { SubCategoryEntity } from '../../Core/subcategory-entity';
+﻿// Slice packages
+import { SubCategoryEntity } from '../../core';
+
+// Internal references
 import { SubCategoryModel } from '../models';
 
+// ----------------------------------------------
 export class SubCategoryMapper {
   toPersistence(parentId: string, entity: SubCategoryEntity): SubCategoryModel {
     const copy = entity.getProps();

@@ -1,5 +1,10 @@
-﻿import { v4 as uuidV4 } from 'uuid';
-import { AggregateRoot } from '../../../_common/primitives/aggregate-root.base';
+﻿// External packages
+import { v4 as uuidV4 } from 'uuid';
+
+// Slice packages
+import { AggregateRoot } from '../../primitives';
+
+// Internal references
 import {
   CategoryArchivedEvent,
   CategoryCreatedEvent,
@@ -17,6 +22,7 @@ import {
   SubCategoryUpdatedEvent,
 } from './subcategory-events';
 
+// ----------------------------------------------
 export enum CategoryType {
   income = 'INCOME',
   expense = 'EXPENSE',

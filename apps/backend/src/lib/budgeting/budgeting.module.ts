@@ -1,13 +1,8 @@
 ﻿import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-// Domain
-import { ICategoryRepository } from './common/Core/i-category-repository';
 
-// Database
-import { PostgresCategoryRepository } from './common/Database/postgres-category-repository';
-
-// Common Services
-import { BudgetingProvider } from './common/Database/budgeting.provider';
+// App packages
+import { CommonModule } from '../_common';
 
 // Features
 import { ManageCategoriesController } from './feature/manage-categories/manage-categories.controller';
@@ -22,13 +17,9 @@ import { DeleteSubCategoryHandler } from './feature/manage-categories/Commands/d
 import { UpdateSubCategoryHandler } from './feature/manage-categories/Commands/update-sub-category.command';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, CommonModule],
   controllers: [ManageCategoriesController],
   providers: [
-    // Common
-    BudgetingProvider,
-    { provide: ICategoryRepository, useClass: PostgresCategoryRepository },
-
     // Manage Categories
     ArchiveCategoryHandler,
     CreateCategoryHandler,

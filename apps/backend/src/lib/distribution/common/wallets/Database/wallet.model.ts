@@ -1,5 +1,5 @@
 // App packages
-import { InferResultType } from '../../../../_common/primitives/infer-result-type';
+import { InferResultType } from '../../../../_common/primitives';
 
 // Slice packages
 import { DistributionSchema } from '../../distribution.schema';

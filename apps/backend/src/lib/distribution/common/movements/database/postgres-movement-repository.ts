@@ -4,13 +4,13 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-// App packages
+// Slice packages
 import { DISTRIBUTION_SCHEMA_CONNECTION } from '../../distribution.provider';
 import { DistributionSchema } from '../../distribution.schema';
-import * as events from '../core/movement-events';
-import { IMovementRepository } from '../core/i-movement-repository';
+import { IMovementRepository, MovementAggregate, events } from '../core';
+
+// Internal references
 import { MovementMapper } from './movement.model';
-import { MovementAggregate } from '../core/movement-aggregate';
 
 @Injectable()
 export class PostgresMovementRepository implements IMovementRepository {
@@ -44,7 +44,7 @@ export class PostgresMovementRepository implements IMovementRepository {
       .where(eq(DistributionSchema.movements.id, id));
 
     if (result.length === 0) return null;
-    return this._mapper.toDomain();
+    return null;
   }
 
   async saveChanges(aggregate: MovementAggregate): Promise<void> {

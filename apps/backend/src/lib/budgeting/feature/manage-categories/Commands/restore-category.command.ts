@@ -3,10 +3,8 @@ import { Logger } from '@nestjs/common';
 import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 // App packages
-import { CommandQueryResult, Result } from '../../../../_common/command-query-result';
-
-// Internal imports
-import { ICategoryRepository } from '../../../common/Core/i-category-repository';
+import { ICategoryRepository } from '../../../../_common/categories';
+import { CommandQueryResult, Result } from '../../../../_common/primitives';
 
 export class RestoreCategoryCommand extends Command<Result<string>> {
   constructor(public readonly id: string) {

@@ -1,9 +1,9 @@
 ﻿import { varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const budgetingSchema = pgSchema('budgeting');
+export const commonSchema = pgSchema('common');
 
-export const CategoriesTable = budgetingSchema.table('categories', {
+export const CategoriesTable = commonSchema.table('categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: varchar('user_id').notNull(),
   iconId: integer('icon_id').notNull(),
@@ -14,7 +14,7 @@ export const CategoriesTable = budgetingSchema.table('categories', {
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
 
-export const SubCategoriesTable = budgetingSchema.table('sub-categories', {
+export const SubCategoriesTable = commonSchema.table('sub-categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   parentId: uuid('parent_id').references(() => CategoriesTable.id),
   iconId: integer('icon_id').notNull(),
@@ -35,7 +35,7 @@ export const subCategoryRelations = relations(SubCategoriesTable, ({ one }) => (
 }));
 
 // DrizzleSchema ----------------------------------------
-export const BudgetingSchema = {
+export const CommonSchema = {
   categoriesTable: CategoriesTable,
   subCategoriesTable: SubCategoriesTable,
   categoryRelations: categoryRelations,

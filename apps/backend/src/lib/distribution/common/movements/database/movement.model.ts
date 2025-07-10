@@ -1,11 +1,9 @@
 // App packages
-import { InferResultType } from '../../../../_common/primitives/infer-result-type';
+import { InferResultType } from '../../../../_common/primitives';
 
 // Slice Packages
 import { DistributionSchema } from '../../distribution.schema';
-import { MovementAggregate } from '../core/movement-aggregate';
-import { SummaryItem } from '../core/summary-item.value-object';
-import { Category } from '../../categories';
+import { MovementAggregate, SummaryItem, Category } from '../core';
 
 type Schema = typeof DistributionSchema;
 export type MovementModel = InferResultType<Schema, 'movements', { summary: true }>;

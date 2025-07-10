@@ -2,12 +2,13 @@
 import { v4 as uuidV4 } from 'uuid';
 
 // App packages
-import { AggregateRoot } from '../../../../_common/primitives/aggregate-root.base';
+import { CategoryType } from '../../../../_common/categories';
+import { AggregateRoot } from '../../../../_common/primitives';
 
 // Slice packages
 import * as events from './movement-events';
 import { SummaryItem } from './summary-item.value-object';
-import { Category, CategoryType } from '../../categories';
+import { Category } from './category.value-object';
 
 interface MovementProps {
   _userId: string;
@@ -35,7 +36,13 @@ interface UpdateMovementProps {
 export class MovementAggregate extends AggregateRoot<MovementProps> {
   static create(create: CreateMovementProps): MovementAggregate {
     const id = uuidV4();
-    const props: MovementProps = { ...create };
+    const props: MovementProps = {
+      _category: create.category,
+      _date: create.date,
+      _description: create.description,
+      _summary: create.summary,
+      _userId: create.userId,
+    };
 
     const movement: MovementAggregate = new MovementAggregate({ id, props });
     movement.addEvent(new events.MovementCreatedEvent({ aggregateId: id }));
@@ -82,7 +89,7 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
     if (update.date) this.props._date = update.date;
     if (update.description) this.props._description = update.description.trim().toLowerCase();
     if (update.summary) this.props._summary = update.summary;
-    if (update.categoryId) this.props.categoryId = update.categoryId;
+    if (update.category) this.props._category = update.category;
     this._updatedAt = new Date();
     this.validate();
 

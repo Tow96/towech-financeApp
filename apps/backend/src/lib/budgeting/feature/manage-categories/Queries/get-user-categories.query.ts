@@ -2,11 +2,8 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 
 // App packages
-import { CommandQueryResult, Result } from '../../../../_common/command-query-result';
-
-// Internal imports
-import { ICategoryRepository } from '../../../common/Core/i-category-repository';
-import { CategoryAggregate } from '../../../common/Core/category-aggregate';
+import { CategoryAggregate, ICategoryRepository } from '../../../../_common/categories';
+import { CommandQueryResult, Result } from '../../../../_common/primitives';
 
 export class GetUserCategoriesQuery extends Query<Result<CategoryAggregate[]>> {
   constructor(public readonly userId: string) {

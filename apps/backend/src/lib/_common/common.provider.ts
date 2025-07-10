@@ -5,17 +5,17 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 // Internal references
-import { BudgetingSchema } from './budgeting.schema';
+import { CommonSchema } from './common.schema';
 
-export const BUDGETING_SCHEMA_CONNECTION = 'BUDGETING_SCHEMA_CONNECTION';
+export const COMMON_SCHEMA_CONNECTION = 'COMMON_SCHEMA_CONNECTION';
 
-export const BudgetingProvider: Provider = {
-  provide: BUDGETING_SCHEMA_CONNECTION,
+export const CommonProvider: Provider = {
+  provide: COMMON_SCHEMA_CONNECTION,
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => {
     const connectionString = configService.getOrThrow<string>('DATABASE_URL');
     const pool = new Pool({ connectionString });
 
-    return drizzle(pool, { schema: BudgetingSchema });
+    return drizzle(pool, { schema: CommonSchema });
   },
 };

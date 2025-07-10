@@ -1,7 +1,7 @@
-﻿import { BudgetingSchema } from './budgeting.schema';
-import { InferResultType } from '../../../_common/primitives/infer-result-type';
+﻿import { CommonSchema } from '../../common.schema';
+import { InferResultType } from '../../primitives';
 
-type Schema = typeof BudgetingSchema;
+type Schema = typeof CommonSchema;
 
 export type CategoryModel = InferResultType<Schema, 'categoriesTable', { subCategories: true }>;
 export type SubCategoryModel = InferResultType<Schema, 'subCategoriesTable'>;

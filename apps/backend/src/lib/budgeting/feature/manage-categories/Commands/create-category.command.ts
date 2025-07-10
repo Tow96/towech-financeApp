@@ -3,11 +3,12 @@ import { Command, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
 // App packages
-import { CommandQueryResult, Result } from '../../../../_common/command-query-result';
-import { CategoryAggregate, CategoryType } from '../../../common/Core/category-aggregate';
-
-// Internal imports
-import { ICategoryRepository } from '../../../common/Core/i-category-repository';
+import {
+  CategoryAggregate,
+  CategoryType,
+  ICategoryRepository,
+} from '../../../../_common/categories';
+import { CommandQueryResult, Result } from '../../../../_common/primitives';
 
 export class CreateCategoryCommand extends Command<Result<string>> {
   constructor(

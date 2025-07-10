@@ -57,6 +57,13 @@
       "when": 1751408156914,
       "tag": "0007_gigantic_veda",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1752170058349,
+      "tag": "0008_sweet_newton_destine",
+      "breakpoints": true
     }
   ]
 }

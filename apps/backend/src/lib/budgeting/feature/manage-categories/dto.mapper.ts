@@ -1,5 +1,4 @@
-﻿import { CategoryAggregate } from '../../common/Core/category-aggregate';
-import { SubCategoryEntity } from '../../common/Core/subcategory-entity';
+﻿import { CategoryAggregate, SubCategoryEntity } from '../../../_common/categories';
 
 export class DtoMapper {
   categoryToDto(entity: CategoryAggregate): CategoryDto {

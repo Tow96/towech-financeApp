@@ -8,7 +8,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Logger,
   NotFoundException,
   Param,
   Post,
@@ -17,14 +16,13 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 // App packages
+import { CategoryType } from '../../../_common/categories';
+import { CommandQueryResult } from '../../../_common/primitives';
+
 import { CurrentUser } from '../../../users/lib/current-user.decorator';
 import { User } from '../../../users/core/user.entity';
-import { CommandQueryResult } from '../../../_common/command-query-result';
 
-// Slice common packages
-import { CategoryType } from '../../common/Core/category-aggregate';
-
-// Internal imports
+// Internal references
 import { GetUserCategoriesQuery } from './Queries/get-user-categories.query';
 import { CategoryDto, DtoMapper } from './dto.mapper';
 import { CreateCategoryCommand } from './Commands/create-category.command';
@@ -38,7 +36,6 @@ import { DeleteSubCategoryCommand } from './Commands/delete-sub-category.command
 
 @Controller('category')
 export class ManageCategoriesController {
-  private readonly logger = new Logger(ManageCategoriesController.name);
   private readonly mapper = new DtoMapper();
 
   constructor(
@@ -63,9 +60,6 @@ export class ManageCategoriesController {
         new CreateCategoryCommand(user.id, 1, 'Other income', CategoryType.income)
       );
       requery = true;
-    }
-    if (result.message.filter(c => c.type === CategoryType.transfer).length === 0) {
-      await this.commandBus;
     }
 
     if (requery) result = await this.queryBus.execute(new GetUserCategoriesQuery(user.id));

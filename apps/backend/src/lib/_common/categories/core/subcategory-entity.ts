@@ -1,6 +1,10 @@
-﻿import { v4 as uuidV4 } from 'uuid';
-import { Entity } from '../../../_common/primitives';
+﻿// External packages
+import { v4 as uuidV4 } from 'uuid';
 
+// Internal references
+import { Entity } from '../../primitives';
+
+// ----------------------------------------------
 interface SubCategoryProps {
   iconId: number;
   name: string;

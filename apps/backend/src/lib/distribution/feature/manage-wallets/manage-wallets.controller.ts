@@ -18,7 +18,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 // App packages
 import { CurrentUser } from '../../../users/lib/current-user.decorator';
 import { User } from '../../../users/core/user.entity';
-import { CommandQueryResult, Result } from '../../../_common/command-query-result';
+import { CommandQueryResult, Result } from '../../../_common/primitives';
 
 // Slice common packages
 // Feature packages

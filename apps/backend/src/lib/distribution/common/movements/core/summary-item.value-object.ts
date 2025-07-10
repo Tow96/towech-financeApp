@@ -1,7 +1,7 @@
 ﻿// External packages
 
 // App packages
-import { ValueObject, ValueObjectProps } from '../../../../_common/primitives/value-object.base';
+import { ValueObject, ValueObjectProps } from '../../../../_common/primitives';
 
 // Slice packages
 
@@ -17,7 +17,7 @@ export class SummaryItem extends ValueObject<SummaryItemProps> {
   }
 
   get destinationWalletId() {
-    return this.destinationWalletId;
+    return this.props.destinationWalletId;
   }
 
   get amount() {

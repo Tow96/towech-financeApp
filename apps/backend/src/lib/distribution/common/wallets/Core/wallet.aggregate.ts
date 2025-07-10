@@ -2,7 +2,7 @@
 import { v4 as uuidV4 } from 'uuid';
 
 // App packages
-import { AggregateRoot } from '../../../../_common/primitives/aggregate-root.base';
+import { AggregateRoot } from '../../../../_common/primitives';
 
 // Slice packages
 import * as events from './wallet-events';

@@ -2,7 +2,7 @@
 import { IQueryHandler, Query, QueryHandler } from '@nestjs/cqrs';
 
 // App packages
-import { CommandQueryResult, Result } from '../../../../_common/command-query-result';
+import { CommandQueryResult, Result } from '../../../../_common/primitives';
 import { IWalletRepository } from '../../../common/wallets';
 
 export class GetWalletOwnerQuery extends Query<Result<string>> {

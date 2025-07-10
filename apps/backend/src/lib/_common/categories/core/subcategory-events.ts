@@ -1,6 +1,10 @@
-﻿import { DomainEvent, DomainEventProps } from '../../../_common/primitives/domain-event.base';
+﻿// Slice packages
 import { CategoryType } from './category-aggregate';
 
+// Internal references
+import { DomainEvent, DomainEventProps } from '../../primitives';
+
+// ----------------------------------------------
 export class SubCategoryCreatedEvent extends DomainEvent {
   readonly userId: string;
   readonly categoryId: string;

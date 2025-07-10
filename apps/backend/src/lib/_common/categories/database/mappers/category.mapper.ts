@@ -1,7 +1,9 @@
-import { CategoryAggregate, CategoryType } from '../../Core/category-aggregate';
+// Internal references
+import { CategoryAggregate, CategoryType } from '../../core';
 import { CategoryModel } from '../models';
 import { SubCategoryMapper } from './sub-category.mapper';
 
+// ----------------------------------------------
 export class CategoryMapper {
   private readonly subMapper = new SubCategoryMapper();
 
