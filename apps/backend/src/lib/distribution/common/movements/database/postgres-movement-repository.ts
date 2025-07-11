@@ -4,6 +4,9 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
+// App packages
+import { ICategoryRepository } from '../../../../_common/categories';
+
 // Slice packages
 import { DISTRIBUTION_SCHEMA_CONNECTION } from '../../distribution.provider';
 import { DistributionSchema } from '../../distribution.schema';
@@ -20,6 +23,7 @@ export class PostgresMovementRepository implements IMovementRepository {
   constructor(
     @Inject(DISTRIBUTION_SCHEMA_CONNECTION)
     private readonly _db: NodePgDatabase<typeof DistributionSchema>,
+    private readonly _categoryRepo: ICategoryRepository,
     private readonly _eventEmitter: EventEmitter2
   ) {}
 
@@ -38,13 +42,16 @@ export class PostgresMovementRepository implements IMovementRepository {
   async getById(id: string): Promise<MovementAggregate | null> {
     this._logger.debug(`Fetching movement with id: ${id}`);
 
-    const result = await this._db
-      .select()
-      .from(DistributionSchema.movements)
-      .where(eq(DistributionSchema.movements.id, id));
+    const resultMovement = await this._db.query.movements.findMany({
+      with: { summary: true },
+      where: eq(DistributionSchema.movements.id, id),
+    });
 
-    if (result.length === 0) return null;
-    return null;
+    if (resultMovement.length === 0) return null;
+
+    // TODO: Add foreign key?
+    const resultCategory = await this._categoryRepo.getById(resultMovement[0].id);
+    return this._mapper.toDomain(resultMovement[0], resultCategory!);
   }
 
   async saveChanges(aggregate: MovementAggregate): Promise<void> {

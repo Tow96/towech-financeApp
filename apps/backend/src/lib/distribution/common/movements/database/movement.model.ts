@@ -3,7 +3,8 @@ import { InferResultType } from '../../../../_common/primitives';
 
 // Slice Packages
 import { DistributionSchema } from '../../distribution.schema';
-import { MovementAggregate, SummaryItem, Category } from '../core';
+import { MovementAggregate, SummaryItem } from '../core';
+import { CategoryAggregate } from '../../../../_common/categories';
 
 type Schema = typeof DistributionSchema;
 export type MovementModel = InferResultType<Schema, 'movements', { summary: true }>;
@@ -22,12 +23,17 @@ export class MovementMapper {
       userId: copy._userId,
       date: copy._date,
       categoryId: copy._category.id,
+      subCategoryId: copy._subCategoryId,
       description: copy._description,
       summary: copy._summary.map(s => this.summaryMapper.toPersistence(copy.id, s)),
     };
   }
 
-  toDomain(model: MovementModel, categories: Category[]): MovementAggregate {
+  // TODO: Improve this mapping to not require a direct category
+  toDomain(model: MovementModel, category: CategoryAggregate): MovementAggregate {
+    if (model.categoryId !== category.id)
+      throw new Error('Invalid MovementAggregate mapping, category id must match');
+
     return new MovementAggregate({
       id: model.id,
       createdAt: model.createdAt,
@@ -36,7 +42,8 @@ export class MovementMapper {
         _description: model.description,
         _date: model.date,
         _userId: model.userId,
-        _category: categories.find(c => c.id === model.categoryId)!,
+        _category: category,
+        _subCategoryId: model.subCategoryId,
         _summary: model.summary.map(s => this.summaryMapper.toDomain(s)),
       },
     });

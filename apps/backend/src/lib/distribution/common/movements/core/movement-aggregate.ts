@@ -2,17 +2,17 @@
 import { v4 as uuidV4 } from 'uuid';
 
 // App packages
-import { CategoryType } from '../../../../_common/categories';
+import { CategoryAggregate, CategoryType } from '../../../../_common/categories';
 import { AggregateRoot } from '../../../../_common/primitives';
 
 // Slice packages
 import * as events from './movement-events';
 import { SummaryItem } from './summary-item.value-object';
-import { Category } from './category.value-object';
 
 interface MovementProps {
   _userId: string;
-  _category: Category;
+  _category: CategoryAggregate;
+  _subCategoryId: string | null;
   _description: string;
   _date: Date;
   _summary: SummaryItem[];
@@ -20,14 +20,16 @@ interface MovementProps {
 
 interface CreateMovementProps {
   userId: string;
-  category: Category;
+  category: CategoryAggregate;
+  subCategoryId: string | null;
   description: string;
   date: Date;
   summary: SummaryItem[];
 }
 
 interface UpdateMovementProps {
-  category?: Category;
+  category?: CategoryAggregate;
+  subCategoryId?: string | null;
   description?: string;
   date?: Date;
   summary?: SummaryItem[];
@@ -38,6 +40,7 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
     const id = uuidV4();
     const props: MovementProps = {
       _category: create.category,
+      _subCategoryId: create.subCategoryId,
       _date: create.date,
       _description: create.description,
       _summary: create.summary,
@@ -62,6 +65,12 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
     const uniqueDestinations = new Set(this.props._summary.map(i => i.destinationWalletId));
     const errors: string[] = [];
 
+    if (
+      this.props._subCategoryId !== null &&
+      !this.props._category.hasSubcategory(this.props._subCategoryId)
+    )
+      errors.push('Invalid subcategory');
+
     switch (this.props._category.type) {
       case CategoryType.income:
         if (!(uniqueOrigins.has(null) && uniqueOrigins.size === 1))
@@ -82,6 +91,7 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
       default:
         errors.push(`Validation for type not implemented`);
     }
+
     if (errors.length > 0) throw new Error(errors.join(', '));
   }
 
@@ -90,6 +100,7 @@ export class MovementAggregate extends AggregateRoot<MovementProps> {
     if (update.description) this.props._description = update.description.trim().toLowerCase();
     if (update.summary) this.props._summary = update.summary;
     if (update.category) this.props._category = update.category;
+    if (update.subCategoryId !== undefined) this.props._subCategoryId = update.subCategoryId;
     this._updatedAt = new Date();
     this.validate();
 

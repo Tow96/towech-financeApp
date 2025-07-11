@@ -19,6 +19,7 @@ export const movements = distributionSchema.table('movements', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
   userId: varchar('user_id').notNull(),
   categoryId: varchar('category_id').notNull(),
+  subCategoryId: varchar('sub_category_id'),
   description: varchar('description').notNull(),
   date: timestamp('data', { withTimezone: true }).notNull(),
 });

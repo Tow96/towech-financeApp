@@ -85,8 +85,16 @@ export class CategoryAggregate extends AggregateRoot<CategoryProps> {
     return this.props.type;
   }
 
+  get subCategories() {
+    return this.props.subCategories;
+  }
+
   get deletedAt() {
     return this.props.deletedAt;
+  }
+
+  hasSubcategory(id: string): boolean {
+    return this.props.subCategories.map(s => s.id).includes(id);
   }
 
   update(update: UpdateCategoryProps): void {
