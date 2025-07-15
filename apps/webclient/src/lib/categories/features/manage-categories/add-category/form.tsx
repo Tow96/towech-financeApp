@@ -1,10 +1,8 @@
 ﻿'use client';
-// External packages
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-// App packages
 import {
   Form,
   FormControl,
@@ -16,7 +14,7 @@ import {
 import { DialogClose, DialogFooter } from '@/lib/shadcn-ui/components/ui/dialog';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/ui/avatar';
+import { AppIconSelector } from '@/lib/icons';
 import {
   Select,
   SelectContent,
@@ -25,10 +23,10 @@ import {
   SelectValue,
 } from '@/lib/shadcn-ui/components/ui/select';
 
-// Data Store
-import { useAddCategory } from '../../../data-store';
+import { useAddCategory } from '@/lib/categories/data-store/use-add-categories';
+import { CategoryType } from '@/lib/categories/data-store';
 
-// --------------------
+// ----------------------------------------------
 const formSchema = z.object({
   name: z
     .string()
@@ -37,20 +35,23 @@ const formSchema = z.object({
   type: z.string({
     required_error: 'Please select a type.',
   }),
+  iconId: z.number()
 });
 
 export const AddCategoryForm = () => {
+  const addCategoryMutation = useAddCategory();
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      iconId: 0,
     },
   });
 
-  const addCategory = useAddCategory();
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addCategory.mutate(values);
+    addCategoryMutation.mutate(values);
   }
 
   return (
@@ -59,10 +60,7 @@ export const AddCategoryForm = () => {
         {/* Form content */}
         <div className="flex items-center gap-5 py-5">
           {/* Icon */}
-          <Avatar className="rounded-full w-24 h-24">
-            <AvatarImage src="https://avatar.iran.liara.run/public" alt="Placeholder" />
-            <AvatarFallback>C</AvatarFallback>
-          </Avatar>
+          <AppIconSelector />
 
           {/* Inputs */}
           <div className="grid gap-3 flex-1">
@@ -79,8 +77,9 @@ export const AddCategoryForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="income">Income</SelectItem>
-                      <SelectItem value="expense">Expense</SelectItem>
+                      <SelectItem value={CategoryType.income}>Income</SelectItem>
+                      <SelectItem value={CategoryType.expense}>Expense</SelectItem>
+                      <SelectItem value={CategoryType.transfer}>Transfer</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

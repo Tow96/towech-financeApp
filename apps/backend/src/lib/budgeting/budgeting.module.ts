@@ -18,7 +18,7 @@ import { UpdateSubCategoryHandler } from './feature/manage-categories/Commands/u
 
 @Module({
   imports: [ConfigModule, CommonModule],
-  controllers: [ManageCategoriesController],
+  controllers: [],
   providers: [
     // Manage Categories
     ArchiveCategoryHandler,

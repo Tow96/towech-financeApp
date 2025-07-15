@@ -1,28 +1,27 @@
-'use client';
-// External packages
+﻿'use client';
 import { ReactNode } from 'react';
 
 // App packages
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';
 import { Card, CardContent, CardHeader } from '@/lib/shadcn-ui/components/ui/card';
+import { CategoryType, useCategories } from '@/lib/categories/data-store';
 
-// Data store
-import { useCategories } from '../../../data-store';
-
-// Internal references
+// Internal
 import { CategoryList } from './category-list';
-import { AddCategoryButton } from '../add-category';
+import { AddCategoryButton } from './add-category';
 
-export const CategoriesView = (): ReactNode => {
+export const ManageCategoriesView = (): ReactNode => {
   const categories = useCategories();
 
   return (
     <Card className="m-4">
       <Tabs defaultValue="expense">
+        {/* Header */}
         <CardHeader className="flex">
           <TabsList>
             <TabsTrigger value="income">Income</TabsTrigger>
             <TabsTrigger value="expense">Expense</TabsTrigger>
+            <TabsTrigger value="transfer">Transfer</TabsTrigger>
           </TabsList>
 
           {/* Spacer */}
@@ -30,19 +29,34 @@ export const CategoriesView = (): ReactNode => {
           <AddCategoryButton />
         </CardHeader>
 
+        {/* Content */}
         <CardContent>
-          {/* Income Tab content */}
+          {/* Income tab */}
           <TabsContent value="income">
             <CategoryList
-              categories={categories.data?.Income || []}
+              categories={(categories.data || []).filter(
+                (c: CategoryDto) => c.type === CategoryType.income
+              )}
               loading={categories.isLoading}
             />
           </TabsContent>
 
-          {/* Expense Tab content */}
+          {/* Expense tab */}
           <TabsContent value="expense">
             <CategoryList
-              categories={categories.data?.Expense || []}
+              categories={(categories.data || []).filter(
+                (c: CategoryDto) => c.type === CategoryType.expense
+              )}
+              loading={categories.isLoading}
+            />
+          </TabsContent>
+
+          {/*  Transfer tab */}
+          <TabsContent value="transfer">
+            <CategoryList
+              categories={(categories.data || []).filter(
+                (c: CategoryDto) => c.type === CategoryType.transfer
+              )}
               loading={categories.isLoading}
             />
           </TabsContent>

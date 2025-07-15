@@ -11,12 +11,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/lib/shadcn-ui/components/
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 
 // Data Access
-import { CategoryDto } from '../../../data-store';
+import { CategoryDtoLegacy } from '../../../data-store';
 
 // Internal References
 import { CategoryItemMenu } from './menu';
 
-export const CategoryItem = ({ category }: { category: CategoryDto }): ReactNode => {
+export const CategoryItem = ({ category }: { category: CategoryDtoLegacy }): ReactNode => {
   return (
     <AccordionItem value={category.id.toString()}>
       {/* Header */}

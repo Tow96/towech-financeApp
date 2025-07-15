@@ -21,13 +21,18 @@ import { User } from '../../../users/core/user.entity';
 import { CommandQueryResult, Result } from '../../../_common/primitives';
 
 import * as commands from './commands';
+import * as queries from './queries';
 import { SummaryItem } from '../../common/movements/core';
+import { GetMovementOwnerQuery } from './queries';
 
 @Controller('movement')
 export class ManageMovementsController {
   private readonly _logger = new Logger(`Distribution.${ManageMovementsController.name}`);
 
-  constructor(private readonly _commandBus: CommandBus) {}
+  constructor(
+    private readonly _commandBus: CommandBus,
+    private readonly _queryBus: QueryBus
+  ) {}
 
   @Post()
   async createMovement(
@@ -58,6 +63,33 @@ export class ManageMovementsController {
     return { id: result.message };
   }
 
+  @Put(':id')
+  async updateMovement(
+    @CurrentUser() user: User,
+    @Body() body: UpdateMovementRequest,
+    @Param('id') id: string
+  ): Promise<void> {
+    await this.validateMovementOwnership(user.id, id);
+
+    const summary = body.summary?.map(
+      i =>
+        new SummaryItem({
+          amount: i.amount,
+          destinationWalletId: i.destinationWalletId,
+          originWalletId: i.originWalletId,
+        })
+    );
+
+    const command = new commands.UpdateMovementCommand(
+      id,
+      body.categoryId,
+      body.subCategoryId,
+      body.description,
+      body.date,
+      summary
+    );
+  }
+
   private returnFailMessages(result: Result<string>) {
     switch (result.status) {
       case CommandQueryResult.Conflict:
@@ -65,6 +97,15 @@ export class ManageMovementsController {
       case CommandQueryResult.NotFound:
         throw new NotFoundException(result.message);
     }
+  }
+
+  private async validateMovementOwnership(userId: string, movementId: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const query = new queries.GetMovementOwnerQuery(movementId);
+    const ownerQuery = await this._queryBus.execute(query);
+    if (ownerQuery.status === CommandQueryResult.NotFound)
+      throw new NotFoundException(ownerQuery.message);
+    if (ownerQuery.message !== userId) throw new ForbiddenException();
   }
 }
 

@@ -47,31 +47,31 @@ export class UpdateMovementHandler implements ICommandHandler<UpdateMovementComm
       );
 
       const walletOwnerErrors: string[] = [];
-      for (let i = 0; i < uniqueWallets.length; i++) {
-        const owner = await this._walletRepo.getWalletOwner(uniqueWallets[i]);
-        if (command.userId !== owner)
-          walletOwnerErrors.push(`User does not own wallet ${uniqueWallets[i]}`);
-      }
+      // for (let i = 0; i < uniqueWallets.length; i++) {
+      //   const owner = await this._walletRepo.getWalletOwner(uniqueWallets[i]);
+      //   if (command.userId !== owner)
+      //     walletOwnerErrors.push(`User does not own wallet ${uniqueWallets[i]}`);
+      // }
       if (walletOwnerErrors.length > 0)
         return { status: CommandQueryResult.Conflict, message: walletOwnerErrors.join(', ') };
     }
 
-    let category: CategoryAggregate | null = null;
-    if (command.categoryId !== undefined) {
-      category = await this._categoryRepo.getById(command.categoryId);
-      if (category === null || category.userId !== command.userId)
-        return { status: CommandQueryResult.Conflict, message: 'Category not found' };
-    }
+    // let category: CategoryAggregate | null = null;
+    // if (command.categoryId !== undefined) {
+    //   category = await this._categoryRepo.getById(command.categoryId);
+    //   if (category === null || category.userId !== command.userId)
+    //     return { status: CommandQueryResult.Conflict, message: 'Category not found' };
+    // }
 
     this._logger.log(`Updating movement: ${command.id}`);
 
-    movement.update({
-      summary: command.summary,
-      date: command.date,
-      description: command.description,
-      category: command.categoryId ? category : undefined,
-      subCategoryId: command.subCategoryId,
-    });
+    // movement.update({
+    //   summary: command.summary,
+    //   date: command.date,
+    //   description: command.description,
+    //   category: command.categoryId === null ? undefined : category,
+    //   subCategoryId: command.subCategoryId,
+    // });
     await this._movementRepo.saveChanges(movement);
     return { status: CommandQueryResult.Success, message: 'Movement updated' };
   }

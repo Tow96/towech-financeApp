@@ -1,24 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { UsersModule } from '../lib/users/lib/users.module';
-import { BudgetingModule } from '../lib/budgeting/budgeting.module';
+
+// Modules
 import { LoggingModule } from './logging/logging.module';
-import { CqrsModule } from '@nestjs/cqrs';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { DistributionModule } from '../lib/distribution/distribution.module';
-import { ScheduleModule } from '@nestjs/schedule';
+import { UsersModule } from '@/lib/users';
+import { CategoryModule } from '@/lib/categories';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
-    CqrsModule.forRoot(),
-    EventEmitterModule.forRoot(),
-    ScheduleModule.forRoot(),
     LoggingModule,
     UsersModule,
-    BudgetingModule,
-    DistributionModule,
+    CategoryModule,
   ],
   controllers: [AppController],
 })
