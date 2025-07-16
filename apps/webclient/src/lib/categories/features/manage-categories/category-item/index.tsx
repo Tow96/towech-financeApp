@@ -8,6 +8,7 @@ import {
 } from '@/lib/shadcn-ui/components/ui/accordion';
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 import { AppIcon } from '@/lib/icons';
+import { CategoryItemMenu } from './menu';
 
 interface CategoryItemProps {
   category: CategoryDto;
@@ -28,6 +29,7 @@ export const CategoryItem = ({ category }: CategoryItemProps): ReactNode => {
           {/* Name */}
           <span className="flex-1 text-xl">{category.name}</span>
         </AccordionTrigger>
+        <CategoryItemMenu category={category} />
       </div>
 
       {/* Subcategories */}

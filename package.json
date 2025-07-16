@@ -3,6 +3,7 @@
   "version": "2.3.0",
   "license": "BSD-3-Clause",
   "scripts": {
+    "dev": "concurrently \"npm run dev --workspace webclient\" \"npm run dev --workspace backend\"",
     "format": "prettier --check ./apps",
     "format:fix": "prettier --write ./apps",
     "db:generate": "drizzle-kit generate",
@@ -13,6 +14,7 @@
     "./apps/*"
   ],
   "devDependencies": {
+    "concurrently": "^9.2.0",
     "drizzle-kit": "^0.31.1"
   }
 }

@@ -24,3 +24,8 @@ export interface AddCategoryDto {
   type: CategoryType;
   iconId: number;
 }
+
+export interface EditCategoryDto {
+  name: string;
+  iconId: number;
+}

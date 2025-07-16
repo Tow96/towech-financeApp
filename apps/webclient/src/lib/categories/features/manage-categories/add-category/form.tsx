@@ -24,8 +24,7 @@ import {
   SelectValue,
 } from '@/lib/shadcn-ui/components/ui/select';
 
-import { useAddCategory } from '@/lib/categories/data-store/use-add-categories';
-import { CategoryType } from '@/lib/categories/data-store';
+import { CategoryType, useAddCategory } from '@/lib/categories/data-store';
 import { Alert, AlertDescription, AlertTitle } from '@/lib/shadcn-ui/components/ui/alert';
 import { AlertCircleIcon, Loader2Icon } from 'lucide-react';
 
@@ -33,8 +32,8 @@ import { AlertCircleIcon, Loader2Icon } from 'lucide-react';
 const formSchema = z.object({
   name: z
     .string()
-    .min(2, { message: 'Name must be at least 2 characters.' })
-    .max(50, { message: 'Name cannot exceed 50 characters.' }),
+    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .max(50, { message: 'Name cannot exceed 50 characters long.' }),
   type: z.nativeEnum(CategoryType, { required_error: 'Please select a type.' }),
   iconId: z.number(),
 });
@@ -57,14 +56,12 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setErrorBox(null);
-
     const data = await addCategoryMutation.mutateAsync(values);
 
     if (!data.errors) {
       if (props.setDialog) props.setDialog(false);
       return;
     }
-
     setErrorBox((Object.values(data.errors) as string[]).join('\n'));
   }
 
