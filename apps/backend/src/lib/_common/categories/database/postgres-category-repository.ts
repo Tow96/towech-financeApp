@@ -19,7 +19,7 @@ import {
 
 // Internal references
 import { COMMON_SCHEMA_CONNECTION } from '../../common.provider';
-import { CommonSchema } from '../../common.schema';
+import { CommonSchema } from '../../common.schemta';
 import { CategoryMapper } from './mappers/category.mapper';
 import { SubCategoryModel } from './models';
 

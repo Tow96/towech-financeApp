@@ -2,7 +2,7 @@
 import { InferResultType } from '../../../../_common/primitives';
 
 // Slice packages
-import { DistributionSchema } from '../../distribution.schema';
+import { DistributionSchema } from '../../distribution.schemta';
 import { WalletAggregate } from '../Core/wallet.aggregate';
 
 type Schema = typeof DistributionSchema;

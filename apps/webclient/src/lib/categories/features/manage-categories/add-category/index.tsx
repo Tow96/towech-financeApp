@@ -1,4 +1,6 @@
-﻿import { Plus } from 'lucide-react';
+﻿'use client';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
 
 import {
   Dialog,
@@ -11,19 +13,25 @@ import { Button } from '@/lib/shadcn-ui/components/ui/button';
 
 import { AddCategoryForm } from './form';
 
-export const AddCategoryButton = () => (<Dialog>
-  <DialogTrigger asChild>
-    <Button>
-      <Plus />
-      Add Category
-    </Button>
-  </DialogTrigger>
+export const AddCategoryButton = () => {
+  const [open, setOpen] = useState(false);
 
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Add Category</DialogTitle>
-    </DialogHeader>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus />
+          Add Category
+        </Button>
+      </DialogTrigger>
 
-    <AddCategoryForm />
-  </DialogContent>
-</Dialog>)
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Category</DialogTitle>
+        </DialogHeader>
+
+        <AddCategoryForm setDialog={setOpen} />
+      </DialogContent>
+    </Dialog>
+  );
+};

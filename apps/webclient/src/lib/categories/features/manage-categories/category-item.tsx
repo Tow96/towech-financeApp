@@ -36,7 +36,11 @@ export const CategoryItem = ({ category }: CategoryItemProps): ReactNode => {
           {category.subCategories.map(subCat => (
             <div key={subCat.id} className="flex items-center pl-10 gap-2 py-3">
               {/* Icon */}
-              <AppIcon className="rounded-full w-10 h-10" id={category.iconId} name={category.name} />
+              <AppIcon
+                className="rounded-full w-10 h-10"
+                id={category.iconId}
+                name={category.name}
+              />
 
               {/* Name */}
               <span className="flex-1 text-lg">{subCat.name}</span>

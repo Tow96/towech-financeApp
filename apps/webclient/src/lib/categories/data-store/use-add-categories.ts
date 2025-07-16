@@ -6,13 +6,13 @@ import { CATEGORY_QUERY_KEY } from './use-categories';
 
 interface AddCategoryDto {
   name: string;
-  iconId: string;
+  iconId: number;
   type: CategoryType;
 }
 
 export const useAddCategory = () => {
   const user = useUsers();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (newCategory: AddCategoryDto) => {
@@ -27,7 +27,7 @@ export const useAddCategory = () => {
       return res.json();
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries(CATEGORY_QUERY_KEY);
-    }
+      await queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
+    },
   });
 };

@@ -1,9 +1,9 @@
 ﻿import { varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const commonSchema = pgSchema('common');
+export const commonSchemta = pgSchema('common');
 
-export const CategoriesTable = commonSchema.table('categories', {
+export const CategoriesTable = commonSchemta.table('categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: varchar('user_id').notNull(),
   iconId: integer('icon_id').notNull(),
@@ -14,7 +14,7 @@ export const CategoriesTable = commonSchema.table('categories', {
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
 
-export const SubCategoriesTable = commonSchema.table('sub-categories', {
+export const SubCategoriesTable = commonSchemta.table('sub-categories', {
   id: uuid('id').defaultRandom().primaryKey(),
   parentId: uuid('parent_id').references(() => CategoriesTable.id),
   iconId: integer('icon_id').notNull(),

@@ -1,85 +1,56 @@
-﻿import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+﻿import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
+import { v4 as uuidV4 } from 'uuid';
 
 import { CurrentUser, User } from '@/lib/users';
 import { AddCategoryDto, CategoryDto, CategoryType } from '@/lib/categories/dto';
+import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { eq } from 'drizzle-orm';
 
 @Controller('category')
 export class CategoryController {
   private readonly logger: Logger = new Logger(CategoryController.name);
 
-  private MockCategories: CategoryDto[] = [
-    {
-      id: 'aiejfgoaief',
-      name: 'cat 1',
-      archived: false,
-      type: CategoryType.income,
-      iconId: 1,
-      subCategories: [],
-    },
-    {
-      id: 'sdjfgeiogjlkas',
-      name: 'cat 2',
-      archived: false,
-      type: CategoryType.expense,
-      iconId: 2,
-      subCategories: [
-        { id: 'ieiiao', iconId: 12, name: 'sub A' },
-        { id: 'iedifs', iconId: 3, name: 'sub B' },
-        { id: 'feafe', iconId: 1, name: 'sub c' },
-        { id: 'gega', iconId: 5, name: 'sub d' },
-      ],
-    },
-    {
-      id: 'aetioaepoti',
-      name: 'cat 3',
-      archived: true,
-      iconId: 4,
-      type: CategoryType.transfer,
-      subCategories: [],
-    },
-    {
-      id: 'alkjeigjlakejgem',
-      name: 'cat 4',
-      archived: false,
-      iconId: 8,
-      type: CategoryType.transfer,
-      subCategories: [],
-    },
-    {
-      id: 'lakdkjfgoiae',
-      name: 'cat 5',
-      archived: true,
-      type: CategoryType.expense,
-      iconId: 9,
-      subCategories: [
-        { id: 'feage', iconId: 12, name: 'sub A' },
-        { id: 'ageah', iconId: 3, name: 'sub B' },
-        { id: 'aefe', iconId: 1, name: 'sub c' },
-        { id: 'gaege', iconId: 5, name: 'sub d' },
-      ],
-    },
-  ];
+  constructor(
+    @Inject(MAIN_SCHEMA_CONNECTION)
+    private readonly _db: NodePgDatabase<typeof mainSchema>
+  ) {}
 
   @Get()
-  getAllCategories(@CurrentUser() user: User): CategoryDto[] {
+  async getAllCategories(@CurrentUser() user: User): Promise<CategoryDto[]> {
     this.logger.log(`user: ${user.id} requesting all categories`);
 
-    return this.MockCategories;
+    const query = await this._db.query.Categories.findMany({
+      with: { subCategories: true },
+      where: eq(mainSchema.Categories.userId, user.id),
+    });
+
+    return query.map(i => ({
+      id: i.id,
+      iconId: i.iconId,
+      name: i.name,
+      subCategories: i.subCategories.map(s => ({ id: s.id, iconId: s.iconId, name: s.name })),
+      type: <CategoryType>i.type,
+      archived: i.deletedAt !== null,
+    }));
   }
 
   @Post()
-  addCategory(@CurrentUser() user: User, @Body() data: AddCategoryDto): { id: string } {
-    this.logger.log(JSON.stringify(data));
+  async addCategory(
+    @CurrentUser() user: User,
+    @Body() data: AddCategoryDto
+  ): Promise<{ id: string }> {
     this.logger.log(`user: ${user.id} trying to add category: ${data.name} of type ${data.type}`);
 
-    const id = new Date().getTime().toString();
-    this.MockCategories.push({
+    const id = uuidV4();
+    await this._db.insert(mainSchema.Categories).values({
       id,
+      userId: user.id,
       iconId: data.iconId,
       name: data.name,
-      subCategories: [],
       type: data.type,
-      archived: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     return { id };

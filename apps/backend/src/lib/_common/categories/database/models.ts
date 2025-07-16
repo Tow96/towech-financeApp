@@ -1,4 +1,4 @@
-﻿import { CommonSchema } from '../../common.schema';
+﻿import { CommonSchema } from '../../common.schemta';
 import { InferResultType } from '../../primitives';
 
 type Schema = typeof CommonSchema;

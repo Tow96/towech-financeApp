@@ -2,7 +2,7 @@
 import { InferResultType } from '../../../../_common/primitives';
 
 // Slice Packages
-import { DistributionSchema } from '../../distribution.schema';
+import { DistributionSchema } from '../../distribution.schemta';
 import { MovementAggregate, SummaryItem } from '../core';
 import { CategoryAggregate } from '../../../../_common/categories';
 

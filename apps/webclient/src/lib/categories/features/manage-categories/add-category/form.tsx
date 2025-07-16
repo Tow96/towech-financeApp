@@ -25,6 +25,7 @@ import {
 
 import { useAddCategory } from '@/lib/categories/data-store/use-add-categories';
 import { CategoryType } from '@/lib/categories/data-store';
+import { Dispatch, SetStateAction } from 'react';
 
 // ----------------------------------------------
 const formSchema = z.object({
@@ -32,15 +33,16 @@ const formSchema = z.object({
     .string()
     .min(2, { message: 'Name must be at least 2 characters.' })
     .max(50, { message: 'Name cannot exceed 50 characters.' }),
-  type: z.string({
-    required_error: 'Please select a type.',
-  }),
-  iconId: z.number()
+  type: z.nativeEnum(CategoryType, { required_error: 'Please select a type.' }),
+  iconId: z.number(),
 });
 
-export const AddCategoryForm = () => {
-  const addCategoryMutation = useAddCategory();
+interface AddCategoryFormProps {
+  setDialog?: Dispatch<SetStateAction<boolean>>;
+}
 
+export const AddCategoryForm = (props: AddCategoryFormProps) => {
+  const addCategoryMutation = useAddCategory();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,6 +54,8 @@ export const AddCategoryForm = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     addCategoryMutation.mutate(values);
+
+    if (props.setDialog) props.setDialog(false);
   }
 
   return (

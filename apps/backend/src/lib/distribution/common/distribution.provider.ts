@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 // Slice references
-import { DistributionSchema } from './distribution.schema';
+import { DistributionSchema } from './distribution.schemta';
 
 export const DISTRIBUTION_SCHEMA_CONNECTION = 'DISTRIBUTION_SCHEMA_CONNECTION';
 

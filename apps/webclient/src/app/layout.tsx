@@ -23,9 +23,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const openSidebar = cookieStore.get('sidebar_state')?.value === 'true';
 
   return (
-    <UsersProvider>
-      <html lang="en">
-        <body>
+    <html lang="en">
+      <body>
+        <UsersProvider>
           <QueryProvider>
             <ThemeProvider
               attribute="class"
@@ -49,8 +49,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               </SidebarProvider>
             </ThemeProvider>
           </QueryProvider>
-        </body>
-      </html>
-    </UsersProvider>
+        </UsersProvider>
+      </body>
+    </html>
   );
 }

@@ -9,7 +9,7 @@ import { ICategoryRepository } from '../../../../_common/categories';
 
 // Slice packages
 import { DISTRIBUTION_SCHEMA_CONNECTION } from '../../distribution.provider';
-import { DistributionSchema } from '../../distribution.schema';
+import { DistributionSchema } from '../../distribution.schemta';
 import { IMovementRepository, MovementAggregate, events } from '../core';
 
 // Internal references

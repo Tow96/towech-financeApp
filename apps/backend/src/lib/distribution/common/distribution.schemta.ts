@@ -1,9 +1,9 @@
 import { varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const distributionSchema = pgSchema('distribution');
+export const distributionSchemta = pgSchema('distribution');
 
-export const wallets = distributionSchema.table('wallets', {
+export const wallets = distributionSchemta.table('wallets', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
@@ -13,7 +13,7 @@ export const wallets = distributionSchema.table('wallets', {
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
 
-export const movements = distributionSchema.table('movements', {
+export const movements = distributionSchemta.table('movements', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
@@ -24,7 +24,7 @@ export const movements = distributionSchema.table('movements', {
   date: timestamp('data', { withTimezone: true }).notNull(),
 });
 
-export const summary = distributionSchema.table('movement_summary', {
+export const summary = distributionSchemta.table('movement_summary', {
   movementId: uuid('movement_id')
     .notNull()
     .references(() => movements.id),

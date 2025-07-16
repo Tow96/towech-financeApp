@@ -6,7 +6,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 // App packages
 import { DISTRIBUTION_SCHEMA_CONNECTION } from '../../distribution.provider';
-import { DistributionSchema } from '../../distribution.schema';
+import { DistributionSchema } from '../../distribution.schemta';
 import * as events from '../Core/wallet-events';
 import { IWalletRepository } from '../Core/i-wallet-repository';
 import { WalletMapper } from './wallet.model';
