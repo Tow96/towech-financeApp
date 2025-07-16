@@ -8,6 +8,13 @@
       "when": 1752620548766,
       "tag": "0000_giant_wong",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752700260427,
+      "tag": "0001_kind_secret_warriors",
+      "breakpoints": true
     }
   ]
 }

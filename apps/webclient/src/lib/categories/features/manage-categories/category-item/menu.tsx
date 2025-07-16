@@ -30,6 +30,7 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
 
   return (
     <DropDrawer>
+      {/* All forms (hidden at start) */}
       <EditCategoryDialog open={openEdit} setOpen={setOpenEdit} category={props.category} />
       <ArchiveCategoryDialog
         open={openArchive}

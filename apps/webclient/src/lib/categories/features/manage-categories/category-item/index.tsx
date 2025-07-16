@@ -9,6 +9,7 @@ import {
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 import { AppIcon } from '@/lib/icons';
 import { CategoryItemMenu } from './menu';
+import { SubCategoryItem } from './subcategory-item';
 
 interface CategoryItemProps {
   category: CategoryDto;
@@ -36,17 +37,7 @@ export const CategoryItem = ({ category }: CategoryItemProps): ReactNode => {
       {category.subCategories.length > 0 && (
         <AccordionContent>
           {category.subCategories.map(subCat => (
-            <div key={subCat.id} className="flex items-center pl-10 gap-2 py-3">
-              {/* Icon */}
-              <AppIcon
-                className="rounded-full w-10 h-10"
-                id={category.iconId}
-                name={category.name}
-              />
-
-              {/* Name */}
-              <span className="flex-1 text-lg">{subCat.name}</span>
-            </div>
+            <SubCategoryItem key={subCat.id} subCategory={subCat} parentId={category.id} />
           ))}
         </AccordionContent>
       )}

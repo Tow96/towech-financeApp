@@ -19,4 +19,5 @@ export interface SubCategoryDto {
   id: string;
   iconId: number;
   name: string;
+  archived: boolean;
 }

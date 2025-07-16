@@ -17,7 +17,14 @@ import { eq, and } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { CurrentUser, User } from '@/lib/users';
-import { AddCategoryDto, CategoryDto, CategoryType, EditCategoryDto } from '@/lib/categories/dto';
+import {
+  AddCategoryDto,
+  AddSubCategoryDto,
+  CategoryDto,
+  CategoryType,
+  EditCategoryDto,
+  EditSubCategoryDto,
+} from '@/lib/categories/dto';
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 
 @Controller('category')
@@ -42,9 +49,14 @@ export class CategoryController {
       id: i.id,
       iconId: i.iconId,
       name: i.name,
-      subCategories: i.subCategories.map(s => ({ id: s.id, iconId: s.iconId, name: s.name })),
+      subCategories: i.subCategories.map(s => ({
+        id: s.id,
+        iconId: s.iconId,
+        name: s.name,
+        archived: !!s.archivedAt,
+      })),
       type: <CategoryType>i.type,
-      archived: i.deletedAt !== null,
+      archived: !!i.archivedAt,
     }));
   }
 
@@ -127,6 +139,7 @@ export class CategoryController {
       .set({
         name: data.name,
         iconId: data.iconId,
+        updatedAt: new Date(),
       })
       .where(eq(mainSchema.Categories.id, id));
   }
@@ -142,9 +155,10 @@ export class CategoryController {
     if (category.length === 0 || category[0].userId !== user.id)
       throw new NotFoundException(`category ${id} not found`);
 
+    this.logger.log(`user: ${user.id} trying to archive category: ${id}`);
     await this._db
       .update(mainSchema.Categories)
-      .set({ deletedAt: new Date() })
+      .set({ archivedAt: new Date(), updatedAt: new Date() })
       .where(eq(mainSchema.Categories.id, id));
   }
 
@@ -155,13 +169,160 @@ export class CategoryController {
       .select()
       .from(mainSchema.Categories)
       .where(eq(mainSchema.Categories.id, id));
-
     if (category.length === 0 || category[0].userId !== user.id)
       throw new NotFoundException(`category ${id} not found`);
 
+    this.logger.log(`user: ${user.id} trying to restore category: ${id}`);
     await this._db
       .update(mainSchema.Categories)
-      .set({ deletedAt: null })
+      .set({ archivedAt: null, updatedAt: new Date() })
       .where(eq(mainSchema.Categories.id, id));
+  }
+
+  @Post(':parentId/subcategory')
+  async addSubCategory(
+    @CurrentUser() user: User,
+    @Body() data: AddSubCategoryDto,
+    @Param('parentId') parentId: string
+  ): Promise<{ id: string }> {
+    data.name = data.name.trim().toLowerCase();
+
+    const category = await this._db
+      .select()
+      .from(mainSchema.Categories)
+      .where(eq(mainSchema.Categories.id, parentId));
+    if (category.length === 0 || category[0].userId !== user.id)
+      throw new NotFoundException(`category ${parentId} not found`);
+
+    this.logger.log(
+      `user: ${user.id} trying to add subcategory ${data.name} to category ${parentId}`
+    );
+    const exists = await this._db
+      .select({ id: mainSchema.SubCategories.id })
+      .from(mainSchema.SubCategories)
+      .where(
+        and(
+          eq(mainSchema.SubCategories.parentId, parentId),
+          eq(mainSchema.SubCategories.name, data.name)
+        )
+      );
+    if (exists.length > 0)
+      throw new ConflictException({
+        errors: { name: `Subcategory ${data.name} already exists for category.` },
+      });
+
+    const id = uuidV4();
+    await this._db.insert(mainSchema.SubCategories).values({
+      id,
+      parentId,
+      iconId: data.iconId,
+      name: data.name,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return { id };
+  }
+
+  @Put(':parentId/subcategory/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateSubCategory(
+    @CurrentUser() user: User,
+    @Body() data: EditSubCategoryDto,
+    @Param('parentId') parentId: string,
+    @Param('id') id: string
+  ): Promise<void> {
+    data.name = data.name.trim().toLowerCase();
+
+    const category = await this._db
+      .select()
+      .from(mainSchema.Categories)
+      .where(eq(mainSchema.Categories.id, parentId));
+    if (category.length === 0 || category[0].userId !== user.id)
+      throw new NotFoundException(`category ${parentId} not found`);
+
+    const subCategory = await this._db
+      .select()
+      .from(mainSchema.SubCategories)
+      .where(eq(mainSchema.SubCategories.id, id));
+    if (subCategory.length === 0) throw new NotFoundException(`subcategory ${id} not found`);
+
+    this.logger.log(`user: ${user.id} trying to update subCategory: ${id}`);
+    const exists = await this._db
+      .select({ id: mainSchema.SubCategories.id })
+      .from(mainSchema.SubCategories)
+      .where(
+        and(
+          eq(mainSchema.SubCategories.parentId, parentId),
+          eq(mainSchema.SubCategories.name, data.name)
+        )
+      );
+    if (exists.length > 0)
+      throw new ConflictException({
+        errors: { name: `Subcategory ${data.name} already exists for category.` },
+      });
+
+    await this._db
+      .update(mainSchema.SubCategories)
+      .set({
+        name: data.name,
+        iconId: data.iconId,
+        updatedAt: new Date(),
+      })
+      .where(eq(mainSchema.SubCategories.id, id));
+  }
+
+  @Put(':parentId/subcategory/:id/archive')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async archiveSubCategory(
+    @CurrentUser() user: User,
+    @Param('parentId') parentId: string,
+    @Param('id') id: string
+  ): Promise<void> {
+    const category = await this._db
+      .select()
+      .from(mainSchema.Categories)
+      .where(eq(mainSchema.Categories.id, parentId));
+    if (category.length === 0 || category[0].userId !== user.id)
+      throw new NotFoundException(`category ${parentId} not found`);
+
+    const subCategory = await this._db
+      .select()
+      .from(mainSchema.SubCategories)
+      .where(eq(mainSchema.SubCategories.id, id));
+    if (subCategory.length === 0) throw new NotFoundException(`subcategory ${parentId} not found`);
+
+    this.logger.log(`user: ${user.id} trying to archive subcategory: ${id}`);
+    await this._db
+      .update(mainSchema.SubCategories)
+      .set({ archivedAt: new Date(), updatedAt: new Date() })
+      .where(eq(mainSchema.SubCategories.id, id));
+  }
+
+  @Put(':parentId/subcategory/:id/restore')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async restoreSubCategory(
+    @CurrentUser() user: User,
+    @Param('parentId') parentId: string,
+    @Param('id') id: string
+  ): Promise<void> {
+    const category = await this._db
+      .select()
+      .from(mainSchema.Categories)
+      .where(eq(mainSchema.Categories.id, parentId));
+    if (category.length === 0 || category[0].userId !== user.id)
+      throw new NotFoundException(`category ${parentId} not found`);
+
+    const subCategory = await this._db
+      .select()
+      .from(mainSchema.SubCategories)
+      .where(eq(mainSchema.SubCategories.id, id));
+    if (subCategory.length === 0) throw new NotFoundException(`subcategory ${parentId} not found`);
+
+    this.logger.log(`user: ${user.id} trying to restore subcategory: ${id}`);
+    await this._db
+      .update(mainSchema.SubCategories)
+      .set({ archivedAt: null, updatedAt: new Date() })
+      .where(eq(mainSchema.SubCategories.id, id));
   }
 }

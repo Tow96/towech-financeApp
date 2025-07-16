@@ -11,7 +11,7 @@ export const Categories = MainSchema.table('categories', {
   type: varchar('type').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-  deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
 });
 
 export const SubCategories = MainSchema.table('sub-categories', {
@@ -21,6 +21,7 @@ export const SubCategories = MainSchema.table('sub-categories', {
   name: varchar('name').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
 });
 
 export const categoryRelations = relations(Categories, ({ many }) => ({

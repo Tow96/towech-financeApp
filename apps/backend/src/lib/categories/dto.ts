@@ -17,6 +17,7 @@ export interface SubCategoryDto {
   id: string;
   iconId: number;
   name: string;
+  archived: boolean;
 }
 
 export interface AddCategoryDto {
@@ -28,4 +29,14 @@ export interface AddCategoryDto {
 export interface EditCategoryDto {
   name: string;
   iconId: number;
+}
+
+export interface AddSubCategoryDto {
+  iconId: number;
+  name: string;
+}
+
+export interface EditSubCategoryDto {
+  iconId: number;
+  name: string;
 }
