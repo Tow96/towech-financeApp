@@ -1,6 +1,6 @@
 ﻿'use client';
 import { ReactNode, useState } from 'react';
-import { Archive, Ellipsis, Pencil } from 'lucide-react';
+import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react';
 
 import {
   DropDrawer,
@@ -15,6 +15,7 @@ import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { CategoryDto } from '@/lib/categories/data-store';
 import { EditCategoryDialog } from './edit-category-dialog';
 import { ArchiveCategoryDialog } from './archive-category-dialog';
+import { RestoreCategoryDialog } from './restore-category-dialog';
 
 interface CategoryItemMenuProps {
   category: CategoryDto;
@@ -23,6 +24,7 @@ interface CategoryItemMenuProps {
 export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openArchive, setOpenArchive] = useState(false);
+  const [openRestore, setOpenRestore] = useState(false);
 
   return (
     <DropDrawer>
@@ -30,6 +32,11 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
       <ArchiveCategoryDialog
         open={openArchive}
         setOpen={setOpenArchive}
+        category={props.category}
+      />
+      <RestoreCategoryDialog
+        open={openRestore}
+        setOpen={setOpenRestore}
         category={props.category}
       />
 
@@ -69,7 +76,9 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
         // Archived category menu
         <DropDrawerContent align="start">
           <DropDrawerGroup>
-            <DropDrawerItem>TODO</DropDrawerItem>
+            <DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenRestore(true)}>
+              <span>Restore Category</span>
+            </DropDrawerItem>
           </DropDrawerGroup>
         </DropDrawerContent>
       )}

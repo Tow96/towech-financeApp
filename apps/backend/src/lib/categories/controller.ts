@@ -147,4 +147,21 @@ export class CategoryController {
       .set({ deletedAt: new Date() })
       .where(eq(mainSchema.Categories.id, id));
   }
+
+  @Put(':id/restore')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async restoreCategory(@CurrentUser() user: User, @Param('id') id: string): Promise<void> {
+    const category = await this._db
+      .select()
+      .from(mainSchema.Categories)
+      .where(eq(mainSchema.Categories.id, id));
+
+    if (category.length === 0 || category[0].userId !== user.id)
+      throw new NotFoundException(`category ${id} not found`);
+
+    await this._db
+      .update(mainSchema.Categories)
+      .set({ deletedAt: null })
+      .where(eq(mainSchema.Categories.id, id));
+  }
 }

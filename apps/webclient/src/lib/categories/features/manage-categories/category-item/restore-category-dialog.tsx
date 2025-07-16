@@ -13,49 +13,42 @@ import {
 } from '@/lib/shadcn-ui/components/ui/dialog';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 
-import { CategoryDto, useArchiveCategory } from '@/lib/categories/data-store';
+import { CategoryDto, useRestoreCategory } from '@/lib/categories/data-store';
 
 // ----------------------------------------------
-interface ArchiveCategoryDialogProps {
+interface RestoreCategoryDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   category: CategoryDto;
 }
 
-export const ArchiveCategoryDialog = (props: ArchiveCategoryDialogProps): ReactNode => {
-  const archiveCategoryMutation = useArchiveCategory();
+export const RestoreCategoryDialog = (props: RestoreCategoryDialogProps): ReactNode => {
+  const restoreCategoryMutation = useRestoreCategory();
 
   async function onConfirm() {
-    archiveCategoryMutation.mutate(props.category.id);
+    restoreCategoryMutation.mutate(props.category.id);
     props.setOpen(false);
   }
 
   return (
     <Dialog open={props.open} onOpenChange={props.setOpen}>
       <DialogDescription className="sr-only">
-        Archive category ${props.category.name}
+        Restore category ${props.category.name}
       </DialogDescription>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Archive Category</DialogTitle>
+          <DialogTitle>Restore Category</DialogTitle>
         </DialogHeader>
-        <p>
-          Once archived, no new movements or budgets under this category can be made until it is
-          restored.
-        </p>
         <p>Are you sure?</p>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" disabled={archiveCategoryMutation.isPending}>
+            <Button variant="outline" disabled={restoreCategoryMutation.isPending}>
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            variant="destructive"
-            disabled={archiveCategoryMutation.isPending}
-            onClick={onConfirm}>
-            {archiveCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
-            Archive
+          <Button disabled={restoreCategoryMutation.isPending} onClick={onConfirm}>
+            {restoreCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
+            Restore
           </Button>
         </DialogFooter>
       </DialogContent>
