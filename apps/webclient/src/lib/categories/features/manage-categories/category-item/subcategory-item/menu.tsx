@@ -10,8 +10,11 @@ import {
   DropDrawerTrigger,
 } from '@/lib/shadcn-ui/components/ui/dropdrawer';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
+
 import { SubCategoryDto } from '@/lib/categories/data-store';
-import { EditSubCategoryDialog } from '@/lib/categories/features/manage-categories/category-item/subcategory-item/edit-subcategory-dialog';
+import { EditSubCategoryDialog } from './edit-subcategory-dialog';
+import { ArchiveSubCategoryDialog } from './archive-subcategory-dialog';
+import { RestoreSubCategoryDialog } from '@/lib/categories/features/manage-categories/category-item/subcategory-item/restore-subcategory-dialog';
 
 interface SubCategoryItemMenuProps {
   subCategory: SubCategoryDto;
@@ -29,6 +32,18 @@ export const SubCategoryItemMenu = (props: SubCategoryItemMenuProps): ReactNode 
       <EditSubCategoryDialog
         open={openEdit}
         setOpen={setOpenEdit}
+        parentId={props.parentId}
+        subCategory={props.subCategory}
+      />
+      <ArchiveSubCategoryDialog
+        open={openArchive}
+        setOpen={setOpenArchive}
+        parentId={props.parentId}
+        subCategory={props.subCategory}
+      />
+      <RestoreSubCategoryDialog
+        open={openRestore}
+        setOpen={setOpenRestore}
         parentId={props.parentId}
         subCategory={props.subCategory}
       />

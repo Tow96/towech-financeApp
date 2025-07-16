@@ -16,10 +16,13 @@ export const useArchiveSubCategory = () => {
     mutationFn: async (data: ArchiveSubCategoryDto) => {
       const token = (await user.getToken()) || '';
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/category/${data.parentId}/subcategory/${data.id}/archive`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/category/${data.parentId}/subcategory/${data.id}/archive`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }
+      );
 
       return JSON.parse((await res.text()) || '{}');
     },

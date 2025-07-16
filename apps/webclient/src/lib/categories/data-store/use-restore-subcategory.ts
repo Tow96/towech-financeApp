@@ -4,27 +4,30 @@ import { useUsers } from '@/lib/users/use-users';
 import { CATEGORY_QUERY_KEY } from './use-categories';
 
 interface RestoreSubCategoryDto {
-    parentId: string;
-    id: string;
+  parentId: string;
+  id: string;
 }
 
 export const useRestoreSubCategory = () => {
-    const user = useUsers();
-    const queryClient = useQueryClient();
+  const user = useUsers();
+  const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: async (data: RestoreSubCategoryDto) => {
-            const token = (await user.getToken()) || '';
+  return useMutation({
+    mutationFn: async (data: RestoreSubCategoryDto) => {
+      const token = (await user.getToken()) || '';
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/category/${data.parentId}/subcategory/${data.id}/restore`, {
-                method: 'PUT',
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-            });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/category/${data.parentId}/subcategory/${data.id}/restore`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }
+      );
 
-            return JSON.parse((await res.text()) || '{}');
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
-        },
-    });
+      return JSON.parse((await res.text()) || '{}');
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
+    },
+  });
 };
