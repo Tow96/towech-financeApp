@@ -1,6 +1,6 @@
 ﻿'use client';
 import { ReactNode, useState } from 'react';
-import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react';
+import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil } from 'lucide-react';
 
 import {
   DropDrawer,
@@ -12,10 +12,11 @@ import {
 } from '@/lib/shadcn-ui/components/ui/dropdrawer';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 
-import { CategoryDto } from '@/lib/categories/data-store';
+import { CategoryDto, MAX_SUBCATEGORIES } from '@/lib/categories/data-store';
 import { EditCategoryDialog } from './edit-category-dialog';
 import { ArchiveCategoryDialog } from './archive-category-dialog';
 import { RestoreCategoryDialog } from './restore-category-dialog';
+import { AddSubCategoryDialog } from '@/lib/categories/features/manage-categories/category-item/add-subcategory-dialog';
 
 interface CategoryItemMenuProps {
   category: CategoryDto;
@@ -25,6 +26,7 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openArchive, setOpenArchive] = useState(false);
   const [openRestore, setOpenRestore] = useState(false);
+  const [openAddSub, setOpenAddSub] = useState(false);
 
   return (
     <DropDrawer>
@@ -39,6 +41,11 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
         setOpen={setOpenRestore}
         category={props.category}
       />
+      <AddSubCategoryDialog
+        open={openAddSub}
+        setOpen={setOpenAddSub}
+        parentId={props.category.id}
+      />
 
       {/* Open Button */}
       <DropDrawerTrigger asChild>
@@ -52,7 +59,12 @@ export const CategoryItemMenu = (props: CategoryItemMenuProps): ReactNode => {
         // Regular category menu
         <DropDrawerContent align="start">
           <DropDrawerGroup>
-            <DropDrawerItem>TODO</DropDrawerItem>
+            <DropDrawerItem
+              onClick={() => setOpenAddSub(true)}
+              icon={<CirclePlus />}
+              disabled={props.category.subCategories.length >= MAX_SUBCATEGORIES}>
+              <span>Add SubCategory</span>
+            </DropDrawerItem>
           </DropDrawerGroup>
 
           <DropDrawerSeparator />

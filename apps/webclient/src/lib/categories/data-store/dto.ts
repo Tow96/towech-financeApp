@@ -4,6 +4,8 @@
   transfer = 'TRANSFER',
 }
 
+export const MAX_SUBCATEGORIES = 10;
+
 export interface CategoryDto {
   id: string;
   iconId: number;
