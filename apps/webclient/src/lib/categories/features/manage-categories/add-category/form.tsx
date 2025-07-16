@@ -1,4 +1,5 @@
 ﻿'use client';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,7 +26,8 @@ import {
 
 import { useAddCategory } from '@/lib/categories/data-store/use-add-categories';
 import { CategoryType } from '@/lib/categories/data-store';
-import { Dispatch, SetStateAction } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/lib/shadcn-ui/components/ui/alert';
+import { AlertCircleIcon, Loader2Icon } from 'lucide-react';
 
 // ----------------------------------------------
 const formSchema = z.object({
@@ -43,6 +45,7 @@ interface AddCategoryFormProps {
 
 export const AddCategoryForm = (props: AddCategoryFormProps) => {
   const addCategoryMutation = useAddCategory();
+  const [errorBox, setErrorBox] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,10 +55,17 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    addCategoryMutation.mutate(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setErrorBox(null);
 
-    if (props.setDialog) props.setDialog(false);
+    const data = await addCategoryMutation.mutateAsync(values);
+
+    if (!data.errors) {
+      if (props.setDialog) props.setDialog(false);
+      return;
+    }
+
+    setErrorBox((Object.values(data.errors) as string[]).join('\n'));
   }
 
   return (
@@ -71,12 +81,13 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
             {/* Type */}
             <FormField
               control={form.control}
+              disabled={addCategoryMutation.isPending}
               name="type"
               render={({ field }) => (
                 <FormItem>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full" disabled={addCategoryMutation.isPending}>
                         <SelectValue placeholder="Select a type" />
                       </SelectTrigger>
                     </FormControl>
@@ -94,6 +105,7 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
             {/* Name */}
             <FormField
               control={form.control}
+              disabled={addCategoryMutation.isPending}
               name="name"
               render={({ field }) => (
                 <FormItem>
@@ -108,12 +120,26 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
           </div>
         </div>
 
+        {/* Error box */}
+        {errorBox !== null && (
+          <Alert variant="destructive" className="mb-5">
+            <AlertCircleIcon />
+            <AlertTitle>Failed to create category</AlertTitle>
+            <AlertDescription> {errorBox} </AlertDescription>
+          </Alert>
+        )}
+
         {/* Form close */}
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" disabled={addCategoryMutation.isPending}>
+              Cancel
+            </Button>
           </DialogClose>
-          <Button type="submit">Create</Button>
+          <Button type="submit" disabled={addCategoryMutation.isPending}>
+            {addCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
+            Create
+          </Button>
         </DialogFooter>
       </form>
     </Form>

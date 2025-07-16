@@ -1,11 +1,11 @@
-﻿import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
+﻿import { Body, ConflictException, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
 import { v4 as uuidV4 } from 'uuid';
 
 import { CurrentUser, User } from '@/lib/users';
 import { AddCategoryDto, CategoryDto, CategoryType } from '@/lib/categories/dto';
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 @Controller('category')
 export class CategoryController {
@@ -40,7 +40,25 @@ export class CategoryController {
     @CurrentUser() user: User,
     @Body() data: AddCategoryDto
   ): Promise<{ id: string }> {
+    data.name = data.name.trim().toLowerCase();
+
     this.logger.log(`user: ${user.id} trying to add category: ${data.name} of type ${data.type}`);
+
+    const exists = await this._db
+      .select({ id: mainSchema.Categories.id })
+      .from(mainSchema.Categories)
+      .where(
+        and(
+          eq(mainSchema.Categories.userId, user.id),
+          eq(mainSchema.Categories.type, data.type.toString()),
+          eq(mainSchema.Categories.name, data.name)
+        )
+      );
+
+    if (exists.length > 0)
+      throw new ConflictException({
+        errors: { name: `Category ${data.name} already exists for type ${data.type}` },
+      });
 
     const id = uuidV4();
     await this._db.insert(mainSchema.Categories).values({
