@@ -14,6 +14,7 @@
     "./apps/*"
   ],
   "devDependencies": {
+    "@types/node": "22.13.1",
     "concurrently": "^9.2.0",
     "drizzle-kit": "^0.31.1"
   }
