@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="Transactions__WalletSelector__Icon__Circle">
+    <defs>
+        <style>.Recurso_1_svg__cls-2{fill:#ab0036}</style>
+    </defs>
+    <g id="Recurso_1_svg__Capa_2">
+        <circle cx="50" cy="50" r="50" style="fill: rgb(196, 196, 196);" id="Recurso_1_svg__Capa_1-2"/>
+        <g id="Recurso_1_svg__Capa_2-2">
+            <path class="Recurso_1_svg__cls-2"
+                  d="M72 29.57c-.64-10.32-10-20-20.31-21a22.5 22.5 0 0 0-24 17.2 1.39 1.39 0 0 0 1.52 1.69l1.81-.21a2.27 2.27 0 0 0 1.89-1.56A17.49 17.49 0 1 1 52 48.3a2.48 2.48 0 0 0-2.47 2.47V76h5V54a1.43 1.43 0 0 1 1.06-1.37A22.49 22.49 0 0 0 72 29.57Z"/>
+            <circle class="Recurso_1_svg__cls-2" cx="52" cy="86" r="4.5"/>
+        </g>
+    </g>
+</svg>

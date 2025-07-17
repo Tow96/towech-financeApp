@@ -1,0 +1,13 @@
+﻿<svg id="Recurso_33_svg__Capa_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_33_svg__cls-2{fill:#e9feff}</style>
+    </defs>
+    <circle cx="50" cy="50" r="50" style="fill: rgb(55, 61, 145);" id="Recurso_33_svg__Capa_1-2"/>
+    <g id="Recurso_33_svg__Capa_2-2">
+        <path class="Recurso_33_svg__cls-2" d="m50 50.5 27.5-25h-55l27.5 25z"/>
+        <path class="Recurso_33_svg__cls-2" d="M48.5 48h3v34h-3z"/>
+        <path class="Recurso_33_svg__cls-2" d="M50 77.62 30 82h40l-20-4.38z"/>
+        <path style="fill: rgb(144, 76, 152);" d="m50 47 22.5-20h-45L50 47z"/>
+    </g>
+</svg>

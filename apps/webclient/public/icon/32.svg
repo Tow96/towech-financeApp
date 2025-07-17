@@ -1,0 +1,13 @@
+﻿<svg id="Recurso_38_svg__Capa_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_38_svg__cls-1{fill:#fff}.Recurso_38_svg__cls-3{fill:#f2f2f2}</style>
+    </defs>
+    <circle cx="50" cy="50" r="50" style="fill: rgb(40, 40, 91);" id="Recurso_38_svg__Capa_1-2"/>
+    <g id="Recurso_38_svg__Capa_2-2">
+        <path class="Recurso_38_svg__cls-3"
+              d="M21 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM39 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM63 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99ZM81 64h-2.01c-.57 0-1.05-.42-1.12-.99l-.72-5.74c-.08-.67.44-1.27 1.12-1.27h3.44c.68 0 1.2.59 1.12 1.27l-.72 5.74c-.07.56-.55.99-1.12.99Z"/>
+        <path class="Recurso_38_svg__cls-1" d="M50 32 6.7 58h86.6L50 32zM50 68l-9.15 10h18.3L50 68z"/>
+        <rect class="Recurso_38_svg__cls-3" x="46.5" y="18" width="7" height="60" rx="3.5" ry="3.5"/>
+    </g>
+</svg>

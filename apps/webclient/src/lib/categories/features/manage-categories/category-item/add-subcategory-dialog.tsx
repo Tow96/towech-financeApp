@@ -57,8 +57,15 @@ export const AddSubCategoryDialog = (props: AddSubCategoryDialogProps): ReactNod
       error={addSubCategoryMutation.error}
       loading={addSubCategoryMutation.isPending}>
       <div className="flex items-center gap-5 py-5">
-        <AppIconSelector />
+        {/* Icon */}
+        <FormField
+          control={form.control}
+          disabled={addSubCategoryMutation.isPending}
+          name="iconId"
+          render={({ field }) => <AppIconSelector {...field} />}
+        />
 
+        {/* Name */}
         <div className="grid gap-3 flex-1">
           <FormField
             control={form.control}

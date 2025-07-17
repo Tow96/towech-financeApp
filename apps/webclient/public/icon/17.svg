@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_26_svg__h{fill:none;stroke:#e2de00;stroke-miterlimit:10}</style>
+    </defs>
+    <g id="Recurso_26_svg__b">
+        <circle cx="50" cy="50" r="50" style="fill: rgb(69, 177, 121);" id="Recurso_26_svg__c"/>
+        <g id="Recurso_26_svg__d">
+            <path d="M23.14 49.44h48.49v12.31c0 2.13-1.73 3.85-3.85 3.85H26.99c-2.13 0-3.85-1.73-3.85-3.85V49.44Z"
+                  style="fill: rgb(43, 48, 119);"/>
+            <path style="fill: rgb(43, 73, 153);" d="m89 46.21-40 10-40-10 40-10 40 10z"/>
+            <path class="Recurso_26_svg__h" d="m49 46.21 20.2 4.04M68.56 49.44V65.6"/>
+        </g>
+    </g>
+</svg>

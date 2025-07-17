@@ -1,0 +1,6 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <circle cx="50" cy="50" r="50" style="fill: rgb(142, 74, 151);"/>
+    <rect x="22.5" y="15" width="55" height="70" rx="5" ry="5" style="fill: gray;"/>
+    <rect x="27.5" y="20" width="45" height="55" rx="1" ry="1" style="fill: rgb(255, 255, 255);"/>
+    <path d="M31 24h38v2H31zM31 28h12v2H31zM31 34h38v2H31zM31 38h18v2H31zM51 38h18v2H51zM31 42h38v2H31zM31 52h38v2H31zM31 56h32v2H31zM37 62h32v2H37zM65 56h4v2h-4zM31 62h4v2h-4zM31 68h38v2H31z"/>
+</svg>

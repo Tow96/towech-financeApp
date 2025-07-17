@@ -1,0 +1,18 @@
+﻿<svg id="Recurso_39_svg__Capa_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="IconSelector__Grid__Icon">
+    <defs>
+        <style>
+            .Recurso_39_svg__cls-3{fill:#2c4b9b}.Recurso_39_svg__cls-4{fill:#94d9ff}.Recurso_39_svg__cls-5{fill:#c4c4c4}
+        </style>
+    </defs>
+    <circle class="Recurso_39_svg__cls-3" cx="50" cy="50" r="50" id="Recurso_39_svg__Capa_1-2"/>
+    <g id="Recurso_39_svg__Capa_2-2">
+        <path class="Recurso_39_svg__cls-5" d="M35 22h30v60H35z"/>
+        <path style="fill: rgb(171, 0, 54);" d="M36 50h14v32H36z"/>
+        <path style="fill: rgb(0, 148, 46);" d="M50 50h14v32H50z"/>
+        <path d="M36 38h28v12H36z"/>
+        <path class="Recurso_39_svg__cls-4" d="M38 42h10v4H38zM52 42h10v4H52z"/>
+        <path class="Recurso_39_svg__cls-5" d="M34.5 81.5h31v1h-31z"/>
+        <path class="Recurso_39_svg__cls-3" d="M36 24h28v12H36z"/>
+    </g>
+</svg>
