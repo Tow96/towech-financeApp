@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_19_svg__i{fill:#1b1464}</style>
+    </defs>
+    <g id="Recurso_19_svg__b">
+        <circle cx="50" cy="50" r="50" style="fill: rgb(234, 88, 28);" id="Recurso_19_svg__c"/>
+        <g id="Recurso_19_svg__d">
+            <path style="fill: rgb(255, 255, 255);" d="M22.5 15h55v70h-55z"/>
+            <path class="Recurso_19_svg__i"
+                  d="M57 26v4H43v-4h14m.5-.5h-15v5h15v-5ZM72 26v4H58v-4h14m.5-.5h-15v5h15v-5ZM72 31v4H58v-4h14m.5-.5h-15v5h15v-5ZM57 31v4H43v-4h14m.5-.5h-15v5h15v-5ZM42 31v4H28v-4h14m.5-.5h-15v5h15v-5ZM42 26v4H28v-4h14m.5-.5h-15v5h15v-5Z"/>
+            <path style="fill: rgb(171, 0, 54);" d="M61 18h11v5H61z"/>
+            <path d="M43 55h14c.55 0 1 .45 1 1v19c0 1.1-.9 2-2 2H44c-1.1 0-2-.9-2-2V56c0-.55.45-1 1-1Z"
+                  style="fill: rgb(196, 196, 196);"/>
+            <path d="M54 48h-7c-1.1 0-2 .9-2 2v5h10v-6c0-.55-.45-1-1-1Zm-2 5h-4v-2h4v2Z"
+                  style="fill: rgb(234, 88, 28);"/>
+        </g>
+    </g>
+</svg>

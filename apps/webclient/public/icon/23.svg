@@ -1,0 +1,6 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <circle cx="50" cy="50" r="50" style="fill: rgb(30, 128, 53);"/>
+    <path d="M50 19c7.73 0 14 6.27 14 14v17H36V33c0-7.73 6.27-14 14-14Z" style="fill: rgb(211, 40, 135);"/>
+    <path d="M50 50c7.34 0 13.3 5.96 13.3 13.3V81H36.7V63.3C36.7 55.96 42.66 50 50 50Z" transform="rotate(180 50 65.5)"
+          style="fill: rgb(36, 55, 141);"/>
+</svg>

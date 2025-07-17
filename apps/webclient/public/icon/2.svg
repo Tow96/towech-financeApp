@@ -1,0 +1,56 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_7_svg__e{fill:#fff}.Recurso_7_svg__h{fill:#18bc65}.Recurso_7_svg__i{fill:#00ab36}</style>
+    </defs>
+    <g id="Recurso_7_svg__b">
+        <circle cx="50" cy="50" r="50" style="fill: rgb(59, 124, 119);" id="Recurso_7_svg__c"/>
+        <g id="Recurso_7_svg__d">
+            <path class="Recurso_7_svg__e"
+                  d="M38.66 19.85 16.5 43h67L61.34 19.85A6.013 6.013 0 0 0 57 18H42.98c-1.63 0-3.2.67-4.33 1.85Z"/>
+            <path style="stroke: rgb(0, 0, 0); stroke-miterlimit: 10; stroke-width: 0.1px; fill: rgb(255, 255, 255);"
+                  d="m66.75 60.45 16.75-17.5h-67l16.75 17.5h33.5z"/>
+            <path class="Recurso_7_svg__i"
+                  d="M18.23 41.41h42.14c.83 0 1.5.67 1.5 1.5v18.78c0 .83-.67 1.5-1.5 1.5h-41.8c-.83 0-1.5-.67-1.5-1.5V42.58c0-.64.52-1.17 1.17-1.17Z"
+                  transform="rotate(-50 39.464 52.29)"/>
+            <ellipse class="Recurso_7_svg__h" cx="39.47" cy="52.3" rx="12.32" ry="6.53"
+                     transform="rotate(-50 39.464 52.29)"/>
+            <ellipse class="Recurso_7_svg__h" cx="45.75" cy="31.25" rx="1.12" ry="1.09"
+                     transform="rotate(-50 45.749 31.254)"/>
+            <ellipse class="Recurso_7_svg__h" cx="59.1" cy="42.45" rx="1.12" ry="1.09"
+                     transform="rotate(-50 59.102 42.454)"/>
+            <ellipse class="Recurso_7_svg__h" cx="33.18" cy="73.34" rx="1.12" ry="1.09"
+                     transform="rotate(-50 33.185 73.343)"/>
+            <ellipse class="Recurso_7_svg__h" cx="19.83" cy="62.14" rx="1.12" ry="1.09"
+                     transform="rotate(-50 19.832 62.143)"/>
+            <path class="Recurso_7_svg__i"
+                  d="M28.23 43.42h42.14c.83 0 1.5.67 1.5 1.5V63.7c0 .83-.67 1.5-1.5 1.5h-41.8c-.83 0-1.5-.67-1.5-1.5V44.59c0-.64.52-1.17 1.17-1.17Z"
+                  transform="rotate(-40 49.461 54.313)"/>
+            <ellipse class="Recurso_7_svg__h" cx="49.47" cy="54.31" rx="12.32" ry="6.53"
+                     transform="rotate(-40 49.461 54.313)"/>
+            <ellipse class="Recurso_7_svg__h" cx="59.31" cy="34.67" rx="1.12" ry="1.09"
+                     transform="rotate(-40 59.317 34.673)"/>
+            <ellipse class="Recurso_7_svg__h" cx="70.51" cy="48.02" rx="1.12" ry="1.09"
+                     transform="rotate(-40 70.514 48.02)"/>
+            <ellipse class="Recurso_7_svg__h" cx="39.62" cy="73.94" rx="1.12" ry="1.09"
+                     transform="rotate(-40 39.625 73.944)"/>
+            <ellipse class="Recurso_7_svg__h" cx="28.42" cy="60.59" rx="1.12" ry="1.09"
+                     transform="rotate(-40 28.428 60.597)"/>
+            <path class="Recurso_7_svg__i"
+                  d="M36.23 46.61h42.14c.83 0 1.5.67 1.5 1.5v18.78c0 .83-.67 1.5-1.5 1.5H36.56c-.83 0-1.5-.67-1.5-1.5V47.78c0-.64.52-1.17 1.17-1.17Z"
+                  transform="rotate(-30 57.473 57.5)"/>
+            <ellipse class="Recurso_7_svg__h" cx="57.47" cy="57.5" rx="12.32" ry="6.53"
+                     transform="rotate(-30 57.473 57.5)"/>
+            <ellipse class="Recurso_7_svg__h" cx="70.57" cy="39.87" rx="1.12" ry="1.09"
+                     transform="rotate(-30 70.577 39.87)"/>
+            <ellipse class="Recurso_7_svg__h" cx="79.28" cy="54.96" rx="1.12" ry="1.09"
+                     transform="rotate(-30 79.292 54.966)"/>
+            <ellipse class="Recurso_7_svg__h" cx="44.36" cy="75.13" rx="1.12" ry="1.09"
+                     transform="rotate(-30 44.37 75.129)"/>
+            <ellipse class="Recurso_7_svg__h" cx="35.65" cy="60.04" rx="1.12" ry="1.09"
+                     transform="rotate(-30 35.654 60.033)"/>
+            <path class="Recurso_7_svg__e" d="M66.75 60.5h-33.5L16.5 43v35h67V43L66.75 60.5z"/>
+            <path style="fill: none; stroke: rgb(0, 0, 0); stroke-miterlimit: 10; stroke-width: 0.1px;"
+                  d="M33.25 60.5 16.5 78h67L66.75 60.5h-33.5z"/>
+        </g>
+    </g>
+</svg>

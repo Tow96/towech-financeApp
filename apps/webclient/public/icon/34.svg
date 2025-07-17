@@ -1,0 +1,17 @@
+﻿<svg id="Recurso_40_svg__Capa_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_40_svg__cls-1{fill:#ff6}</style>
+    </defs>
+    <circle cx="50" cy="50" r="50" style="fill: rgb(87, 73, 152);" id="Recurso_40_svg__Capa_1-2"/>
+    <g id="Recurso_40_svg__Capa_2-2">
+        <circle class="Recurso_40_svg__cls-1" cx="50" cy="50" r="28.5"/>
+        <path d="M50 23c14.89 0 27 12.11 27 27S64.89 77 50 77 23 64.89 23 50s12.11-27 27-27m0-3c-16.57 0-30 13.43-30 30s13.43 30 30 30 30-13.43 30-30-13.43-30-30-30Z"
+              style="fill: rgb(255, 204, 0);"/>
+        <path class="Recurso_40_svg__cls-1" d="M48 20.07C32.36 21.1 20 34.1 20 50s12.36 28.9 28 29.93V20.07Z"/>
+        <text transform="translate(37.18 67.75)"
+              style="font-family: MyriadPro-Regular, &quot;Myriad Pro&quot;; font-size: 50px; stroke: rgb(223, 188, 0); stroke-miterlimit: 10; fill: rgb(255, 204, 0);">
+            <tspan x="0" y="0">$</tspan>
+        </text>
+    </g>
+</svg>

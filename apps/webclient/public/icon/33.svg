@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em"
+     class="IconSelector__Grid__Icon">
+    <circle cx="50" cy="50" r="50" style="fill: rgb(167, 181, 26);"/>
+    <path d="M30 45a9 9 0 0 1 9 9v17H21V54a9 9 0 0 1 9-9Z" style="fill: rgb(180, 37, 24);"/>
+    <path d="M70 57c2.48 0 4.5 2.02 4.5 4.5V70h-9v-8.5c0-2.48 2.02-4.5 4.5-4.5Z" style="fill: rgb(93, 67, 148);"/>
+    <path style="fill: rgb(52, 61, 145);" d="m50 71 9-26H41l9 26z"/>
+    <ellipse cx="30" cy="36" rx="7" ry="8" style="fill: rgb(159, 98, 0);"/>
+    <ellipse cx="50" cy="36" rx="7" ry="8" style="fill: rgb(255, 218, 159);"/>
+    <ellipse cx="69.91" cy="52" rx="4.09" ry="4" style="fill: rgb(255, 166, 63);"/>
+</svg>

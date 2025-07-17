@@ -10,7 +10,7 @@ interface AppIconProps {
 export const AppIcon = (props: AppIconProps): ReactNode => (
   <div>
     <Avatar className={props.className}>
-      <AvatarImage src={props.id.toString()} alt={props.name} />
+      <AvatarImage src={`/icon/${props.id}.svg`} alt={props.name} />
       <AvatarFallback>{props.name.charAt(0)}</AvatarFallback>
     </Avatar>
   </div>
