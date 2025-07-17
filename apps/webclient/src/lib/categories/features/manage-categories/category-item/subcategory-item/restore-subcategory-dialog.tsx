@@ -1,18 +1,10 @@
 'use client';
 import { ReactNode } from 'react';
-import { Loader2Icon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/lib/shadcn-ui/components/ui/dialog';
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
-
+import { FormDialog } from '@/lib/webclient';
 import { SubCategoryDto, useRestoreSubCategory } from '@/lib/categories/data-store';
 
 // ----------------------------------------------
@@ -26,36 +18,25 @@ interface RestoreSubCategoryDialogProps {
 export const RestoreSubCategoryDialog = (props: RestoreSubCategoryDialogProps): ReactNode => {
   const restoreSubCategoryMutation = useRestoreSubCategory();
 
-  async function onConfirm() {
-    restoreSubCategoryMutation.mutate({
-      parentId: props.parentId,
-      id: props.subCategory.id,
-    });
-    props.setOpen(false);
-  }
+  const formSchema = z.object({ id: z.string(), parentId: z.string() });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { id: props.subCategory.id, parentId: props.parentId },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) =>
+    restoreSubCategoryMutation.mutate(values, { onSettled: () => props.setOpen(false) });
 
   return (
-    <Dialog open={props.open} onOpenChange={props.setOpen}>
-      <DialogDescription className="sr-only">
-        Restore sub category ${props.subCategory.name}
-      </DialogDescription>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Restore SubCategory</DialogTitle>
-        </DialogHeader>
-        <p>Are you sure?</p>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={restoreSubCategoryMutation.isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button disabled={restoreSubCategoryMutation.isPending} onClick={onConfirm}>
-            {restoreSubCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
-            Restore
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <FormDialog
+      open={props.open}
+      setOpen={props.setOpen}
+      title={'Restore SubCategory'}
+      form={form}
+      onSubmit={onSubmit}
+      error={restoreSubCategoryMutation.error}
+      loading={restoreSubCategoryMutation.isPending}>
+      <p>Are you sure?</p>
+    </FormDialog>
   );
 };

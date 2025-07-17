@@ -4,7 +4,8 @@ import { ReactNode } from 'react';
 // App packages
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';
 import { Card, CardContent, CardHeader } from '@/lib/shadcn-ui/components/ui/card';
-import { CategoryType, useCategories } from '@/lib/categories/data-store';
+
+import { CategoryDto, CategoryType, useCategories } from '@/lib/categories/data-store';
 
 // Internal
 import { CategoryList } from './category-list';

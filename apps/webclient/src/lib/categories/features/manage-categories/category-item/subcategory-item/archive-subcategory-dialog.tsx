@@ -1,18 +1,10 @@
 'use client';
 import { ReactNode } from 'react';
-import { Loader2Icon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/lib/shadcn-ui/components/ui/dialog';
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
-
+import { FormDialog } from '@/lib/webclient';
 import { SubCategoryDto, useArchiveSubCategory } from '@/lib/categories/data-store';
 
 // ----------------------------------------------
@@ -26,43 +18,29 @@ interface ArchiveSubCategoryDialogProps {
 export const ArchiveSubCategoryDialog = (props: ArchiveSubCategoryDialogProps): ReactNode => {
   const archiveSubCategoryMutation = useArchiveSubCategory();
 
-  async function onConfirm() {
-    archiveSubCategoryMutation.mutate({
-      parentId: props.parentId,
-      id: props.subCategory.id,
-    });
-    props.setOpen(false);
-  }
+  const formSchema = z.object({ id: z.string(), parentId: z.string() });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { id: props.subCategory.id, parentId: props.parentId },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) =>
+    archiveSubCategoryMutation.mutate(values, { onSettled: () => props.setOpen(false) });
 
   return (
-    <Dialog open={props.open} onOpenChange={props.setOpen}>
-      <DialogDescription className="sr-only">
-        Archive SubCategory ${props.subCategory.id}
-      </DialogDescription>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Archive SubCategory</DialogTitle>
-        </DialogHeader>
-        <p>
-          Once archived, no new movements or budgets under this category can be made until it is
-          restored
-        </p>
-        <p>Are you sure?</p>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={archiveSubCategoryMutation.isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button
-            variant="destructive"
-            disabled={archiveSubCategoryMutation.isPending}
-            onClick={onConfirm}>
-            {archiveSubCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
-            Archive
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <FormDialog
+      open={props.open}
+      setOpen={props.setOpen}
+      title="Archive SubCategory"
+      form={form}
+      onSubmit={onSubmit}
+      error={archiveSubCategoryMutation.error}
+      loading={archiveSubCategoryMutation.isPending}>
+      <p>
+        Once archived, no new movements or budgets under this category can be made until it is
+        restored
+      </p>
+      <p>Are you sure?</p>
+    </FormDialog>
   );
 };

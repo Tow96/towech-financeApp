@@ -1,21 +1,22 @@
 ﻿'use client';
-import { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { ErrorBox } from '@/lib/webclient';
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/lib/shadcn-ui/components/ui/form';
-import { DialogClose, DialogFooter } from '@/lib/shadcn-ui/components/ui/dialog';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
-import { Input } from '@/lib/shadcn-ui/components/ui/input';
+
+import { FormDialog } from '@/lib/webclient';
+import { CategoryType, useAddCategory } from '@/lib/categories/data-store';
+
 import { AppIconSelector } from '@/lib/icons';
 import {
   Select,
@@ -24,28 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/lib/shadcn-ui/components/ui/select';
+import { Input } from '@/lib/shadcn-ui/components/ui/input';
 
-import { CategoryType, useAddCategory } from '@/lib/categories/data-store';
-import { AlertCircleIcon, Loader2Icon } from 'lucide-react';
-import axios from 'axios';
-
-// ----------------------------------------------
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
-    .max(50, { message: 'Name cannot exceed 50 characters long.' }),
-  type: z.enum(CategoryType),
-  iconId: z.number(),
-});
-
-interface AddCategoryFormProps {
-  setDialog?: Dispatch<SetStateAction<boolean>>;
-}
-
-export const AddCategoryForm = (props: AddCategoryFormProps) => {
+export const AddCategoryButton = () => {
+  const [open, setOpen] = useState(false);
   const addCategoryMutation = useAddCategory();
 
+  const formSchema = z.object({
+    name: z
+      .string()
+      .min(2, { message: 'Name must be at least 2 characters long.' })
+      .max(50, { message: 'Name cannot exceed 50 characters long.' }),
+    type: z.enum(CategoryType),
+    iconId: z.number(),
+  });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,14 +47,23 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    addCategoryMutation.mutate(values);
-  }
+  const onSubmit = (values: z.infer<typeof formSchema>) =>
+    addCategoryMutation.mutate(values, { onSuccess: () => setOpen(false) });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        {/* Form content */}
+    <>
+      <Button onClick={() => setOpen(true)}>
+        <Plus />
+        Add Category
+      </Button>
+      <FormDialog
+        open={open}
+        setOpen={setOpen}
+        title="Add Category"
+        form={form}
+        onSubmit={onSubmit}
+        error={addCategoryMutation.error}
+        loading={addCategoryMutation.isPending}>
         <div className="flex items-center gap-5 py-5">
           {/* Icon */}
           <AppIconSelector />
@@ -109,28 +111,7 @@ export const AddCategoryForm = (props: AddCategoryFormProps) => {
             />
           </div>
         </div>
-
-        {addCategoryMutation.isError && (
-          <ErrorBox
-            className="mb-4"
-            title="Failed to create category"
-            error={addCategoryMutation.error}
-          />
-        )}
-
-        {/* Form close */}
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={addCategoryMutation.isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button type="submit" disabled={addCategoryMutation.isPending}>
-            {addCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
-            Create
-          </Button>
-        </DialogFooter>
-      </form>
-    </Form>
+      </FormDialog>
+    </>
   );
 };

@@ -1,18 +1,10 @@
 ﻿'use client';
 import { ReactNode } from 'react';
-import { Loader2Icon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/lib/shadcn-ui/components/ui/dialog';
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
-
+import { FormDialog } from '@/lib/webclient';
 import { CategoryDto, useArchiveCategory } from '@/lib/categories/data-store';
 
 // ----------------------------------------------
@@ -25,40 +17,29 @@ interface ArchiveCategoryDialogProps {
 export const ArchiveCategoryDialog = (props: ArchiveCategoryDialogProps): ReactNode => {
   const archiveCategoryMutation = useArchiveCategory();
 
-  async function onConfirm() {
-    archiveCategoryMutation.mutate(props.category.id);
-    props.setOpen(false);
-  }
+  const formSchema = z.object({ id: z.string() });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { id: props.category.id },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) =>
+    archiveCategoryMutation.mutate(values.id, { onSettled: () => props.setOpen(false) });
 
   return (
-    <Dialog open={props.open} onOpenChange={props.setOpen}>
-      <DialogDescription className="sr-only">
-        Archive category ${props.category.name}
-      </DialogDescription>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Archive Category</DialogTitle>
-        </DialogHeader>
-        <p>
-          Once archived, no new movements or budgets under this category can be made until it is
-          restored.
-        </p>
-        <p>Are you sure?</p>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={archiveCategoryMutation.isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button
-            variant="destructive"
-            disabled={archiveCategoryMutation.isPending}
-            onClick={onConfirm}>
-            {archiveCategoryMutation.isPending && <Loader2Icon className="animate-spin" />}
-            Archive
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <FormDialog
+      open={props.open}
+      setOpen={props.setOpen}
+      title="Archive category"
+      form={form}
+      onSubmit={onSubmit}
+      error={archiveCategoryMutation.error}
+      loading={archiveCategoryMutation.isPending}>
+      <p>
+        Once archived, no new movements or budgets under this category can be made until it is
+        restored.
+      </p>
+      <p>Are you sure?</p>
+    </FormDialog>
   );
 };
