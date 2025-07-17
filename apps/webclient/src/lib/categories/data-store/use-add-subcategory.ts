@@ -2,6 +2,7 @@
 import { useUsers } from '@/lib/users/use-users';
 
 import { CATEGORY_QUERY_KEY } from './use-categories';
+import ApiClient from '@/lib/api';
 
 interface AddSubCategoryDto {
   parentId: string;
@@ -10,24 +11,12 @@ interface AddSubCategoryDto {
 }
 
 export const useAddSubCategory = () => {
-  const user = useUsers();
+  const api = new ApiClient(useUsers().getToken());
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (newSubCategory: AddSubCategoryDto) => {
-      const token = (await user.getToken()) || '';
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API}/category/${newSubCategory.parentId}/subcategory`,
-        {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify(newSubCategory),
-        }
-      );
-
-      return res.json();
-    },
+    mutationFn: (data: AddSubCategoryDto) =>
+      api.post<{ id: string }>(`category/${data.parentId}/subcategory`, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
     },

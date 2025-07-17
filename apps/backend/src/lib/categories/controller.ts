@@ -65,9 +65,7 @@ export class CategoryController {
       data.name
     );
     if (existingCategory !== null)
-      throw new ConflictException({
-        errors: { name: `Category ${data.name} already exists for type ${data.type}` },
-      });
+      throw new ConflictException(`Category ${data.name} already exists for type ${data.type}`);
 
     const id = await this._categoryRepository.insertCategory(
       user.id,
@@ -89,7 +87,7 @@ export class CategoryController {
 
     const category = await this._categoryRepository.getCategoryById(id);
     if (category === null || category.userId !== user.id)
-      throw new NotFoundException(`category ${id} not found`);
+      throw new NotFoundException(`Category ${id} not found`);
 
     this.logger.log(`user: ${user.id} trying to update category: ${id}`);
     const existingCategory = await this._categoryRepository.getCategoryIdByName(
@@ -98,11 +96,9 @@ export class CategoryController {
       data.name
     );
     if (existingCategory !== null)
-      throw new ConflictException({
-        errors: {
-          name: `Category "${data.name}" already exists for type ${category.type.toString()}`,
-        },
-      });
+      throw new ConflictException(
+        `Category "${data.name}" already exists for type ${category.type.toString()}`
+      );
 
     await this._categoryRepository.updateCategory(id, { name: data.name, iconId: data.iconId });
   }
@@ -149,9 +145,7 @@ export class CategoryController {
       data.name
     );
     if (existingSubCategory !== null)
-      throw new ConflictException({
-        errors: { name: `Subcategory ${data.name} already exists for category.` },
-      });
+      throw new ConflictException(`Subcategory ${data.name} already exists for category.`);
 
     const id = await this._categoryRepository.insertSubCategory(parentId, data.iconId, data.name);
     return { id };
@@ -180,9 +174,7 @@ export class CategoryController {
       data.name
     );
     if (existingSubCategory !== null)
-      throw new ConflictException({
-        errors: { name: `Subcategory ${data.name} already exists for category.` },
-      });
+      throw new ConflictException(`Subcategory ${data.name} already exists for category.`);
 
     await this._categoryRepository.updateSubCategory(id, { name: data.name, iconId: data.iconId });
   }

@@ -1,9 +1,9 @@
 ﻿'use client';
-import { useState, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { AlertCircleIcon, Loader2Icon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 
 import {
   Dialog,
@@ -22,12 +22,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@/lib/shadcn-ui/components/ui/form';
-import { Alert, AlertDescription, AlertTitle } from '@/lib/shadcn-ui/components/ui/alert';
 
 import { SubCategoryDto, useEditSubCategory } from '@/lib/categories/data-store';
 import { AppIconSelector } from '@/lib/icons';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
+import { ErrorBox } from '@/lib/webclient';
 
 // ----------------------------------------------
 const formSchema = z.object({
@@ -47,7 +47,6 @@ interface EditSubcategoriesProps {
 
 export const EditSubCategoryDialog = (props: EditSubcategoriesProps): ReactNode => {
   const editSubCategoryMutation = useEditSubCategory();
-  const [errorBox, setErrorBox] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,16 +56,12 @@ export const EditSubCategoryDialog = (props: EditSubcategoriesProps): ReactNode 
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setErrorBox(null);
-    const data = await editSubCategoryMutation.mutateAsync({
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    editSubCategoryMutation.mutate({
       ...values,
       id: props.subCategory.id,
       parentId: props.parentId,
     });
-
-    if (!data.errors) return props.setOpen(false);
-    setErrorBox((Object.values(data.errors) as string[]).join('\n'));
   }
 
   return (
@@ -104,13 +99,12 @@ export const EditSubCategoryDialog = (props: EditSubcategoriesProps): ReactNode 
               </div>
             </div>
 
-            {/* Error box */}
-            {errorBox !== null && (
-              <Alert variant="destructive" className="mb-5">
-                <AlertCircleIcon />
-                <AlertTitle>Failed to create category</AlertTitle>
-                <AlertDescription> {errorBox} </AlertDescription>
-              </Alert>
+            {editSubCategoryMutation.isError && (
+              <ErrorBox
+                className="mb-4"
+                title="Failed to create category"
+                error={editSubCategoryMutation.error}
+              />
             )}
 
             {/* Form close */}

@@ -25,16 +25,9 @@ import {
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
 import { AppIconSelector } from '@/lib/icons';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/lib/shadcn-ui/components/ui/select';
-import { Alert, AlertDescription, AlertTitle } from '@/lib/shadcn-ui/components/ui/alert';
 
-import { CategoryDto, useAddSubCategory } from '@/lib/categories/data-store';
+import { useAddSubCategory } from '@/lib/categories/data-store';
+import { ErrorBox } from '@/lib/webclient';
 
 // ----------------------------------------------
 const formSchema = z.object({
@@ -53,7 +46,6 @@ interface AddSubCategoryDialogProps {
 
 export const AddSubCategoryDialog = (props: AddSubCategoryDialogProps) => {
   const addSubCategoryMutation = useAddSubCategory();
-  const [errorBox, setErrorBox] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,12 +55,8 @@ export const AddSubCategoryDialog = (props: AddSubCategoryDialogProps) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setErrorBox(null);
-    const data = await addSubCategoryMutation.mutateAsync({ ...values, parentId: props.parentId });
-
-    if (!data.errors) return props.setOpen(false);
-    setErrorBox((Object.values(data.errors) as string[]).join('\n'));
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    addSubCategoryMutation.mutate({ ...values, parentId: props.parentId });
   }
 
   return (
@@ -105,13 +93,12 @@ export const AddSubCategoryDialog = (props: AddSubCategoryDialogProps) => {
               </div>
             </div>
 
-            {/* Error box */}
-            {errorBox !== null && (
-              <Alert variant="destructive" className="mb-5">
-                <AlertCircleIcon />
-                <AlertTitle>Failed to create category</AlertTitle>
-                <AlertDescription> {errorBox} </AlertDescription>
-              </Alert>
+            {addSubCategoryMutation.isError && (
+              <ErrorBox
+                className="mb-4"
+                title="Failed to create category"
+                error={addSubCategoryMutation.error}
+              />
             )}
 
             {/* Form close */}
