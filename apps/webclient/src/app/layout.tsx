@@ -8,10 +8,8 @@ import {
   SidebarTrigger,
 } from '@/lib/shadcn-ui/components/ui/sidebar';
 import { Separator } from '@/lib/shadcn-ui/components/ui/separator';
-import { WebClientSidebar } from '@/lib/webclient/sidebar';
 import { UsersProvider } from '@/lib/users';
-import { QueryProvider } from '@/lib/webclient/QueryProvider';
-import { ThemeProvider } from '@/lib/webclient/theme-provider';
+import { PageTitle, QueryProvider, ThemeProvider, WebClientSidebar } from '@/lib/webclient';
 
 export const metadata: Metadata = {
   title: 'Towechlabs Finance App',
@@ -40,7 +38,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     <div className="flex items-center gap-2 px-3">
                       <SidebarTrigger />
                       <Separator orientation="vertical" className="mr-2 h-4" />
-                      TODO: TITLE
+                      <PageTitle />
                     </div>
                   </header>
                   {/* Content */}

@@ -1,12 +1,18 @@
 ﻿import {
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/lib/shadcn-ui/components/ui/sidebar';
-import { CircleDot } from 'lucide-react';
+import { CircleDot, Wallet } from 'lucide-react';
 
 const pages = [
+  {
+    name: 'Wallets',
+    url: '/wallets',
+    icon: Wallet,
+  },
   {
     name: 'Categories',
     url: '/categories',
@@ -17,7 +23,7 @@ const pages = [
 export const WebClientNav = () => {
   return (
     <SidebarGroup>
-      {/*<SidebarGroupLabel>TODO</SidebarGroupLabel>*/}
+      <SidebarGroupLabel>Components</SidebarGroupLabel>
       <SidebarMenu>
         {pages.map(page => (
           <SidebarMenuItem key={page.name}>
