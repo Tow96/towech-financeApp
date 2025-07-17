@@ -1,0 +1,22 @@
+meta {
+  name: Generate JWT
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://api.clerk.com/v1/sessions/{{sessionId}}/tokens
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "expires_in_seconds": 3600
+  }
+}
+
+script:post-response {
+  let data = res.body;
+  bru.setEnvVar("jwt", data.jwt);
+}

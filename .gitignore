@@ -1,17 +1,25 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+﻿# compiled output
+/node_modules
+**/*/dist
+**/*/.next
+**/*/next-env.d.ts
 
-# compiled output
-dist
-tmp
-out-tsc
+
+# Logs
 logs
-deploy
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# environment variables
-*.env*
+# OS
+.DS_Store
 
-# dependencies
-node_modules
+# Tests
+/coverage
+/.nyc_output
 
 # IDEs and editors
 /.idea
@@ -29,25 +37,19 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
+# dotenv environment variable files
+.env
+.env.*
 
-# System Files
-.DS_Store
-Thumbs.db
+# temp directory
+.temp
+.tmp
 
-.nx/cache
-.nx/workspace-data
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Next.js
-.next
-out
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
