@@ -95,7 +95,7 @@ export class CategoryController {
       category.type,
       data.name
     );
-    if (existingCategory !== null)
+    if (existingCategory !== null && existingCategory !== category.id)
       throw new ConflictException(
         `Category "${data.name}" already exists for type ${category.type.toString()}`
       );
@@ -173,7 +173,7 @@ export class CategoryController {
       parentId,
       data.name
     );
-    if (existingSubCategory !== null)
+    if (existingSubCategory !== null && existingSubCategory !== subCategory.id)
       throw new ConflictException(`Subcategory ${data.name} already exists for category.`);
 
     await this._categoryRepository.updateSubCategory(id, { name: data.name, iconId: data.iconId });

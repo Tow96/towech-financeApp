@@ -61,7 +61,12 @@ export const EditSubCategoryDialog = (props: EditSubcategoriesProps): ReactNode 
       loading={editSubCategoryMutation.isPending}>
       <div className="flex items-center gap-5 py-5">
         {/* Icon */}
-        <AppIconSelector />
+        <FormField
+          control={form.control}
+          disabled={editSubCategoryMutation.isPending}
+          name="iconId"
+          render={({ field }) => <AppIconSelector {...field} />}
+        />
 
         {/* Inputs */}
         <div className="grid gap-3 flex-1">

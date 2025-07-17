@@ -65,7 +65,12 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
       {/* Form content */}
       <div className="flex items-center gap-5 py-5">
         {/* Icon */}
-        <AppIconSelector />
+        <FormField
+          control={form.control}
+          disabled={editCategoryMutation.isPending}
+          name="iconId"
+          render={({ field }) => <AppIconSelector {...field} />}
+        />
 
         {/* Inputs */}
         <div className="grid gap-3 flex-1">

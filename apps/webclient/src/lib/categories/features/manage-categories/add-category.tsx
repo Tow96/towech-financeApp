@@ -66,14 +66,18 @@ export const AddCategoryButton = () => {
         loading={addCategoryMutation.isPending}>
         <div className="flex items-center gap-5 py-5">
           {/* Icon */}
-          <AppIconSelector />
+          <FormField
+            control={form.control}
+            disabled={addCategoryMutation.isPending}
+            name="iconId"
+            render={({ field }) => <AppIconSelector {...field} />}
+          />
 
           {/* Inputs */}
           <div className="grid gap-3 flex-1">
             {/* Type */}
             <FormField
               control={form.control}
-              disabled={addCategoryMutation.isPending}
               name="type"
               render={({ field }) => (
                 <FormItem>
