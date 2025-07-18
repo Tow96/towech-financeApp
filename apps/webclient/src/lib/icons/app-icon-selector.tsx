@@ -42,7 +42,9 @@ export const AppIconSelector = (props: AppIconSelectorProps): ReactNode => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button disabled={props.disabled} className="disabled:opacity-50 disabled:pointer-events-none">
+        <button
+          disabled={props.disabled}
+          className="disabled:opacity-50 disabled:pointer-events-none">
           <AppIcon className="rounded-full w-24 h-24" id={selectedIcon} name="C" />
         </button>
       </DialogTrigger>

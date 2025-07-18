@@ -1,5 +1,5 @@
-﻿import { CategoryDto } from '@/lib/categories/data-store';
-import { ReactNode } from 'react';
+﻿import { ReactNode } from 'react';
+import { CategoryDto } from '@/lib/categories/data-store';
 
 import {
   AccordionContent,

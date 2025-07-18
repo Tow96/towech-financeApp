@@ -1,8 +1,9 @@
 ﻿// External packages
 import { useQuery } from '@tanstack/react-query';
-import { CategoryDto } from '@/lib/categories/data-store';
 import { useUsers } from '@/lib/users/use-users';
 import ApiClient from '@/lib/api';
+
+import { CategoryDto } from './dto';
 
 export const CATEGORY_QUERY_KEY = 'categories';
 
