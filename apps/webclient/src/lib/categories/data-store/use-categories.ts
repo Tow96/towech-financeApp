@@ -12,6 +12,6 @@ export const useCategories = () => {
 
   return useQuery<CategoryDto[]>({
     queryKey: [CATEGORY_QUERY_KEY],
-    queryFn: () => api.get<CategoryDto[]>('/category'),
+    queryFn: () => api.get<CategoryDto[]>('category'),
   });
 };

@@ -100,7 +100,6 @@ export class ManageMovementsController {
   }
 
   private async validateMovementOwnership(userId: string, movementId: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const query = new queries.GetMovementOwnerQuery(movementId);
     const ownerQuery = await this._queryBus.execute(query);
     if (ownerQuery.status === CommandQueryResult.NotFound)

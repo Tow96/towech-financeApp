@@ -16,7 +16,9 @@ export const Categories = MainSchema.table('categories', {
 
 export const SubCategories = MainSchema.table('sub-categories', {
   id: uuid('id').defaultRandom().primaryKey(),
-  parentId: uuid('parent_id').references(() => Categories.id),
+  parentId: uuid('parent_id')
+    .references(() => Categories.id)
+    .notNull(),
   iconId: integer('icon_id').notNull(),
   name: varchar('name').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
@@ -34,3 +36,13 @@ export const subCategoryRelations = relations(SubCategories, ({ one }) => ({
     references: [Categories.id],
   }),
 }));
+
+export const Wallets = MainSchema.table('wallets', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  iconId: integer('icon_id').notNull(),
+  userId: varchar('user_id').notNull(),
+  name: varchar('name').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
+});

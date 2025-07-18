@@ -9,7 +9,7 @@ import { WalletTotal } from './wallet-total';
 
 export const ManageWalletsView = (): ReactNode => {
   const wallets = useWallets();
-  const total = (wallets.data?.map(w => w.money) || [0]).reduce((acc, v) => acc + v);
+  const total = (wallets.data?.map(w => w.money) || []).reduce((acc, v) => acc + v, 0);
 
   return (
     <Card className="m-4">

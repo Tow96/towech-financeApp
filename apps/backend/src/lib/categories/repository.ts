@@ -27,8 +27,7 @@ export class CategoryRepository {
       .from(mainSchema.Categories)
       .where(eq(mainSchema.Categories.id, id));
 
-    if (query.length === 0) return null;
-    return query[0];
+    return query.length > 0 ? query[0] : null;
   }
 
   async getCategoryIdByName(userId: string, type: string, name: string): Promise<string | null> {
