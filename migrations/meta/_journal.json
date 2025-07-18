@@ -15,6 +15,13 @@
       "when": 1752700260427,
       "tag": "0001_kind_secret_warriors",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1752865861379,
+      "tag": "0002_previous_dakota_north",
+      "breakpoints": true
     }
   ]
 }
