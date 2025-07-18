@@ -15,10 +15,7 @@ export const useArchiveWallet = () => {
 
   return useMutation({
     mutationFn: (data: ArchiveWalletDto) =>
-      api.put<undefined>(
-        `category/${data.id}/archive?restore=${data.restore ? 'true' : 'false'}`,
-        data
-      ),
+      api.put<undefined>(`wallet/${data.id}/archive?restore=${data.restore ? '1' : '0'}`, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [WALLET_QUERY_KEY] });
     },

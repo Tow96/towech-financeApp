@@ -77,11 +77,12 @@ export class WalletController {
   async archiveWallet(
     @CurrentUser() user: User,
     @Param('id') id: string,
-    @Query('restore') restore: boolean
+    @Query('restore') restoreQuery: string
   ): Promise<void> {
+    const restore = restoreQuery === '1';
     const wallet = await this._walletRepository.getWalletById(id);
     if (wallet === null || wallet.userId !== user.id)
-      throw new NotFoundException(`Wallet ${data.name} not found`);
+      throw new NotFoundException(`Wallet ${id} not found`);
 
     this.logger.log(`user: ${user.id} trying to ${restore ? 'restore' : 'archive'} wallet: ${id}`);
     await this._walletRepository.updateWallet(id, { archivedAt: restore ? null : new Date() });

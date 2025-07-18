@@ -35,7 +35,7 @@ export const AddCategoryButton = () => {
     name: z
       .string()
       .min(2, { message: 'Name must be at least 2 characters long.' })
-      .max(50, { message: 'Name cannot exceed 50 characters long.' }),
+      .max(50, { message: 'Name cannot exceed 50 characters.' }),
     type: z.enum(CategoryType),
     iconId: z.number(),
   });

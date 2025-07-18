@@ -6,7 +6,7 @@ import ApiClient from '@/lib/api';
 
 interface AddWalletDto {
   name: string;
-  iconId: string;
+  iconId: number;
 }
 
 export const useAddWallet = () => {
