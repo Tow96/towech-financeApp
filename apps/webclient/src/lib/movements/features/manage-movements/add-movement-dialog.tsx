@@ -17,6 +17,7 @@ import { Input } from '@/lib/shadcn-ui/components/ui/input';
 
 import { FormDialog } from '@/lib/webclient';
 import { useAddMovement } from '@/lib/movements/data-store';
+import { Features as CategoryFeatures } from '@/lib/categories';
 
 export const AddMovementDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
@@ -58,6 +59,9 @@ export const AddMovementDialog = (): ReactNode => {
         onSubmit={onSubmit}
         error={addMovementMutation.error}
         loading={addMovementMutation.isPending}>
+        {/* Category */}
+        <CategoryFeatures.CategorySelector />
+
         {/* Description */}
         <FormField
           control={form.control}
