@@ -1,0 +1,71 @@
+﻿import { v4 as uuidV4 } from 'uuid';
+import { Inject, Injectable } from '@nestjs/common';
+import { eq, and, gte, lt } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+
+import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
+import { MovementEntity } from './entity';
+
+@Injectable()
+export class MovementRepository {
+  constructor(
+    @Inject(MAIN_SCHEMA_CONNECTION)
+    private readonly _db: NodePgDatabase<typeof mainSchema>
+  ) {}
+
+  getByMonth(userId: string, year: number, month: number): Promise<MovementEntity[]> {
+    return this._db.query.Movements.findMany({
+      with: { summary: true },
+      where: and(
+        eq(mainSchema.Movements.userId, userId),
+        gte(mainSchema.Movements.date, new Date(year, month)),
+        lt(mainSchema.Movements.date, new Date(year, month + 1)) // Primitive handles year rollover
+      ),
+    });
+  }
+
+  async getById(id: string): Promise<MovementEntity | null> {
+    const query = await this._db.query.Movements.findMany({
+      with: { summary: true },
+      where: eq(mainSchema.Movements.id, id),
+    });
+
+    return query.length > 0 ? query[0] : null;
+  }
+
+  async insert(
+    userId: string,
+    categoryId: string,
+    subCategoryId: string | null,
+    description: string,
+    date: Date
+  ): Promise<string> {
+    const id = uuidV4();
+    await this._db.insert(mainSchema.Movements).values({
+      id,
+      userId,
+      categoryId,
+      subCategoryId,
+      description,
+      date,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return id;
+  }
+
+  async update(id: string, data: Partial<MovementEntity>): Promise<void> {
+    await this._db
+      .update(mainSchema.Movements)
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(mainSchema.Movements.id, id));
+  }
+
+  async delete(id: string): Promise<void> {
+    await this._db.delete(mainSchema.Movements).where(eq(mainSchema.Movements.id, id));
+  }
+}

@@ -46,3 +46,35 @@ export const Wallets = MainSchema.table('wallets', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
   archivedAt: timestamp('archived_at', { withTimezone: true }),
 });
+
+export const Movements = MainSchema.table('movements', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: varchar('user_id').notNull(),
+  categoryId: uuid('category_id').notNull(),
+  subCategoryId: uuid('sub_category_id'),
+  description: varchar('description').notNull(),
+  date: timestamp('created_at', { withTimezone: true }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+});
+
+export const MovementSummary = MainSchema.table('movementSummary', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  movementId: uuid('movement_id')
+    .references(() => Movements.id)
+    .notNull(),
+  originWalletId: uuid('origin_wallet_id'),
+  destinationWalletId: uuid('destination_wallet_id'),
+  amount: integer('amount').notNull(),
+});
+
+export const movementRelations = relations(Movements, ({ many }) => ({
+  summary: many(MovementSummary),
+}));
+
+export const summaryRelations = relations(MovementSummary, ({ one }) => ({
+  parent: one(Movements, {
+    fields: [MovementSummary.movementId],
+    references: [Movements.id],
+  }),
+}));

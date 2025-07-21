@@ -7,6 +7,7 @@ import { LoggingModule } from './logging/logging.module';
 import { UsersModule } from '@/lib/users';
 import { CategoryModule } from '@/lib/categories';
 import { WalletModule } from '@/lib/wallets';
+import { MovementModule } from '@/lib/movements';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { WalletModule } from '@/lib/wallets';
     UsersModule,
     CategoryModule,
     WalletModule,
+    MovementModule,
   ],
   controllers: [AppController],
 })
