@@ -24,8 +24,10 @@ export const AddMovementDialog = (): ReactNode => {
   const addMovementMutation = useAddMovement();
 
   const formSchema = z.object({
-    categoryId: z.string(),
-    subCategoryId: z.string().nullable(),
+    category: z.object({
+      id: z.string(),
+      subCategory: z.string().nullable(),
+    }),
     date: z.date(),
     description: z
       .string()
@@ -35,15 +37,26 @@ export const AddMovementDialog = (): ReactNode => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: '94a19c1e-4b97-4236-aa99-9640be42c24b',
-      subCategoryId: null,
+      category: {
+        id: '',
+        subCategory: null,
+      },
       date: new Date(),
       description: '',
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) =>
-    addMovementMutation.mutate(values, { onSuccess: () => setOpen(false) });
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    addMovementMutation.mutate(
+      {
+        categoryId: values.category.id,
+        subCategoryId: values.category.subCategory,
+        date: values.date,
+        description: values.description,
+      },
+      { onSuccess: () => setOpen(false) }
+    );
+  };
 
   return (
     <>
@@ -60,7 +73,12 @@ export const AddMovementDialog = (): ReactNode => {
         error={addMovementMutation.error}
         loading={addMovementMutation.isPending}>
         {/* Category */}
-        <CategoryFeatures.CategorySelector />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => <CategoryFeatures.CategorySelector {...field} />}
+        />
+        {/*<CategoryFeatures.CategorySelector />*/}
 
         {/* Description */}
         <FormField

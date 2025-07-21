@@ -9,7 +9,7 @@ async function bootstrap() {
   app.useLogger(app.get(PinoLogger));
 
   // CORS
-  const corsOrigin = process.env.CORS_ORIGIN;
+  const corsOrigin = (process.env.CORS_ORIGIN ?? '').split(' ');
   if (corsOrigin !== undefined) {
     app.enableCors({
       origin: corsOrigin,

@@ -1,5 +1,5 @@
 ﻿'use client';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { CategoryDto, CategoryType, useCategories } from '@/lib/categories/data-store';
 import {
@@ -11,21 +11,46 @@ import {
 } from '@/lib/shadcn-ui/components/ui/select';
 import { AppIcon } from '@/lib/icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';
+import { Control, useController } from 'react-hook-form';
+
+export interface CategorySelectorValue {
+  id: string;
+  subCategory: string | null;
+}
 
 interface CategorySelectorProps {
   className?: string;
+  control?: Control;
+  name?: string;
+  disabled?: boolean;
 }
 
 export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
   const categories = useCategories();
 
+  const {
+    field: { onChange, value },
+  } = useController({ name: props.name || '', control: props.control });
+  const [tab, setTab] = useState('expense');
+  const [selectedCategory, setSelectedCategory] = useState<CategorySelectorValue>(
+    value || { id: '', subCategory: null }
+  );
+
+  const handleOnChange = (v: string) => {
+    const splittedValue = v.split('%');
+    const selection = { id: splittedValue[0], subCategory: splittedValue[1] || null };
+
+    setSelectedCategory(selection);
+    onChange(selection);
+  };
+
   return (
-    <Select>
+    <Select disabled={props.disabled} onValueChange={handleOnChange}>
       <SelectTrigger className="w-full !h-12">
         <SelectValue placeholder="Select a category" />
       </SelectTrigger>
       <SelectContent>
-        <Tabs defaultValue="expense">
+        <Tabs value={tab} onValueChange={v => setTab(v)}>
           {/* Header */}
           <TabsList>
             <TabsTrigger value="income">Income</TabsTrigger>
