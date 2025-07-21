@@ -1,6 +1,6 @@
 ﻿export interface MovementDto {
   id: string;
   categoryId: string;
-  date: Date;
+  date: string;
   description: string;
 }

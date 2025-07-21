@@ -1,0 +1,39 @@
+﻿import { ReactNode } from 'react';
+
+import { cn } from '@/lib/shadcn-ui/utils';
+import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
+
+import { MovementDto } from '@/lib/movements/data-store';
+import { AppIcon } from '@/lib/icons';
+import { convertNumToCurrencyString } from '@/lib/utils';
+
+interface MovementItemProps {
+  movement: MovementDto;
+}
+
+const convertIsoDate = (date: string): string => {
+  return new Date(date).toLocaleDateString();
+}
+
+export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
+  return (
+    <div className="flex items-center min-w-0 gap-4 py-4 border-b-1 last:border-b-0">
+      <AppIcon className="rounded-full w-16 h-16" id={8} name="c" />
+      <div className="flex-1">
+        {/* Main data */}
+        <div className="flex justify-between text-2xl font-bold">
+          <span>CATEGORY</span>
+          <span>{convertNumToCurrencyString(0)}</span>
+        </div>
+
+        {/* Secondary data */}
+        <div className="flex justify-between text-muted-foreground">
+          <span>{movement.description}</span>
+          <span>{convertIsoDate(movement.date)}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
