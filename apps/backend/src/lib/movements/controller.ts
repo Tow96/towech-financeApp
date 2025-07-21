@@ -68,7 +68,7 @@ export class MovementController {
       data.categoryId,
       data.subCategoryId,
       data.description,
-      data.date
+      new Date(data.date)
     );
     return { id };
   }

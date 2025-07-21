@@ -53,7 +53,7 @@ export const Movements = MainSchema.table('movements', {
   categoryId: uuid('category_id').notNull(),
   subCategoryId: uuid('sub_category_id'),
   description: varchar('description').notNull(),
-  date: timestamp('created_at', { withTimezone: true }).notNull(),
+  date: timestamp('date', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });
