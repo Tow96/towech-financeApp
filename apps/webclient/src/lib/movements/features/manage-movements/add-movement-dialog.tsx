@@ -66,6 +66,16 @@ export const AddMovementDialog = (): ReactNode => {
       },
       date: new Date(),
       description: '',
+      from: {
+        id: '',
+        iconId: 0,
+        name: ''
+      },
+      to: {
+        id: '',
+        iconId: 0,
+        name: '',
+      }
     },
   });
 
@@ -81,7 +91,7 @@ export const AddMovementDialog = (): ReactNode => {
             originWalletId: values.category.type === CategoryType.income ? null : values.from.id,
             destinationWalletId:
               values.category.type === CategoryType.expense ? null : values.to.id,
-            amount: Number(values.amount),
+            amount: Math.round(Number(values.amount) * 100),
           },
         ],
       },

@@ -42,7 +42,7 @@ export class MovementController {
       summary: i.summary.map(s => ({
         originWalletId: s.originWalletId,
         destinationWalletId: s.destinationWalletId,
-        amount: s.amount / 100,
+        amount: s.amount,
       })),
     }));
   }
@@ -53,10 +53,6 @@ export class MovementController {
     @Body() data: AddMovementDto
   ): Promise<{ id: string }> {
     data.description = data.description.trim().toLowerCase();
-    const parsedSummary: SummaryDto[] = data.summary.map(i => ({
-      ...i,
-      amount: Math.round(i.amount * 100),
-    }));
 
     this.logger.log(`user: ${user.id} trying to add movement to category: ${data.categoryId}`);
 
@@ -79,7 +75,7 @@ export class MovementController {
       data.subCategoryId,
       data.description,
       new Date(data.date),
-      parsedSummary
+      data.summary
     );
     return { id };
   }
