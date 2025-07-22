@@ -13,7 +13,7 @@ import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/lib/shadcn-ui/components/ui/calendar';
 
 export const ManageMovementsView = (): ReactNode => {
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
 
   const movements = useMovements(date.getFullYear(), date.getMonth() + 1);
 
@@ -28,12 +28,7 @@ export const ManageMovementsView = (): ReactNode => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              captionLayout="dropdown"
-            />
+            <Calendar mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
           </PopoverContent>
         </Popover>
 

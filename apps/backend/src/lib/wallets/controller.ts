@@ -25,17 +25,10 @@ export class WalletController {
   constructor(private readonly _walletRepository: WalletRepository) {}
 
   @Get()
-  async getAllWallets(@CurrentUser() user: User): Promise<WalletDto[]> {
+  getAllWallets(@CurrentUser() user: User): Promise<WalletDto[]> {
     this.logger.log(`user: ${user.id} requesting all wallets`);
 
-    const query = await this._walletRepository.getAllUserWallets(user.id);
-    return query.map(i => ({
-      id: i.id,
-      iconId: i.iconId,
-      name: i.name,
-      money: 0,
-      archived: !!i.archivedAt,
-    }));
+    return this._walletRepository.getAllUserWallets(user.id);
   }
 
   @Post()

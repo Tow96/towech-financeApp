@@ -9,7 +9,8 @@
   NotFoundException,
   Param,
   Post,
-  Put, Query,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
