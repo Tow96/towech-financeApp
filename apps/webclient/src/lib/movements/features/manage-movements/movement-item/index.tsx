@@ -6,6 +6,7 @@ import { Features as CategoryFeatures } from '@/lib/categories';
 import { MovementDto } from '@/lib/movements/data-store';
 import { convertNumToCurrencyString } from '@/lib/utils';
 import { CategoryType } from '@/lib/categories/data-store';
+import { MovementItemMenu } from './menu';
 
 interface MovementItemProps {
   movement: MovementDto;
@@ -55,6 +56,8 @@ export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
             <span>{convertIsoDate(movement.date)}</span>
           </div>
         </div>
+
+        <MovementItemMenu movement={movement} />
       </div>
     </>
   );

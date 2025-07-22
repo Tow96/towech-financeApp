@@ -79,6 +79,11 @@ export class MovementRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this._db.delete(mainSchema.Movements).where(eq(mainSchema.Movements.id, id));
+    await this._db.transaction(async tx => {
+      await tx
+        .delete(mainSchema.MovementSummary)
+        .where(eq(mainSchema.MovementSummary.movementId, id));
+      await tx.delete(mainSchema.Movements).where(eq(mainSchema.Movements.id, id));
+    });
   }
 }

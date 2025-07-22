@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode, useState } from 'react';
 
-import { useWallets, WalletDto } from '@/lib/wallets/data-store';
+import { useWallets } from '@/lib/wallets/data-store';
 import {
   Select,
   SelectContent,
