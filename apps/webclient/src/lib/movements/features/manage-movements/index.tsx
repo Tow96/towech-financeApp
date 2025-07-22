@@ -1,7 +1,7 @@
 ﻿'use client';
 import { ReactNode, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/lib/shadcn-ui/components/ui/card';
-import { useMovements } from '@/lib/movements/data-store';
+import { MovementDto, useMovements } from '@/lib/movements/data-store';
 
 import { AddMovementDialog } from './add-movement-dialog';
 import { MovementList } from '@/lib/movements/features/manage-movements/movement-list';
@@ -11,11 +11,21 @@ import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { cn } from '@/lib/shadcn-ui/utils';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/lib/shadcn-ui/components/ui/calendar';
+import { WalletFilter } from '@/lib/wallets/features/filter-wallet';
 
 export const ManageMovementsView = (): ReactNode => {
   const [date, setDate] = useState(new Date());
+  const [filteredWallet, setFilteredWallet] = useState<string | null>(null);
 
   const movements = useMovements(date.getFullYear(), date.getMonth() + 1);
+  const filteredMovements = (movements.data || ([] as MovementDto[])).filter(m => {
+    if (filteredWallet === null) return true;
+
+    return (
+      m.summary[0]?.originWalletId === filteredWallet ||
+      m.summary[0]?.destinationWalletId === filteredWallet
+    );
+  });
 
   return (
     <Card className="m-4">
@@ -31,11 +41,11 @@ export const ManageMovementsView = (): ReactNode => {
             <Calendar mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
           </PopoverContent>
         </Popover>
-
+        <WalletFilter selectedWallet={filteredWallet} setSelectedWallet={setFilteredWallet} />
         <AddMovementDialog />
       </CardHeader>
       <CardContent>
-        <MovementList movements={movements.data || []} loading={movements.isLoading} />
+        <MovementList movements={filteredMovements} loading={movements.isLoading} />
       </CardContent>
     </Card>
   );
