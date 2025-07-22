@@ -3,12 +3,14 @@ import { useUsers } from '@/lib/users/use-users';
 
 import { MOVEMENT_QUERY_KEY } from './use-movements';
 import ApiClient from '@/lib/api';
+import { SummaryDto } from './dto';
 
 interface AddMovementDto {
   categoryId: string;
   date: Date;
   description: string;
   subCategoryId: string | null;
+  summary: SummaryDto[];
 }
 
 export const useAddMovement = () => {

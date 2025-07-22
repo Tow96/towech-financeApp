@@ -1,11 +1,11 @@
 ﻿import { ReactNode } from 'react';
 
 import { cn } from '@/lib/shadcn-ui/utils';
-import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 
 import { Features as CategoryFeatures } from '@/lib/categories';
 import { MovementDto } from '@/lib/movements/data-store';
 import { convertNumToCurrencyString } from '@/lib/utils';
+import { CategoryType } from '@/lib/categories/data-store';
 
 interface MovementItemProps {
   movement: MovementDto;
@@ -16,6 +16,16 @@ const convertIsoDate = (date: string): string => {
 };
 
 export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
+  const origin = movement.summary[0]?.originWalletId || null;
+  const destination = movement.summary[0]?.destinationWalletId || null;
+
+  const type: CategoryType =
+    origin !== null && destination !== null
+      ? CategoryType.transfer
+      : origin === null && destination !== null
+        ? CategoryType.income
+        : CategoryType.expense;
+
   return (
     <>
       <div className="flex items-center min-w-0 gap-4 py-4 border-b-1 last:border-b-0">
@@ -30,7 +40,13 @@ export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
             <span>
               <CategoryFeatures.CategoryName id={movement.categoryId} />
             </span>
-            <span>{convertNumToCurrencyString(0)}</span>
+            <span
+              className={cn(
+                type === CategoryType.income && 'text-constructive',
+                type == CategoryType.expense && 'text-destructive'
+              )}>
+              {convertNumToCurrencyString(movement.summary[0]?.amount || 0)}
+            </span>
           </div>
 
           {/* Secondary data */}

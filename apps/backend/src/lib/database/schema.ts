@@ -58,7 +58,7 @@ export const Movements = MainSchema.table('movements', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });
 
-export const MovementSummary = MainSchema.table('movementSummary', {
+export const MovementSummary = MainSchema.table('movement_summary', {
   id: uuid('id').defaultRandom().primaryKey(),
   movementId: uuid('movement_id')
     .references(() => Movements.id)

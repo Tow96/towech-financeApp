@@ -42,6 +42,16 @@ export const AddMovementDialog = (): ReactNode => {
       .string()
       .min(1, { message: 'Description cannot be empty. ' })
       .max(140, { message: 'Description cannot exceed 140 characters.' }),
+    from: z.object({
+      id: z.string().nullable(),
+      name: z.string(),
+      iconId: z.number(),
+    }),
+    to: z.object({
+      id: z.string().nullable(),
+      name: z.string(),
+      iconId: z.number(),
+    }),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,16 +70,23 @@ export const AddMovementDialog = (): ReactNode => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // addMovementMutation.mutate(
-    //   {
-    //     categoryId: values.category.id,
-    //     subCategoryId: values.category.subCategory,
-    //     date: values.date,
-    //     description: values.description,
-    //   },
-    //   { onSuccess: () => setOpen(false) }
-    // );
+    addMovementMutation.mutate(
+      {
+        categoryId: values.category.id,
+        subCategoryId: values.category.subCategory,
+        date: values.date,
+        description: values.description,
+        summary: [
+          {
+            originWalletId: values.category.type === CategoryType.income ? null : values.from.id,
+            destinationWalletId:
+              values.category.type === CategoryType.expense ? null : values.to.id,
+            amount: Number(values.amount),
+          },
+        ],
+      },
+      { onSuccess: () => setOpen(false) }
+    );
   };
 
   return (
@@ -101,7 +118,6 @@ export const AddMovementDialog = (): ReactNode => {
             </FormItem>
           )}
         />
-
         {/* Category */}
         <FormField
           control={form.control}
@@ -114,9 +130,60 @@ export const AddMovementDialog = (): ReactNode => {
             </FormItem>
           )}
         />
-
         {/* Wallet*/}
-        MODE: {form.watch().category.type}
+        {form.watch().category.type === CategoryType.expense && (
+          <FormField
+            control={form.control}
+            name="from"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Wallet</FormLabel>
+                <WalletFeatures.WalletSelector {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {form.watch().category.type === CategoryType.income && (
+          <FormField
+            control={form.control}
+            name="to"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Wallet</FormLabel>
+                <WalletFeatures.WalletSelector {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {form.watch().category.type === CategoryType.transfer && (
+          <div className="flex gap-2">
+            <FormField
+              control={form.control}
+              name="from"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>From</FormLabel>
+                  <WalletFeatures.WalletSelector {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="to"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>To</FormLabel>
+                  <WalletFeatures.WalletSelector {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
 
         {/* Date selector */}
         <FormField
@@ -148,7 +215,6 @@ export const AddMovementDialog = (): ReactNode => {
             </FormItem>
           )}
         />
-
         {/* Description */}
         <FormField
           control={form.control}

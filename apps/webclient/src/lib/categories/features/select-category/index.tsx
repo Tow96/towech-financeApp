@@ -13,7 +13,7 @@ import { AppIcon } from '@/lib/icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/lib/shadcn-ui/components/ui/tabs';
 import { Control, useController } from 'react-hook-form';
 
-export interface CategorySelectorValue {
+interface CategorySelectorValue {
   id: string;
   subCategory: string | null;
   type: CategoryType;
@@ -48,7 +48,7 @@ export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
     const selectedCategory = categories.data?.find(c => c.id === id);
 
     const type = selectedCategory?.type || CategoryType.expense;
-    
+
     const name =
       subCategory === null
         ? selectedCategory?.name || ''

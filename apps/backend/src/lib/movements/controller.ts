@@ -9,11 +9,11 @@
   NotFoundException,
   Param,
   Post,
-  Put
+  Put,
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
-import { AddMovementDto, EditMovementDto, MovementDto } from './dto';
+import { AddMovementDto, EditMovementDto, MovementDto, SummaryDto } from './dto';
 import { MovementRepository } from './repository';
 import { CategoryRepository } from '@/lib/categories';
 
@@ -39,6 +39,11 @@ export class MovementController {
       date: i.date,
       categoryId: i.categoryId,
       description: i.description,
+      summary: i.summary.map(s => ({
+        originWalletId: s.originWalletId,
+        destinationWalletId: s.destinationWalletId,
+        amount: s.amount / 100,
+      })),
     }));
   }
 
@@ -48,6 +53,11 @@ export class MovementController {
     @Body() data: AddMovementDto
   ): Promise<{ id: string }> {
     data.description = data.description.trim().toLowerCase();
+    const parsedSummary: SummaryDto[] = data.summary.map(i => ({
+      ...i,
+      amount: Math.round(i.amount * 100),
+    }));
+
     this.logger.log(`user: ${user.id} trying to add movement to category: ${data.categoryId}`);
 
     // Category validation
@@ -68,7 +78,8 @@ export class MovementController {
       data.categoryId,
       data.subCategoryId,
       data.description,
-      new Date(data.date)
+      new Date(data.date),
+      parsedSummary
     );
     return { id };
   }

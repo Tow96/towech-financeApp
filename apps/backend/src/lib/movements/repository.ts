@@ -5,6 +5,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 import { MovementEntity } from './entity';
+import { SummaryDto } from '@/lib/movements/dto';
 
 @Injectable()
 export class MovementRepository {
@@ -38,18 +39,30 @@ export class MovementRepository {
     categoryId: string,
     subCategoryId: string | null,
     description: string,
-    date: Date
+    date: Date,
+    summary: SummaryDto[]
   ): Promise<string> {
     const id = uuidV4();
-    await this._db.insert(mainSchema.Movements).values({
-      id,
-      userId,
-      categoryId,
-      subCategoryId,
-      description,
-      date,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+
+    await this._db.transaction(async tx => {
+      await tx.insert(mainSchema.Movements).values({
+        id,
+        userId,
+        categoryId,
+        subCategoryId,
+        description,
+        date,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      for (const item of summary) {
+        await tx.insert(mainSchema.MovementSummary).values({
+          movementId: id,
+          originWalletId: item.originWalletId,
+          destinationWalletId: item.destinationWalletId,
+          amount: item.amount,
+        });
+      }
     });
 
     return id;
