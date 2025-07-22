@@ -22,6 +22,7 @@ import { FormDialog } from '@/lib/webclient';
 import { useAddMovement } from '@/lib/movements/data-store';
 import { Features as CategoryFeatures } from '@/lib/categories';
 import { Features as WalletFeatures } from '@/lib/wallets';
+import { CategoryType } from '@/lib/categories/data-store';
 
 export const AddMovementDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
@@ -32,6 +33,9 @@ export const AddMovementDialog = (): ReactNode => {
     category: z.object({
       id: z.string().min(1, { message: 'Select a category' }),
       subCategory: z.string().nullable(),
+      type: z.enum(CategoryType),
+      name: z.string(),
+      iconId: z.number(),
     }),
     date: z.date(),
     description: z
@@ -46,6 +50,9 @@ export const AddMovementDialog = (): ReactNode => {
       category: {
         id: '',
         subCategory: null,
+        name: '',
+        iconId: 0,
+        type: CategoryType.expense,
       },
       date: new Date(),
       description: '',
@@ -99,49 +106,48 @@ export const AddMovementDialog = (): ReactNode => {
         <FormField
           control={form.control}
           name="category"
-          render={({ field }) => <CategoryFeatures.CategorySelector {...field} />}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <CategoryFeatures.CategorySelector {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        {/* Wallet + Date */}
-        <div className="flex gap-4 items-center">
-          <FormField
-            control={form.control}
-            disabled={addMovementMutation.isPending}
-            name=""
-          {/* Wallet selector */}
-          <WalletFeatures.WalletSelector />
+        {/* Wallet*/}
+        MODE: {form.watch().category.type}
 
-          {/* Date selector */}
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(!field.value && 'text-muted-foreground')}>
-                        {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      captionLayout="dropdown"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormItem>
-            )}
-          />
-        </div>
+        {/* Date selector */}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      className={cn(!field.value && 'text-muted-foreground')}>
+                      {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+            </FormItem>
+          )}
+        />
 
         {/* Description */}
         <FormField

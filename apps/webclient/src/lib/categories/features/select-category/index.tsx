@@ -10,12 +10,15 @@ import {
   SelectValue,
 } from '@/lib/shadcn-ui/components/ui/select';
 import { AppIcon } from '@/lib/icons';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/lib/shadcn-ui/components/ui/tabs';
 import { Control, useController } from 'react-hook-form';
 
 export interface CategorySelectorValue {
   id: string;
   subCategory: string | null;
+  type: CategoryType;
+  name: string;
+  iconId: number;
 }
 
 interface CategorySelectorProps {
@@ -25,39 +28,61 @@ interface CategorySelectorProps {
   disabled?: boolean;
 }
 
+const VALUE_SEPARATOR = '%';
+
 export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
   const categories = useCategories();
-
   const {
     field: { onChange, value },
   } = useController({ name: props.name || '', control: props.control });
-  const [tab, setTab] = useState('expense');
+
   const [selectedCategory, setSelectedCategory] = useState<CategorySelectorValue>(
-    value || { id: '', subCategory: null }
+    value || { id: '', subCategory: null, iconId: 0, name: '', type: CategoryType.expense }
   );
 
   const handleOnChange = (v: string) => {
-    const splittedValue = v.split('%');
-    const selection = { id: splittedValue[0], subCategory: splittedValue[1] || null };
+    const splitValue = v.split(VALUE_SEPARATOR);
+    const id = splitValue[0];
+    const subCategory = splitValue[1] || null;
 
-    setSelectedCategory(selection);
-    onChange(selection);
+    const selectedCategory = categories.data?.find(c => c.id === id);
+
+    const type = selectedCategory?.type || CategoryType.expense;
+    
+    const name =
+      subCategory === null
+        ? selectedCategory?.name || ''
+        : selectedCategory?.subCategories.find(sC => sC.id === subCategory)?.name || '';
+    const iconId =
+      subCategory === null
+        ? selectedCategory?.iconId || 0
+        : selectedCategory?.subCategories.find(sC => sC.id === subCategory)?.iconId || 0;
+
+    const value: CategorySelectorValue = { id, subCategory, type, name, iconId };
+
+    setSelectedCategory(value);
+    onChange(value);
   };
 
   return (
     <Select disabled={props.disabled} onValueChange={handleOnChange}>
       <SelectTrigger className="w-full !h-12">
-        <SelectValue placeholder="Select a category" />
+        <SelectValue placeholder="Select a category">
+          <AppIcon
+            className="rounded-full w-8 h-8"
+            id={selectedCategory.iconId}
+            name={selectedCategory.name}
+          />
+          <span className="text-lg">{selectedCategory.name}</span>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        <Tabs value={tab} onValueChange={v => setTab(v)}>
-          {/* Header */}
+        <Tabs defaultValue="expense">
           <TabsList>
             <TabsTrigger value="income">Income</TabsTrigger>
             <TabsTrigger value="expense">Expense</TabsTrigger>
             <TabsTrigger value="transfer">Transfer</TabsTrigger>
           </TabsList>
-
           <CategorySelectionTab
             value="income"
             categories={(categories.data || []).filter(
@@ -116,7 +141,7 @@ interface SelectCategoryItemProps {
 
 const SelectCategoryItem = (props: SelectCategoryItemProps) => (
   <SelectItem value={props.value} className={props.className}>
-    <AppIcon className="rounded-full w-8 h-8" id={props.iconId} name={props.name} />{' '}
+    <AppIcon className="rounded-full w-8 h-8" id={props.iconId} name={props.name} />
     <span className="text-lg">{props.name}</span>
   </SelectItem>
 );
