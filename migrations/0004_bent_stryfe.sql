@@ -1,0 +1,1 @@
+ALTER TABLE "main"."movements" ADD COLUMN "date" timestamp with time zone NOT NULL;

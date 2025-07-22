@@ -1,8 +1,8 @@
 ﻿import { ReactNode } from 'react';
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
+import { Features } from '@/lib/movements';
 
 const DashboardPage = (): ReactNode => {
-  return <Button>TEST</Button>;
+  return <Features.ManageMovementsView />;
 };
 
 export default DashboardPage;
