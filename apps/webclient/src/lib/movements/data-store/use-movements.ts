@@ -6,11 +6,11 @@ import { MovementDto } from './dto';
 
 export const MOVEMENT_QUERY_KEY = 'movements';
 
-export const useMovements = () => {
+export const useMovements = (year: number, month: number) => {
   const api = new ApiClient(useUsers().getToken());
 
   return useQuery<MovementDto[]>({
-    queryKey: [MOVEMENT_QUERY_KEY],
-    queryFn: () => api.get<MovementDto[]>('movement'),
+    queryKey: [MOVEMENT_QUERY_KEY, year, month],
+    queryFn: () => api.get<MovementDto[]>(`movement?year=${year}&month=${month}`),
   });
 };

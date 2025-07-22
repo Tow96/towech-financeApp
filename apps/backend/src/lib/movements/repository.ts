@@ -19,8 +19,8 @@ export class MovementRepository {
       with: { summary: true },
       where: and(
         eq(mainSchema.Movements.userId, userId),
-        gte(mainSchema.Movements.date, new Date(year, month)),
-        lt(mainSchema.Movements.date, new Date(year, month + 1)) // Primitive handles year rollover
+        gte(mainSchema.Movements.date, new Date(year, month - 1)),
+        lt(mainSchema.Movements.date, new Date(year, month)) // Primitive handles year rollover
       ),
     });
   }
