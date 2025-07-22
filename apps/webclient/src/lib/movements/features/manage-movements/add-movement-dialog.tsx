@@ -21,6 +21,7 @@ import { cn } from '@/lib/shadcn-ui/utils';
 import { FormDialog } from '@/lib/webclient';
 import { useAddMovement } from '@/lib/movements/data-store';
 import { Features as CategoryFeatures } from '@/lib/categories';
+import { Features as WalletFeatures } from '@/lib/wallets';
 
 export const AddMovementDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
@@ -102,7 +103,14 @@ export const AddMovementDialog = (): ReactNode => {
         />
 
         {/* Wallet + Date */}
-        <div>
+        <div className="flex gap-4 items-center">
+          <FormField
+            control={form.control}
+            disabled={addMovementMutation.isPending}
+            name=""
+          {/* Wallet selector */}
+          <WalletFeatures.WalletSelector />
+
           {/* Date selector */}
           <FormField
             control={form.control}
