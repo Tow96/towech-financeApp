@@ -69,13 +69,13 @@ export const AddMovementDialog = (): ReactNode => {
       from: {
         id: '',
         iconId: 0,
-        name: ''
+        name: '',
       },
       to: {
         id: '',
         iconId: 0,
         name: '',
-      }
+      },
     },
   });
 

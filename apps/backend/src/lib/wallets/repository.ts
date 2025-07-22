@@ -1,10 +1,11 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql, or } from 'drizzle-orm';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 import { WalletEntity } from './entity';
+import { WalletDto } from './dto';
 
 @Injectable()
 export class WalletRepository {
@@ -13,8 +14,37 @@ export class WalletRepository {
     private readonly _db: NodePgDatabase<typeof mainSchema>
   ) {}
 
-  getAllUserWallets(userId: string): Promise<WalletEntity[]> {
-    return this._db.select().from(mainSchema.Wallets).where(eq(mainSchema.Wallets.userId, userId));
+  async getAllUserWallets(userId: string): Promise<WalletDto[]> {
+    const res = await this._db
+      .select({
+        id: mainSchema.Wallets.id,
+        iconId: mainSchema.Wallets.iconId,
+        name: mainSchema.Wallets.name,
+        archivedAt: mainSchema.Wallets.archivedAt,
+        money: sql<string>`SUM(CASE WHEN ${mainSchema.MovementSummary.destinationWalletId} = ${mainSchema.Wallets.id} THEN ${mainSchema.MovementSummary.amount} ELSE 0 END) - SUM(CASE WHEN ${mainSchema.MovementSummary.originWalletId} = ${mainSchema.Wallets.id} THEN ${mainSchema.MovementSummary.amount} ELSE 0 END)`,
+      })
+      .from(mainSchema.Wallets)
+      .leftJoin(
+        mainSchema.MovementSummary,
+        or(
+          eq(mainSchema.MovementSummary.originWalletId, mainSchema.Wallets.id),
+          eq(mainSchema.MovementSummary.destinationWalletId, mainSchema.Wallets.id)
+        )
+      )
+      .where(eq(mainSchema.Wallets.userId, userId))
+      .groupBy(mainSchema.Wallets.id)
+      .orderBy(mainSchema.Wallets.name);
+
+    return res.map(
+      i =>
+        ({
+          id: i.id,
+          archived: !!i.archivedAt,
+          iconId: i.iconId,
+          name: i.name,
+          money: Number(i.money),
+        }) as WalletDto
+    );
   }
 
   async getWalletById(id: string): Promise<WalletEntity | null> {

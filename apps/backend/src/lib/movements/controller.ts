@@ -10,6 +10,7 @@
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
@@ -27,13 +28,17 @@ export class MovementController {
   ) {}
 
   @Get()
-  async getMonthMovements(@CurrentUser() user: User): Promise<MovementDto[]> {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth();
+  async getMonthMovements(
+    @CurrentUser() user: User,
+    @Query('year') year: string,
+    @Query('month') month: string
+  ): Promise<MovementDto[]> {
+    const yearNum = parseInt(year) || new Date().getFullYear();
+    const monthNum = parseInt(month) || new Date().getMonth() + 1;
 
-    this.logger.log(`user: ${user.id} requesting movements for ${year}-${month + 1}`);
+    this.logger.log(`user: ${user.id} requesting movements for ${yearNum}-${monthNum}`);
 
-    const query = await this._movementRepository.getByMonth(user.id, year, month);
+    const query = await this._movementRepository.getByMonth(user.id, yearNum, monthNum);
     return query.map(i => ({
       id: i.id,
       date: i.date,
