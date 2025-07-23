@@ -1,4 +1,6 @@
-﻿import {
+﻿'use client';
+import { useRouter } from 'next/navigation'
+import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
@@ -21,6 +23,8 @@ const pages = [
 ];
 
 export const WebClientNav = () => {
+  const router = useRouter();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Components</SidebarGroupLabel>
@@ -28,10 +32,10 @@ export const WebClientNav = () => {
         {pages.map(page => (
           <SidebarMenuItem key={page.name}>
             <SidebarMenuButton asChild tooltip={page.name}>
-              <a href={page.url}>
+              <button onClick={() => router.push(page.url)}>
                 {page.icon && <page.icon />}
                 <span>{page.name}</span>
-              </a>
+              </button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
