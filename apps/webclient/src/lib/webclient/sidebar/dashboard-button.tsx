@@ -1,6 +1,6 @@
 ﻿'use client';
 import { ReactNode } from 'react';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import {
   SidebarMenu,
   SidebarMenuButton,

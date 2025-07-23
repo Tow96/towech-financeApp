@@ -1,0 +1,1 @@
+ALTER TABLE "main"."budget_summary" ALTER COLUMN "limit" SET NOT NULL;

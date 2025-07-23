@@ -96,7 +96,7 @@ export const BudgetSummary = MainSchema.table('budget_summary', {
   month: integer('month').notNull(),
   categoryId: uuid('category_id').notNull(),
   subCategoryId: uuid('sub_category_id'),
-  limit: integer('limit'),
+  limit: integer('limit').notNull(),
 });
 
 export const budgetRelations = relations(Budgets, ({ many }) => ({
