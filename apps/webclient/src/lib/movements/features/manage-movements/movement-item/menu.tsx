@@ -1,5 +1,5 @@
 ﻿import { ReactNode, useState } from 'react';
-import { Ellipsis, Pencil, Trash } from 'lucide-react';
+import { Ellipsis, Trash } from 'lucide-react';
 
 import {
   DropDrawer,
@@ -17,8 +17,7 @@ interface MovementItemMenuProps {
   movement: MovementDto;
 }
 
-export const MovementItemMenu: ReactNode = ({ movement }: MovementItemMenuProps) => {
-  const [openEdit, setOpenEdit] = useState(false);
+export const MovementItemMenu = ({ movement }: MovementItemMenuProps): ReactNode => {
   const [openDelete, setOpenDelete] = useState(false);
 
   return (
@@ -35,9 +34,6 @@ export const MovementItemMenu: ReactNode = ({ movement }: MovementItemMenuProps)
 
       <DropDrawerContent align="start">
         <DropDrawerGroup>
-          <DropDrawerItem onClick={() => setOpenEdit(true)} icon={<Pencil />}>
-            <span>Edit Movement</span>
-          </DropDrawerItem>
           <DropDrawerItem
             onClick={() => setOpenDelete(true)}
             icon={<Trash />}

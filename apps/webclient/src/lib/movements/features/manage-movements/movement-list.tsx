@@ -8,7 +8,7 @@ interface MovementListProps {
   loading: boolean;
 }
 
-export const MovementList = ({ movements, loading }: MovementListProps) => {
+export const MovementList = ({ movements, loading }: MovementListProps): ReactNode => {
   return (
     <div>
       {loading ? (

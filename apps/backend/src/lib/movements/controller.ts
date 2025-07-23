@@ -14,7 +14,7 @@
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
-import { AddMovementDto, EditMovementDto, MovementDto, SummaryDto } from './dto';
+import { AddMovementDto, EditMovementDto, MovementDto } from './dto';
 import { MovementRepository } from './repository';
 import { CategoryRepository } from '@/lib/categories';
 

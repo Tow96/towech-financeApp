@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode, useState } from 'react';
 
-import { useWallets, WalletDto } from '@/lib/wallets/data-store';
+import { useWallets } from '@/lib/wallets/data-store';
 import {
   Select,
   SelectContent,
@@ -14,14 +14,14 @@ import { cn } from '@/lib/shadcn-ui/utils';
 import { capitalizeFirst, convertAmountToCurrencyString } from '@/lib/utils';
 
 interface WalletFilterProps {
-  selectedWallet?: string | null;
+  selectedWallet?: string;
   setSelectedWallet?: (s: string) => void;
 }
 
 export const WalletFilter = (props: WalletFilterProps): ReactNode => {
   const wallets = useWallets();
   const total = (wallets.data?.map(w => w.money) || []).reduce((acc, v) => acc + v, 0);
-  const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null);
+  const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>('');
 
   const handleValueChange = (v: string) => {
     if (props.setSelectedWallet) props.setSelectedWallet(v);
@@ -35,7 +35,7 @@ export const WalletFilter = (props: WalletFilterProps): ReactNode => {
           <SelectValue placeholder="pls"></SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={null} className="border-b-1 last:border-b-0 py-2">
+          <SelectItem value="total" className="border-b-1 last:border-b-0 py-2">
             <AppIcon id={0} name="Total" className="rounded-full w-12 h-12" />
             <div className="flex flex-1 flex-col min-w-0">
               <span className="text-xl truncate font-bold">Total</span>

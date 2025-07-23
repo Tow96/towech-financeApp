@@ -6,20 +6,18 @@ import { MovementDto, useMovements } from '@/lib/movements/data-store';
 import { AddMovementDialog } from './add-movement-dialog';
 import { MovementList } from '@/lib/movements/features/manage-movements/movement-list';
 import { Popover, PopoverContent, PopoverTrigger } from '@/lib/shadcn-ui/components/ui/popover';
-import { FormControl } from '@/lib/shadcn-ui/components/ui/form';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
-import { cn } from '@/lib/shadcn-ui/utils';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/lib/shadcn-ui/components/ui/calendar';
 import { WalletFilter } from '@/lib/wallets/features/filter-wallet';
 
 export const ManageMovementsView = (): ReactNode => {
   const [date, setDate] = useState(new Date());
-  const [filteredWallet, setFilteredWallet] = useState<string | null>(null);
+  const [filteredWallet, setFilteredWallet] = useState<string>('total');
 
   const movements = useMovements(date.getFullYear(), date.getMonth() + 1);
   const filteredMovements = (movements.data || ([] as MovementDto[])).filter(m => {
-    if (filteredWallet === null) return true;
+    if (filteredWallet === 'total') return true;
 
     return (
       m.summary[0]?.originWalletId === filteredWallet ||
@@ -38,7 +36,13 @@ export const ManageMovementsView = (): ReactNode => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
+            <Calendar
+              required={true}
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              captionLayout="dropdown"
+            />
           </PopoverContent>
         </Popover>
         <WalletFilter selectedWallet={filteredWallet} setSelectedWallet={setFilteredWallet} />
