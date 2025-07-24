@@ -60,8 +60,9 @@ export class BudgetRepository {
         await tx.insert(mainSchema.BudgetSummary).values({
           budgetId: id,
           month: item.month,
+          categoryType: item.categoryType,
           categoryId: item.categoryId,
-          subCategoryId: item.subCategoryId,
+          categorySubId: item.categorySubId,
           limit: item.limit,
         });
       }

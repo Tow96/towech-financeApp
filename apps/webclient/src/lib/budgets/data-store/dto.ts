@@ -1,3 +1,5 @@
+import { CategoryType } from '@/lib/categories/data-store';
+
 export interface BudgetDto {
   id: string;
   userId: string;
@@ -8,7 +10,10 @@ export interface BudgetDto {
 
 export interface BudgetSummaryDto {
   month: number;
-  categoryId: string;
-  subCategoryId: string | null;
   limit: number;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
 }

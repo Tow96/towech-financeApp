@@ -95,8 +95,9 @@ export const BudgetSummary = MainSchema.table('budget_summary', {
     .references(() => Budgets.id)
     .notNull(),
   month: integer('month').notNull(),
-  categoryId: uuid('category_id').notNull(),
-  subCategoryId: uuid('sub_category_id'),
+  categoryType: varchar('category_type').notNull(),
+  categoryId: uuid('category_id'),
+  categorySubId: uuid('category_sub_id'),
   limit: integer('limit').notNull(),
 });
 

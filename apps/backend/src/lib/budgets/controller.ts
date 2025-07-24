@@ -15,6 +15,7 @@ import { CurrentUser, User } from '@/lib/users';
 
 import { AddBudgetDto, BudgetDto } from '@/lib/budgets/dto';
 import { BudgetRepository } from '@/lib/budgets/repository';
+import { CategoryType } from '@/lib/categories/dto';
 
 @Controller('budget')
 export class BudgetController {
@@ -34,10 +35,13 @@ export class BudgetController {
       userId: i.userId,
       year: i.year,
       summary: i.summary.map(s => ({
-        categoryId: s.categoryId,
-        subCategoryId: s.subCategoryId,
         limit: s.limit,
         month: s.month,
+        category: {
+          type: <CategoryType>s.categoryType,
+          id: s.categoryId,
+          subId: s.categorySubId,
+        },
       })),
     }));
   }
@@ -59,9 +63,10 @@ export class BudgetController {
         id: '',
         budgetId: '',
         month: s.month,
-        categoryId: s.categoryId,
-        subCategoryId: s.subCategoryId,
         limit: s.limit,
+        categoryType: s.category.type,
+        categoryId: s.category.id,
+        categorySubId: s.category.subId,
       }))
     );
 

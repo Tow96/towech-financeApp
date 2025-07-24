@@ -6,7 +6,8 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger, SelectValue,
+  SelectTrigger,
+  SelectValue,
 } from '@/lib/shadcn-ui/components/ui/select';
 import { AppIcon } from '@/lib/icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/shadcn-ui/components/ui/tabs';

@@ -1,6 +1,6 @@
 'use client';
 import { useState, ReactNode } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 
@@ -13,11 +13,13 @@ import {
 } from '@/lib/shadcn-ui/components/ui/form';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
-import { cn } from '@/lib/shadcn-ui/utils';
 
 import { FormDialog } from '@/lib/webclient';
 import { useAddBudget } from '@/lib/budgets/data-store';
 import { addBudgetFormDefaultValues, AddBudgetFormSchema } from './form-schema';
+import { CategoryType } from '@/lib/categories/data-store';
+import { Features as CategoryFeatures } from '@/lib/categories';
+import { convertValueToCents } from '@/lib/utils';
 
 export const AddBudgetDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
@@ -29,7 +31,25 @@ export const AddBudgetDialog = (): ReactNode => {
   });
   const summaryFieldArray = useFieldArray({ control: form.control, name: 'summary' });
 
-  const onSubmit = (values: AddBudgetFormSchema) => console.log(values);
+  const onSubmit = (values: AddBudgetFormSchema) => {
+    addBudgetMutation.mutate(
+      {
+        year: values.year,
+        name: values.name,
+        summary: values.summary.map(s => ({
+          month: 0,
+          category: s.category,
+          limit: convertValueToCents(Number(s.limit)),
+        })),
+      },
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -78,12 +98,48 @@ export const AddBudgetDialog = (): ReactNode => {
           )}
         />
 
-        {summaryFieldArray.fields.map((field, index) => (
-          <div key={field.id}>
-            pepe
+        {summaryFieldArray.fields.map((fieldItem, index) => (
+          <div key={fieldItem.id} className="flex">
+            <FormField
+              control={form.control}
+              name={`summary.${index}.category`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <CategoryFeatures.CategorySelector {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={`summary.${index}.limit`}
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Limit</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button onClick={() => summaryFieldArray.remove(index)}>
+              <Trash />
+            </Button>
           </div>
         ))}
-
+        <Button
+          onClick={() =>
+            summaryFieldArray.append({
+              limit: '',
+              category: { type: CategoryType.expense, id: null, subId: null },
+            })
+          }>
+          <Plus /> Add category
+        </Button>
       </FormDialog>
     </>
   );

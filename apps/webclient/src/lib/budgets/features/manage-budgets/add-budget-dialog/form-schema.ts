@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod';
-import { convertValueToCents } from '@/lib/utils';
+import { CategoryType } from '@/lib/categories/data-store';
 
 const AddBudgetFormSchema = z.object({
   year: z.coerce.number<number>().min(2000),
@@ -7,9 +7,14 @@ const AddBudgetFormSchema = z.object({
   summary: z
     .array(
       z.object({
-        categoryId: z.string().min(1).nullable(),
-        subCategoryId: z.string().min(1).nullable(),
-        limit: z.number().min(1).transform(convertValueToCents),
+        limit: z
+          .string()
+          .regex(/^\d+(\.\d{1,2})?$/, 'Must be a number with up to two decimal places'),
+        category: z.object({
+          type: z.enum(CategoryType),
+          id: z.string().min(1).nullable(),
+          subId: z.string().min(1).nullable(),
+        }),
       })
     )
     .min(1),
@@ -22,9 +27,12 @@ const addBudgetFormDefaultValues: AddBudgetFormSchema = {
   name: `${new Date().getFullYear()} budget`,
   summary: [
     {
-      categoryId: '',
-      subCategoryId: null,
-      limit: 0,
+      limit: '',
+      category: {
+        type: CategoryType.income,
+        id: null,
+        subId: null,
+      },
     },
   ],
 };
