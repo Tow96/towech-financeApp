@@ -30,13 +30,9 @@ const VALUE_SEPARATOR = '%';
 export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
   const categories = useCategories();
   const {
-    field: { onChange, value },
+    field: { onChange },
   } = useController({ name: props.name || '', control: props.control });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setSelectedCategory] = useState<CategorySelectorValue>(
-    value || { type: CategoryType.expense, id: null, subCategory: null }
-  );
   const [displayedCategory, setDisplayedCategory] = useState<{ iconId: number; name: string }>({
     iconId: 4,
     name: 'Uncategorized expense',
@@ -48,7 +44,6 @@ export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
     const id = splitValue[1] || null;
     const subId = splitValue[2] || null;
     const value: CategorySelectorValue = { type, id, subId };
-    setSelectedCategory(value);
     onChange(value);
 
     const selectedCategory = categories.data?.find(c => c.id === id);

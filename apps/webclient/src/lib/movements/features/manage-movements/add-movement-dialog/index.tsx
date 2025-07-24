@@ -35,24 +35,32 @@ export const AddMovementDialog = (): ReactNode => {
   });
 
   const onSubmit = (values: AddMovementFormSchema) => {
-    console.log(values);
-    // addMovementMutation.mutate(
-    //   {
-    //     ...values,
-    //     summary: [
-    //       {
-    //         amount: convertValueToCents(Number(values.summary.amount)),
-    //         wallet: values.summary.wallet,
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       form.reset();
-    //       setOpen(false);
-    //     },
-    //   }
-    // );
+    addMovementMutation.mutate(
+      {
+        ...values,
+        summary: [
+          {
+            amount: convertValueToCents(Number(values.summary.amount)),
+            wallet: {
+              originId:
+                values.category.type === CategoryType.income
+                  ? null
+                  : values.summary.wallet.originId,
+              destinationId:
+                values.category.type === CategoryType.expense
+                  ? null
+                  : values.summary.wallet.destinationId,
+            },
+          },
+        ],
+      },
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+        },
+      }
+    );
   };
 
   return (
@@ -84,72 +92,71 @@ export const AddMovementDialog = (): ReactNode => {
             </FormItem>
           )}
         />
-          {/* Category */}
+        {/* Category */}
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <CategoryFeatures.CategorySelector {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Wallet*/}
+        {form.watch().category.type === CategoryType.expense && (
           <FormField
             control={form.control}
-            name="category"
+            name="summary.wallet.originId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
-                <CategoryFeatures.CategorySelector {...field} />
+                <FormLabel>Wallet</FormLabel>
+                <WalletFeatures.WalletSelector {...field} />
                 <FormMessage />
               </FormItem>
             )}
           />
-        {/*  /!* Wallet*!/*/}
-        {/*  {form.watch().category.type === CategoryType.expense && (*/}
-        {/*    <FormField*/}
-        {/*      control={form.control}*/}
-        {/*      name="from"*/}
-        {/*      render={({ field }) => (*/}
-        {/*        <FormItem>*/}
-        {/*          <FormLabel>Wallet</FormLabel>*/}
-        {/*          <WalletFeatures.WalletSelector {...field} />*/}
-        {/*          <FormMessage />*/}
-        {/*        </FormItem>*/}
-        {/*      )}*/}
-        {/*    />*/}
-        {/*  )}*/}
-        {/*  {form.watch().category.type === CategoryType.income && (*/}
-        {/*    <FormField*/}
-        {/*      control={form.control}*/}
-        {/*      name="to"*/}
-        {/*      render={({ field }) => (*/}
-        {/*        <FormItem>*/}
-        {/*          <FormLabel>Wallet</FormLabel>*/}
-        {/*          <WalletFeatures.WalletSelector {...field} />*/}
-        {/*          <FormMessage />*/}
-        {/*        </FormItem>*/}
-        {/*      )}*/}
-        {/*    />*/}
-        {/*  )}*/}
-        {/*  {form.watch().category.type === CategoryType.transfer && (*/}
-        {/*    <div className="flex gap-2">*/}
-        {/*      <FormField*/}
-        {/*        control={form.control}*/}
-        {/*        name="from"*/}
-        {/*        render={({ field }) => (*/}
-        {/*          <FormItem>*/}
-        {/*            <FormLabel>From</FormLabel>*/}
-        {/*            <WalletFeatures.WalletSelector {...field} />*/}
-        {/*            <FormMessage />*/}
-        {/*          </FormItem>*/}
-        {/*        )}*/}
-        {/*      />*/}
-
-        {/*      <FormField*/}
-        {/*        control={form.control}*/}
-        {/*        name="to"*/}
-        {/*        render={({ field }) => (*/}
-        {/*          <FormItem>*/}
-        {/*            <FormLabel>To</FormLabel>*/}
-        {/*            <WalletFeatures.WalletSelector {...field} />*/}
-        {/*            <FormMessage />*/}
-        {/*          </FormItem>*/}
-        {/*        )}*/}
-        {/*      />*/}
-        {/*    </div>*/}
-        {/*  )}*/}
+        )}
+        {form.watch().category.type === CategoryType.income && (
+          <FormField
+            control={form.control}
+            name="summary.wallet.destinationId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Wallet</FormLabel>
+                <WalletFeatures.WalletSelector {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {form.watch().category.type === CategoryType.transfer && (
+          <div className="flex gap-2">
+            <FormField
+              control={form.control}
+              name="summary.wallet.originId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>From</FormLabel>
+                  <WalletFeatures.WalletSelector {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="summary.wallet.destinationId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>To</FormLabel>
+                  <WalletFeatures.WalletSelector {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
 
         {/* Date selector */}
         <FormField
