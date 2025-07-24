@@ -48,7 +48,10 @@ export const AddCategoryButton = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) =>
-    addCategoryMutation.mutate(values, { onSuccess: () => setOpen(false) });
+    addCategoryMutation.mutate(values, { onSuccess: () => {
+      form.reset();
+      setOpen(false);
+    } });
 
   return (
     <>

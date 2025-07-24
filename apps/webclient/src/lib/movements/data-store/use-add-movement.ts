@@ -4,12 +4,16 @@ import { useUsers } from '@/lib/users/use-users';
 import { MOVEMENT_QUERY_KEY } from './use-movements';
 import ApiClient from '@/lib/api';
 import { SummaryDto } from './dto';
+import { CategoryType } from 'backend/dist/lib/categories/dto';
 
-interface AddMovementDto {
-  categoryId: string;
+export interface AddMovementDto {
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
   date: Date;
   description: string;
-  subCategoryId: string | null;
   summary: SummaryDto[];
 }
 

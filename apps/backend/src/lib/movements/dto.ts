@@ -1,28 +1,32 @@
-﻿export interface MovementDto {
+﻿import { CategoryType } from '@/lib/categories/dto';
+
+export interface MovementDto {
   id: string;
-  categoryId: string;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
   date: Date;
   description: string;
   summary: SummaryDto[];
 }
 
 export interface SummaryDto {
-  originWalletId: string | null;
-  destinationWalletId: string | null;
+  wallet: {
+    originId: string | null;
+    destinationId: string | null;
+  };
   amount: number;
 }
 
 export interface AddMovementDto {
-  categoryId: string;
-  subCategoryId: string | null;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
   date: Date;
   description: string;
   summary: SummaryDto[];
-}
-
-export interface EditMovementDto {
-  categoryId: string;
-  subCategoryId: string | null;
-  date: Date;
-  description: string;
 }

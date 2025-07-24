@@ -6,6 +6,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 import { MovementEntity } from './entity';
 import { SummaryDto } from '@/lib/movements/dto';
+import { CategoryType } from '@/lib/categories/dto';
 
 @Injectable()
 export class MovementRepository {
@@ -36,8 +37,9 @@ export class MovementRepository {
 
   async insert(
     userId: string,
-    categoryId: string,
-    subCategoryId: string | null,
+    categoryType: CategoryType,
+    categoryId: string | null,
+    categorySubId: string | null,
     description: string,
     date: Date,
     summary: SummaryDto[]
@@ -48,8 +50,9 @@ export class MovementRepository {
       await tx.insert(mainSchema.Movements).values({
         id,
         userId,
+        categoryType,
         categoryId,
-        subCategoryId,
+        categorySubId,
         description,
         date,
         createdAt: new Date(),
@@ -58,24 +61,14 @@ export class MovementRepository {
       for (const item of summary) {
         await tx.insert(mainSchema.MovementSummary).values({
           movementId: id,
-          originWalletId: item.originWalletId,
-          destinationWalletId: item.destinationWalletId,
           amount: item.amount,
+          originWalletId: item.wallet.originId,
+          destinationWalletId: item.wallet.destinationId,
         });
       }
     });
 
     return id;
-  }
-
-  async update(id: string, data: Partial<MovementEntity>): Promise<void> {
-    await this._db
-      .update(mainSchema.Movements)
-      .set({
-        ...data,
-        updatedAt: new Date(),
-      })
-      .where(eq(mainSchema.Movements.id, id));
   }
 
   async delete(id: string): Promise<void> {
