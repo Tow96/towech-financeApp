@@ -5,6 +5,7 @@ import { MOVEMENT_QUERY_KEY } from './use-movements';
 import ApiClient from '@/lib/api';
 import { SummaryDto } from './dto';
 import { CategoryType } from 'backend/dist/lib/categories/dto';
+import { WALLET_QUERY_KEY } from '@/lib/wallets/data-store';
 
 export interface AddMovementDto {
   category: {
@@ -25,6 +26,7 @@ export const useAddMovement = () => {
     mutationFn: (data: AddMovementDto) => api.post<{ id: string }>('movement', data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [MOVEMENT_QUERY_KEY] });
+      await queryClient.invalidateQueries({ queryKey: [WALLET_QUERY_KEY] });
     },
   });
 };
