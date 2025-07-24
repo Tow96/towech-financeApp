@@ -2,13 +2,13 @@
 
 export interface MovementDto {
   id: string;
+  date: Date;
+  description: string;
   category: {
     type: CategoryType;
     id: string | null;
     subId: string | null;
   };
-  date: Date;
-  description: string;
   summary: SummaryDto[];
 }
 

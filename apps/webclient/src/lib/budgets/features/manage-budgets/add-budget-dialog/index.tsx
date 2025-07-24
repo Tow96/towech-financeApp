@@ -17,7 +17,7 @@ import { cn } from '@/lib/shadcn-ui/utils';
 
 import { FormDialog } from '@/lib/webclient';
 import { useAddBudget } from '@/lib/budgets/data-store';
-import { addBudgetFormDefaultValues, AddBudgetFormSchema } from './formSchema';
+import { addBudgetFormDefaultValues, AddBudgetFormSchema } from './form-schema';
 
 export const AddBudgetDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
