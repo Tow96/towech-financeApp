@@ -11,7 +11,7 @@ import {
 } from '@/lib/shadcn-ui/components/ui/select';
 import { AppIcon } from '@/lib/icons';
 import { cn } from '@/lib/shadcn-ui/utils';
-import { capitalizeFirst, convertAmountToCurrencyString } from '@/lib/utils';
+import { capitalizeFirst, convertCentsToCurrencyString } from '@/lib/utils';
 
 interface WalletFilterProps {
   selectedWallet?: string;
@@ -45,7 +45,7 @@ export const WalletFilter = (props: WalletFilterProps): ReactNode => {
                   'font-semibold',
                   total < 0 ? 'text-destructive' : 'text-muted-foreground'
                 )}>
-                {convertAmountToCurrencyString(total)}
+                {convertCentsToCurrencyString(total)}
               </span>
             </div>
           </SelectItem>
@@ -69,7 +69,7 @@ export const WalletFilter = (props: WalletFilterProps): ReactNode => {
                     'font-semibold',
                     wallet.money < 0 ? 'text-destructive' : 'text-muted-foreground'
                   )}>
-                  {convertAmountToCurrencyString(wallet.money)}
+                  {convertCentsToCurrencyString(wallet.money)}
                 </span>
               </div>
             </SelectItem>

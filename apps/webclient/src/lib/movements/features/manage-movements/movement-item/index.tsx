@@ -4,7 +4,7 @@ import { cn } from '@/lib/shadcn-ui/utils';
 
 import { Features as CategoryFeatures } from '@/lib/categories';
 import { MovementDto } from '@/lib/movements/data-store';
-import { convertAmountToCurrencyString } from '@/lib/utils';
+import { convertCentsToCurrencyString } from '@/lib/utils';
 import { CategoryType } from '@/lib/categories/data-store';
 import { MovementItemMenu } from './menu';
 
@@ -46,7 +46,7 @@ export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
                 type === CategoryType.income && 'text-constructive',
                 type == CategoryType.expense && 'text-destructive'
               )}>
-              {convertAmountToCurrencyString(movement.summary[0]?.amount || 0)}
+              {convertCentsToCurrencyString(movement.summary[0]?.amount || 0)}
             </span>
           </div>
 
