@@ -35,23 +35,24 @@ export const AddMovementDialog = (): ReactNode => {
   });
 
   const onSubmit = (values: AddMovementFormSchema) => {
-    addMovementMutation.mutate(
-      {
-        ...values,
-        summary: [
-          {
-            amount: convertValueToCents(Number(values.summary.amount)),
-            wallet: values.summary.wallet,
-          },
-        ],
-      },
-      {
-        onSuccess: () => {
-          form.reset();
-          setOpen(false);
-        },
-      }
-    );
+    console.log(values);
+    // addMovementMutation.mutate(
+    //   {
+    //     ...values,
+    //     summary: [
+    //       {
+    //         amount: convertValueToCents(Number(values.summary.amount)),
+    //         wallet: values.summary.wallet,
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       form.reset();
+    //       setOpen(false);
+    //     },
+    //   }
+    // );
   };
 
   return (
@@ -83,18 +84,18 @@ export const AddMovementDialog = (): ReactNode => {
             </FormItem>
           )}
         />
-        {/*  /!* Category *!/*/}
-        {/*  <FormField*/}
-        {/*    control={form.control}*/}
-        {/*    name="category"*/}
-        {/*    render={({ field }) => (*/}
-        {/*      <FormItem>*/}
-        {/*        <FormLabel>Category</FormLabel>*/}
-        {/*        <CategoryFeatures.CategorySelector {...field} />*/}
-        {/*        <FormMessage />*/}
-        {/*      </FormItem>*/}
-        {/*    )}*/}
-        {/*  />*/}
+          {/* Category */}
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <CategoryFeatures.CategorySelector {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         {/*  /!* Wallet*!/*/}
         {/*  {form.watch().category.type === CategoryType.expense && (*/}
         {/*    <FormField*/}
@@ -150,51 +151,51 @@ export const AddMovementDialog = (): ReactNode => {
         {/*    </div>*/}
         {/*  )}*/}
 
-        {/*  /!* Date selector *!/*/}
-        {/*  <FormField*/}
-        {/*    control={form.control}*/}
-        {/*    name="date"*/}
-        {/*    render={({ field }) => (*/}
-        {/*      <FormItem>*/}
-        {/*        <FormLabel>Date</FormLabel>*/}
-        {/*        <Popover>*/}
-        {/*          <PopoverTrigger asChild>*/}
-        {/*            <FormControl>*/}
-        {/*              <Button*/}
-        {/*                variant="outline"*/}
-        {/*                className={cn(!field.value && 'text-muted-foreground')}>*/}
-        {/*                {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}*/}
-        {/*                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />*/}
-        {/*              </Button>*/}
-        {/*            </FormControl>*/}
-        {/*          </PopoverTrigger>*/}
-        {/*          <PopoverContent className="w-auto p-0" align="start">*/}
-        {/*            <Calendar*/}
-        {/*              mode="single"*/}
-        {/*              selected={field.value}*/}
-        {/*              onSelect={field.onChange}*/}
-        {/*              captionLayout="dropdown"*/}
-        {/*            />*/}
-        {/*          </PopoverContent>*/}
-        {/*        </Popover>*/}
-        {/*      </FormItem>*/}
-        {/*    )}*/}
-        {/*  />*/}
-        {/*  /!* Description *!/*/}
-        {/*  <FormField*/}
-        {/*    control={form.control}*/}
-        {/*    disabled={addMovementMutation.isPending}*/}
-        {/*    name="description"*/}
-        {/*    render={({ field }) => (*/}
-        {/*      <FormItem className="flex-1">*/}
-        {/*        <FormLabel>Description</FormLabel>*/}
-        {/*        <FormControl>*/}
-        {/*          <Input {...field} />*/}
-        {/*        </FormControl>*/}
-        {/*        <FormMessage />*/}
-        {/*      </FormItem>*/}
-        {/*    )}*/}
-        {/*  />*/}
+        {/* Date selector */}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      className={cn(!field.value && 'text-muted-foreground')}>
+                      {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+            </FormItem>
+          )}
+        />
+        {/* Description */}
+        <FormField
+          control={form.control}
+          disabled={addMovementMutation.isPending}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </FormDialog>
     </>
   );
