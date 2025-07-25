@@ -5,10 +5,10 @@ export const MainSchema = pgSchema('main');
 
 export const Categories = MainSchema.table('categories', {
   id: uuid('id').defaultRandom().primaryKey(),
+  type: varchar('type').notNull(),
   userId: varchar('user_id').notNull(),
   iconId: integer('icon_id').notNull(),
   name: varchar('name').notNull(),
-  type: varchar('type').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
   archivedAt: timestamp('archived_at', { withTimezone: true }),
@@ -50,8 +50,9 @@ export const Wallets = MainSchema.table('wallets', {
 export const Movements = MainSchema.table('movements', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: varchar('user_id').notNull(),
-  categoryId: uuid('category_id').notNull(),
-  subCategoryId: uuid('sub_category_id'),
+  categoryType: varchar('category_type').notNull(),
+  categoryId: uuid('category_id'),
+  categorySubId: uuid('category_sub_id'),
   description: varchar('description').notNull(),
   date: timestamp('date', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
@@ -72,9 +73,41 @@ export const movementRelations = relations(Movements, ({ many }) => ({
   summary: many(MovementSummary),
 }));
 
-export const summaryRelations = relations(MovementSummary, ({ one }) => ({
+export const movementSummaryRelations = relations(MovementSummary, ({ one }) => ({
   parent: one(Movements, {
     fields: [MovementSummary.movementId],
     references: [Movements.id],
+  }),
+}));
+
+export const Budgets = MainSchema.table('budgets', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: varchar('user_id').notNull(),
+  year: integer('year').notNull(),
+  name: varchar('name').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+});
+
+export const BudgetSummary = MainSchema.table('budget_summary', {
+  id: uuid().defaultRandom().primaryKey(),
+  budgetId: uuid('budget_id')
+    .references(() => Budgets.id)
+    .notNull(),
+  month: integer('month').notNull(),
+  categoryType: varchar('category_type').notNull(),
+  categoryId: uuid('category_id'),
+  categorySubId: uuid('category_sub_id'),
+  limit: integer('limit').notNull(),
+});
+
+export const budgetRelations = relations(Budgets, ({ many }) => ({
+  summary: many(BudgetSummary),
+}));
+
+export const budgetSummaryRelations = relations(BudgetSummary, ({ one }) => ({
+  parent: one(Budgets, {
+    fields: [BudgetSummary.budgetId],
+    references: [Budgets.id],
   }),
 }));

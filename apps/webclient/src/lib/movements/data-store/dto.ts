@@ -1,13 +1,21 @@
-﻿export interface MovementDto {
+﻿import { CategoryType } from '@/lib/categories/data-store';
+
+export interface MovementDto {
   id: string;
-  categoryId: string;
-  date: string;
+  date: Date;
   description: string;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
   summary: SummaryDto[];
 }
 
 export interface SummaryDto {
-  originWalletId: string | null;
-  destinationWalletId: string | null;
+  wallet: {
+    originId: string | null;
+    destinationId: string | null;
+  };
   amount: number;
 }

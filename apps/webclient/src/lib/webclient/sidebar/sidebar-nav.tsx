@@ -1,11 +1,13 @@
-﻿import {
+﻿'use client';
+import { useRouter } from 'next/navigation';
+import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/lib/shadcn-ui/components/ui/sidebar';
-import { CircleDot, Wallet } from 'lucide-react';
+import { CircleDot, FileChartColumn, Wallet } from 'lucide-react';
 
 const pages = [
   {
@@ -18,9 +20,16 @@ const pages = [
     url: '/categories',
     icon: CircleDot,
   },
+  {
+    name: 'Budgets',
+    url: '/budgets',
+    icon: FileChartColumn,
+  },
 ];
 
 export const WebClientNav = () => {
+  const router = useRouter();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Components</SidebarGroupLabel>
@@ -28,10 +37,10 @@ export const WebClientNav = () => {
         {pages.map(page => (
           <SidebarMenuItem key={page.name}>
             <SidebarMenuButton asChild tooltip={page.name}>
-              <a href={page.url}>
+              <button onClick={() => router.push(page.url)}>
                 {page.icon && <page.icon />}
                 <span>{page.name}</span>
-              </a>
+              </button>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

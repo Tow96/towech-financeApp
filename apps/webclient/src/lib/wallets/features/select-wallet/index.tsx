@@ -12,12 +12,6 @@ import {
 import { AppIcon } from '@/lib/icons';
 import { Control, useController } from 'react-hook-form';
 
-interface WalletSelectorValue {
-  id: string;
-  name: string;
-  iconId: number;
-}
-
 interface WalletSelectorProps {
   className?: string;
   control?: Control;
@@ -31,28 +25,24 @@ export const WalletSelector = (props: WalletSelectorProps): ReactNode => {
     field: { onChange, value },
   } = useController({ name: props.name || '', control: props.control });
 
-  const [selectedWallet, setSelectedWallet] = useState<WalletSelectorValue>(
-    value || { id: '', name: '', iconId: 0 }
-  );
+  const [displayedWallet, setDisplayedWallet] = useState<{ iconId: number; name: string }>({
+    iconId: 0,
+    name: '',
+  });
 
   const handleOnChange = (id: string) => {
-    const wallet = wallets.data?.find(w => w.id === id);
-    const value: WalletSelectorValue = {
-      id,
-      iconId: wallet?.iconId || 0,
-      name: wallet?.name || '',
-    };
+    onChange(id);
 
-    setSelectedWallet(value);
-    onChange(value);
+    const wallet = wallets.data?.find(w => w.id === id);
+    setDisplayedWallet({ name: wallet?.name || '', iconId: wallet?.iconId || 0 });
   };
 
   return (
     <Select disabled={props.disabled} onValueChange={handleOnChange}>
       <SelectTrigger className="w-full !h-12">
-        <SelectValue placeholder="Select a wallet">
-          <AppIcon id={selectedWallet.iconId} name={setSelectedWallet.name} />
-          <span className="text-lg">{selectedWallet.name}</span>
+        <SelectValue placeholder="Select a wallet" defaultValue={value}>
+          <AppIcon id={displayedWallet.iconId} name={displayedWallet.name} />
+          <span className="text-lg">{displayedWallet.name}</span>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>

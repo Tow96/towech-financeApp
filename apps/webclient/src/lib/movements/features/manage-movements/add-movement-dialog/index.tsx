@@ -3,7 +3,6 @@ import { useState, ReactNode } from 'react';
 import { CalendarIcon, Plus } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import {
   FormControl,
@@ -18,84 +17,49 @@ import { Calendar } from '@/lib/shadcn-ui/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/lib/shadcn-ui/components/ui/popover';
 import { cn } from '@/lib/shadcn-ui/utils';
 
-import { FormDialog } from '@/lib/webclient';
 import { useAddMovement } from '@/lib/movements/data-store';
+import { AddMovementFormSchema, addMovementFormDefaultValues } from './form-schema';
+import { FormDialog } from '@/lib/webclient';
 import { Features as CategoryFeatures } from '@/lib/categories';
 import { Features as WalletFeatures } from '@/lib/wallets';
 import { CategoryType } from '@/lib/categories/data-store';
+import { convertValueToCents } from '@/lib/utils';
 
 export const AddMovementDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
   const addMovementMutation = useAddMovement();
 
-  const formSchema = z.object({
-    amount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Must be a number with up to two decimal places'),
-    category: z.object({
-      id: z.string().min(1, { message: 'Select a category' }),
-      subCategory: z.string().nullable(),
-      type: z.enum(CategoryType),
-      name: z.string(),
-      iconId: z.number(),
-    }),
-    date: z.date(),
-    description: z
-      .string()
-      .min(1, { message: 'Description cannot be empty. ' })
-      .max(140, { message: 'Description cannot exceed 140 characters.' }),
-    from: z.object({
-      id: z.string().nullable(),
-      name: z.string(),
-      iconId: z.number(),
-    }),
-    to: z.object({
-      id: z.string().nullable(),
-      name: z.string(),
-      iconId: z.number(),
-    }),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      amount: '',
-      category: {
-        id: '',
-        subCategory: null,
-        name: '',
-        iconId: 0,
-        type: CategoryType.expense,
-      },
-      date: new Date(),
-      description: '',
-      from: {
-        id: '',
-        iconId: 0,
-        name: '',
-      },
-      to: {
-        id: '',
-        iconId: 0,
-        name: '',
-      },
-    },
+  const form = useForm<AddMovementFormSchema>({
+    resolver: zodResolver(AddMovementFormSchema),
+    defaultValues: addMovementFormDefaultValues,
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: AddMovementFormSchema) => {
     addMovementMutation.mutate(
       {
-        categoryId: values.category.id,
-        subCategoryId: values.category.subCategory,
-        date: values.date,
-        description: values.description,
+        ...values,
         summary: [
           {
-            originWalletId: values.category.type === CategoryType.income ? null : values.from.id,
-            destinationWalletId:
-              values.category.type === CategoryType.expense ? null : values.to.id,
-            amount: Math.round(Number(values.amount) * 100),
+            amount: convertValueToCents(Number(values.summary.amount)),
+            wallet: {
+              originId:
+                values.category.type === CategoryType.income
+                  ? null
+                  : values.summary.wallet.originId,
+              destinationId:
+                values.category.type === CategoryType.expense
+                  ? null
+                  : values.summary.wallet.destinationId,
+            },
           },
         ],
       },
-      { onSuccess: () => setOpen(false) }
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+        },
+      }
     );
   };
 
@@ -117,7 +81,7 @@ export const AddMovementDialog = (): ReactNode => {
         <FormField
           control={form.control}
           disabled={addMovementMutation.isPending}
-          name="amount"
+          name="summary.amount"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>Amount</FormLabel>
@@ -144,7 +108,7 @@ export const AddMovementDialog = (): ReactNode => {
         {form.watch().category.type === CategoryType.expense && (
           <FormField
             control={form.control}
-            name="from"
+            name="summary.wallet.originId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Wallet</FormLabel>
@@ -157,7 +121,7 @@ export const AddMovementDialog = (): ReactNode => {
         {form.watch().category.type === CategoryType.income && (
           <FormField
             control={form.control}
-            name="to"
+            name="summary.wallet.destinationId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Wallet</FormLabel>
@@ -171,7 +135,7 @@ export const AddMovementDialog = (): ReactNode => {
           <div className="flex gap-2">
             <FormField
               control={form.control}
-              name="from"
+              name="summary.wallet.originId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>From</FormLabel>
@@ -180,10 +144,9 @@ export const AddMovementDialog = (): ReactNode => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="to"
+              name="summary.wallet.destinationId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>To</FormLabel>

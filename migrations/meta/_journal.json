@@ -5,43 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1752620548766,
-      "tag": "0000_giant_wong",
+      "when": 1753376888122,
+      "tag": "0000_organic_venus",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1752700260427,
-      "tag": "0001_kind_secret_warriors",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1752865861379,
-      "tag": "0002_previous_dakota_north",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1753122987239,
-      "tag": "0003_aromatic_boomer",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1753126285746,
-      "tag": "0004_bent_stryfe",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1753201472776,
-      "tag": "0005_busy_devos",
+      "when": 1753399835098,
+      "tag": "0001_normal_calypso",
       "breakpoints": true
     }
   ]

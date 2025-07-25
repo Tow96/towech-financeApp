@@ -44,7 +44,12 @@ export const AddSubCategoryDialog = (props: AddSubCategoryDialogProps): ReactNod
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addSubCategoryMutation.mutate(values, { onSuccess: () => props.setOpen(false) });
+    addSubCategoryMutation.mutate(values, {
+      onSuccess: () => {
+        form.reset();
+        props.setOpen(false);
+      },
+    });
   }
 
   return (

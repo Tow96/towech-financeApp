@@ -8,6 +8,7 @@ import { UsersModule } from '@/lib/users';
 import { CategoryModule } from '@/lib/categories';
 import { WalletModule } from '@/lib/wallets';
 import { MovementModule } from '@/lib/movements';
+import { BudgetsModule } from '@/lib/budgets';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MovementModule } from '@/lib/movements';
     CategoryModule,
     WalletModule,
     MovementModule,
+    BudgetsModule,
   ],
   controllers: [AppController],
 })

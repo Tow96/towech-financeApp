@@ -1,5 +1,5 @@
 ﻿import { ReactNode } from 'react';
-import { convertAmountToCurrencyString } from '@/lib/utils';
+import { convertCentsToCurrencyString } from '@/lib/utils';
 
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 
@@ -15,7 +15,7 @@ export const WalletTotal = (props: WalletTotalProps): ReactNode => {
       {props.loading ? (
         <Skeleton className="w-1/3 h-5 ml-4 mt-1" />
       ) : (
-        convertAmountToCurrencyString(props.total)
+        convertCentsToCurrencyString(props.total)
       )}
     </span>
   );

@@ -10,6 +10,7 @@ import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 import { AppIcon } from '@/lib/icons';
 import { CategoryItemMenu } from './menu';
 import { SubCategoryItem } from './subcategory-item';
+import { capitalizeFirst } from '@/lib/utils';
 
 interface CategoryItemProps {
   category: CategoryDto;
@@ -28,7 +29,7 @@ export const CategoryItem = ({ category }: CategoryItemProps): ReactNode => {
           <AppIcon className="rounded-full w-12 h-12" id={category.iconId} name={category.name} />
 
           {/* Name */}
-          <span className="flex-1 text-xl">{category.name}</span>
+          <span className="flex-1 text-xl">{capitalizeFirst(category.name)}</span>
         </AccordionTrigger>
         <CategoryItemMenu category={category} />
       </div>

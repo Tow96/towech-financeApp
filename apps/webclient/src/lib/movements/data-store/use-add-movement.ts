@@ -4,12 +4,17 @@ import { useUsers } from '@/lib/users/use-users';
 import { MOVEMENT_QUERY_KEY } from './use-movements';
 import ApiClient from '@/lib/api';
 import { SummaryDto } from './dto';
+import { CategoryType } from 'backend/dist/lib/categories/dto';
+import { WALLET_QUERY_KEY } from '@/lib/wallets/data-store';
 
-interface AddMovementDto {
-  categoryId: string;
+export interface AddMovementDto {
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
   date: Date;
   description: string;
-  subCategoryId: string | null;
   summary: SummaryDto[];
 }
 
@@ -21,6 +26,7 @@ export const useAddMovement = () => {
     mutationFn: (data: AddMovementDto) => api.post<{ id: string }>('movement', data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [MOVEMENT_QUERY_KEY] });
+      await queryClient.invalidateQueries({ queryKey: [WALLET_QUERY_KEY] });
     },
   });
 };

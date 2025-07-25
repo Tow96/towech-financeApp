@@ -20,8 +20,8 @@ export const ManageMovementsView = (): ReactNode => {
     if (filteredWallet === 'total') return true;
 
     return (
-      m.summary[0]?.originWalletId === filteredWallet ||
-      m.summary[0]?.destinationWalletId === filteredWallet
+      m.summary[0]?.wallet.originId === filteredWallet ||
+      m.summary[0]?.wallet.destinationId === filteredWallet
     );
   });
 

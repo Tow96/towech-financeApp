@@ -3,6 +3,7 @@
 import { SubCategoryDto } from '@/lib/categories/data-store';
 import { AppIcon } from '@/lib/icons';
 import { SubCategoryItemMenu } from '@/lib/categories/features/manage-categories/category-item/subcategory-item/menu';
+import { capitalizeFirst } from '@/lib/utils';
 
 interface SubCategoryItemProps {
   subCategory: SubCategoryDto;
@@ -23,7 +24,7 @@ export const SubCategoryItem = (props: SubCategoryItemProps): ReactNode => {
         />
 
         {/*  Name */}
-        <span className="flex-1 text-lg">{props.subCategory.name}</span>
+        <span className="flex-1 text-lg">{capitalizeFirst(props.subCategory.name)}</span>
       </div>
 
       <SubCategoryItemMenu subCategory={props.subCategory} parentId={props.parentId} />

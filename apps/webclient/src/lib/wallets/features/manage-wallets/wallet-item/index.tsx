@@ -4,7 +4,7 @@ import { cn } from '@/lib/shadcn-ui/utils';
 import { Skeleton } from '@/lib/shadcn-ui/components/ui/skeleton';
 
 import { AppIcon } from '@/lib/icons';
-import { capitalizeFirst, convertAmountToCurrencyString } from '@/lib/utils';
+import { capitalizeFirst, convertCentsToCurrencyString } from '@/lib/utils';
 import { WalletDto } from '@/lib/wallets/data-store';
 import { WalletItemMenu } from './menu';
 
@@ -29,7 +29,7 @@ export const WalletItem = ({ wallet }: WalletItemProps): ReactNode => {
             'font-semibold',
             wallet.money < 0 ? 'text-destructive' : 'text-muted-foreground'
           )}>
-          {convertAmountToCurrencyString(wallet.money)}
+          {convertCentsToCurrencyString(wallet.money)}
         </span>
       </div>
 
