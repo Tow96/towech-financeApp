@@ -1,6 +1,6 @@
 {
   "name": "@financeapp/source",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace webclient\" \"npm run dev --workspace backend\"",

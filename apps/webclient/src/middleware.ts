@@ -2,11 +2,20 @@
 
 const isPublicRoute = createRouteMatcher([]);
 
-export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req) && !(process.env.NEXT_PUBLIC_USERS_DISABLED === 'true')) {
-    await auth.protect();
+export default clerkMiddleware(
+  async (auth, req) => {
+    if (!isPublicRoute(req) && !(process.env.NEXT_PUBLIC_USERS_DISABLED === 'true')) {
+      await auth.protect();
+    }
+  },
+  {
+    contentSecurityPolicy: {
+      directives: {
+        'connect-src': ['https://betafinanceapi.towechlabs.com', 'http://localhost:3001'],
+      },
+    },
   }
-});
+);
 
 export const config = {
   matcher: [

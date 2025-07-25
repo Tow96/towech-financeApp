@@ -1,9 +1,9 @@
 ﻿# compiled output
 /node_modules
 **/*/dist
+/dist
 **/*/.next
 **/*/next-env.d.ts
-
 
 # Logs
 logs

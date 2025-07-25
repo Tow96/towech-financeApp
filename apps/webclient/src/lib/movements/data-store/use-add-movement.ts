@@ -4,8 +4,8 @@ import { useUsers } from '@/lib/users/use-users';
 import { MOVEMENT_QUERY_KEY } from './use-movements';
 import ApiClient from '@/lib/api';
 import { SummaryDto } from './dto';
-import { CategoryType } from 'backend/dist/lib/categories/dto';
 import { WALLET_QUERY_KEY } from '@/lib/wallets/data-store';
+import { CategoryType } from '@/lib/categories/data-store';
 
 export interface AddMovementDto {
   category: {
