@@ -7,6 +7,8 @@ import { MovementDto } from '@/lib/movements/data-store';
 import { capitalizeFirst, convertCentsToCurrencyString } from '@/lib/utils';
 import { CategoryType } from '@/lib/categories/data-store';
 import { MovementItemMenu } from './menu';
+import { WalletIcon } from '@/lib/wallets/features/display-wallet';
+import { ArrowBigRight } from 'lucide-react';
 
 interface MovementItemProps {
   movement: MovementDto;
@@ -49,7 +51,18 @@ export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
           </div>
           {/* Secondary data */}
           <div className="flex justify-between text-muted-foreground">
-            <span>{capitalizeFirst(movement.description)}</span>
+            <div className="flex">
+              {movement.summary[0].wallet.originId && (
+                <WalletIcon className="h-6 w-6" id={movement.summary[0].wallet.originId} />
+              )}
+              {movement.summary[0].wallet.originId && movement.summary[0].wallet.destinationId && (
+                <ArrowBigRight />
+              )}
+              {movement.summary[0].wallet.destinationId && (
+                <WalletIcon className="h-6 w-6" id={movement.summary[0].wallet.destinationId} />
+              )}
+              <span className="pl-2">{capitalizeFirst(movement.description)}</span>
+            </div>
             <span>{convertIsoDate(movement.date)}</span>
           </div>
         </div>

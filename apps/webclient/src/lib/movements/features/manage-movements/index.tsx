@@ -8,9 +8,17 @@ import { MovementList } from '@/lib/movements/features/manage-movements/movement
 import { WalletFilter } from '@/lib/wallets/features/filter-wallet';
 import { DatePicker } from '@/lib/webclient/datepicker';
 import { MonthSummary } from '@/lib/movements/features/manage-movements/summary';
+import { Button } from '@/lib/shadcn-ui/components/ui/button';
+import { ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 
 export const ManageMovementsView = (): ReactNode => {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const changeMonth = (delta: number) => {
+    const currDate = new Date(date || new Date());
+    currDate.setMonth(currDate.getMonth() + delta);
+    setDate(currDate);
+  };
+
   const [filteredWallet, setFilteredWallet] = useState<string>('total');
 
   const movements = useMovements(
@@ -29,7 +37,15 @@ export const ManageMovementsView = (): ReactNode => {
   return (
     <Card className="m-4">
       <CardHeader className="flex items-center justify-between">
-        <DatePicker value={date} onChange={setDate} />
+        <div className="flex">
+          <Button size="icon" onClick={() => changeMonth(-1)}>
+            <ArrowBigLeft />
+          </Button>
+          <DatePicker value={date} onChange={setDate} />
+          <Button size="icon" onClick={() => changeMonth(1)}>
+            <ArrowBigRight />
+          </Button>
+        </div>
         <WalletFilter selectedWallet={filteredWallet} setSelectedWallet={setFilteredWallet} />
         <AddMovementDialog />
       </CardHeader>
