@@ -7,6 +7,7 @@ import { AddMovementDialog } from './add-movement-dialog';
 import { MovementList } from '@/lib/movements/features/manage-movements/movement-list';
 import { WalletFilter } from '@/lib/wallets/features/filter-wallet';
 import { DatePicker } from '@/lib/webclient/datepicker';
+import { MonthSummary } from '@/lib/movements/features/manage-movements/summary';
 
 export const ManageMovementsView = (): ReactNode => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -33,6 +34,7 @@ export const ManageMovementsView = (): ReactNode => {
         <AddMovementDialog />
       </CardHeader>
       <CardContent>
+        <MonthSummary movements={filteredMovements} />
         <MovementList movements={filteredMovements} loading={movements.isLoading} />
       </CardContent>
     </Card>
