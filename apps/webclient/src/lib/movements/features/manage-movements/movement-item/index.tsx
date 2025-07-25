@@ -4,7 +4,7 @@ import { cn } from '@/lib/shadcn-ui/utils';
 
 import { Features as CategoryFeatures } from '@/lib/categories';
 import { MovementDto } from '@/lib/movements/data-store';
-import { convertCentsToCurrencyString } from '@/lib/utils';
+import { capitalizeFirst, convertCentsToCurrencyString } from '@/lib/utils';
 import { CategoryType } from '@/lib/categories/data-store';
 import { MovementItemMenu } from './menu';
 
@@ -49,7 +49,7 @@ export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
           </div>
           {/* Secondary data */}
           <div className="flex justify-between text-muted-foreground">
-            <span>{movement.description}</span>
+            <span>{capitalizeFirst(movement.description)}</span>
             <span>{convertIsoDate(movement.date)}</span>
           </div>
         </div>

@@ -7,7 +7,7 @@ const AddMovementFormSchema = z.object({
     .string()
     .min(1)
     .max(140)
-    .transform(v => v.trim().toLowerCase()),
+    .transform(v => v.trim()),
   category: z.object({
     type: z.enum(CategoryType),
     id: z.string().min(1).nullable(),

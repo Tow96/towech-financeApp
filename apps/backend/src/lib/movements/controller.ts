@@ -63,8 +63,6 @@ export class MovementController {
     @CurrentUser() user: User,
     @Body() data: AddMovementDto
   ): Promise<{ id: string }> {
-    data.description = data.description.trim().toLowerCase();
-
     this.logger.log(
       `user: ${user.id} trying to add movement to category: ${data.category.type}-${data.category.id || 'null'}-${data.category.subId || 'null'}`
     );

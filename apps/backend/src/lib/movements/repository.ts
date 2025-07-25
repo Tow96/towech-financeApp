@@ -1,6 +1,6 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, and, gte, lt, sql, or } from 'drizzle-orm';
+import { eq, and, gte, lt, sql, or, desc } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
@@ -65,6 +65,7 @@ export class MovementRepository {
         gte(mainSchema.Movements.date, new Date(year, month - 1)),
         lt(mainSchema.Movements.date, new Date(year, month)) // Primitive handles year rollover
       ),
+      orderBy: desc(mainSchema.Movements.date),
     });
   }
 
