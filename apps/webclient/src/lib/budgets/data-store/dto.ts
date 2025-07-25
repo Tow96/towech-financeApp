@@ -17,3 +17,13 @@ export interface BudgetSummaryDto {
     subId: string | null;
   };
 }
+
+export interface ReportDto {
+  year: number;
+  amount: number;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
+}

@@ -10,18 +10,35 @@
   NotFoundException,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
 import { AddBudgetDto, BudgetDto } from '@/lib/budgets/dto';
 import { BudgetRepository } from '@/lib/budgets/repository';
 import { CategoryType } from '@/lib/categories/dto';
+import { MovementRepository } from '@/lib/movements/repository';
+import { ReportDto } from '@/lib/movements/dto';
 
 @Controller('budget')
 export class BudgetController {
   private readonly logger: Logger = new Logger(BudgetController.name);
 
-  constructor(private readonly _budgetRepository: BudgetRepository) {}
+  constructor(
+    private readonly _movementRepository: MovementRepository,
+    private readonly _budgetRepository: BudgetRepository
+  ) {}
+
+  @Get('report')
+  async getBudgetReport(
+    @CurrentUser() user: User,
+    @Query('year') year: string
+  ): Promise<ReportDto[]> {
+    const yearNum = parseInt(year) || new Date().getFullYear();
+
+    this.logger.log(`user: ${user.id} requesting budget report for ${yearNum}`);
+    return await this._movementRepository.getReport(user.id, yearNum);
+  }
 
   @Get()
   async getAllBudgets(@CurrentUser() user: User): Promise<BudgetDto[]> {

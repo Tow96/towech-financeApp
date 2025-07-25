@@ -1,6 +1,6 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, and, gte, lt } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';

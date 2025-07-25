@@ -30,3 +30,13 @@ export interface AddMovementDto {
   description: string;
   summary: SummaryDto[];
 }
+
+export interface ReportDto {
+  year: number;
+  amount: number;
+  category: {
+    type: CategoryType;
+    id: string | null;
+    subId: string | null;
+  };
+}

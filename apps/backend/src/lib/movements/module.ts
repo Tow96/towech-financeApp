@@ -9,5 +9,6 @@ import { MovementRepository } from './repository';
   imports: [DatabaseModule, CategoryModule],
   controllers: [MovementController],
   providers: [MovementRepository],
+  exports: [MovementRepository],
 })
 export class MovementModule {}
