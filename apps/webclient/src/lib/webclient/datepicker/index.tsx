@@ -29,6 +29,7 @@ export const DatePicker = (props: DatePickerProps) => {
         <Calendar
           mode="single"
           defaultMonth={props.value}
+          startMonth={new Date(2015, 0)}
           selected={props.value}
           onSelect={props.onChange}
           captionLayout="dropdown"

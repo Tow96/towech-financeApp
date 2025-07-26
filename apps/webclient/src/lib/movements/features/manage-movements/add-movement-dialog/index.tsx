@@ -52,13 +52,14 @@ export const AddMovementDialog = (): ReactNode => {
           },
         ],
       },
-      {
-        onSuccess: () => {
-          form.reset();
-          setOpen(false);
-        },
-      }
+      { onSuccess: onSubmitSuccess }
     );
+  };
+  const onSubmitSuccess = () => {
+    const lastDate = new Date(form.watch().date);
+    form.reset();
+    form.setValue('date', lastDate); // Ensure last date is remembered
+    setOpen(false);
   };
 
   return (
