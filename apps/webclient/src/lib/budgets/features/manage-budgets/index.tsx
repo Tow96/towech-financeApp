@@ -45,11 +45,18 @@ export const ManageBudgetsView = (): ReactNode => {
       );
       if (bucketIndex === -1)
         bucketIndex = buckets.findIndex(
-          b => b.category.type === item.category.type && b.category.id === item.category.id
+          b =>
+            b.category.type === item.category.type &&
+            b.category.id === item.category.id &&
+            b.category.subId === null
         );
       if (bucketIndex === -1)
-        bucketIndex = buckets.findIndex(b => b.category.type === item.category.type);
-
+        bucketIndex = buckets.findIndex(
+          b =>
+            b.category.type === item.category.type &&
+            b.category.id === null &&
+            b.category.subId === null
+        );
       if (bucketIndex !== -1) buckets[bucketIndex].total += item.amount;
     }
   }
