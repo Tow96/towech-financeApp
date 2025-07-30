@@ -1,5 +1,5 @@
 ﻿import { ReactNode, useState } from 'react';
-import { Ellipsis, Trash } from 'lucide-react';
+import { Ellipsis, Trash, Pencil } from 'lucide-react';
 
 import {
   DropDrawer,
@@ -12,18 +12,21 @@ import { Button } from '@/lib/shadcn-ui/components/ui/button';
 
 import { MovementDto } from '@/lib/movements/data-store';
 import { DeleteMovementDialog } from '@/lib/movements/features/manage-movements/movement-item/delete-movement-dialog';
+import { EditMovementDialog } from '@/lib/movements/features/manage-movements/movement-item/edit-movement-dialog';
 
 interface MovementItemMenuProps {
   movement: MovementDto;
 }
 
 export const MovementItemMenu = ({ movement }: MovementItemMenuProps): ReactNode => {
+  const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
   return (
     <DropDrawer>
       {/* Forms (hidden at start) */}
       <DeleteMovementDialog open={openDelete} setOpen={setOpenDelete} movement={movement} />
+      <EditMovementDialog open={openEdit} setOpen={setOpenEdit} movement={movement} />
 
       {/* Menu button */}
       <DropDrawerTrigger asChild>
@@ -34,6 +37,12 @@ export const MovementItemMenu = ({ movement }: MovementItemMenuProps): ReactNode
 
       <DropDrawerContent align="start">
         <DropDrawerGroup>
+          <DropDrawerItem
+            onClick={() => setOpenEdit(true)}
+            icon={<Pencil />}
+          >
+            <span>Edit Movement</span>
+          </DropDrawerItem>
           <DropDrawerItem
             onClick={() => setOpenDelete(true)}
             icon={<Trash />}
