@@ -1,5 +1,5 @@
 ﻿'use client';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 
 import { CategoryType, useCategories } from '@/lib/categories/data-store';
 import {
@@ -31,36 +31,49 @@ const VALUE_SEPARATOR = '%';
 export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
   const categories = useCategories();
   const {
-    field: { onChange },
+    field: { onChange, value },
   } = useController({ name: props.name || '', control: props.control });
 
+  const [internalValue, setInternalValue] = useState<CategorySelectorValue | undefined>(value ?? undefined);
   const [displayedCategory, setDisplayedCategory] = useState<{ iconId: number; name: string }>({
     iconId: 4,
     name: 'Uncategorized expense',
   });
 
-  const handleOnChange = (v: string) => {
+  useEffect(() => {
+    const selectedCategory = categories.data?.find(c => c.id === internalValue?.id);
+    const name =
+      internalValue?.subId === null
+        ? selectedCategory?.name || `Uncategorized ${internalValue.type.toLowerCase()}`
+        : selectedCategory?.subCategories.find(c => c.id === internalValue?.subId)?.name || '';
+    const iconId =
+      internalValue?.subId === null
+        ? selectedCategory?.iconId || 4
+        : selectedCategory?.subCategories.find(c => c.id === internalValue?.subId)?.iconId || 4;
+    setDisplayedCategory({ name, iconId });
+  }, [categories.data, internalValue]);
+
+  const internalOnChange = (v: string) => {
     const splitValue = v.split(VALUE_SEPARATOR);
     const type = splitValue[0] as CategoryType;
     const id = splitValue[1] || null;
     const subId = splitValue[2] || null;
     const value: CategorySelectorValue = { type, id, subId };
+    setInternalValue(value);
     onChange(value);
-
-    const selectedCategory = categories.data?.find(c => c.id === id);
-    const name =
-      subId === null
-        ? selectedCategory?.name || `Uncategorized ${type.toLowerCase()}`
-        : selectedCategory?.subCategories.find(c => c.id === subId)?.name || '';
-    const iconId =
-      subId === null
-        ? selectedCategory?.iconId || 4
-        : selectedCategory?.subCategories.find(c => c.id === subId)?.iconId || 4;
-    setDisplayedCategory({ name, iconId });
   };
 
+  const valueToSelectValue = () => {
+    let output: string | undefined;
+    if (!internalValue) return output;
+
+    output = internalValue.type.toString();
+    if (internalValue.id !== null) output += `${VALUE_SEPARATOR}${internalValue.id}`;
+    if (internalValue.subId !== null) output += `${VALUE_SEPARATOR}${internalValue.subId}`;
+    return output;
+  };
   return (
-    <Select disabled={props.disabled} onValueChange={handleOnChange}>
+    <Select disabled={props.disabled} onValueChange={internalOnChange} value={valueToSelectValue()}>
       <SelectTrigger className="w-full !h-12">
         <SelectValue placeholder="Select a category">
           <AppIcon

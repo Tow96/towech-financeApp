@@ -1,6 +1,6 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, and, gte, lt, sql, or } from 'drizzle-orm';
+import { eq, and, gte, lt, sql, desc } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
@@ -65,6 +65,7 @@ export class MovementRepository {
         gte(mainSchema.Movements.date, new Date(year, month - 1)),
         lt(mainSchema.Movements.date, new Date(year, month)) // Primitive handles year rollover
       ),
+      orderBy: desc(mainSchema.Movements.date),
     });
   }
 
@@ -111,6 +112,26 @@ export class MovementRepository {
     });
 
     return id;
+  }
+
+  async update(id: string, data: Partial<MovementEntity>): Promise<void> {
+    await this._db.transaction(async tx => {
+      await tx
+        .delete(mainSchema.MovementSummary)
+        .where(eq(mainSchema.MovementSummary.movementId, id));
+      await tx
+        .update(mainSchema.Movements)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(mainSchema.Movements.id, id));
+      for (const item of data.summary || []) {
+        await tx.insert(mainSchema.MovementSummary).values({
+          movementId: id,
+          amount: item.amount,
+          originWalletId: item.originWalletId,
+          destinationWalletId: item.destinationWalletId,
+        });
+      }
+    });
   }
 
   async delete(id: string): Promise<void> {

@@ -36,6 +36,7 @@ export const ManageBudgetsView = (): ReactNode => {
   if (report.data) {
     for (let i = 0; i < (report.data?.length || 0); i++) {
       const item = report.data[i];
+
       let bucketIndex = buckets.findIndex(
         b =>
           b.category.type === item.category.type &&
@@ -44,10 +45,18 @@ export const ManageBudgetsView = (): ReactNode => {
       );
       if (bucketIndex === -1)
         bucketIndex = buckets.findIndex(
-          b => b.category.type === item.category.type && b.category.id === item.category.id
+          b =>
+            b.category.type === item.category.type &&
+            b.category.id === item.category.id &&
+            b.category.subId === null
         );
-      if (bucketIndex === -1) bucketIndex = buckets.findIndex(b => b.category.type);
-
+      if (bucketIndex === -1)
+        bucketIndex = buckets.findIndex(
+          b =>
+            b.category.type === item.category.type &&
+            b.category.id === null &&
+            b.category.subId === null
+        );
       if (bucketIndex !== -1) buckets[bucketIndex].total += item.amount;
     }
   }
@@ -68,7 +77,16 @@ export const ManageBudgetsView = (): ReactNode => {
               <CategoryName type={i.category.type} id={i.category.id} subId={i.category.subId} />
             </div>
             <div className="flex">
-              <span>{convertCentsToCurrencyString(0)}</span>
+              <span>
+                {convertCentsToCurrencyString(
+                  buckets.find(
+                    b =>
+                      b.category.type === i.category.type &&
+                      b.category.id === i.category.id &&
+                      b.category.subId === i.category.subId
+                  )?.total || 0
+                )}
+              </span>
               <span>/</span>
               <span>{convertCentsToCurrencyString(i.limit)}</span>
             </div>

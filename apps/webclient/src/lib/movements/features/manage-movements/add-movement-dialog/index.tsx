@@ -1,6 +1,6 @@
 ﻿'use client';
 import { useState, ReactNode } from 'react';
-import { CalendarIcon, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -13,9 +13,6 @@ import {
 } from '@/lib/shadcn-ui/components/ui/form';
 import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
-import { Calendar } from '@/lib/shadcn-ui/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/lib/shadcn-ui/components/ui/popover';
-import { cn } from '@/lib/shadcn-ui/utils';
 
 import { useAddMovement } from '@/lib/movements/data-store';
 import { AddMovementFormSchema, addMovementFormDefaultValues } from './form-schema';
@@ -24,6 +21,7 @@ import { Features as CategoryFeatures } from '@/lib/categories';
 import { Features as WalletFeatures } from '@/lib/wallets';
 import { CategoryType } from '@/lib/categories/data-store';
 import { convertValueToCents } from '@/lib/utils';
+import { DatePicker } from '@/lib/webclient/datepicker';
 
 export const AddMovementDialog = (): ReactNode => {
   const [open, setOpen] = useState(false);
@@ -54,13 +52,16 @@ export const AddMovementDialog = (): ReactNode => {
           },
         ],
       },
-      {
-        onSuccess: () => {
-          form.reset();
-          setOpen(false);
-        },
-      }
+      { onSuccess: onSubmitSuccess }
     );
+  };
+  const onSubmitSuccess = () => {
+    const lastDate = new Date(form.watch().date);
+    lastDate.setSeconds(lastDate.getSeconds() + 1);
+
+    form.reset();
+    form.setValue('date', lastDate); // Ensure last date is remembered
+    setOpen(false);
   };
 
   return (
@@ -165,26 +166,7 @@ export const AddMovementDialog = (): ReactNode => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      className={cn(!field.value && 'text-muted-foreground')}>
-                      {field.value ? field.value.toLocaleDateString() : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </Popover>
+              <DatePicker {...field} />
             </FormItem>
           )}
         />

@@ -16,8 +16,9 @@ export class CategoryRepository {
 
   getAllUserCategories(userId: string): Promise<any[]> {
     return this._db.query.Categories.findMany({
-      with: { subCategories: true },
+      with: { subCategories: { orderBy: mainSchema.SubCategories.name } },
       where: eq(mainSchema.Categories.userId, userId),
+      orderBy: mainSchema.Categories.name,
     });
   }
 

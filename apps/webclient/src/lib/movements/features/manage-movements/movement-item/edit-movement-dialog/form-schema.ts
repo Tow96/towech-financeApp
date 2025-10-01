@@ -1,7 +1,9 @@
 ﻿import { z } from 'zod';
 import { CategoryType } from '@/lib/categories/data-store';
+import { MovementDto } from '@/lib/movements/data-store';
 
-const AddMovementFormSchema = z.object({
+const EditMovementFormSchema = z.object({
+  id: z.string().min(1),
   date: z.date(),
   description: z
     .string()
@@ -22,23 +24,24 @@ const AddMovementFormSchema = z.object({
   }),
 });
 
-type AddMovementFormSchema = z.infer<typeof AddMovementFormSchema>;
+type EditMovementFormSchema = z.infer<typeof EditMovementFormSchema>;
 
-const addMovementFormDefaultValues: AddMovementFormSchema = {
-  date: new Date(),
-  description: '',
+const editMovementFormDefaultValues = (v: MovementDto): EditMovementFormSchema => ({
+  id: v.id,
+  date: new Date(v.date),
+  description: v.description,
   category: {
-    type: CategoryType.expense,
-    id: null,
-    subId: null,
+    type: v.category.type,
+    id: v.category.id,
+    subId: v.category.subId,
   },
   summary: {
-    amount: '',
+    amount: (v.summary[0].amount / 100).toString(),
     wallet: {
-      originId: null,
-      destinationId: null,
+      originId: v.summary[0].wallet.originId,
+      destinationId: v.summary[0].wallet.destinationId,
     },
   },
-};
+});
 
-export { AddMovementFormSchema, addMovementFormDefaultValues };
+export { EditMovementFormSchema, editMovementFormDefaultValues };

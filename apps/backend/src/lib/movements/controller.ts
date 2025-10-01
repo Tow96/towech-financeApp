@@ -9,11 +9,12 @@
   NotFoundException,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CurrentUser, User } from '@/lib/users';
 
-import { AddMovementDto, MovementDto } from './dto';
+import { AddMovementDto, EditMovementDto, MovementDto } from './dto';
 import { MovementRepository } from './repository';
 import { CategoryRepository } from '@/lib/categories';
 import { CategoryType } from '@/lib/categories/dto';
@@ -63,8 +64,6 @@ export class MovementController {
     @CurrentUser() user: User,
     @Body() data: AddMovementDto
   ): Promise<{ id: string }> {
-    data.description = data.description.trim().toLowerCase();
-
     this.logger.log(
       `user: ${user.id} trying to add movement to category: ${data.category.type}-${data.category.id || 'null'}-${data.category.subId || 'null'}`
     );
@@ -94,6 +93,49 @@ export class MovementController {
       data.summary
     );
     return { id };
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async editMovement(
+    @CurrentUser() user: User,
+    @Body() data: EditMovementDto,
+    @Param('id') id: string
+  ): Promise<void> {
+    const movement = await this._movementRepository.getById(id);
+    if (movement === null || movement.userId !== user.id)
+      throw new NotFoundException(`Movement ${id} not found`);
+
+    this.logger.log(`user: ${user.id} trying to update category: ${id}`);
+    // Category validation
+    if (data.category.id !== null) {
+      const existingCategory = await this._categoryRepository.getCategoryById(data.category.id);
+      if (existingCategory === null || existingCategory.userId !== user.id)
+        throw new NotFoundException(`Category ${data.category.id} not found`);
+      if (data.category.subId !== null) {
+        const existingSubcategory = await this._categoryRepository.getSubCategoryById(
+          data.category.id,
+          data.category.subId
+        );
+        if (existingSubcategory === null)
+          throw new NotFoundException(`SubCategory ${data.category.subId} not found`);
+      }
+    }
+
+    await this._movementRepository.update(id, {
+      categoryType: data.category.type,
+      categoryId: data.category.id,
+      categorySubId: data.category.subId,
+      date: new Date(data.date),
+      description: data.description,
+      summary: data.summary.map(s => ({
+        id: '',
+        amount: s.amount,
+        originWalletId: s.wallet.originId,
+        destinationWalletId: s.wallet.destinationId,
+        movementId: '',
+      })),
+    });
   }
 
   @Delete(':id')
