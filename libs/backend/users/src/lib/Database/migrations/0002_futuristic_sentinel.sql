@@ -1,1 +1,0 @@
-ALTER TABLE "users"."info" ADD COLUMN "role" text DEFAULT 'user' NOT NULL;

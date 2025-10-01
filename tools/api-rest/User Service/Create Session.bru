@@ -1,0 +1,22 @@
+meta {
+  name: Create Session
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://api.clerk.com/v1/sessions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id": "{{userId}}"
+  }
+}
+
+script:post-response {
+  let data = res.body;
+  bru.setEnvVar("sessionId", data.id);
+}

@@ -1,0 +1,16 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_24_svg__g{fill:#00b0f0}.Recurso_24_svg__h{fill:#1b1464}</style>
+    </defs>
+    <g id="Recurso_24_svg__b">
+        <circle class="Recurso_24_svg__g" cx="50" cy="50" r="50" id="Recurso_24_svg__c"/>
+        <g id="Recurso_24_svg__d">
+            <path style="fill: rgb(255, 255, 255);" d="M22.5 15h55v70h-55z"/>
+            <path class="Recurso_24_svg__h"
+                  d="M57 26v4H43v-4h14m.5-.5h-15v5h15v-5ZM72 26v4H58v-4h14m.5-.5h-15v5h15v-5ZM72 31v4H58v-4h14m.5-.5h-15v5h15v-5ZM57 31v4H43v-4h14m.5-.5h-15v5h15v-5ZM42 31v4H28v-4h14m.5-.5h-15v5h15v-5ZM42 26v4H28v-4h14m.5-.5h-15v5h15v-5Z"/>
+            <path style="fill: rgb(171, 0, 54);" d="M61 18h11v5H61z"/>
+            <path class="Recurso_24_svg__g"
+                  d="M59.24 71.61c-2.11 5.1-7.96 7.52-13.06 5.41s-7.52-7.96-5.41-13.07l9.24-22.3 9.24 22.3c.97 2.36 1.06 5.11 0 7.66Z"/>
+        </g>
+    </g>
+</svg>

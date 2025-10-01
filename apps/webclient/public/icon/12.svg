@@ -1,0 +1,22 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>
+            .Recurso_21_svg__f,.Recurso_21_svg__g{stroke:#28285b;stroke-miterlimit:10}.Recurso_21_svg__f{fill:#1caae2}.Recurso_21_svg__g{fill:none}.Recurso_21_svg__l{fill:#1b1464}
+        </style>
+    </defs>
+    <g id="Recurso_21_svg__b">
+        <circle cx="50" cy="50" r="50" style="fill: rgb(28, 170, 226);" id="Recurso_21_svg__c"/>
+        <g id="Recurso_21_svg__d">
+            <path style="fill: rgb(255, 255, 255);" d="M22.5 15h55v70h-55z"/>
+            <path class="Recurso_21_svg__l"
+                  d="M57 26v4H43v-4h14m.5-.5h-15v5h15v-5ZM72 26v4H58v-4h14m.5-.5h-15v5h15v-5ZM72 31v4H58v-4h14m.5-.5h-15v5h15v-5ZM57 31v4H43v-4h14m.5-.5h-15v5h15v-5ZM42 31v4H28v-4h14m.5-.5h-15v5h15v-5ZM42 26v4H28v-4h14m.5-.5h-15v5h15v-5Z"/>
+            <path style="fill: rgb(171, 0, 54);" d="M61 18h11v5H61z"/>
+            <circle cx="50" cy="56" r="13.5" style="fill: rgb(28, 170, 226);"/>
+            <path d="M50 43c7.17 0 13 5.83 13 13s-5.83 13-13 13-13-5.83-13-13 5.83-13 13-13m0-1c-7.73 0-14 6.27-14 14s6.27 14 14 14 14-6.27 14-14-6.27-14-14-14Z"
+                  style="fill: rgb(40, 40, 91);"/>
+            <path class="Recurso_21_svg__f"
+                  d="M49.02 69.56c-1.32-1.67-4.01-5.56-4.61-11.17-.91-8.38 3.48-14.45 4.56-15.85M50.2 69.71c1.32-1.67 4.01-5.56 4.61-11.17.91-8.38-3.48-14.45-4.56-15.85"/>
+            <path class="Recurso_21_svg__g" d="M36.85 53.11h26.16M37.15 60.7h25.48"/>
+        </g>
+    </g>
+</svg>

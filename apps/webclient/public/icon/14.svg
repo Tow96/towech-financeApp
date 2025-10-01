@@ -1,0 +1,19 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <defs>
+        <style>.Recurso_23_svg__e{fill:#dfa300}.Recurso_23_svg__g{fill:#ab0036}.Recurso_23_svg__i{fill:#1b1464}</style>
+    </defs>
+    <g id="Recurso_23_svg__b">
+        <circle class="Recurso_23_svg__e" cx="50" cy="50" r="50" id="Recurso_23_svg__c"/>
+        <g id="Recurso_23_svg__d">
+            <path style="fill: rgb(255, 255, 255);" d="M22.5 15h55v70h-55z"/>
+            <path class="Recurso_23_svg__i"
+                  d="M57 26v4H43v-4h14m.5-.5h-15v5h15v-5ZM72 26v4H58v-4h14m.5-.5h-15v5h15v-5ZM72 31v4H58v-4h14m.5-.5h-15v5h15v-5ZM57 31v4H43v-4h14m.5-.5h-15v5h15v-5ZM42 31v4H28v-4h14m.5-.5h-15v5h15v-5ZM42 26v4H28v-4h14m.5-.5h-15v5h15v-5Z"/>
+            <path class="Recurso_23_svg__g" d="M61 18h11v5H61z"/>
+            <path style="fill: rgb(191, 92, 23);" d="M54.5 45.5H57V53h-2.5z"/>
+            <path class="Recurso_23_svg__g"
+                  d="M49.38 43.83 35.69 56.67c-.6.57-.2 1.58.62 1.58H63.7c.83 0 1.23-1.01.62-1.58L50.63 43.83a.913.913 0 0 0-1.25 0Z"/>
+            <path class="Recurso_23_svg__e" d="m50 46.2-12.5 12h25L50 46.2zM37.5 58.2h25v17h-25z"/>
+            <path style="fill: rgb(66, 33, 11);" d="M47 64.2h6v11h-6z"/>
+        </g>
+    </g>
+</svg>

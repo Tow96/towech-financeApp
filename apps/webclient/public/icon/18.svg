@@ -1,0 +1,7 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1em" height="1em" class="IconSelector__Grid__Icon">
+    <circle cx="50" cy="50" r="50" style="fill: rgb(0, 125, 201);"/>
+    <circle cx="50" cy="50" r="32.5" style="fill: rgb(84, 34, 93);"/>
+    <circle cx="50" cy="50" r="15" style="fill: rgb(171, 0, 54);"/>
+    <path d="m65.18 68.926 2.909-6.554 6.554 2.908-2.909 6.554zM69.536 62.989 85.91 25.935l3.658 1.617-16.373 37.053z"/>
+    <circle cx="50" cy="50" r="2.5"/>
+</svg>
