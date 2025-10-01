@@ -1,6 +1,5 @@
 ﻿'use client';
-import { useState, ReactNode } from 'react';
-import { Plus } from 'lucide-react';
+import { ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -11,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/lib/shadcn-ui/components/ui/form';
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
 
 import { useEditMovement } from '@/lib/movements/data-store/use-edit-movement';
@@ -65,7 +63,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps): ReactNode =>
   const internalSetOpen = (open: boolean) => {
     form.reset();
     props.setOpen(open);
-  }
+  };
 
   return (
     <FormDialog

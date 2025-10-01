@@ -37,10 +37,7 @@ export const MovementItemMenu = ({ movement }: MovementItemMenuProps): ReactNode
 
       <DropDrawerContent align="start">
         <DropDrawerGroup>
-          <DropDrawerItem
-            onClick={() => setOpenEdit(true)}
-            icon={<Pencil />}
-          >
+          <DropDrawerItem onClick={() => setOpenEdit(true)} icon={<Pencil />}>
             <span>Edit Movement</span>
           </DropDrawerItem>
           <DropDrawerItem

@@ -25,7 +25,6 @@ export const WalletSelector = (props: WalletSelectorProps): ReactNode => {
     field: { onChange, value },
   } = useController({ name: props.name || '', control: props.control });
 
-
   const [internalValue, setInternalValue] = useState<string | undefined>(value ?? undefined);
   const [displayedWallet, setDisplayedWallet] = useState<{ iconId: number; name: string }>({
     iconId: 0,
@@ -40,7 +39,7 @@ export const WalletSelector = (props: WalletSelectorProps): ReactNode => {
   const internalOnChange = (v: string) => {
     setInternalValue(v);
     onChange(v);
-  }
+  };
 
   return (
     <Select disabled={props.disabled} onValueChange={internalOnChange} value={internalValue}>

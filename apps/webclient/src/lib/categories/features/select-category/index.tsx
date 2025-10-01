@@ -34,7 +34,9 @@ export const CategorySelector = (props: CategorySelectorProps): ReactNode => {
     field: { onChange, value },
   } = useController({ name: props.name || '', control: props.control });
 
-  const [internalValue, setInternalValue] = useState<CategorySelectorValue | undefined>(value ?? undefined);
+  const [internalValue, setInternalValue] = useState<CategorySelectorValue | undefined>(
+    value ?? undefined
+  );
   const [displayedCategory, setDisplayedCategory] = useState<{ iconId: number; name: string }>({
     iconId: 4,
     name: 'Uncategorized expense',

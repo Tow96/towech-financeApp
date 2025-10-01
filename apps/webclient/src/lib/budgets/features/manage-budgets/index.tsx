@@ -1,9 +1,8 @@
 'use client';
 import { ReactNode, useState } from 'react';
 
-import { Button } from '@/lib/shadcn-ui/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/lib/shadcn-ui/components/ui/card';
-import { ReportDto, useBudgets, useReport } from '@/lib/budgets/data-store';
+import { useBudgets, useReport } from '@/lib/budgets/data-store';
 import { AddBudgetDialog } from './add-budget-dialog';
 import { Input } from '@/lib/shadcn-ui/components/ui/input';
 import { CategoryType } from '@/lib/categories/data-store';
