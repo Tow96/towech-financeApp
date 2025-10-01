@@ -49,6 +49,7 @@ export const ManageMovementsView = (): ReactNode => {
         <WalletFilter selectedWallet={filteredWallet} setSelectedWallet={setFilteredWallet} />
         <AddMovementDialog />
       </CardHeader>
+
       <CardContent>
         <MonthSummary movements={filteredMovements} />
         <MovementList movements={filteredMovements} loading={movements.isLoading} />

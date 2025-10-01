@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/lib/shadcn-ui/components/ui/sidebar';
-import { CircleDot, FileChartColumn, Wallet } from 'lucide-react';
+import { CircleDot, ChartNoAxesCombined, FileChartColumn, Wallet } from 'lucide-react';
 
 const pages = [
   {
@@ -24,6 +24,11 @@ const pages = [
     name: 'Budgets',
     url: '/budgets',
     icon: FileChartColumn,
+  },
+  {
+    name: 'Statistics',
+    url: '/stats',
+    icon: ChartNoAxesCombined,
   },
 ];
 
