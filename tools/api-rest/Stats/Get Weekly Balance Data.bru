@@ -1,0 +1,15 @@
+meta {
+  name: Get Weekly Balance Data
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{apiDns}}/stats/balance/week
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
