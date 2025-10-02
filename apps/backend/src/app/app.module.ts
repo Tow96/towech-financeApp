@@ -10,7 +10,7 @@ import { CategoryModule } from '@/lib/categories';
 import { WalletModule } from '@/lib/wallets';
 import { MovementModule } from '@/lib/movements';
 import { BudgetsModule } from '@/lib/budgets';
-import {StatsModule} from '@/lib/stats/module';
+import { StatsModule } from '@/lib/stats/module';
 
 @Module({
   imports: [

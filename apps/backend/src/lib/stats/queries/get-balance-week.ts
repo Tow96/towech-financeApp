@@ -1,9 +1,9 @@
 ﻿import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { BalanceItem } from '@towech-financeapp/shared';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
-import { BalanceItem } from '../balance-item.dto';
 
 // Query parameters
 export class GetBalanceWeekQuery {

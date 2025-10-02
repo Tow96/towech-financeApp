@@ -1,0 +1,5 @@
+{
+  "name": "@towech-financeapp/shared",
+  "main": "index.ts",
+  "private": true
+}
