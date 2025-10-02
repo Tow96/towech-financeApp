@@ -16,6 +16,7 @@ import {
 } from '@/lib/shadcn-ui/components/ui/card';
 
 import { useBalanceQuery } from './queries';
+import { StatTimeframe } from '@towech-financeapp/shared';
 
 const chartConfig = {
   balance: {
@@ -25,7 +26,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export const BalanceChart = (): ReactNode => {
-  const balance = useBalanceQuery();
+  const balance = useBalanceQuery(StatTimeframe.WEEK);
 
   return (
     <Card className="m-4">

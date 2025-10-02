@@ -1,10 +1,11 @@
-﻿import { Controller, Get, Logger } from '@nestjs/common';
+﻿import { Controller, Get, Logger, Query } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 
-import { GetBalanceWeekResponse } from '@towech-financeapp/shared';
+import { GetBalanceResponse } from '@towech-financeapp/shared';
 
 import { CurrentUser, User } from '@/lib/users';
 import { GetBalanceWeekQuery } from '@/lib/stats/queries/get-balance-week';
+import { GetBalanceDto } from '@/lib/stats/dto';
 
 @Controller('stats')
 export class StatsController {
@@ -12,9 +13,12 @@ export class StatsController {
 
   constructor(private readonly queryBus: QueryBus) {}
 
-  @Get('balance/week')
-  async getWeeklyBalance(@CurrentUser() user: User): Promise<GetBalanceWeekResponse> {
-    this.logger.log(`Retrieving weekly balance stats for user ${user.id}`);
+  @Get('balance')
+  async getWeeklyBalance(
+    @CurrentUser() user: User,
+    @Query() params: GetBalanceDto
+  ): Promise<GetBalanceResponse> {
+    this.logger.log(`Retrieving ${params.timeframe} balance stats for user ${user.id}`);
 
     return this.queryBus.execute(new GetBalanceWeekQuery(user.id));
   }

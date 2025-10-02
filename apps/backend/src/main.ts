@@ -1,12 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { Logger as PinoLogger } from 'nestjs-pino';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Logging
   app.useLogger(app.get(PinoLogger));
+
+  // Validation
+  app.useGlobalPipes(new ValidationPipe());
 
   // CORS
   const corsOrigin = (process.env.CORS_ORIGIN ?? '').split(' ');

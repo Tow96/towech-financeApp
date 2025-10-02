@@ -7,5 +7,15 @@ export interface BalanceItem {
   balance: number;
 }
 
-/** Response from the Get Balance Weekly request */
-export type GetBalanceWeekResponse = BalanceItem[];
+export enum StatTimeframe {
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
+  MAX = 'max'
+}
+export interface GetBalanceRequest {
+  timeframe: StatTimeframe;
+}
+
+/** Response from the Get Balance request */
+export type GetBalanceResponse = BalanceItem[];

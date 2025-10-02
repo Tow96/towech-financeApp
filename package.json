@@ -3,7 +3,8 @@
   "version": "3.0.0",
   "license": "BSD-3-Clause",
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace @towech-financeapp/webclient\" \"npm run dev --workspace @towech-financeapp/backend\"",
+    "dev": "concurrently \"npm run build:watch --workspace @towech-financeapp/shared\" \"npm run dev --workspace @towech-financeapp/webclient\" \"npm run dev --workspace @towech-financeapp/backend\"",
+    "build": "npm run build --workspace @towech-financeapp/shared && npm run build --workspace @towech-financeapp/webclient && npm run build --workspace @towech-financeapp/backend",
     "format": "prettier --check ./apps",
     "format:fix": "prettier --write ./apps",
     "db:generate": "drizzle-kit generate",
