@@ -1,0 +1,25 @@
+{
+  "name": "towech-financeapp",
+  "version": "3.0.0",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "dev": "concurrently \"npm run build:watch --workspace @towech-financeapp/shared\" \"npm run dev --workspace @towech-financeapp/webclient\" \"npm run dev --workspace @towech-financeapp/backend\"",
+    "build": "npm run build --workspace @towech-financeapp/shared && npm run build --workspace @towech-financeapp/webclient && npm run build --workspace @towech-financeapp/backend",
+    "format": "prettier --check ./apps",
+    "format:fix": "prettier --write ./apps",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
+  },
+  "private": true,
+  "workspaces": [
+    "apps/backend",
+    "apps/webclient",
+    "apps/shared"
+  ],
+  "devDependencies": {
+    "@types/node": "24.6.1",
+    "concurrently": "^9.2.0",
+    "drizzle-kit": "^0.31.1",
+    "prettier": "^3.5.3"
+  }
+}

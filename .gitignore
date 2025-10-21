@@ -1,25 +1,18 @@
 ﻿# compiled output
-/node_modules
-**/*/dist
-/dist
-**/*/.next
-**/*/next-env.d.ts
-
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+node_modules
+dist
+dist-ssr
+count.txt
+.nitro
+.tanstack
+.output
+.vinxi
+routeTree.gen.ts
 
 # OS
 .DS_Store
 
 # Tests
-/coverage
-/.nyc_output
 
 # IDEs and editors
 /.idea
@@ -30,16 +23,8 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# dotenv environment variable files
-.env
-.env.*
+# environment variable files
+*.local
 
 # temp directory
 .temp
