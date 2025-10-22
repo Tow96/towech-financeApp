@@ -7,8 +7,7 @@ const connectionString = process.env.DATABASE_URL!
 const pool = new Pool({ connectionString })
 
 const getDb = createServerOnlyFn(() => {
-	return drizzle(pool)
+	return drizzle(pool, { schema })
 })
 
-// export const db = getDb()
-export const db = drizzle(pool, { schema })
+export const db = getDb()

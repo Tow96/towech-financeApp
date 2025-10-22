@@ -1,8 +1,11 @@
+import { eq } from 'drizzle-orm'
+
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useQuery } from '@tanstack/react-query'
+
 import { db, schema } from '@/integrations/drizzle-db'
-import { eq } from 'drizzle-orm'
+import { AuthorizationMiddleware } from '@/integrations/clerk/authorization.middleware.ts'
 
 export const Route = createFileRoute('/categories')({
 	component: RouteComponent,
@@ -29,10 +32,14 @@ function CategoryList() {
 	)
 }
 
-const getCategories = createServerFn({ method: 'GET' }).handler(async () => {
-	return await db.query.Categories.findMany({
-		with: { subCategories: { orderBy: schema.SubCategories.name }},
-		where: eq(schema.Categories.userId, 'TestingUser'),
-		orderBy: schema.Categories.name,
+const getCategories = createServerFn({ method: 'GET' })
+	.middleware([AuthorizationMiddleware])
+	.handler(async ({ context: { user, logger } }) => {
+		logger.info(`Fetching categories for user: ${user}`)
+
+		return await db.query.Categories.findMany({
+			with: { subCategories: { orderBy: schema.SubCategories.name } },
+			where: eq(schema.Categories.userId, user),
+			orderBy: schema.Categories.name,
+		})
 	})
-})
