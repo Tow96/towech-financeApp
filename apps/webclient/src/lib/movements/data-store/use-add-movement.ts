@@ -13,7 +13,7 @@ export interface AddMovementDto {
     id: string | null;
     subId: string | null;
   };
-  date: Date;
+  date: string;
   description: string;
   summary: SummaryDto[];
 }

@@ -1,7 +1,7 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
 import { Inject, Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { and, eq, sql, or } from 'drizzle-orm';
+import { and, eq, sql, or, lt } from 'drizzle-orm';
 
 import { MAIN_SCHEMA_CONNECTION, mainSchema } from '@/lib/database';
 import { WalletEntity } from './entity';
@@ -31,7 +31,11 @@ export class WalletRepository {
           eq(mainSchema.MovementSummary.destinationWalletId, mainSchema.Wallets.id)
         )
       )
-      .where(eq(mainSchema.Wallets.userId, userId))
+      .leftJoin(
+        mainSchema.Movements,
+        eq(mainSchema.Movements.id, mainSchema.MovementSummary.movementId)
+      )
+      .where(and(eq(mainSchema.Wallets.userId, userId)))
       .groupBy(mainSchema.Wallets.id)
       .orderBy(mainSchema.Wallets.name);
 

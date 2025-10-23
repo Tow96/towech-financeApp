@@ -1,4 +1,4 @@
-import { varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core';
+import { date, varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 export const MainSchema = pgSchema('main');
@@ -54,7 +54,7 @@ export const Movements = MainSchema.table('movements', {
   categoryId: uuid('category_id'),
   categorySubId: uuid('category_sub_id'),
   description: varchar('description').notNull(),
-  date: timestamp('date', { withTimezone: true }).notNull(),
+  date: date('date', { mode: 'date' }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });

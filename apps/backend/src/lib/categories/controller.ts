@@ -55,8 +55,6 @@ export class CategoryController {
     @CurrentUser() user: User,
     @Body() data: AddCategoryDto
   ): Promise<{ id: string }> {
-    data.name = data.name.trim().toLowerCase();
-
     this.logger.log(`user: ${user.id} trying to add category: ${data.name} of type ${data.type}`);
 
     const existingCategory = await this._categoryRepository.getCategoryIdByName(
@@ -83,8 +81,6 @@ export class CategoryController {
     @Body() data: EditCategoryDto,
     @Param('id') id: string
   ): Promise<void> {
-    data.name = data.name.trim().toLowerCase();
-
     const category = await this._categoryRepository.getCategoryById(id);
     if (category === null || category.userId !== user.id)
       throw new NotFoundException(`Category ${id} not found`);

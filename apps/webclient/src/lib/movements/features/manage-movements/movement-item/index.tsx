@@ -15,13 +15,17 @@ interface MovementItemProps {
 }
 
 const convertIsoDate = (date: Date): string => {
-  return new Date(date).toLocaleDateString();
+  const formatter = Intl.DateTimeFormat(window.navigator.language, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+  return formatter.format(new Date(date));
 };
 
 export const MovementItem = ({ movement }: MovementItemProps): ReactNode => {
-  // const origin = movement.summary[0]?.originWalletId || null;
-  // const destination = movement.summary[0]?.destinationWalletId || null;
-
   return (
     <>
       <div className="flex items-center min-w-0 gap-4 py-4 border-b-1 last:border-b-0">

@@ -1,5 +1,5 @@
 ﻿import { v4 as uuidV4 } from 'uuid';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { eq, and, gte, lt, sql, desc } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
@@ -10,6 +10,8 @@ import { CategoryType } from '@/lib/categories/dto';
 
 @Injectable()
 export class MovementRepository {
+  private readonly logger: Logger = new Logger(MovementRepository.name);
+
   constructor(
     @Inject(MAIN_SCHEMA_CONNECTION)
     private readonly _db: NodePgDatabase<typeof mainSchema>
@@ -65,7 +67,7 @@ export class MovementRepository {
         gte(mainSchema.Movements.date, new Date(year, month - 1)),
         lt(mainSchema.Movements.date, new Date(year, month)) // Primitive handles year rollover
       ),
-      orderBy: desc(mainSchema.Movements.date),
+      orderBy: [desc(mainSchema.Movements.date), desc(mainSchema.Movements.createdAt)],
     });
   }
 
