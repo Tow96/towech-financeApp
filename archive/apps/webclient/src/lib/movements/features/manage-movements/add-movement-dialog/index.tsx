@@ -36,6 +36,7 @@ export const AddMovementDialog = (): ReactNode => {
     addMovementMutation.mutate(
       {
         ...values,
+        date: values.date.toISOString(),
         summary: [
           {
             amount: convertValueToCents(Number(values.summary.amount)),
@@ -57,8 +58,6 @@ export const AddMovementDialog = (): ReactNode => {
   };
   const onSubmitSuccess = () => {
     const lastDate = new Date(form.watch().date);
-    lastDate.setSeconds(lastDate.getSeconds() + 1);
-
     form.reset();
     form.setValue('date', lastDate); // Ensure last date is remembered
     setOpen(false);

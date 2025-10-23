@@ -83,6 +83,7 @@ export class MovementController {
       }
     }
 
+    this.logger.debug(`Received time: ${data.date}`);
     const id = await this._movementRepository.insert(
       user.id,
       data.category.type,
@@ -122,6 +123,7 @@ export class MovementController {
       }
     }
 
+    this.logger.debug(`received date ${data.date}`);
     await this._movementRepository.update(id, {
       categoryType: data.category.type,
       categoryId: data.category.id,

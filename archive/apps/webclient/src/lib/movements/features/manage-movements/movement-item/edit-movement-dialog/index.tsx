@@ -40,6 +40,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps): ReactNode =>
     editMovementMutation.mutate(
       {
         ...values,
+        date: values.date.toISOString(),
         summary: [
           {
             amount: convertValueToCents(Number(values.summary.amount)),

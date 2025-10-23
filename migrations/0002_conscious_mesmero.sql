@@ -1,0 +1,1 @@
+ALTER TABLE "main"."movements" ALTER COLUMN "date" SET DATA TYPE date;

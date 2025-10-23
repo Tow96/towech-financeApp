@@ -15,6 +15,13 @@
       "when": 1753399835098,
       "tag": "0001_normal_calypso",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755021185571,
+      "tag": "0002_conscious_mesmero",
+      "breakpoints": true
     }
   ]
 }

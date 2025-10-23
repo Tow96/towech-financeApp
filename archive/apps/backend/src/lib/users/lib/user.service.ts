@@ -20,7 +20,8 @@ export class UserService {
   }
 
   public async validateJwt(token: string): Promise<User | null> {
-    if (this.UsersDisabled) return new User({ id: 'TestingUser' } as ClerkUser);
+    if (this.UsersDisabled)
+      return new User({ id: 'user_30N7QHdqvW2U8TaO2wfnVZDg9Dj' } as ClerkUser);
 
     try {
       const tokenPayload = await verifyToken(token, {

@@ -14,7 +14,7 @@ export interface EditMovementDto {
     id: string | null;
     subId: string | null;
   };
-  date: Date;
+  date: string;
   description: string;
   summary: SummaryDto[];
 }
