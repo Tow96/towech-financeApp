@@ -1,4 +1,4 @@
-﻿import { integer, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+﻿import { date, varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
 export const MainSchema = pgSchema('main')
@@ -24,18 +24,18 @@ export const SubCategories = MainSchema.table('sub-categories', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 	archivedAt: timestamp('archived_at', { withTimezone: true }),
-});
+})
 
 export const categoryRelations = relations(Categories, ({ many }) => ({
 	subCategories: many(SubCategories),
-}));
+}))
 
 export const subCategoryRelations = relations(SubCategories, ({ one }) => ({
 	parent: one(Categories, {
 		fields: [SubCategories.parentId],
 		references: [Categories.id],
 	}),
-}));
+}))
 
 export const Wallets = MainSchema.table('wallets', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -45,7 +45,7 @@ export const Wallets = MainSchema.table('wallets', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 	archivedAt: timestamp('archived_at', { withTimezone: true }),
-});
+})
 
 export const Movements = MainSchema.table('movements', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -54,10 +54,10 @@ export const Movements = MainSchema.table('movements', {
 	categoryId: uuid('category_id'),
 	categorySubId: uuid('category_sub_id'),
 	description: varchar('description').notNull(),
-	date: timestamp('date', { withTimezone: true }).notNull(),
+	date: date('date', { mode: 'date' }).notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-});
+})
 
 export const MovementSummary = MainSchema.table('movement_summary', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -67,18 +67,18 @@ export const MovementSummary = MainSchema.table('movement_summary', {
 	originWalletId: uuid('origin_wallet_id'),
 	destinationWalletId: uuid('destination_wallet_id'),
 	amount: integer('amount').notNull(),
-});
+})
 
 export const movementRelations = relations(Movements, ({ many }) => ({
 	summary: many(MovementSummary),
-}));
+}))
 
 export const movementSummaryRelations = relations(MovementSummary, ({ one }) => ({
 	parent: one(Movements, {
 		fields: [MovementSummary.movementId],
 		references: [Movements.id],
 	}),
-}));
+}))
 
 export const Budgets = MainSchema.table('budgets', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -87,7 +87,7 @@ export const Budgets = MainSchema.table('budgets', {
 	name: varchar('name').notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
-});
+})
 
 export const BudgetSummary = MainSchema.table('budget_summary', {
 	id: uuid().defaultRandom().primaryKey(),
@@ -99,15 +99,15 @@ export const BudgetSummary = MainSchema.table('budget_summary', {
 	categoryId: uuid('category_id'),
 	categorySubId: uuid('category_sub_id'),
 	limit: integer('limit').notNull(),
-});
+})
 
 export const budgetRelations = relations(Budgets, ({ many }) => ({
 	summary: many(BudgetSummary),
-}));
+}))
 
 export const budgetSummaryRelations = relations(BudgetSummary, ({ one }) => ({
 	parent: one(Budgets, {
 		fields: [BudgetSummary.budgetId],
 		references: [Budgets.id],
 	}),
-}));
+}))
