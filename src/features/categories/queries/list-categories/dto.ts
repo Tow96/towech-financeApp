@@ -1,5 +1,7 @@
 ﻿import { z } from 'zod';
 
+import { CategoryType } from '@/features/categories/domain'
+
 export type CategoryListItemDto = {
 	iconId: number;
 	type: CategoryType;
@@ -14,12 +16,6 @@ export type SubCategoryListItemDto = {
 	id: string;
 	name: string;
 	archived: boolean;
-}
-
-export enum CategoryType {
-	income = 'INCOME',
-	expense = 'EXPENSE',
-	transfer = 'TRANSFER',
 }
 
 export const GetCategoryListSchema = z.object({

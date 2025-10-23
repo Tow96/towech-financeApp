@@ -1,8 +1,7 @@
 ﻿import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
-import { CategoryType } from './dto'
-import { getCategoriesByType } from './server'
+import { getCategoriesByType } from './server.ts'
 import type { CategoryListItemDto, SubCategoryListItemDto } from './dto'
 
 import { Icon } from '@/common/components/icon'
@@ -15,6 +14,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 
+import { CategoryType } from '@/features/categories/domain'
+import { AddCategoryButton } from '@/features/categories/commands/add-category/client'
+
 const useCategoryList = (type: CategoryType) => {
 	return useQuery({
 		queryKey: categoryKeys.list(type),
@@ -25,11 +27,14 @@ const useCategoryList = (type: CategoryType) => {
 
 export const AllCategoryList = () => (
 	<Tabs defaultValue="expense">
-		<TabsList className="w-full md:w-fit">
-			<TabsTrigger value="income">Income</TabsTrigger>
-			<TabsTrigger value="expense">Expense</TabsTrigger>
-			<TabsTrigger value="transfer">Transfer</TabsTrigger>
-		</TabsList>
+		<div className="flex flex-col-reverse md:flex-row md:justify-between gap-4">
+			<TabsList className="w-full md:w-fit">
+				<TabsTrigger value="income">Income</TabsTrigger>
+				<TabsTrigger value="expense">Expense</TabsTrigger>
+				<TabsTrigger value="transfer">Transfer</TabsTrigger>
+			</TabsList>
+			<AddCategoryButton />
+		</div>
 		<TabsContent value="income">
 			<CategoryListByType type={CategoryType.income} />
 		</TabsContent>
@@ -89,7 +94,7 @@ const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => (
 	<div className="flex items-center gap-2 py-3 pl-10">
 		<div
 			className={cn(
-				'flex flex-1 items-center gap-2 min-w-0',
+				'flex min-w-0 flex-1 items-center gap-2',
 				subCategory.archived ? 'pointer-events-none opacity-50' : '',
 			)}>
 			<Icon className="h-10 w-10 rounded-full" id={subCategory.iconId} name={subCategory.name} />

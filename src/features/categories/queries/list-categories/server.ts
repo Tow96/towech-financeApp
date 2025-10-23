@@ -2,7 +2,8 @@
 import { createServerFn } from '@tanstack/react-start'
 
 import { GetCategoryListSchema } from './dto'
-import type { CategoryListItemDto, CategoryType } from './dto'
+import type { CategoryListItemDto } from './dto'
+import type { CategoryType } from '@/features/categories/domain'
 
 import { AuthorizationMiddleware } from '@/integrations/clerk/authorization.middleware'
 import { db, schema } from '@/integrations/drizzle-db'
@@ -23,7 +24,7 @@ export const getCategoriesByType = createServerFn({ method: 'GET' })
 				name: schema.Categories.name,
 				subName: schema.SubCategories.name,
 				archived: schema.Categories.archivedAt,
-				subArchived: schema.SubCategories.archivedAt
+				subArchived: schema.SubCategories.archivedAt,
 			})
 			.from(schema.Categories)
 			.leftJoin(schema.SubCategories, eq(schema.Categories.id, schema.SubCategories.parentId))
