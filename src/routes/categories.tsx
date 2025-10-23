@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Card, CardContent } from '@/common/components/ui/card.tsx'
+import { Card, CardContent } from '@/common/components/ui/card'
 
-import { CategoryList } from '@/features/categories/list-categories'
+import { AllCategoryList } from '@/features/categories/queries/list-categories/client'
 
 export const Route = createFileRoute('/categories')({
 	component: RouteComponent,
@@ -11,24 +11,9 @@ export const Route = createFileRoute('/categories')({
 function RouteComponent() {
 	return (
 		<Card className="m-4">
-			<CardContent><CategoryList /></CardContent>
+			<CardContent>
+				<AllCategoryList />
+			</CardContent>
 		</Card>
 	)
 }
-
-// function CategoryList() {
-// 	const { data } = useQuery({
-// 		queryKey: ['categories'],
-// 		queryFn: getCategories,
-// 	})
-//
-// 	return (
-// 		<ul>
-// 			{data?.map(category => (
-// 				<li key={category.id}>
-// 					{category.name} ({category.type})
-// 				</li>
-// 			))}
-// 		</ul>
-// 	)
-// }
