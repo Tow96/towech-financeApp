@@ -7,38 +7,40 @@
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createServerFn } from '@tanstack/react-start'
-import { getCookie } from '@tanstack/react-start/server'
 
 import type { ReactNode } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 
-// import ClerkProvider from '../integrations/clerk/provider'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 import appCss from '@/styles.css?url'
 
 import {
-	SIDEBAR_COOKIE_NAME,
 	SidebarInset,
 	SidebarProvider,
 	SidebarTrigger,
+	getSidebarState,
 } from '@/common/components/ui/sidebar'
 import { AppSidebar } from '@/common/components/app-sidebar'
 import { Separator } from '@/common/components/ui/separator'
 import { capitalizeFirst } from '@/common/lib/utils.ts'
+
 import { getThemeServer } from '@/common/components/ui/theme-provider.tsx'
+import { CustomClerkProvider, getClerkAuth } from '@/integrations/clerk'
 
 interface MyRouterContext {
 	queryClient: QueryClient
 }
 
-const getSidebarState = createServerFn().handler(() => getCookie(SIDEBAR_COOKIE_NAME) === 'true')
-
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+	beforeLoad: async () => {
+		const { userId } = await getClerkAuth()
+		return { userId }
+	},
 	head: () => ({
 		meta: [
 			{ charSet: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ title: 'TanStack Start Starter' },
+			{ title: 'Towech Finance App' },
 			{ description: 'Keep track of your budgets and expenses' },
 		],
 		links: [{ rel: 'stylesheet', href: appCss }],
@@ -64,33 +66,33 @@ function RootDocument({ children }: { children: ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				{/*	<ClerkProvider>	*/}
-				<SidebarProvider defaultOpen={data.sidebarInitialState}>
-					<AppSidebar />
-					<SidebarInset>
-						{/*	Header */}
-						<header className="flex h-16 shrink-0 items-center gap-2 border-b">
-							<div className="flex items-center gap-2 px-3">
-								<SidebarTrigger />
-								<Separator orientation="vertical" className="mr-2 h-4" />
-								<PageTitle />
-							</div>
-						</header>
+				<CustomClerkProvider>
+					<SidebarProvider defaultOpen={data.sidebarInitialState}>
+						<AppSidebar />
+						<SidebarInset>
+							{/*	Header */}
+							<header className="flex h-16 shrink-0 items-center gap-2 border-b">
+								<div className="flex items-center gap-2 px-3">
+									<SidebarTrigger />
+									<Separator orientation="vertical" className="mr-2 h-4" />
+									<PageTitle />
+								</div>
+							</header>
 
-						{/*	Content */}
-						<main>
-							{children}
-							<TanStackDevtools
-								config={{ position: 'bottom-right' }}
-								plugins={[
-									{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-									TanStackQueryDevtools,
-								]}
-							/>
-						</main>
-					</SidebarInset>
-				</SidebarProvider>
-				{/*	</ClerkProvider>	*/}
+							{/*	Content */}
+							<main>
+								{children}
+								<TanStackDevtools
+									config={{ position: 'bottom-right' }}
+									plugins={[
+										{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
+										TanStackQueryDevtools,
+									]}
+								/>
+							</main>
+						</SidebarInset>
+					</SidebarProvider>
+				</CustomClerkProvider>
 				<Scripts />
 			</body>
 		</html>

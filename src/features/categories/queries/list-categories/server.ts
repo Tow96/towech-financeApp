@@ -11,8 +11,8 @@ import { db, schema } from '@/integrations/drizzle-db'
 export const getCategoriesByType = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(GetCategoryListSchema)
-	.handler(async ({ data, context: { user, logger } }) => {
-		logger.info(`Fetching categories of type ${data.type} for user: ${user}`)
+	.handler(async ({ data, context: { userId, logger } }) => {
+		logger.info(`Fetching categories of type ${data.type} for user: ${userId}`)
 
 		const query = await db
 			.select({
@@ -28,7 +28,7 @@ export const getCategoriesByType = createServerFn({ method: 'GET' })
 			})
 			.from(schema.Categories)
 			.leftJoin(schema.SubCategories, eq(schema.Categories.id, schema.SubCategories.parentId))
-			.where(and(eq(schema.Categories.userId, user), eq(schema.Categories.type, data.type)))
+			.where(and(eq(schema.Categories.userId, userId), eq(schema.Categories.type, data.type)))
 			.orderBy(schema.Categories.name)
 
 		const response: Array<CategoryListItemDto> = []

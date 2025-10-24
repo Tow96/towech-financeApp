@@ -1,5 +1,7 @@
 'use client'
 
+import { createServerFn } from '@tanstack/react-start'
+import { getCookie } from '@tanstack/react-start/server'
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
@@ -26,7 +28,7 @@ import {
 	TooltipTrigger,
 } from '@/common/components/ui/tooltip'
 
-export const SIDEBAR_COOKIE_NAME = 'sidebar_state'
+const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = '16rem'
 const SIDEBAR_WIDTH_MOBILE = '18rem'
@@ -42,6 +44,10 @@ type SidebarContextProps = {
 	isMobile: boolean
 	toggleSidebar: () => void
 }
+
+export const getSidebarState = createServerFn().handler(
+	() => getCookie(SIDEBAR_COOKIE_NAME) === 'true',
+)
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
