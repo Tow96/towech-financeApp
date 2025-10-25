@@ -8,7 +8,7 @@ interface ErrorBoxProps {
 	error: Error | null;
 }
 export const ErrorBox = (props: ErrorBoxProps) => {
-	let message = props.error?.message || ''
+	const message = props.error?.message || ''
 
 	return (
 		<Alert variant='destructive' className={props.className}>
