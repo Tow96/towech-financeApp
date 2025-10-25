@@ -27,7 +27,7 @@ const useCategoryList = (type: CategoryType) => {
 
 export const AllCategoryList = () => (
 	<Tabs defaultValue="expense">
-		<div className="flex flex-col-reverse md:flex-row md:justify-between gap-4">
+		<div className="flex flex-col-reverse gap-4 md:flex-row md:justify-between">
 			<TabsList className="w-full md:w-fit">
 				<TabsTrigger value="income">Income</TabsTrigger>
 				<TabsTrigger value="expense">Expense</TabsTrigger>
@@ -62,6 +62,7 @@ const CategoryListByType = ({ type }: { type: CategoryType }) => {
 interface CategoryListItemProps {
 	category: CategoryListItemDto
 }
+
 const CategoryListItem = ({ category }: CategoryListItemProps) => (
 	<AccordionItem value={category.id}>
 		{/* Main body */}
@@ -80,7 +81,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => (
 		{category.subCategories.length > 0 && (
 			<AccordionContent>
 				{category.subCategories.map(c => (
-					<SubCategoryListItem subCategory={c} />
+					<SubCategoryListItem key={c.id} subCategory={c} />
 				))}
 			</AccordionContent>
 		)}
@@ -90,6 +91,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => (
 interface SubCategoryListItemProps {
 	subCategory: SubCategoryListItemDto
 }
+
 const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => (
 	<div className="flex items-center gap-2 py-3 pl-10">
 		<div
