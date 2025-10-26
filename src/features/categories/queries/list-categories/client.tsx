@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { Archive, Ellipsis } from 'lucide-react'
+import { Archive, ArchiveRestore, Ellipsis } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
@@ -26,7 +26,8 @@ import {
 	DropDrawerTrigger,
 } from '@/common/components/ui/dropdrawer'
 import { Button } from '@/common/components/ui/button'
-import { ArchiveCategoryButton } from '@/features/categories/commands/archive-category/client.tsx'
+import { ArchiveCategoryDialog } from '@/features/categories/commands/archive-category/client.tsx'
+import { RestoreCategoryDialog } from '@/features/categories/commands/restore-category/client.tsx'
 
 const useCategoryList = (type: CategoryType) => {
 	return useQuery({
@@ -76,6 +77,7 @@ interface CategoryListItemProps {
 
 const CategoryListItem = ({ category }: CategoryListItemProps) => {
 	const [openArchive, setOpenArchive] = useState(false)
+	const [openRestore, setOpenRestore] = useState(false)
 
 	return (
 		<AccordionItem value={category.id}>
@@ -92,7 +94,10 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 						</span>
 					</AccordionTrigger>
 				</div>
-				<ArchiveCategoryButton id={category.id} open={openArchive} setOpen={setOpenArchive} />
+
+				{/* Side menu */}
+				<ArchiveCategoryDialog id={category.id} open={openArchive} setOpen={setOpenArchive} />
+				<RestoreCategoryDialog id={category.id} open={openRestore} setOpen={setOpenRestore} />
 				<DropDrawer>
 					{/* Open menu button */}
 					<DropDrawerTrigger asChild>
@@ -120,7 +125,9 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 							</>
 						) : (
 							<DropDrawerGroup>
-								<DropDrawerItem>Restore Category</DropDrawerItem>
+								<DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenRestore(true)}>
+									<span>Restore Category</span>
+								</DropDrawerItem>
 							</DropDrawerGroup>
 						)}
 					</DropDrawerContent>

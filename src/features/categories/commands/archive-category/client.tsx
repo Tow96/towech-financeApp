@@ -18,13 +18,13 @@ const useArchiveCategoryMutation = () => {
 	})
 }
 
-interface ArchiveCategoryProps {
+interface ArchiveCategoryDialogProps {
 	id: string
 	open: boolean
 	setOpen: (open: boolean) => void
 }
 
-export const ArchiveCategoryButton = (props: ArchiveCategoryProps) => {
+export const ArchiveCategoryDialog = (props: ArchiveCategoryDialogProps) => {
 	const archiveCategoryMutation = useArchiveCategoryMutation()
 
 	const form = useForm<ArchiveCategorySchema>({
@@ -39,7 +39,7 @@ export const ArchiveCategoryButton = (props: ArchiveCategoryProps) => {
 		<FormDialog
 			open={props.open}
 			setOpen={props.setOpen}
-			title={'Archive category'}
+			title="Archive category"
 			form={form}
 			onSubmit={onSubmit}
 			error={archiveCategoryMutation.error}
