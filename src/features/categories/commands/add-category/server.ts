@@ -2,11 +2,10 @@ import { and, eq } from 'drizzle-orm'
 import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
-import { AddCategorySchema } from './dto.ts'
-import type { CategoryDetailDto } from './dto.ts'
+import { AddCategorySchema } from './dto'
+import type { CategoryDetailDto } from '@/features/categories/domain'
 
 import { db, schema } from '@/integrations/drizzle-db'
-
 import { AuthorizationMiddleware } from '@/integrations/clerk'
 
 export const addCategory = createServerFn({ method: 'POST' })

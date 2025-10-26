@@ -1,15 +1,6 @@
 import { z } from 'zod'
 import { CategoryType } from '@/features/categories/domain'
 
-export type CategoryDetailDto = {
-	iconId: number
-	type: CategoryType
-	id: string
-	subId: string | null
-	name: string
-	archived: boolean
-}
-
 export const AddCategorySchema = z.object({
 	name: z
 		.string()

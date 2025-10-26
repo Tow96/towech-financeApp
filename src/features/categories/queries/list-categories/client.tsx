@@ -1,4 +1,5 @@
-﻿import { Ellipsis } from 'lucide-react'
+﻿import { useState } from 'react'
+import { Archive, Ellipsis } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
@@ -25,6 +26,7 @@ import {
 	DropDrawerTrigger,
 } from '@/common/components/ui/dropdrawer'
 import { Button } from '@/common/components/ui/button'
+import { ArchiveCategoryButton } from '@/features/categories/commands/archive-category/client.tsx'
 
 const useCategoryList = (type: CategoryType) => {
 	return useQuery({
@@ -72,59 +74,70 @@ interface CategoryListItemProps {
 	category: CategoryListItemDto
 }
 
-const CategoryListItem = ({ category }: CategoryListItemProps) => (
-	<AccordionItem value={category.id}>
-		{/* Main body */}
-		<div className="flex items-center">
-			<div className="flex-1">
-				<AccordionTrigger
-					className="flex min-w-0 items-center"
-					empty={category.subCategories.length === 0 || category.archived}>
-					<Icon className="h-12 w-12 rounded-full" id={category.iconId} name={category.name} />
-					<span className="flex-1 overflow-x-hidden text-xl text-nowrap text-ellipsis">
-						{capitalizeFirst(category.name)}
-					</span>
-				</AccordionTrigger>
+const CategoryListItem = ({ category }: CategoryListItemProps) => {
+	const [openArchive, setOpenArchive] = useState(false)
+
+	return (
+		<AccordionItem value={category.id}>
+			{/* Main body */}
+			<div className="flex items-center">
+				<div className="flex-1">
+					<AccordionTrigger
+						className="flex min-w-0 items-center"
+						empty={category.subCategories.length === 0 || category.archived}
+						disabled={category.archived}>
+						<Icon className="h-12 w-12 rounded-full" id={category.iconId} name={category.name} />
+						<span className="flex-1 overflow-x-hidden text-xl text-nowrap text-ellipsis">
+							{capitalizeFirst(category.name)}
+						</span>
+					</AccordionTrigger>
+				</div>
+				<ArchiveCategoryButton id={category.id} open={openArchive} setOpen={setOpenArchive} />
+				<DropDrawer>
+					{/* Open menu button */}
+					<DropDrawerTrigger asChild>
+						<Button variant="secondary" size="icon" className="ml-3">
+							<Ellipsis />
+						</Button>
+					</DropDrawerTrigger>
+
+					{/*	Menu content */}
+					<DropDrawerContent align="start">
+						{!category.archived ? (
+							<>
+								<DropDrawerGroup>
+									<DropDrawerItem>Add SubCategory</DropDrawerItem>
+								</DropDrawerGroup>
+								<DropDrawerGroup>
+									<DropDrawerItem>Edit Category</DropDrawerItem>
+									<DropDrawerItem
+										icon={<Archive />}
+										onClick={() => setOpenArchive(true)}
+										variant="destructive">
+										<span>Archive Category</span>
+									</DropDrawerItem>
+								</DropDrawerGroup>
+							</>
+						) : (
+							<DropDrawerGroup>
+								<DropDrawerItem>Restore Category</DropDrawerItem>
+							</DropDrawerGroup>
+						)}
+					</DropDrawerContent>
+				</DropDrawer>
 			</div>
-			<DropDrawer>
-				{/* Open menu button */}
-				<DropDrawerTrigger asChild>
-					<Button variant="secondary" size="icon" className="ml-3">
-						<Ellipsis />
-					</Button>
-				</DropDrawerTrigger>
 
-				{/*	Menu content */}
-				<DropDrawerContent align="start">
-					{!category.archived ? (
-						<>
-							<DropDrawerGroup>
-								<DropDrawerItem>Add SubCategory</DropDrawerItem>
-							</DropDrawerGroup>
-							<DropDrawerGroup>
-								<DropDrawerItem>Edit Category</DropDrawerItem>
-								<DropDrawerItem>Archive Category</DropDrawerItem>
-							</DropDrawerGroup>
-						</>
-					) : (
-						<DropDrawerGroup>
-							<DropDrawerItem>Restore Category</DropDrawerItem>
-						</DropDrawerGroup>
-					)}
-				</DropDrawerContent>
-			</DropDrawer>
-		</div>
-
-		{/*	Subcategories */}
-		{category.subCategories.length > 0 && (
-			<AccordionContent>
-				{category.subCategories.map(c => (
-					<SubCategoryListItem key={c.id} subCategory={c} />
-				))}
-			</AccordionContent>
-		)}
-	</AccordionItem>
-)
+			{/*	Subcategories */}
+			{category.subCategories.length > 0 && (
+				<AccordionContent>
+					{category.subCategories.map(c => (
+						<SubCategoryListItem key={c.id} subCategory={c} />
+					))}
+				</AccordionContent>
+			)}
+		</AccordionItem>
+	)
+}
 
 interface SubCategoryListItemProps {
 	subCategory: SubCategoryListItemDto

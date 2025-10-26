@@ -20,7 +20,7 @@ import {
 	SelectValue,
 } from '@/common/components/ui/select'
 import { Input } from '@/common/components/ui/input'
-import { categoryKeys } from '@/features/categories/store-keys.ts'
+import { categoryKeys } from '@/features/categories/store-keys'
 
 const useAddCategoryMutation = () => {
 	return useMutation({
