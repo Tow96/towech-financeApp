@@ -2,7 +2,8 @@ import { eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { ArchiveCategorySchema } from './dto'
-import type { CategoryDetailDto } from '@/features/categories/domain.ts'
+import type { CategoryType } from '@/features/categories/domain.ts'
+import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
@@ -16,7 +17,7 @@ export const archiveCategory = createServerFn({ method: 'POST' })
 			.from(schema.Categories)
 			.where(eq(schema.Categories.id, data.id))
 
-		if (categories.length === 0) throw new Response('Category not found', { status: 409 })
+		if (categories.length === 0) throw new Response('Category not found', { status: 404 })
 		if (categories[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
 
 		logger.info(`User: ${userId} archiving category: ${data.id}`)
@@ -28,12 +29,13 @@ export const archiveCategory = createServerFn({ method: 'POST' })
 				.returning()
 		)[0]
 
-		return {
+		const output: CategoryDetailDto = {
 			iconId: updatedCategory.iconId,
-			type: updatedCategory.type,
+			type: updatedCategory.type as CategoryType,
 			id: updatedCategory.id,
 			subId: null,
 			name: updatedCategory.name,
 			archived: true,
-		} as CategoryDetailDto
+		}
+		return output
 	})

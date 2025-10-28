@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { Archive, ArchiveRestore, Ellipsis } from 'lucide-react'
+import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
@@ -26,8 +26,9 @@ import {
 	DropDrawerTrigger,
 } from '@/common/components/ui/dropdrawer'
 import { Button } from '@/common/components/ui/button'
-import { ArchiveCategoryDialog } from '@/features/categories/commands/archive-category/client.tsx'
-import { RestoreCategoryDialog } from '@/features/categories/commands/restore-category/client.tsx'
+import { EditCategoryDialog } from '@/features/categories/commands/edit-category/client'
+import { ArchiveCategoryDialog } from '@/features/categories/commands/archive-category/client'
+import { RestoreCategoryDialog } from '@/features/categories/commands/restore-category/client'
 
 const useCategoryList = (type: CategoryType) => {
 	return useQuery({
@@ -78,6 +79,7 @@ interface CategoryListItemProps {
 const CategoryListItem = ({ category }: CategoryListItemProps) => {
 	const [openArchive, setOpenArchive] = useState(false)
 	const [openRestore, setOpenRestore] = useState(false)
+	const [openEdit, setOpenEdit] = useState(false)
 
 	return (
 		<AccordionItem value={category.id}>
@@ -98,6 +100,12 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				{/* Side menu */}
 				<ArchiveCategoryDialog id={category.id} open={openArchive} setOpen={setOpenArchive} />
 				<RestoreCategoryDialog id={category.id} open={openRestore} setOpen={setOpenRestore} />
+				<EditCategoryDialog
+					type={category.type}
+					id={category.id}
+					open={openEdit}
+					setOpen={setOpenEdit}
+				/>
 				<DropDrawer>
 					{/* Open menu button */}
 					<DropDrawerTrigger asChild>
@@ -114,7 +122,9 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 									<DropDrawerItem>Add SubCategory</DropDrawerItem>
 								</DropDrawerGroup>
 								<DropDrawerGroup>
-									<DropDrawerItem>Edit Category</DropDrawerItem>
+									<DropDrawerItem icon={<Pencil />} onClick={() => setOpenEdit(true)}>
+										<span>Edit Category</span>
+									</DropDrawerItem>
 									<DropDrawerItem
 										icon={<Archive />}
 										onClick={() => setOpenArchive(true)}

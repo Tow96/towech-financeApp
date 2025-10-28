@@ -3,7 +3,8 @@ import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AddCategorySchema } from './dto'
-import type { CategoryDetailDto } from '@/features/categories/domain'
+import type { CategoryType } from '@/features/categories/domain'
+import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
@@ -46,12 +47,13 @@ export const addCategory = createServerFn({ method: 'POST' })
 				.returning()
 		)[0]
 
-		return {
+		const output: CategoryDetailDto = {
 			iconId: newCategory.iconId,
-			type: newCategory.type,
+			type: newCategory.type as CategoryType,
 			id: newCategory.id,
 			subId: null,
 			name: newCategory.name,
-			archived: newCategory.archivedAt === null,
-		} as CategoryDetailDto
+			archived: true,
+		}
+		return output
 	})
