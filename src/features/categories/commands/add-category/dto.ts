@@ -9,5 +9,6 @@ export const AddCategorySchema = z.object({
 		.transform(v => v.trim().toLowerCase()),
 	type: z.enum(CategoryType),
 	iconId: z.number(),
+	id: z.uuid().optional(), // Used for subcategories
 })
 export type AddCategorySchema = z.infer<typeof AddCategorySchema>

@@ -74,7 +74,7 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 					render={({ field }) => (
 						<IconSelector
 							{...field}
-							value={(field.value as number | undefined) ?? categoryDetail.data?.iconId}
+							value={field.value ?? categoryDetail.data?.iconId}
 						/>
 					)}
 				/>
@@ -102,7 +102,7 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 								<FormControl>
 									<Input
 										{...field}
-										value={(field.value as string | undefined) ?? categoryDetail.data?.name}
+										value={field.value ?? categoryDetail.data?.name}
 									/>
 								</FormControl>
 							</FormItem>

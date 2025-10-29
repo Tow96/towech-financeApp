@@ -1,13 +1,10 @@
-﻿import { Plus } from 'lucide-react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { addCategory } from './server'
 import { AddCategorySchema } from './dto'
 
-import { Button } from '@/common/components/ui/button'
 import { CategoryType } from '@/features/categories/domain'
 import { FormDialog } from '@/common/components/form-dialog'
 import { IconSelector } from '@/common/components/icon-selector'
@@ -32,8 +29,14 @@ const useAddCategoryMutation = () => {
 	})
 }
 
-export const AddCategoryButton = () => {
-	const [open, setOpen] = useState(false)
+interface AddCategoryDialogProps {
+	open: boolean
+	setOpen: (open: boolean) => void
+	type?: CategoryType // If populated indicates that a subcategory will be created
+	id?: string // If populated indicates that a subcategory will be created
+}
+
+export const AddCategoryDialog = (props: AddCategoryDialogProps) => {
 	const addCategoryMutation = useAddCategoryMutation()
 
 	const form = useForm<AddCategorySchema>({
@@ -41,6 +44,8 @@ export const AddCategoryButton = () => {
 		defaultValues: {
 			name: '',
 			iconId: 0,
+			type: props.type,
+			id: props.id,
 		},
 	})
 
@@ -48,37 +53,33 @@ export const AddCategoryButton = () => {
 		addCategoryMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()
-				setOpen(false)
+				props.setOpen(false)
 			},
 		})
 	}
 
 	return (
-		<>
-			<Button onClick={() => setOpen(true)}>
-				<Plus />
-				Add Category
-			</Button>
-			<FormDialog
-				open={open}
-				setOpen={setOpen}
-				title="Add Category"
-				form={form}
-				onSubmit={onSubmit}
-				error={addCategoryMutation.error}
-				loading={addCategoryMutation.isPending}>
-				<div className="flex items-center gap-5 py-5">
-					{/*	Icon */}
-					<FormField
-						control={form.control}
-						disabled={addCategoryMutation.isPending}
-						name="iconId"
-						render={({ field }) => <IconSelector {...field} />}
-					/>
+		<FormDialog
+			open={props.open}
+			setOpen={props.setOpen}
+			title={props.id ? 'Add Subcategory' : 'Add Category'}
+			form={form}
+			onSubmit={onSubmit}
+			error={addCategoryMutation.error}
+			loading={addCategoryMutation.isPending}>
+			<div className="flex items-center gap-5 py-5">
+				{/*	Icon */}
+				<FormField
+					control={form.control}
+					disabled={addCategoryMutation.isPending}
+					name="iconId"
+					render={({ field }) => <IconSelector {...field} />}
+				/>
 
-					{/*	Inputs */}
-					<div className="grid flex-1 gap-3">
-						{/*	Type */}
+				{/*	Inputs */}
+				<div className="grid flex-1 gap-3">
+					{/*	Type */}
+					{props.id === undefined && (
 						<FormField
 							control={form.control}
 							name="type"
@@ -99,24 +100,24 @@ export const AddCategoryButton = () => {
 								</FormItem>
 							)}
 						/>
+					)}
 
-						{/*	Name */}
-						<FormField
-							control={form.control}
-							disabled={addCategoryMutation.isPending}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input {...field} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</div>
+					{/*	Name */}
+					<FormField
+						control={form.control}
+						disabled={addCategoryMutation.isPending}
+						name="name"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Name</FormLabel>
+								<FormControl>
+									<Input {...field} />
+								</FormControl>
+							</FormItem>
+						)}
+					/>
 				</div>
-			</FormDialog>
-		</>
+			</div>
+		</FormDialog>
 	)
 }

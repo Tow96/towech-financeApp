@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
+import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil, Plus } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 
 import { CategoryType } from '@/features/categories/domain'
-import { AddCategoryButton } from '@/features/categories/commands/add-category/client'
+import { AddCategoryDialog } from '@/features/categories/commands/add-category/client'
 import {
 	DropDrawer,
 	DropDrawerContent,
@@ -38,27 +38,37 @@ const useCategoryList = (type: CategoryType) => {
 	})
 }
 
-export const AllCategoryList = () => (
-	<Tabs defaultValue="expense">
-		<div className="flex flex-col-reverse gap-4 md:flex-row md:justify-between">
-			<TabsList className="w-full md:w-fit">
-				<TabsTrigger value="income">Income</TabsTrigger>
-				<TabsTrigger value="expense">Expense</TabsTrigger>
-				<TabsTrigger value="transfer">Transfer</TabsTrigger>
-			</TabsList>
-			<AddCategoryButton />
-		</div>
-		<TabsContent value="income">
-			<CategoryListByType type={CategoryType.income} />
-		</TabsContent>
-		<TabsContent value="expense">
-			<CategoryListByType type={CategoryType.expense} />
-		</TabsContent>
-		<TabsContent value="transfer">
-			<CategoryListByType type={CategoryType.transfer} />
-		</TabsContent>
-	</Tabs>
-)
+export const AllCategoryList = () => {
+	const [openAdd, setOpenAdd] = useState(false)
+
+	return (
+		<Tabs defaultValue="expense">
+			<div className="flex flex-col-reverse gap-4 md:flex-row md:justify-between">
+				<TabsList className="w-full md:w-fit">
+					<TabsTrigger value="income">Income</TabsTrigger>
+					<TabsTrigger value="expense">Expense</TabsTrigger>
+					<TabsTrigger value="transfer">Transfer</TabsTrigger>
+				</TabsList>
+
+				{/* Add Category */}
+				<Button onClick={() => setOpenAdd(true)}>
+					<Plus />
+					Add Category
+				</Button>
+				<AddCategoryDialog open={openAdd} setOpen={setOpenAdd} />
+			</div>
+			<TabsContent value="income">
+				<CategoryListByType type={CategoryType.income} />
+			</TabsContent>
+			<TabsContent value="expense">
+				<CategoryListByType type={CategoryType.expense} />
+			</TabsContent>
+			<TabsContent value="transfer">
+				<CategoryListByType type={CategoryType.transfer} />
+			</TabsContent>
+		</Tabs>
+	)
+}
 
 const CategoryListByType = ({ type }: { type: CategoryType }) => {
 	const { data } = useCategoryList(type)
@@ -80,6 +90,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 	const [openArchive, setOpenArchive] = useState(false)
 	const [openRestore, setOpenRestore] = useState(false)
 	const [openEdit, setOpenEdit] = useState(false)
+	const [openAddSub, setOpenAddSub] = useState(false)
 
 	return (
 		<AccordionItem value={category.id}>
@@ -98,6 +109,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				</div>
 
 				{/* Side menu */}
+				<AddCategoryDialog id={category.id} type={category.type} open={openAddSub} setOpen={setOpenAddSub} />
 				<ArchiveCategoryDialog id={category.id} open={openArchive} setOpen={setOpenArchive} />
 				<RestoreCategoryDialog id={category.id} open={openRestore} setOpen={setOpenRestore} />
 				<EditCategoryDialog
@@ -119,7 +131,9 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 						{!category.archived ? (
 							<>
 								<DropDrawerGroup>
-									<DropDrawerItem>Add SubCategory</DropDrawerItem>
+									<DropDrawerItem icon={<CirclePlus />} onClick={() => setOpenAddSub(true)}>
+										<span>Add Subcategory</span>
+									</DropDrawerItem>
 								</DropDrawerGroup>
 								<DropDrawerGroup>
 									<DropDrawerItem icon={<Pencil />} onClick={() => setOpenEdit(true)}>
