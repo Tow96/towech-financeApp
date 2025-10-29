@@ -24,6 +24,7 @@ interface IconSelectorProps {
 	control?: Control
 	name?: string
 	disabled?: boolean
+	value?: number
 }
 
 export const IconSelector = (props: IconSelectorProps) => {
@@ -32,7 +33,7 @@ export const IconSelector = (props: IconSelectorProps) => {
 	} = useController({ name: props.name || '', control: props.control })
 
 	const [open, setOpen] = useState(false)
-	const [selectedIcon, setSelectedIcon] = useState<number>(value || 0)
+	const [selectedIcon, setSelectedIcon] = useState<number>(props.value ? props.value : value || 0)
 
 	const handleOnChange = (icon: number) => {
 		setSelectedIcon(icon)

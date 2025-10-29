@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { CategoryType } from '@/features/categories/domain'
 
 import { categoryKeys } from '@/features/categories/store-keys'
-import { getCategoryDetail } from '@/features/categories/queries/detail-category/server.ts'
+import { getCategoryDetail } from '@/features/categories/queries/detail-category/server'
 
 export const useCategoryDetail = (type: CategoryType, id: string) => {
 	return useQuery({

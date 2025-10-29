@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { archiveCategory } from './server.ts'
+import { archiveCategory } from './server'
 import { ArchiveCategorySchema } from './dto'
 
 import { FormDialog } from '@/common/components/form-dialog'

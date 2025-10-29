@@ -25,8 +25,8 @@ export const editCategory = createServerFn({ method: 'POST' })
 			await db
 				.update(schema.Categories)
 				.set({
-					name: data.name,
-					iconId: data.iconId,
+					name: data.name ?? categories[0].name,
+					iconId: data.iconId ?? categories[0].iconId,
 					updatedAt: new Date(),
 				})
 				.where(eq(schema.Categories.id, data.id))

@@ -1,4 +1,4 @@
-﻿import type { CategoryType } from '@/features/categories/domain.ts'
+﻿import type { CategoryType } from '@/features/categories/domain'
 
 export const categoryKeys = {
 	all: ['categories'] as const,

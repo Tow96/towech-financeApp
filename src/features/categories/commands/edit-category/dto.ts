@@ -6,7 +6,8 @@ export const EditCategorySchema = z.object({
 		.string()
 		.min(2, { message: 'Name must be at least 2 characters long.' })
 		.max(50, { message: 'Name cannot exceed 50 characters.' })
-		.transform(v => v.trim().toLowerCase()),
-	iconId: z.number(),
+		.transform(v => v.trim().toLowerCase())
+		.optional(),
+	iconId: z.number().optional(),
 })
 export type EditCategorySchema = z.infer<typeof EditCategorySchema>

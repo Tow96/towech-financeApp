@@ -9,7 +9,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-} from '@/common/components/ui/sidebar.tsx'
+} from '@/common/components/ui/sidebar'
 
 const pages = [
 	{
