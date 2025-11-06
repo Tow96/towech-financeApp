@@ -1,28 +1,8 @@
-﻿import {
-	HeadContent,
-	Scripts,
-	createRootRouteWithContext,
-	useLocation,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { createServerFn } from '@tanstack/react-start'
+﻿import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 
-import type { ReactNode } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 
-import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 import appCss from '@/styles.css?url'
-
-import {
-	SidebarInset,
-	SidebarProvider,
-	SidebarTrigger,
-	getSidebarState,
-} from '@/common/components/ui/sidebar'
-import { AppSidebar } from '@/common/components/app-sidebar'
-import { Separator } from '@/common/components/ui/separator'
-import { capitalizeFirst } from '@/common/lib/utils.ts'
 
 import { getThemeServer } from '@/common/components/ui/theme-provider.tsx'
 import { CustomClerkProvider, getClerkAuth } from '@/integrations/clerk'
@@ -47,17 +27,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	}),
 	loader: async () => {
 		const theme = await getThemeServer()
-		const sidebarInitialState = await getSidebarState()
-
-		return {
-			theme,
-			sidebarInitialState,
-		}
+		return { theme }
 	},
 	shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: ReactNode }) {
+function RootDocument() {
 	const data = Route.useLoaderData()
 
 	return (
@@ -67,44 +42,10 @@ function RootDocument({ children }: { children: ReactNode }) {
 			</head>
 			<body>
 				<CustomClerkProvider>
-					<SidebarProvider defaultOpen={data.sidebarInitialState}>
-						<AppSidebar />
-						<SidebarInset>
-							{/*	Header */}
-							<header className="flex h-16 shrink-0 items-center gap-2 border-b">
-								<div className="flex items-center gap-2 px-3">
-									<SidebarTrigger />
-									<Separator orientation="vertical" className="mr-2 h-4" />
-									<PageTitle />
-								</div>
-							</header>
-
-							{/*	Content */}
-							<main>
-								{children}
-								<TanStackDevtools
-									config={{ position: 'bottom-right' }}
-									plugins={[
-										{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-										TanStackQueryDevtools,
-									]}
-								/>
-							</main>
-						</SidebarInset>
-					</SidebarProvider>
+					<Outlet />
 				</CustomClerkProvider>
 				<Scripts />
 			</body>
 		</html>
-	)
-}
-
-const PageTitle = (): ReactNode => {
-	const location = useLocation()
-
-	return (
-		<h1 className="text-lg font-bold">
-			{capitalizeFirst(location.pathname.slice(1).split('/')[0])}
-		</h1>
 	)
 }

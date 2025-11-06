@@ -1,5 +1,4 @@
 ﻿import { useClerk } from '@clerk/shared/react'
-import { SignOutButton } from '@clerk/clerk-react'
 import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react'
 
 import type { ReactNode } from 'react'
@@ -86,9 +85,9 @@ const EnabledUserButton = (): ReactNode => {
 				<DropdownMenuSeparator />
 
 				{/* Log out */}
-				<DropdownMenuItem>
+				<DropdownMenuItem onClick={() => clerk.signOut({ redirectUrl: '/' })}>
 					<LogOut />
-					<SignOutButton />
+					Sign out
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
