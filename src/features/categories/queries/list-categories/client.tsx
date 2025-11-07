@@ -109,13 +109,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				{/* Side menu */}
 				<AddCategoryDialog id={category.id} type={category.type} open={openAddSub} setOpen={setOpenAddSub} />
 				<SetCategoryStatusDialog id={category.id} archive={!category.archived} open={openStatus} setOpen={setOpenStatus} />
-
-				<EditCategoryDialog
-					type={category.type}
-					id={category.id}
-					open={openEdit}
-					setOpen={setOpenEdit}
-				/>
+				<EditCategoryDialog type={category.type} id={category.id} open={openEdit} setOpen={setOpenEdit} />
 				<DropDrawer>
 					{/* Open menu button */}
 					<DropDrawerTrigger asChild>
@@ -172,17 +166,27 @@ interface SubCategoryListItemProps {
 	subCategory: SubCategoryListItemDto
 }
 
-const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => (
-	<div className="flex items-center gap-2 py-3 pl-10">
-		<div
-			className={cn(
-				'flex min-w-0 flex-1 items-center gap-2',
-				subCategory.archived ? 'pointer-events-none opacity-50' : '',
-			)}>
-			<Icon className="h-10 w-10 rounded-full" id={subCategory.iconId} name={subCategory.name} />
-			<span className="flex-1 overflow-x-hidden text-lg text-nowrap text-ellipsis">
-				{capitalizeFirst(subCategory.name)}
-			</span>
+const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
+	return (
+		<div className="flex items-center gap-2 py-3 pl-10">
+			<div
+				className={cn(
+					'flex min-w-0 flex-1 items-center gap-2',
+					subCategory.archived ? 'pointer-events-none opacity-50' : '',
+				)}>
+				<Icon className="h-10 w-10 rounded-full" id={subCategory.iconId} name={subCategory.name} />
+				<span className="flex-1 overflow-x-hidden text-lg text-nowrap text-ellipsis">
+					{capitalizeFirst(subCategory.name)}
+				</span>
+				<DropDrawer>
+					{/* Open menu button */}
+					<DropDrawerTrigger asChild>
+						<Button variant="secondary" size="icon" className="ml-3">
+							<Ellipsis />
+						</Button>
+					</DropDrawerTrigger>
+				</DropDrawer>
+			</div>
 		</div>
-	</div>
-)
+	)
+}

@@ -40,6 +40,7 @@ export const getCategoriesByType = createServerFn({ method: 'GET' })
 					iconId: item.iconId,
 					type: item.type as CategoryType,
 					id: item.id,
+					subId: null,
 					name: item.name,
 					subCategories: [],
 					archived: item.archived !== null,
@@ -48,10 +49,13 @@ export const getCategoriesByType = createServerFn({ method: 'GET' })
 			}
 
 			if (item.subId !== null) {
-				response[catIndex].subCategories.push({
+				response[catIndex].subCategories!.push({
 					iconId: item.subIconId!,
-					id: item.subId,
+					type: item.type as CategoryType,
+					id: item.id,
+					subId: item.subId,
 					name: item.subName!,
+					subCategories: null,
 					archived: item.subArchived !== null,
 				})
 			}
