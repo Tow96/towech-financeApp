@@ -27,8 +27,7 @@ import {
 } from '@/common/components/ui/dropdrawer'
 import { Button } from '@/common/components/ui/button'
 import { EditCategoryDialog } from '@/features/categories/commands/edit-category/client'
-import { ArchiveCategoryDialog } from '@/features/categories/commands/archive-category/client'
-import { RestoreCategoryDialog } from '@/features/categories/commands/restore-category/client'
+import { SetCategoryStatusDialog } from '@/features/categories/commands/set-category-status/client.tsx'
 
 const useCategoryList = (type: CategoryType) => {
 	return useQuery({
@@ -87,10 +86,9 @@ interface CategoryListItemProps {
 }
 
 const CategoryListItem = ({ category }: CategoryListItemProps) => {
-	const [openArchive, setOpenArchive] = useState(false)
-	const [openRestore, setOpenRestore] = useState(false)
 	const [openEdit, setOpenEdit] = useState(false)
 	const [openAddSub, setOpenAddSub] = useState(false)
+	const [openStatus, setOpenStatus] = useState(false)
 
 	return (
 		<AccordionItem value={category.id}>
@@ -110,8 +108,8 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 
 				{/* Side menu */}
 				<AddCategoryDialog id={category.id} type={category.type} open={openAddSub} setOpen={setOpenAddSub} />
-				<ArchiveCategoryDialog id={category.id} open={openArchive} setOpen={setOpenArchive} />
-				<RestoreCategoryDialog id={category.id} open={openRestore} setOpen={setOpenRestore} />
+				<SetCategoryStatusDialog id={category.id} archive={!category.archived} open={openStatus} setOpen={setOpenStatus} />
+
 				<EditCategoryDialog
 					type={category.type}
 					id={category.id}
@@ -141,7 +139,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 									</DropDrawerItem>
 									<DropDrawerItem
 										icon={<Archive />}
-										onClick={() => setOpenArchive(true)}
+										onClick={() => setOpenStatus(true)}
 										variant="destructive">
 										<span>Archive Category</span>
 									</DropDrawerItem>
@@ -149,7 +147,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 							</>
 						) : (
 							<DropDrawerGroup>
-								<DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenRestore(true)}>
+								<DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenStatus(true)}>
 									<span>Restore Category</span>
 								</DropDrawerItem>
 							</DropDrawerGroup>
