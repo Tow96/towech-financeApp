@@ -12,5 +12,6 @@ export type CategoryDetailDto = {
 
 export const GetCategoryDetailSchema = z.object({
 	id: z.uuid(),
+	subId: z.uuid().optional(),
 })
 export type RestoreCategorySchema = z.infer<typeof GetCategoryDetailSchema>

@@ -34,17 +34,18 @@ const useEditCategoryMutation = () => {
 interface EditCategoryDialogProps {
 	type: CategoryType
 	id: string
+	subId?: string
 	open: boolean
 	setOpen: (open: boolean) => void
 }
 
 export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
-	const categoryDetail = useCategoryDetail(props.type, props.id)
+	const categoryDetail = useCategoryDetail(props.type, props.id, props.subId)
 	const editCategoryMutation = useEditCategoryMutation()
 
 	const form = useForm<EditCategorySchema>({
 		resolver: zodResolver(EditCategorySchema),
-		defaultValues: { id: props.id },
+		defaultValues: { id: props.id, subId: props.subId },
 	})
 
 	const onSubmit = (values: EditCategorySchema) =>
@@ -72,10 +73,7 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 					disabled={editCategoryMutation.isPending}
 					name="iconId"
 					render={({ field }) => (
-						<IconSelector
-							{...field}
-							value={field.value ?? categoryDetail.data?.iconId}
-						/>
+						<IconSelector {...field} value={field.value ?? categoryDetail.data?.iconId} />
 					)}
 				/>
 
@@ -100,10 +98,7 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 							<FormItem>
 								<FormLabel>Name</FormLabel>
 								<FormControl>
-									<Input
-										{...field}
-										value={field.value ?? categoryDetail.data?.name}
-									/>
+									<Input {...field} value={field.value ?? categoryDetail.data?.name} />
 								</FormControl>
 							</FormItem>
 						)}
