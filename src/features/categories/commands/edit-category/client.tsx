@@ -80,14 +80,16 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 				{/* Inputs*/}
 				<div className="grid flex-1 gap-3">
 					{/*	Type (read-only) */}
-					<Select defaultValue="base" disabled={true}>
-						<SelectTrigger className="w-full">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="base">{capitalizeFirst(props.type.toLowerCase())}</SelectItem>
-						</SelectContent>
-					</Select>
+					{!props.subId && (
+						<Select defaultValue="base" disabled={true}>
+							<SelectTrigger className="w-full">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="base">{capitalizeFirst(props.type.toLowerCase())}</SelectItem>
+							</SelectContent>
+						</Select>
+					)}
 
 					{/*	Name */}
 					<FormField

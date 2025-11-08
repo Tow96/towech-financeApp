@@ -209,6 +209,14 @@ const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
 				open={openStatus}
 				setOpen={setOpenStatus}
 			/>
+			<EditCategoryDialog
+				type={subCategory.type}
+				id={subCategory.id}
+				subId={subCategory.subId!}
+				open={openEdit}
+				setOpen={setOpenEdit}
+			/>
+
 			<DropDrawer>
 				{/* Open menu button */}
 				<DropDrawerTrigger asChild>
