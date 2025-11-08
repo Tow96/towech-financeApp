@@ -187,6 +187,9 @@ interface SubCategoryListItemProps {
 }
 
 const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
+	const [openEdit, setOpenEdit] = useState(false)
+	const [openStatus, setOpenStatus] = useState(false)
+
 	return (
 		<div className="flex items-center gap-2 py-3 pl-10">
 			<div
@@ -198,15 +201,51 @@ const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
 				<span className="flex-1 overflow-x-hidden text-lg text-nowrap text-ellipsis">
 					{capitalizeFirst(subCategory.name)}
 				</span>
-				<DropDrawer>
-					{/* Open menu button */}
-					<DropDrawerTrigger asChild>
-						<Button variant="secondary" size="icon" className="ml-3">
-							<Ellipsis />
-						</Button>
-					</DropDrawerTrigger>
-				</DropDrawer>
 			</div>
+			<SetCategoryStatusDialog
+				id={subCategory.id}
+				subId={subCategory.subId!}
+				archive={!subCategory.archived}
+				open={openStatus}
+				setOpen={setOpenStatus}
+			/>
+			<DropDrawer>
+				{/* Open menu button */}
+				<DropDrawerTrigger asChild>
+					<Button variant="secondary" size="icon" className="ml-3">
+						<Ellipsis />
+					</Button>
+				</DropDrawerTrigger>
+
+				{/* Menu */}
+				<DropDrawerContent>
+					{!subCategory.archived && (
+						<DropDrawerGroup>
+							{/*	Edit*/}
+							<DropDrawerItem icon={<Pencil />} onClick={() => setOpenEdit(true)}>
+								<span>Edit Subcategory</span>
+							</DropDrawerItem>
+
+							{/*	Archive */}
+							<DropDrawerItem
+								icon={<Archive />}
+								onClick={() => setOpenStatus(true)}
+								variant="destructive">
+								<span>Archive Subcategory</span>
+							</DropDrawerItem>
+						</DropDrawerGroup>
+					)}
+
+					{subCategory.archived && (
+						<DropDrawerGroup>
+							{/*	Restore */}
+							<DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenStatus(true)}>
+								<span>Restore Subcategory</span>
+							</DropDrawerItem>
+						</DropDrawerGroup>
+					)}
+				</DropDrawerContent>
+			</DropDrawer>
 		</div>
 	)
 }

@@ -20,6 +20,7 @@ const useSetCategoryStatusMutation = () => {
 
 interface SetCategoryStatusProps {
 	id: string
+	subId?: string
 	archive: boolean
 	open: boolean
 	setOpen: (open: boolean) => void
@@ -30,7 +31,7 @@ export const SetCategoryStatusDialog = (props: SetCategoryStatusProps) => {
 
 	const form = useForm<SetCategoryStatusSchema>({
 		resolver: zodResolver(SetCategoryStatusSchema),
-		defaultValues: { id: props.id, archived: props.archive },
+		defaultValues: { id: props.id, subId: props.subId, archived: props.archive },
 	})
 
 	const onSubmit = (values: SetCategoryStatusSchema) =>
