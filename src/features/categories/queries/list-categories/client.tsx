@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { categoryKeys } from '../../store-keys'
 import { getCategoriesByType } from './server.ts'
-import type { CategoryListItemDto, SubCategoryListItemDto } from './dto'
+import type { CategoryListItemDto } from './dto'
 
 import { Icon } from '@/common/components/icon'
 import {
@@ -81,6 +81,7 @@ const CategoryListByType = ({ type }: { type: CategoryType }) => {
 	)
 }
 
+// TODO: It is likely that the Category List Item and the SubCategory List Item can be joined into one component
 interface CategoryListItemProps {
 	category: CategoryListItemDto
 }
@@ -97,7 +98,11 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				<div className="flex-1">
 					<AccordionTrigger
 						className="flex min-w-0 items-center"
-						empty={category.subCategories.length === 0 || category.archived}
+						empty={
+							category.subCategories === null ||
+							category.subCategories.length === 0 ||
+							category.archived
+						}
 						disabled={category.archived}>
 						<Icon className="h-12 w-12 rounded-full" id={category.iconId} name={category.name} />
 						<span className="flex-1 overflow-x-hidden text-xl text-nowrap text-ellipsis">
@@ -107,9 +112,24 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				</div>
 
 				{/* Side menu */}
-				<AddCategoryDialog id={category.id} type={category.type} open={openAddSub} setOpen={setOpenAddSub} />
-				<SetCategoryStatusDialog id={category.id} archive={!category.archived} open={openStatus} setOpen={setOpenStatus} />
-				<EditCategoryDialog type={category.type} id={category.id} open={openEdit} setOpen={setOpenEdit} />
+				<AddCategoryDialog
+					id={category.id}
+					type={category.type}
+					open={openAddSub}
+					setOpen={setOpenAddSub}
+				/>
+				<SetCategoryStatusDialog
+					id={category.id}
+					archive={!category.archived}
+					open={openStatus}
+					setOpen={setOpenStatus}
+				/>
+				<EditCategoryDialog
+					type={category.type}
+					id={category.id}
+					open={openEdit}
+					setOpen={setOpenEdit}
+				/>
 				<DropDrawer>
 					{/* Open menu button */}
 					<DropDrawerTrigger asChild>
@@ -151,10 +171,10 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 			</div>
 
 			{/*	Subcategories */}
-			{category.subCategories.length > 0 && (
+			{category.subCategories && category.subCategories.length > 0 && (
 				<AccordionContent>
 					{category.subCategories.map(c => (
-						<SubCategoryListItem key={c.id} subCategory={c} />
+						<SubCategoryListItem key={c.subId} subCategory={c} />
 					))}
 				</AccordionContent>
 			)}
@@ -163,7 +183,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 }
 
 interface SubCategoryListItemProps {
-	subCategory: SubCategoryListItemDto
+	subCategory: CategoryListItemDto
 }
 
 const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
