@@ -1,9 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
+import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
+import type { ListWalletItemDto } from './dto'
+
+import { Button } from '@/common/components/ui/button'
+import {
+	DropDrawer,
+	DropDrawerContent,
+	DropDrawerGroup,
+	DropDrawerItem,
+	DropDrawerTrigger,
+} from '@/common/components/ui/dropdrawer'
 import { Skeleton } from '@/common/components/ui/skeleton'
+import { Icon } from '@/common/components/icon'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 import { walletKeys } from '@/features/wallets/store-keys'
 import { getWalletTotals } from '@/features/wallets/queries/list-wallets/server'
-import { convertCentsToCurrencyString } from '@/common/lib/utils.ts'
 
 const useWalletsTotal = () => {
 	return useQuery({
@@ -30,5 +42,70 @@ export const WalletsTotal = () => {
 export const WalletList = () => {
 	const { data } = useWalletsTotal()
 
-	return <div>{JSON.stringify(data?.wallets)}</div>
+	return (
+		<div className="max-h-[70vh] overflow-y-auto">
+			{data?.wallets.map(w => (
+				<WalletItem key={w.id} wallet={w} />
+			))}
+		</div>
+	)
+}
+
+interface WalletItemProps {
+	wallet: ListWalletItemDto
+}
+
+const WalletItem = ({ wallet }: WalletItemProps) => {
+	return (
+		<div className="flex gap-4 border-b-1 py-4 pr-4 last:border-b-0">
+			<Icon
+				className={cn('h-16 w-16 rounded-full', wallet.archived ? 'opacity-50' : '')}
+				id={wallet.iconId}
+				name={wallet.name}
+			/>
+			<div className={cn('min-w-0 flex-1', wallet.archived ? 'opacity-50' : '')}>
+				<div className="truncate overflow-hidden text-xl font-bold text-nowrap text-ellipsis">
+					{capitalizeFirst(wallet.name)}
+				</div>
+				<span
+					className={cn(
+						'text-lg font-semibold',
+						wallet.money < 0 ? 'text-destructive' : 'text-muted-foreground',
+					)}>
+					{convertCentsToCurrencyString(wallet.money)}
+				</span>
+			</div>
+
+			{/*	Menu */}
+			<DropDrawer>
+				{/* Button */}
+				<DropDrawerTrigger asChild>
+					<Button variant="secondary" size="icon" className="ml-3">
+						<Ellipsis />
+					</Button>
+				</DropDrawerTrigger>
+
+				{/* Content	*/}
+				<DropDrawerContent align="start">
+					{!wallet.archived && (
+						<DropDrawerGroup>
+							<DropDrawerItem icon={<Pencil />}>
+								<span>Edit wallet</span>
+							</DropDrawerItem>
+							<DropDrawerItem icon={<Archive />} variant="destructive">
+								<span>Archive wallet</span>
+							</DropDrawerItem>
+						</DropDrawerGroup>
+					)}
+					{wallet.archived && (
+						<DropDrawerGroup>
+							<DropDrawerItem icon={<ArchiveRestore />}>
+								<span>Restored wallet</span>
+							</DropDrawerItem>
+						</DropDrawerGroup>
+					)}
+				</DropDrawerContent>
+			</DropDrawer>
+		</div>
+	)
 }

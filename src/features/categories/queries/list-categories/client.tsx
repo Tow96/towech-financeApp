@@ -112,24 +112,6 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 				</div>
 
 				{/* Side menu */}
-				<AddCategoryDialog
-					id={category.id}
-					type={category.type}
-					open={openAddSub}
-					setOpen={setOpenAddSub}
-				/>
-				<SetCategoryStatusDialog
-					id={category.id}
-					archive={!category.archived}
-					open={openStatus}
-					setOpen={setOpenStatus}
-				/>
-				<EditCategoryDialog
-					type={category.type}
-					id={category.id}
-					open={openEdit}
-					setOpen={setOpenEdit}
-				/>
 				<DropDrawer>
 					{/* Open menu button */}
 					<DropDrawerTrigger asChild>
@@ -168,6 +150,26 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 						)}
 					</DropDrawerContent>
 				</DropDrawer>
+
+				{/* Forms */}
+				<AddCategoryDialog
+					id={category.id}
+					type={category.type}
+					open={openAddSub}
+					setOpen={setOpenAddSub}
+				/>
+				<SetCategoryStatusDialog
+					id={category.id}
+					archive={!category.archived}
+					open={openStatus}
+					setOpen={setOpenStatus}
+				/>
+				<EditCategoryDialog
+					type={category.type}
+					id={category.id}
+					open={openEdit}
+					setOpen={setOpenEdit}
+				/>
 			</div>
 
 			{/*	Subcategories */}

@@ -22,7 +22,7 @@ export const getWalletTotals = createServerFn({ method: 'GET' })
 					SUM(CASE WHEN ${schema.MovementSummary.destinationWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END)
 					- SUM (CASE WHEN ${schema.MovementSummary.originWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END)
 				`,
-				archived: sql<boolean>`CASE WHEN ${schema.Wallets.archivedAt} is NULL THEN TRUE ELSE FALSE END`,
+				archived: sql<boolean>`CASE WHEN ${schema.Wallets.archivedAt} is NULL THEN FALSE ELSE TRUE END`,
 			})
 			.from(schema.Wallets)
 			.leftJoin(
