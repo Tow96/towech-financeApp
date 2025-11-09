@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
@@ -16,6 +17,7 @@ import { Icon } from '@/common/components/icon'
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 import { walletKeys } from '@/features/wallets/store-keys'
 import { getWalletTotals } from '@/features/wallets/queries/list-wallets/server'
+import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client.tsx'
 
 const useWalletsTotal = () => {
 	return useQuery({
@@ -56,6 +58,8 @@ interface WalletItemProps {
 }
 
 const WalletItem = ({ wallet }: WalletItemProps) => {
+	const [openStatus, setOpenStatus] = useState(false)
+
 	return (
 		<div className="flex gap-4 border-b-1 py-4 pr-4 last:border-b-0">
 			<Icon
@@ -92,20 +96,32 @@ const WalletItem = ({ wallet }: WalletItemProps) => {
 							<DropDrawerItem icon={<Pencil />}>
 								<span>Edit wallet</span>
 							</DropDrawerItem>
-							<DropDrawerItem icon={<Archive />} variant="destructive">
+							<DropDrawerItem
+								icon={<Archive />}
+								variant="destructive"
+								onClick={() => setOpenStatus(true)}
+								disabled={wallet.money !== 0}>
 								<span>Archive wallet</span>
 							</DropDrawerItem>
 						</DropDrawerGroup>
 					)}
 					{wallet.archived && (
 						<DropDrawerGroup>
-							<DropDrawerItem icon={<ArchiveRestore />}>
-								<span>Restored wallet</span>
+							<DropDrawerItem icon={<ArchiveRestore />} onClick={() => setOpenStatus(true)}>
+								<span>Restore wallet</span>
 							</DropDrawerItem>
 						</DropDrawerGroup>
 					)}
 				</DropDrawerContent>
 			</DropDrawer>
+
+			{/* Forms	*/}
+			<SetWalletStatusDialog
+				id={wallet.id}
+				archive={!wallet.archived}
+				open={openStatus}
+				setOpen={setOpenStatus}
+			/>
 		</div>
 	)
 }

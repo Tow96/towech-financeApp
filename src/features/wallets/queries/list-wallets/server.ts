@@ -1,11 +1,12 @@
 import { and, eq, or, sql } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { GetWalletTotalsSchema, ListWalletItemDto } from './dto'
-import type { ListWalletsDto } from './dto'
+import { GetWalletTotalsSchema } from './dto'
+import type { ListWalletItemDto, ListWalletsDto } from './dto'
 
 import { AuthorizationMiddleware } from '@/integrations/clerk'
 import { db, schema } from '@/integrations/drizzle-db'
+import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
 export const getWalletTotals = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
@@ -18,10 +19,7 @@ export const getWalletTotals = createServerFn({ method: 'GET' })
 				iconId: schema.Wallets.iconId,
 				id: schema.Wallets.id,
 				name: schema.Wallets.name,
-				money: sql<string>`
-					SUM(CASE WHEN ${schema.MovementSummary.destinationWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END)
-					- SUM (CASE WHEN ${schema.MovementSummary.originWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END)
-				`,
+				money: FetchWalletMoneySql,
 				archived: sql<boolean>`CASE WHEN ${schema.Wallets.archivedAt} is NULL THEN FALSE ELSE TRUE END`,
 			})
 			.from(schema.Wallets)
