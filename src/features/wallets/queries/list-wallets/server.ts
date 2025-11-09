@@ -32,8 +32,7 @@ export const getWalletTotals = createServerFn({ method: 'GET' })
 					eq(schema.MovementSummary.destinationWalletId, schema.Wallets.id),
 				),
 			)
-			.leftJoin(schema.Movements, eq(schema.Movements.id, schema.MovementSummary.movementId))
-			.where(and(eq(schema.Movements.id, schema.MovementSummary.movementId)))
+			.where(and(eq(schema.Wallets.userId, userId)))
 			.groupBy(schema.Wallets.id)
 			.orderBy(schema.Wallets.name)
 
