@@ -1,23 +1,27 @@
 import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { SetWalletStatusSchema } from './dto'
-import type { WalletDetailDto } from './dto'
+import { GetWalletDetailSchema } from './dto.ts'
+import type { WalletDetailDto } from './dto.ts'
 
-import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
+import { db, schema } from '@/integrations/drizzle-db'
 import { FetchWalletMoneySql } from '@/features/wallets/domain.ts'
 
-export const setWalletStatus = createServerFn({ method: 'POST' })
+export const getWalletDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetWalletStatusSchema)
+	.inputValidator(GetWalletDetailSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		// Checks that wallet exist
+		logger.info(`User ${userId} requesting detail for wallet ${data.id}`)
+
 		const existingWallet = await db
 			.select({
 				id: schema.Wallets.id,
+				iconId: schema.Wallets.iconId,
+				name: schema.Wallets.name,
 				money: FetchWalletMoneySql,
 				userId: schema.Wallets.userId,
+				archivedAt: schema.Wallets.archivedAt,
 			})
 			.from(schema.Wallets)
 			.leftJoin(
@@ -29,27 +33,16 @@ export const setWalletStatus = createServerFn({ method: 'POST' })
 			)
 			.where(eq(schema.Wallets.id, data.id))
 			.groupBy(schema.Wallets.id)
+
 		if (existingWallet.length === 0) throw new Response('Wallet not found', { status: 404 })
 		if (existingWallet[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
 
-		// Wallet can't be archived unless it has zero money (movements not necessarily 0)
-		if (existingWallet[0].money !== '0' && data.archived)
-			throw new Response('Wallet needs to have 0 money to be archived', { status: 422 })
-
-		const updatedWallet = (
-			await db
-				.update(schema.Wallets)
-				.set({ archivedAt: data.archived ? new Date() : null })
-				.where(eq(schema.Wallets.id, data.id))
-				.returning()
-		)[0]
-
 		const output: WalletDetailDto = {
-			id: updatedWallet.id,
-			iconId: updatedWallet.iconId,
-			name: updatedWallet.name,
+			id: existingWallet[0].id,
+			iconId: existingWallet[0].iconId,
+			name: existingWallet[0].name,
 			money: existingWallet[0].money,
-			archived: updatedWallet.archivedAt !== null,
+			archived: existingWallet[0].archivedAt !== null,
 		}
 		return output
 	})

@@ -15,9 +15,11 @@ import {
 import { Skeleton } from '@/common/components/ui/skeleton'
 import { Icon } from '@/common/components/icon'
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
+
 import { walletKeys } from '@/features/wallets/store-keys'
+import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client'
+import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client'
 import { getWalletTotals } from '@/features/wallets/queries/list-wallets/server'
-import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client.tsx'
 
 const useWalletsTotal = () => {
 	return useQuery({
@@ -59,6 +61,7 @@ interface WalletItemProps {
 
 const WalletItem = ({ wallet }: WalletItemProps) => {
 	const [openStatus, setOpenStatus] = useState(false)
+	const [openEdit, setOpenEdit] = useState(false)
 
 	return (
 		<div className="flex gap-4 border-b-1 py-4 pr-4 last:border-b-0">
@@ -93,7 +96,7 @@ const WalletItem = ({ wallet }: WalletItemProps) => {
 				<DropDrawerContent align="start">
 					{!wallet.archived && (
 						<DropDrawerGroup>
-							<DropDrawerItem icon={<Pencil />}>
+							<DropDrawerItem icon={<Pencil />} onClick={() => setOpenEdit(true)}>
 								<span>Edit wallet</span>
 							</DropDrawerItem>
 							<DropDrawerItem
@@ -122,6 +125,7 @@ const WalletItem = ({ wallet }: WalletItemProps) => {
 				open={openStatus}
 				setOpen={setOpenStatus}
 			/>
+			<EditWalletDialog id={wallet.id} open={openEdit} setOpen={setOpenEdit} />
 		</div>
 	)
 }

@@ -1,24 +1,20 @@
 import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { SetWalletStatusSchema } from './dto'
-import type { WalletDetailDto } from './dto'
+import { EditWalletSchema } from './dto'
+import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
-import { FetchWalletMoneySql } from '@/features/wallets/domain.ts'
+import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
-export const setWalletStatus = createServerFn({ method: 'POST' })
+export const editWallet = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetWalletStatusSchema)
+	.inputValidator(EditWalletSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		// Checks that wallet exist
 		const existingWallet = await db
-			.select({
-				id: schema.Wallets.id,
-				money: FetchWalletMoneySql,
-				userId: schema.Wallets.userId,
-			})
+			.select({ id: schema.Wallets.id, money: FetchWalletMoneySql, userId: schema.Wallets.userId })
 			.from(schema.Wallets)
 			.leftJoin(
 				schema.MovementSummary,
@@ -29,17 +25,19 @@ export const setWalletStatus = createServerFn({ method: 'POST' })
 			)
 			.where(eq(schema.Wallets.id, data.id))
 			.groupBy(schema.Wallets.id)
-		if (existingWallet.length === 0) throw new Response('Wallet not found', { status: 404 })
+
+		if (existingWallet.lenght === 0) throw new Response('Wallet not found', { status: 404 })
 		if (existingWallet[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
 
-		// Wallet can't be archived unless it has zero money (movements not necessarily 0)
-		if (existingWallet[0].money !== '0' && data.archived)
-			throw new Response('Wallet needs to have 0 money to be archived', { status: 422 })
-
+		logger.info(`User: ${userId} editing wallet: ${data.id}`)
 		const updatedWallet = (
 			await db
 				.update(schema.Wallets)
-				.set({ archivedAt: data.archived ? new Date() : null })
+				.set({
+					name: data.name ?? existingWallet[0].name,
+					iconId: data.iconId ?? existingWallet[0].iconId,
+					updatedAt: new Date(),
+				})
 				.where(eq(schema.Wallets.id, data.id))
 				.returning()
 		)[0]
