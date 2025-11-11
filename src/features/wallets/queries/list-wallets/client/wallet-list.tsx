@@ -1,33 +1,23 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
-import type { ListWalletItemDto } from './dto'
+import type { ListWalletItemDto } from '../dto.ts'
 
-import { Button } from '@/common/components/ui/button'
+import { Button } from '@/common/components/ui/button.tsx'
 import {
 	DropDrawer,
 	DropDrawerContent,
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
-} from '@/common/components/ui/dropdrawer'
-import { Skeleton } from '@/common/components/ui/skeleton'
-import { Icon } from '@/common/components/icon'
-import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
+} from '@/common/components/ui/dropdrawer.tsx'
+import { Skeleton } from '@/common/components/ui/skeleton.tsx'
+import { Icon } from '@/common/components/icon.tsx'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils.ts'
 
-import { walletKeys } from '@/features/wallets/store-keys'
-import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client'
-import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client'
-import { getWalletTotals } from '@/features/wallets/queries/list-wallets/server'
-
-const useWalletsTotal = () => {
-	return useQuery({
-		queryKey: walletKeys.list(),
-		staleTime: 60000,
-		queryFn: () => getWalletTotals({ data: {} }),
-	})
-}
+import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client.tsx'
+import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client.tsx'
+import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store.ts'
 
 export const WalletsTotal = () => {
 	const { data, isPending } = useWalletsTotal()

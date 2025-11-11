@@ -1,6 +1,6 @@
 ﻿import { Link } from '@tanstack/react-router'
 
-import { ChartNoAxesCombined, CircleDot, Wallet } from 'lucide-react'
+import { CircleDot, Wallet } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import {
@@ -21,11 +21,6 @@ const pages = [
 		name: 'Categories',
 		url: '/categories',
 		icon: CircleDot,
-	},
-	{
-		name: 'Statistics',
-		url: '/stats',
-		icon: ChartNoAxesCombined,
 	},
 ]
 
