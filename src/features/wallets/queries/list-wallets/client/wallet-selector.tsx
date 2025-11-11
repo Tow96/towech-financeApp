@@ -8,7 +8,7 @@ import {
 	SelectValue,
 } from '@/common/components/ui/select'
 import { Icon } from '@/common/components/icon'
-import { cn, convertCentsToCurrencyString } from '@/common/lib/utils.ts'
+import { cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 
 import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store'
 
