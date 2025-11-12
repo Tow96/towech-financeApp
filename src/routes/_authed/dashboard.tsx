@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_authed/dashboard')({
 })
 
 function RouteComponent() {
-	const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>()
+	const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>('total')
 	const [periodStart, setPeriodStart] = useState<Date>(new Date())
 
 	return (
@@ -23,7 +23,9 @@ function RouteComponent() {
 					setSelectedWalletId={setSelectedWalletId}
 				/>
 			</CardHeader>
-			<CardContent>{/*<PeriodSummary periodStart={periodStart} />*/}</CardContent>
+			<CardContent>
+				<PeriodSummary periodStart={periodStart} />
+			</CardContent>
 		</Card>
 	)
 }
