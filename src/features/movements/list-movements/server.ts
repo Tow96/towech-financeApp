@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, lt } from 'drizzle-orm'
+import { and, desc, eq, gte, lt, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { GetMovementListSchema } from './dto'
@@ -33,7 +33,7 @@ export const getPeriodMovementList = createServerFn({ method: 'GET' })
 			orderBy: [desc(schema.Movements.date), desc(schema.Movements.createdAt)],
 		})
 
-		const output: Array<ListMovementItemDto> = query.map(x => ({
+		let output: Array<ListMovementItemDto> = query.map(x => ({
 			id: x.id,
 			date: x.date,
 			description: x.description,
@@ -48,5 +48,12 @@ export const getPeriodMovementList = createServerFn({ method: 'GET' })
 				destinationId: x.summary[0].destinationWalletId,
 			},
 		}))
+
+		// This filter should be moved to sql
+		if (data.walletId && data.walletId !== 'total')
+			output = output.filter(
+				x => x.wallet.originId === data.walletId || x.wallet.destinationId === data.walletId,
+			)
+
 		return output
 	})

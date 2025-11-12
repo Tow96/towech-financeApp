@@ -24,7 +24,7 @@ function RouteComponent() {
 				/>
 			</CardHeader>
 			<CardContent>
-				<PeriodSummary periodStart={periodStart} />
+				<PeriodSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
 			</CardContent>
 		</Card>
 	)

@@ -4,11 +4,12 @@ import { CategoryType } from '@/features/categories/domain'
 import { usePeriodMovements } from '@/features/movements/list-movements/client/query-store.ts'
 
 interface PeriodSummaryProps {
+	selectedWalletId: string | undefined
 	periodStart: Date
 }
 
 export const PeriodSummary = (props: PeriodSummaryProps) => {
-	const movements = usePeriodMovements(props.periodStart)
+	const movements = usePeriodMovements(props.selectedWalletId, props.periodStart)
 
 	// This should be converted to a tanStack selector instead
 	const inMoney = (movements.data ?? [])

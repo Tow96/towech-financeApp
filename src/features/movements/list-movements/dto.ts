@@ -19,5 +19,6 @@ export type ListMovementItemDto = {
 }
 
 export const GetMovementListSchema = z.object({
+	walletId: z.string().optional(),
 	periodStart: z.date(),
 })
