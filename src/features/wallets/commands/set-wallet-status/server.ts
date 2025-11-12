@@ -2,7 +2,7 @@ import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { SetWalletStatusSchema } from './dto'
-import type { WalletDetailDto } from './dto'
+import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto.ts'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
@@ -36,6 +36,8 @@ export const setWalletStatus = createServerFn({ method: 'POST' })
 		if (existingWallet[0].money !== '0' && data.archived)
 			throw new Response('Wallet needs to have 0 money to be archived', { status: 422 })
 
+		logger.info(`User: ${userId} setting status for wallet: ${data.id}`)
+
 		const updatedWallet = (
 			await db
 				.update(schema.Wallets)
@@ -48,7 +50,7 @@ export const setWalletStatus = createServerFn({ method: 'POST' })
 			id: updatedWallet.id,
 			iconId: updatedWallet.iconId,
 			name: updatedWallet.name,
-			money: existingWallet[0].money,
+			money: parseInt(existingWallet[0].money),
 			archived: updatedWallet.archivedAt !== null,
 		}
 		return output

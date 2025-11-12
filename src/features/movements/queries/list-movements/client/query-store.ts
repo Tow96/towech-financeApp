@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { movementKeys } from '@/features/movements/store-keys'
-import { getPeriodMovementList } from '@/features/movements/list-movements/server.ts'
+import { getPeriodMovementList } from '@/features/movements/queries/list-movements/server.ts'
 
 export const usePeriodMovements = (walletId: string | undefined, start: Date) => {
 	return useQuery({

@@ -1,7 +1,7 @@
 import { convertCentsToCurrencyString } from '@/common/lib/utils'
 
 import { CategoryType } from '@/features/categories/domain'
-import { usePeriodMovements } from '@/features/movements/list-movements/client/query-store.ts'
+import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store.ts'
 
 interface PeriodSummaryProps {
 	selectedWalletId: string | undefined

@@ -1,11 +1,23 @@
-﻿import { ArrowBigRight } from 'lucide-react'
+﻿import { useState } from 'react'
+import { ArrowBigRight, Ellipsis, Pencil, Trash } from 'lucide-react'
+
 import type { ListMovementItemDto } from '../dto'
 
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
-import { usePeriodMovements } from '@/features/movements/list-movements/client/query-store.ts'
-import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail-category/client'
+import { Button } from '@/common/components/ui/button'
+import {
+	DropDrawer,
+	DropDrawerContent,
+	DropDrawerGroup,
+	DropDrawerItem,
+	DropDrawerTrigger,
+} from '@/common/components/ui/dropdrawer'
+
 import { CategoryType } from '@/features/categories/domain'
+import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail-category/client'
+import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store.ts'
 import { WalletIcon } from '@/features/wallets/queries/detail-wallet/client'
+import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client.tsx'
 
 interface PeriodMovementListProps {
 	selectedWalletId: string | undefined
@@ -40,9 +52,15 @@ const convertIsoDate = (date: Date): string => {
 }
 
 const MovementItem = ({ movement }: MovementItemProps) => {
+	const [openEdit, setOpenEdit] = useState<boolean>(false)
+	const [openDelete, setOpenDelete] = useState<boolean>(false)
+
 	return (
 		<div className="flex min-w-0 items-center gap-4 border-b-1 py-4 last:border-b-0">
+			{/* Icon */}
 			<CategoryIcon className="h-16 w-16 rounded-full" category={movement.category} />
+
+			{/* Info */}
 			<div className="flex-1">
 				{/* Top row */}
 				<div className="flex justify-between text-2xl font-bold">
@@ -75,6 +93,34 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 					<span>{convertIsoDate(movement.date)}</span>
 				</div>
 			</div>
+
+			{/* Menu */}
+			<DropDrawer>
+				{/*	Button */}
+				<DropDrawerTrigger asChild>
+					<Button variant="secondary" size="icon" className="ml-3">
+						<Ellipsis />
+					</Button>
+				</DropDrawerTrigger>
+
+				{/*	Menu content */}
+				<DropDrawerContent align="start">
+					<DropDrawerGroup>
+						<DropDrawerItem onClick={() => setOpenEdit(true)} icon={<Pencil />}>
+							<span>Edit Movement</span>
+						</DropDrawerItem>
+						<DropDrawerItem
+							onClick={() => setOpenDelete(true)}
+							icon={<Trash />}
+							variant="destructive">
+							<span>Delete Movement</span>
+						</DropDrawerItem>
+					</DropDrawerGroup>
+				</DropDrawerContent>
+
+				{/* Forms	*/}
+				<DeleteMovementDialog id={movement.id} open={openDelete} setOpen={setOpenDelete} />
+			</DropDrawer>
 		</div>
 	)
 }
