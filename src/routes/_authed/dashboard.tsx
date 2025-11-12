@@ -1,7 +1,11 @@
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
+import { Button } from '@/common/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
+
+import { AddMovementDialog } from '@/features/movements/commands/add-movement/client'
 import { PeriodSelector, PeriodSummary } from '@/features/movements/queries/list-movements/client'
 import { PeriodMovementList } from '@/features/movements/queries/list-movements/client/movement-list.tsx'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
@@ -11,6 +15,7 @@ export const Route = createFileRoute('/_authed/dashboard')({
 })
 
 function RouteComponent() {
+	const [openAdd, setOpenAdd] = useState<boolean>(false)
 	const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>('total')
 	const [periodStart, setPeriodStart] = useState<Date>(new Date())
 
@@ -23,6 +28,10 @@ function RouteComponent() {
 					selectedWalletId={selectedWalletId}
 					setSelectedWalletId={setSelectedWalletId}
 				/>
+				<Button onClick={() => setOpenAdd(true)}>
+					<Plus /> Add Movement
+				</Button>
+				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
 			</CardHeader>
 			<CardContent>
 				<PeriodSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
