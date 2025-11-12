@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
 import { PeriodSelector, PeriodSummary } from '@/features/movements/list-movements/client'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
+import { PeriodMovementList } from '@/features/movements/list-movements/client/movement-list.tsx'
 
 export const Route = createFileRoute('/_authed/dashboard')({
 	component: RouteComponent,
@@ -25,6 +26,7 @@ function RouteComponent() {
 			</CardHeader>
 			<CardContent>
 				<PeriodSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
+				<PeriodMovementList selectedWalletId={selectedWalletId} periodStart={periodStart} />
 			</CardContent>
 		</Card>
 	)

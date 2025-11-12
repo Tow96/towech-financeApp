@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, lt, or } from 'drizzle-orm'
+import { and, desc, eq, gte, lt } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { GetMovementListSchema } from './dto'
