@@ -154,6 +154,7 @@ function DropDrawerContent({
 
 				const element = node as ReactElement
 				// Use a more specific type to avoid 'any'
+				// eslint-disable-next-line no-shadow
 				const props = element.props as {
 					id?: string
 					'data-submenu-id'?: string

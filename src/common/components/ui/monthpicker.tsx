@@ -9,7 +9,7 @@ type Month = {
     name: string;
 };
 
-const MONTHS: Month[][] = [
+const MONTHS: Array<Array<Month>> = [
     [
         { number: 0, name: "Jan" },
         { number: 1, name: "Feb" },
@@ -48,7 +48,7 @@ type MonthCalProps = {
     };
     minDate?: Date;
     maxDate?: Date;
-    disabledDates?: Date[];
+    disabledDates?: Array<Date>;
 };
 
 type ButtonVariant = "default" | "outline" | "ghost" | "link" | "destructive" | "secondary" | null | undefined;
@@ -101,7 +101,7 @@ function MonthCal({ selectedMonth, onMonthSelect, callbacks, variant, minDate, m
     return (
         <>
             <div className="flex justify-center pt-1 relative items-center">
-                <div className="text-sm font-medium">{callbacks?.yearLabel ? callbacks?.yearLabel(menuYear) : menuYear}</div>
+                <div className="text-sm font-medium">{callbacks?.yearLabel ? callbacks.yearLabel(menuYear) : menuYear}</div>
                 <div className="space-x-1 flex items-center">
                     <button
                         onClick={() => {
@@ -141,9 +141,9 @@ function MonthCal({ selectedMonth, onMonthSelect, callbacks, variant, minDate, m
                                                     if (onMonthSelect) onMonthSelect(new Date(menuYear, m.number));
                                                 }}
                                                 disabled={
-                                                    (maxDate ? menuYear > maxDate?.getFullYear() || (menuYear == maxDate?.getFullYear() && m.number > maxDate.getMonth()) : false) ||
-                                                    (minDate ? menuYear < minDate?.getFullYear() || (menuYear == minDate?.getFullYear() && m.number < minDate.getMonth()) : false) ||
-                                                    (disabledDatesMapped ? disabledDatesMapped?.some((d) => d.year == menuYear && d.month == m.number) : false)
+                                                    (maxDate ? menuYear > maxDate.getFullYear() || (menuYear == maxDate.getFullYear() && m.number > maxDate.getMonth()) : false) ||
+                                                    (minDate ? menuYear < minDate.getFullYear() || (menuYear == minDate.getFullYear() && m.number < minDate.getMonth()) : false) ||
+                                                    (disabledDatesMapped ? disabledDatesMapped.some((d) => d.year == menuYear && d.month == m.number) : false)
                                                 }
                                                 className={cn(
                                                     buttonVariants({ variant: month == m.number && menuYear == year ? variant?.calendar?.selected ?? "default" : variant?.calendar?.main ?? "ghost" }),

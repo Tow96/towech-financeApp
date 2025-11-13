@@ -1,4 +1,4 @@
-﻿import { date, varchar, integer, timestamp, pgSchema, uuid } from 'drizzle-orm/pg-core'
+﻿import { date, integer, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
 export const MainSchema = pgSchema('main')

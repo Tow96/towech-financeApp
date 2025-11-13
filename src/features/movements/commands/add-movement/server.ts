@@ -3,8 +3,9 @@ import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AddMovementSchema } from './dto'
-import { CategoryType } from '@/features/categories/domain'
 import type { MovementDetailDto } from '@/features/movements/queries/detail-movement/dto'
+
+import { CategoryType } from '@/features/categories/domain'
 
 import { AuthorizationMiddleware } from '@/integrations/clerk'
 import { db, schema } from '@/integrations/drizzle-db'
