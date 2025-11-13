@@ -1,18 +1,15 @@
 ﻿import { useState } from 'react'
 import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil, Plus } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 
-import { categoryKeys } from '../../store-keys'
-import { getCategoriesByType } from './server.ts'
-import type { CategoryListItemDto } from './dto'
+import type { CategoryListItemDto } from '../dto.ts'
 
-import { Icon } from '@/common/components/icon'
+import { Icon } from '@/common/components/icon.tsx'
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/common/components/ui/accordion'
+} from '@/common/components/ui/accordion.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 
@@ -27,15 +24,8 @@ import {
 } from '@/common/components/ui/dropdrawer'
 import { Button } from '@/common/components/ui/button'
 import { EditCategoryDialog } from '@/features/categories/commands/edit-category/client'
-import { SetCategoryStatusDialog } from '@/features/categories/commands/set-category-status/client.tsx'
-
-const useCategoryList = (type: CategoryType) => {
-	return useQuery({
-		queryKey: categoryKeys.list(type),
-		staleTime: 60000,
-		queryFn: () => getCategoriesByType({ data: { type } }),
-	})
-}
+import { SetCategoryStatusDialog } from '@/features/categories/commands/set-category-status/client'
+import { useCategoryList } from '@/features/categories/queries/list-categories/client/query-store'
 
 export const AllCategoryList = () => {
 	const [openAdd, setOpenAdd] = useState(false)

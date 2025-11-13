@@ -13,11 +13,12 @@ import {
 } from '@/common/components/ui/form'
 import { FormDialog } from '@/common/components/form-dialog'
 import { Input } from '@/common/components/ui/input'
+import { Datepicker } from '@/common/components/datepicker'
 
 import { CategoryType } from '@/features/categories/domain'
 import { movementKeys } from '@/features/movements/store-keys'
 import { walletKeys } from '@/features/wallets/store-keys'
-import { Datepicker } from '@/common/components/datepicker.tsx'
+import { CategorySelector } from '@/features/categories/queries/list-categories/client'
 
 const useAddMovementMutation = () => {
 	return useMutation({
@@ -79,6 +80,17 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 			/>
 
 			{/*	Category */}
+			<FormField
+				disabled={addMovementMutation.isPending}
+				control={form.control}
+				name="category"
+				render={({ field }) => (
+					<FormItem className="flex-1">
+						<FormLabel>Category</FormLabel>
+						<CategorySelector {...field} />
+					</FormItem>
+				)}
+			/>
 
 			{/*	Wallet(s) */}
 
