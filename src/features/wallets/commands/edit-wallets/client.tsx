@@ -34,11 +34,7 @@ export const EditWalletDialog = (props: EditWalletDialogProps) => {
 
 	const form = useForm<EditWalletSchema>({
 		resolver: zodResolver(EditWalletSchema),
-		defaultValues: {
-			id: props.id,
-			iconId: walletDetail.data?.iconId,
-			name: walletDetail.data?.name,
-		},
+		defaultValues: { id: props.id },
 	})
 
 	const onSubmit = (values: EditWalletSchema) =>
@@ -78,7 +74,7 @@ export const EditWalletDialog = (props: EditWalletDialogProps) => {
 						<FormItem>
 							<FormLabel>Name</FormLabel>
 							<FormControl>
-								<Input {...field} value={field.value ?? editWalletMutation.data?.name} />
+								<Input {...field} value={field.value ?? walletDetail.data?.name} />
 							</FormControl>
 						</FormItem>
 					)}

@@ -48,17 +48,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 
 	const form = useForm<EditMovementSchema>({
 		resolver: zodResolver(EditMovementSchema),
-		defaultValues: {
-			id: props.id,
-			amount: convertCentsToAmount(movementDetail.data?.amount ?? 0),
-			date: movementDetail.data?.date,
-			description: movementDetail.data?.description,
-			category: movementDetail.data?.category,
-			wallet: {
-				originId: movementDetail.data?.wallet.originId ?? undefined,
-				destinationId: movementDetail.data?.wallet.destinationId ?? undefined,
-			},
-		},
+		defaultValues: { id: props.id },
 	})
 
 	const onSubmit = (values: EditMovementSchema) =>
@@ -87,7 +77,10 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					<FormItem className="flex-1">
 						<FormLabel>Amount</FormLabel>
 						<FormControl>
-							<Input {...field} />
+							<Input
+								{...field}
+								value={field.value ?? convertCentsToAmount(movementDetail.data?.amount ?? 0)}
+							/>
 						</FormControl>
 						<FormMessage />
 					</FormItem>
@@ -102,7 +95,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 				render={({ field }) => (
 					<FormItem className="flex-1">
 						<FormLabel>Category</FormLabel>
-						<CategorySelector {...field} />
+						<CategorySelector {...field} value={field.value ?? movementDetail.data?.category} />
 					</FormItem>
 				)}
 			/>
@@ -116,7 +109,10 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Wallet</FormLabel>
-							<WalletSelector {...field} />
+							<WalletSelector
+								{...field}
+								value={field.value ?? movementDetail.data?.wallet.originId ?? undefined}
+							/>
 						</FormItem>
 					)}
 				/>
@@ -129,7 +125,10 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Wallet</FormLabel>
-							<WalletSelector {...field} />
+							<WalletSelector
+								{...field}
+								value={field.value ?? movementDetail.data?.wallet.destinationId ?? undefined}
+							/>
 						</FormItem>
 					)}
 				/>
@@ -143,7 +142,10 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>From</FormLabel>
-								<WalletSelector {...field} />
+								<WalletSelector
+									{...field}
+									value={field.value ?? movementDetail.data?.wallet.originId ?? undefined}
+								/>
 							</FormItem>
 						)}
 					/>
@@ -154,7 +156,10 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>To</FormLabel>
-								<WalletSelector {...field} />
+								<WalletSelector
+									{...field}
+									value={field.value ?? movementDetail.data?.wallet.destinationId ?? undefined}
+								/>
 							</FormItem>
 						)}
 					/>
@@ -169,7 +174,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 				render={({ field }) => (
 					<FormItem className="flex-1">
 						<FormLabel>Date</FormLabel>
-						<Datepicker {...field} />
+						<Datepicker {...field} value={field.value ?? movementDetail.data?.date} />
 					</FormItem>
 				)}
 			/>
@@ -183,7 +188,7 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					<FormItem className="flex-1">
 						<FormLabel>Description</FormLabel>
 						<FormControl>
-							<Input {...field} />
+							<Input {...field} value={field.value ?? movementDetail.data?.description} />
 						</FormControl>
 						<FormMessage />
 					</FormItem>
