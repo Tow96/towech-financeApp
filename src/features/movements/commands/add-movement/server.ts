@@ -77,8 +77,10 @@ export const addMovement = createServerFn({ method: 'POST' })
 			await tx.insert(schema.MovementSummary).values({
 				movementId: newId,
 				amount: convertAmountToCents(data.amount),
-				originWalletId: data.category.type !== CategoryType.income ? data.wallet.originId ?? null : null,
-				destinationWalletId: data.category.type !== CategoryType.expense ? data.wallet.destinationId ?? null : null,
+				originWalletId:
+					data.category.type !== CategoryType.income ? (data.wallet.originId ?? null) : null,
+				destinationWalletId:
+					data.category.type !== CategoryType.expense ? (data.wallet.destinationId ?? null) : null,
 			})
 		})
 
@@ -93,8 +95,10 @@ export const addMovement = createServerFn({ method: 'POST' })
 				subId: data.category.subId,
 			},
 			wallet: {
-				originId: data.category.type !== CategoryType.income ? data.wallet.originId ?? null : null,
-				destinationId: data.category.type !== CategoryType.expense ? data.wallet.destinationId ?? null : null,
+				originId:
+					data.category.type !== CategoryType.income ? (data.wallet.originId ?? null) : null,
+				destinationId:
+					data.category.type !== CategoryType.expense ? (data.wallet.destinationId ?? null) : null,
 			},
 		}
 		return output

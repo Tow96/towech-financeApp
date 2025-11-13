@@ -23,7 +23,9 @@ interface WalletSelectorProps {
 
 export const WalletSelector = (props: WalletSelectorProps) => {
 	const wallets = useWalletsTotal()
-	const [internalValue, setInternalValue] = useState<string | undefined>(props.showTotal ? 'total' : undefined)
+	const [internalValue, setInternalValue] = useState<string | undefined>(
+		props.showTotal ? 'total' : undefined,
+	)
 
 	const handleValueChange = (v: string) => {
 		if (props.onChange) props.onChange(v)

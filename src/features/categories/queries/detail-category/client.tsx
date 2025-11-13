@@ -35,7 +35,7 @@ export const CategoryName = ({ className, category }: CategoryDetailProps) => {
 	if (!category.id) return <span className={className}>{getUncategorizedName(category.type)}</span>
 
 	const detail = useCategoryDetail(category.type, category.id, category.subId ?? undefined)
-	return <span className={className}>{capitalizeFirst(detail.data?.name ?? "")}</span>
+	return <span className={className}>{capitalizeFirst(detail.data?.name ?? '')}</span>
 }
 
 const getUncategorizedName = (type: CategoryType) => {

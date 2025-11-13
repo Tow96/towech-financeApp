@@ -29,7 +29,7 @@ export const PeriodSummary = (props: PeriodSummaryProps) => {
 			</div>
 			<div className="flex justify-between">
 				<span>Out:</span>
-				<span className="text-destructive border-b-2 border-primary">
+				<span className="text-destructive border-primary border-b-2">
 					{convertCentsToCurrencyString(outMoney)}
 				</span>
 			</div>

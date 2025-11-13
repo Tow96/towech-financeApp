@@ -3,7 +3,7 @@ import handler from '@tanstack/react-start/server-entry'
 import './integrations/pino/logging-polyfill'
 
 export default {
-	fetch(request: Request){
+	fetch(request: Request) {
 		return handler.fetch(request)
-	}
+	},
 }

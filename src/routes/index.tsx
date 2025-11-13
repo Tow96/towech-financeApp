@@ -3,6 +3,6 @@
 // There is no main page, it automatically redirects to the dashboard
 export const Route = createFileRoute('/')({
 	loader: () => {
-		redirect({to: '/dashboard', throw: true})
-	}
+		redirect({ to: '/dashboard', throw: true })
+	},
 })

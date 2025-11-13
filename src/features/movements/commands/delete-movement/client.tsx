@@ -47,8 +47,7 @@ export const DeleteMovementDialog = (props: DeleteMovementDialogProps) => {
 			form={form}
 			onSubmit={onSubmit}
 			error={deleteMovementMutation.error}
-			loading={deleteMovementMutation.isPending}
-		>
+			loading={deleteMovementMutation.isPending}>
 			<p>This cannot be undone</p>
 			<p>Are you sure?</p>
 		</FormDialog>

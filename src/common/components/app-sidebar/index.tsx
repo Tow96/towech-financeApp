@@ -3,7 +3,12 @@ import { AppNav } from './nav'
 
 import type { ReactNode } from 'react'
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '@/common/components/ui/sidebar'
+import {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarHeader,
+} from '@/common/components/ui/sidebar'
 import { UserMenuButton } from '@/integrations/clerk'
 
 export const AppSidebar = (): ReactNode => {
@@ -14,11 +19,11 @@ export const AppSidebar = (): ReactNode => {
 			</SidebarHeader>
 
 			<SidebarContent>
-				 <AppNav />
+				<AppNav />
 			</SidebarContent>
 
 			<SidebarFooter>
-				 <UserMenuButton />
+				<UserMenuButton />
 			</SidebarFooter>
 		</Sidebar>
 	)

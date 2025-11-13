@@ -21,7 +21,7 @@ export const deleteMovement = createServerFn({ method: 'POST' })
 
 		logger.info(`User: ${userId} trying to remove movement: ${data.id}`)
 
-		await db.transaction( async (tx) => {
+		await db.transaction(async tx => {
 			await tx.delete(schema.MovementSummary).where(eq(schema.MovementSummary.movementId, data.id))
 			await tx.delete(schema.Movements).where(eq(schema.Movements.id, data.id))
 		})

@@ -21,7 +21,7 @@ export type CategoryListItemDto =
 			name: string
 			subCategories: null
 			archived: boolean
-		}
+	  }
 
 export const GetCategoryListSchema = z.object({
 	type: z.enum(CategoryType),

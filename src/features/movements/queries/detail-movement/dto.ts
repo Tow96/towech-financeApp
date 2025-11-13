@@ -7,17 +7,17 @@ export type MovementDetailDto = {
 	date: Date
 	description: string
 	category: {
-		type: CategoryType,
-		id: string | null,
-		subId: string | null,
+		type: CategoryType
+		id: string | null
+		subId: string | null
 	}
 	wallet: {
-		originId: string | null,
-		destinationId: string | null,
+		originId: string | null
+		destinationId: string | null
 	}
 }
 
 export const GetMovementDetailSchema = z.object({
-	id: z.uuid()
+	id: z.uuid(),
 })
 export type GetMovementDetailSchema = z.infer<typeof GetMovementDetailSchema>

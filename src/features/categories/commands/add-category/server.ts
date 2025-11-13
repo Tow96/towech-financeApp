@@ -13,7 +13,6 @@ export const addCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(AddCategorySchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
-
 		if (data.id === undefined) {
 			logger.info(`User: ${userId} trying to add category ${data.name} of type ${data.type}`)
 			return createCategory(data, userId)
