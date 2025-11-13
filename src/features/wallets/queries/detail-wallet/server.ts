@@ -41,7 +41,7 @@ export const getWalletDetail = createServerFn({ method: 'GET' })
 			id: existingWallet[0].id,
 			iconId: existingWallet[0].iconId,
 			name: existingWallet[0].name,
-			money: existingWallet[0].money,
+			money: parseInt(existingWallet[0].money),
 			archived: existingWallet[0].archivedAt !== null,
 		}
 		return output

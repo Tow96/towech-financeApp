@@ -2,65 +2,69 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { AddMovementSchema } from './dto.ts'
+import { EditMovementSchema } from './dto'
 
+import { FormDialog } from '@/common/components/form-dialog'
+import { convertCentsToAmount } from '@/common/lib/utils.ts'
+import { editMovement } from '@/features/movements/commands/edit-movement/server'
+import { walletKeys } from '@/features/wallets/store-keys'
+import { movementKeys } from '@/features/movements/store-keys'
+import { useMovementDetail } from '@/features/movements/queries/detail-movement/client.tsx'
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/common/components/ui/form'
-import { FormDialog } from '@/common/components/form-dialog'
-import { Input } from '@/common/components/ui/input'
-import { Datepicker } from '@/common/components/datepicker'
-
-import { CategoryType } from '@/features/categories/domain'
+} from '@/common/components/ui/form.tsx'
+import { Input } from '@/common/components/ui/input.tsx'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
-import { addMovement } from '@/features/movements/commands/add-movement/server'
-import { movementKeys } from '@/features/movements/store-keys'
-import { walletKeys } from '@/features/wallets/store-keys'
+import { CategoryType } from '@/features/categories/domain.ts'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
+import { Datepicker } from '@/common/components/datepicker.tsx'
 
-const useAddMovementMutation = () => {
+const useEditMovementMutation = () => {
 	return useMutation({
-		mutationFn: async (data: AddMovementSchema) => addMovement({ data }),
+		mutationFn: (data: EditMovementSchema) => editMovement({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await Promise.all([
 				context.client.invalidateQueries({ queryKey: walletKeys.all }),
-				context.client.invalidateQueries({ queryKey: movementKeys.lists() }),
+				context.client.invalidateQueries({ queryKey: movementKeys.all }),
 			])
 			context.client.setQueryData(movementKeys.detail(result.id), result)
 		},
 	})
 }
 
-interface AddMovementDialogProps {
+interface EditMovementDialogProps {
+	id: string
 	open: boolean
-	setOpen: (open: boolean) => void
+	setOpen: (o: boolean) => void
 }
 
-const defaultValues = (date?: Date): AddMovementSchema => ({
-	amount: '',
-	description: '',
-	date: date ?? new Date(),
-	category: { type: CategoryType.expense, id: null, subId: null },
-	wallet: { originId: undefined, destinationId: undefined },
-})
+export const EditMovementDialog = (props: EditMovementDialogProps) => {
+	const movementDetail = useMovementDetail(props.id)
+	const editMovementMutation = useEditMovementMutation()
 
-export const AddMovementDialog = (props: AddMovementDialogProps) => {
-	const addMovementMutation = useAddMovementMutation()
-
-	const form = useForm<AddMovementSchema>({
-		resolver: zodResolver(AddMovementSchema),
-		defaultValues: defaultValues(),
+	const form = useForm<EditMovementSchema>({
+		resolver: zodResolver(EditMovementSchema),
+		defaultValues: {
+			id: props.id,
+			amount: convertCentsToAmount(movementDetail.data?.amount ?? 0),
+			date: movementDetail.data?.date,
+			description: movementDetail.data?.description,
+			category: movementDetail.data?.category,
+			wallet: {
+				originId: movementDetail.data?.wallet.originId ?? undefined,
+				destinationId: movementDetail.data?.wallet.destinationId ?? undefined,
+			},
+		},
 	})
 
-	const onSubmit = (values: AddMovementSchema) =>
-		addMovementMutation.mutate(values, {
+	const onSubmit = (values: EditMovementSchema) =>
+		editMovementMutation.mutate(values, {
 			onSuccess: () => {
-				const lastDate = new Date(form.watch().date)
-				form.reset(defaultValues(lastDate))
+				form.reset()
 				props.setOpen(false)
 			},
 		})
@@ -69,14 +73,14 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 		<FormDialog
 			open={props.open}
 			setOpen={props.setOpen}
-			title="Add movement"
+			title="Edit Movement"
 			form={form}
 			onSubmit={onSubmit}
-			error={null}
-			loading={false}>
+			error={editMovementMutation.error}
+			loading={editMovementMutation.isPending}>
 			{/*	Amount */}
 			<FormField
-				disabled={addMovementMutation.isPending}
+				disabled={editMovementMutation.isPending}
 				control={form.control}
 				name="amount"
 				render={({ field }) => (
@@ -92,7 +96,7 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 
 			{/*	Category */}
 			<FormField
-				disabled={addMovementMutation.isPending}
+				disabled={editMovementMutation.isPending}
 				control={form.control}
 				name="category"
 				render={({ field }) => (
@@ -104,9 +108,9 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 			/>
 
 			{/*	Wallet(s) */}
-			{form.watch().category.type === CategoryType.expense && (
+			{form.watch().category?.type === CategoryType.expense && (
 				<FormField
-					disabled={addMovementMutation.isPending}
+					disabled={editMovementMutation.isPending}
 					control={form.control}
 					name="wallet.originId"
 					render={({ field }) => (
@@ -117,9 +121,9 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 					)}
 				/>
 			)}
-			{form.watch().category.type === CategoryType.income && (
+			{form.watch().category?.type === CategoryType.income && (
 				<FormField
-					disabled={addMovementMutation.isPending}
+					disabled={editMovementMutation.isPending}
 					control={form.control}
 					name="wallet.destinationId"
 					render={({ field }) => (
@@ -130,10 +134,10 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 					)}
 				/>
 			)}
-			{form.watch().category.type === CategoryType.transfer && (
+			{form.watch().category?.type === CategoryType.transfer && (
 				<div className="flex gap-2">
 					<FormField
-						disabled={addMovementMutation.isPending}
+						disabled={editMovementMutation.isPending}
 						control={form.control}
 						name="wallet.originId"
 						render={({ field }) => (
@@ -144,7 +148,7 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 						)}
 					/>
 					<FormField
-						disabled={addMovementMutation.isPending}
+						disabled={editMovementMutation.isPending}
 						control={form.control}
 						name="wallet.destinationId"
 						render={({ field }) => (
@@ -159,7 +163,7 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 
 			{/*	Date */}
 			<FormField
-				disabled={addMovementMutation.isPending}
+				disabled={editMovementMutation.isPending}
 				control={form.control}
 				name="date"
 				render={({ field }) => (
@@ -172,7 +176,7 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 
 			{/*	Description */}
 			<FormField
-				disabled={addMovementMutation.isPending}
+				disabled={editMovementMutation.isPending}
 				control={form.control}
 				name="description"
 				render={({ field }) => (

@@ -18,6 +18,7 @@ import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail
 import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store.ts'
 import { WalletIcon } from '@/features/wallets/queries/detail-wallet/client'
 import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client.tsx'
+import { EditMovementDialog } from '@/features/movements/commands/edit-movement/client.tsx'
 
 interface PeriodMovementListProps {
 	selectedWalletId: string | undefined
@@ -119,6 +120,7 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 				</DropDrawerContent>
 
 				{/* Forms	*/}
+				<EditMovementDialog id={movement.id} open={openEdit} setOpen={setOpenEdit} />
 				<DeleteMovementDialog id={movement.id} open={openDelete} setOpen={setOpenDelete} />
 			</DropDrawer>
 		</div>

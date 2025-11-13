@@ -3,8 +3,8 @@ import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AddMovementSchema } from './dto'
+import { CategoryType } from '@/features/categories/domain'
 import type { MovementDetailDto } from '@/features/movements/queries/detail-movement/dto'
-import type { CategoryType } from '@/features/categories/domain'
 
 import { AuthorizationMiddleware } from '@/integrations/clerk'
 import { db, schema } from '@/integrations/drizzle-db'
@@ -76,8 +76,8 @@ export const addMovement = createServerFn({ method: 'POST' })
 			await tx.insert(schema.MovementSummary).values({
 				movementId: newId,
 				amount: convertAmountToCents(data.amount),
-				originWalletId: data.wallet.originId ?? null,
-				destinationWalletId: data.wallet.destinationId ?? null,
+				originWalletId: data.category.type !== CategoryType.income ? data.wallet.originId ?? null : null,
+				destinationWalletId: data.category.type !== CategoryType.expense ? data.wallet.destinationId ?? null : null,
 			})
 		})
 
@@ -92,8 +92,8 @@ export const addMovement = createServerFn({ method: 'POST' })
 				subId: data.category.subId,
 			},
 			wallet: {
-				originId: data.wallet.originId ?? null,
-				destinationId: data.wallet.destinationId ?? null,
+				originId: data.category.type !== CategoryType.income ? data.wallet.originId ?? null : null,
+				destinationId: data.category.type !== CategoryType.expense ? data.wallet.destinationId ?? null : null,
 			},
 		}
 		return output

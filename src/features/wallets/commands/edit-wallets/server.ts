@@ -14,7 +14,13 @@ export const editWallet = createServerFn({ method: 'POST' })
 	.handler(async ({ data, context: { userId, logger } }) => {
 		// Checks that wallet exist
 		const existingWallet = await db
-			.select({ id: schema.Wallets.id, money: FetchWalletMoneySql, userId: schema.Wallets.userId })
+			.select({
+				id: schema.Wallets.id,
+				money: FetchWalletMoneySql,
+				userId: schema.Wallets.userId,
+				name: schema.Wallets.name,
+				iconId: schema.Wallets.iconId,
+			})
 			.from(schema.Wallets)
 			.leftJoin(
 				schema.MovementSummary,
@@ -26,7 +32,7 @@ export const editWallet = createServerFn({ method: 'POST' })
 			.where(eq(schema.Wallets.id, data.id))
 			.groupBy(schema.Wallets.id)
 
-		if (existingWallet.lenght === 0) throw new Response('Wallet not found', { status: 404 })
+		if (existingWallet.length === 0) throw new Response('Wallet not found', { status: 404 })
 		if (existingWallet[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
 
 		logger.info(`User: ${userId} editing wallet: ${data.id}`)
@@ -46,7 +52,7 @@ export const editWallet = createServerFn({ method: 'POST' })
 			id: updatedWallet.id,
 			iconId: updatedWallet.iconId,
 			name: updatedWallet.name,
-			money: existingWallet[0].money,
+			money: parseInt(existingWallet[0].money),
 			archived: updatedWallet.archivedAt !== null,
 		}
 		return output
