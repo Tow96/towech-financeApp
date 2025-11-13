@@ -24,9 +24,11 @@ function RouteComponent() {
 			<CardHeader className="flex items-center justify-between">
 				<PeriodSelector start={periodStart} setStart={setPeriodStart} />
 				<WalletSelector
-					className="!h-16 w-1/2"
-					selectedWalletId={selectedWalletId}
-					setSelectedWalletId={setSelectedWalletId}
+					className="w-1/2"
+					value={selectedWalletId}
+					onChange={setSelectedWalletId}
+					showMoney
+					showTotal
 				/>
 				<Button onClick={() => setOpenAdd(true)}>
 					<Plus /> Add Movement

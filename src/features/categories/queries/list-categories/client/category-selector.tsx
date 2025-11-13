@@ -45,11 +45,10 @@ export const CategorySelector = (props: CategorySelectorProps) => {
 	const handleValueChange = (v: string) => {
 		const splitValue = v.split(VALUE_SEPARATOR)
 		const vCategory: CategorySelectorValue = {
-			type: splitValue[0] as CategoryType,
+			type: (splitValue[0] || 'EXPENSE') as CategoryType,
 			id: splitValue[1] ?? null,
 			subId: splitValue[2] ?? null,
 		}
-
 		setInternalValue(vCategory)
 		if (props.onChange) props.onChange(vCategory)
 	}

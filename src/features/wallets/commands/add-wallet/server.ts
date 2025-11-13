@@ -20,7 +20,7 @@ export const addWallet = createServerFn({ method: 'POST' })
 			.select({ id: schema.Wallets.id })
 			.from(schema.Wallets)
 			.where(and(eq(schema.Wallets.name, data.name), eq(schema.Wallets.userId, userId)))
-		if (existingWallet > 0)
+		if (existingWallet.length > 0)
 			throw new Response(`Wallet ${data.name} already exists.`, { status: 409 })
 
 		// Add new wallet to the DB

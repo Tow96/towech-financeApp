@@ -16,16 +16,15 @@ import { Input } from '@/common/components/ui/input'
 import { Datepicker } from '@/common/components/datepicker'
 
 import { CategoryType } from '@/features/categories/domain'
+import { CategorySelector } from '@/features/categories/queries/list-categories/client'
+import { addMovement } from '@/features/movements/commands/add-movement/server'
 import { movementKeys } from '@/features/movements/store-keys'
 import { walletKeys } from '@/features/wallets/store-keys'
-import { CategorySelector } from '@/features/categories/queries/list-categories/client'
+import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
 
 const useAddMovementMutation = () => {
 	return useMutation({
-		mutationFn: async (data: AddMovementSchema) => {
-			console.log(data)
-			return false
-		},
+		mutationFn: async (data: AddMovementSchema) => addMovement({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await Promise.all([
 				context.client.invalidateQueries({ queryKey: walletKeys.all }),
@@ -41,18 +40,30 @@ interface AddMovementDialogProps {
 	setOpen: (open: boolean) => void
 }
 
+const defaultValues = (date?: Date): AddMovementSchema => ({
+	amount: '',
+	description: '',
+	date: date ?? new Date(),
+	category: { type: CategoryType.expense, id: null, subId: null },
+	wallet: { originId: undefined, destinationId: undefined },
+})
+
 export const AddMovementDialog = (props: AddMovementDialogProps) => {
 	const addMovementMutation = useAddMovementMutation()
 
 	const form = useForm<AddMovementSchema>({
 		resolver: zodResolver(AddMovementSchema),
-		defaultValues: {
-			date: new Date(),
-			category: { type: CategoryType.expense, id: null, subId: null },
-		},
+		defaultValues: defaultValues(),
 	})
 
-	const onSubmit = (values: AddMovementSchema) => console.log(values)
+	const onSubmit = (values: AddMovementSchema) =>
+		addMovementMutation.mutate(values, {
+			onSuccess: () => {
+				const lastDate = new Date(form.watch().date)
+				form.reset(defaultValues(lastDate))
+				props.setOpen(false)
+			},
+		})
 
 	return (
 		<FormDialog
@@ -93,6 +104,58 @@ export const AddMovementDialog = (props: AddMovementDialogProps) => {
 			/>
 
 			{/*	Wallet(s) */}
+			{form.watch().category.type === CategoryType.expense && (
+				<FormField
+					disabled={addMovementMutation.isPending}
+					control={form.control}
+					name="wallet.originId"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Wallet</FormLabel>
+							<WalletSelector {...field} />
+						</FormItem>
+					)}
+				/>
+			)}
+			{form.watch().category.type === CategoryType.income && (
+				<FormField
+					disabled={addMovementMutation.isPending}
+					control={form.control}
+					name="wallet.destinationId"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Wallet</FormLabel>
+							<WalletSelector {...field} />
+						</FormItem>
+					)}
+				/>
+			)}
+			{form.watch().category.type === CategoryType.transfer && (
+				<div className="flex gap-2">
+					<FormField
+						disabled={addMovementMutation.isPending}
+						control={form.control}
+						name="wallet.originId"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>From</FormLabel>
+								<WalletSelector {...field} />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						disabled={addMovementMutation.isPending}
+						control={form.control}
+						name="wallet.destinationId"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>To</FormLabel>
+								<WalletSelector {...field} />
+							</FormItem>
+						)}
+					/>
+				</div>
+			)}
 
 			{/*	Date */}
 			<FormField
