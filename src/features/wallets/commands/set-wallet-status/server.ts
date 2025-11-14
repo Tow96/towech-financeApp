@@ -2,11 +2,11 @@ import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { SetWalletStatusSchema } from './dto'
-import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto.ts'
+import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
-import { FetchWalletMoneySql } from '@/features/wallets/domain.ts'
+import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

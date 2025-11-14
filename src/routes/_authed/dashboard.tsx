@@ -7,11 +7,11 @@ import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
 
 import { AddMovementDialog } from '@/features/movements/commands/add-movement/client'
 import { PeriodSelector, PeriodSummary } from '@/features/movements/queries/list-movements/client'
-import { PeriodMovementList } from '@/features/movements/queries/list-movements/client/movement-list.tsx'
+import { PeriodMovementList } from '@/features/movements/queries/list-movements/client/movement-list'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
 
 export const Route = createFileRoute('/_authed/dashboard')({
-	component: RouteComponent,
+  component: RouteComponent,
 })
 
 function RouteComponent() {

@@ -5,7 +5,7 @@ import { CategoryType } from '@/features/categories/domain'
 
 import { Icon } from '@/common/components/icon'
 import { categoryKeys } from '@/features/categories/store-keys'
-import { capitalizeFirst } from '@/common/lib/utils.ts'
+import { capitalizeFirst } from '@/common/lib/utils'
 
 export const useCategoryDetail = (type: CategoryType, id: string, subId?: string) => {
 	return useQuery({

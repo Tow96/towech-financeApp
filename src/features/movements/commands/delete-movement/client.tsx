@@ -6,8 +6,8 @@ import { DeleteMovementSchema } from './dto'
 import { deleteMovement } from './server'
 
 import { FormDialog } from '@/common/components/form-dialog'
-import { movementKeys } from '@/features/movements/store-keys.ts'
-import { walletKeys } from '@/features/wallets/store-keys.ts'
+import { movementKeys } from '@/features/movements/store-keys'
+import { walletKeys } from '@/features/wallets/store-keys'
 
 const useDeleteMovementMutation = () => {
 	return useMutation({

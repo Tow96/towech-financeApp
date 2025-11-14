@@ -9,7 +9,7 @@ import { CategoryType } from '@/features/categories/domain'
 
 import { AuthorizationMiddleware } from '@/integrations/clerk'
 import { db, schema } from '@/integrations/drizzle-db'
-import { convertAmountToCents } from '@/common/lib/utils.ts'
+import { convertAmountToCents } from '@/common/lib/utils'
 
 export const addMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

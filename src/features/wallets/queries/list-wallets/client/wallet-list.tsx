@@ -3,21 +3,21 @@ import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
 import type { ListWalletItemDto } from '../dto.ts'
 
-import { Button } from '@/common/components/ui/button.tsx'
+import { Button } from '@/common/components/ui/button'
 import {
 	DropDrawer,
 	DropDrawerContent,
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
-} from '@/common/components/ui/dropdrawer.tsx'
-import { Skeleton } from '@/common/components/ui/skeleton.tsx'
-import { Icon } from '@/common/components/icon.tsx'
-import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils.ts'
+} from '@/common/components/ui/dropdrawer'
+import { Skeleton } from '@/common/components/ui/skeleton'
+import { Icon } from '@/common/components/icon'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 
-import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client.tsx'
-import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client.tsx'
-import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store.ts'
+import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client'
+import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client'
+import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store'
 
 export const WalletsTotal = () => {
 	const { data, isPending } = useWalletsTotal()

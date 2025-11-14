@@ -1,7 +1,7 @@
 'use client'
 import * as React from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { buttonVariants } from './button'
+import { buttonVariants } from '@/common/components/ui/button'
 import { cn } from '@/common/lib/utils'
 
 type Month = {

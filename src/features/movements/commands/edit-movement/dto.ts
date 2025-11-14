@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod'
-import { CategoryType } from '@/features/categories/domain.ts'
+import { CategoryType } from '@/features/categories/domain'
 
 export const EditMovementSchema = z
 	.object({

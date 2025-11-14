@@ -9,10 +9,10 @@ import {
 } from '@/common/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { Icon } from '@/common/components/icon'
+import { capitalizeFirst } from '@/common/lib/utils'
 
-import { CategoryType } from '@/features/categories/domain.ts'
+import { CategoryType } from '@/features/categories/domain'
 import { useCategoryList } from '@/features/categories/queries/list-categories/client/query-store'
-import { capitalizeFirst } from '@/common/lib/utils.ts'
 
 interface CategorySelectorValue {
 	type: CategoryType

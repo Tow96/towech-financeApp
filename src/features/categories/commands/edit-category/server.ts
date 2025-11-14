@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { EditCategorySchema } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
-import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto.ts'
+import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'

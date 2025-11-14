@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { CategoryType } from '@/features/categories/domain.ts'
+import type { CategoryType } from '@/features/categories/domain'
 
 export type CategoryDetailDto = {
 	iconId: number

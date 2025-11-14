@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/tanstack-react-start'
 import { createServerFn } from '@tanstack/react-start'
-import { getUserId } from './authorization.middleware.ts'
+import { getUserId } from './authorization.middleware'
 
 import type { ReactNode } from 'react'
 

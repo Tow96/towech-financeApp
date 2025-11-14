@@ -15,10 +15,10 @@ import {
 
 import { CategoryType } from '@/features/categories/domain'
 import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail-category/client'
-import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store.ts'
+import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store'
 import { WalletIcon } from '@/features/wallets/queries/detail-wallet/client'
-import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client.tsx'
-import { EditMovementDialog } from '@/features/movements/commands/edit-movement/client.tsx'
+import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client'
+import { EditMovementDialog } from '@/features/movements/commands/edit-movement/client'
 
 interface PeriodMovementListProps {
 	selectedWalletId: string | undefined

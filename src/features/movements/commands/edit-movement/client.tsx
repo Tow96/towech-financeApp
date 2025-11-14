@@ -5,23 +5,23 @@ import { useMutation } from '@tanstack/react-query'
 import { EditMovementSchema } from './dto'
 
 import { FormDialog } from '@/common/components/form-dialog'
-import { convertCentsToAmount } from '@/common/lib/utils.ts'
+import { convertCentsToAmount } from '@/common/lib/utils'
 import { editMovement } from '@/features/movements/commands/edit-movement/server'
 import { walletKeys } from '@/features/wallets/store-keys'
 import { movementKeys } from '@/features/movements/store-keys'
-import { useMovementDetail } from '@/features/movements/queries/detail-movement/client.tsx'
+import { useMovementDetail } from '@/features/movements/queries/detail-movement/client'
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/common/components/ui/form.tsx'
-import { Input } from '@/common/components/ui/input.tsx'
+} from '@/common/components/ui/form'
+import { Input } from '@/common/components/ui/input'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
-import { CategoryType } from '@/features/categories/domain.ts'
+import { CategoryType } from '@/features/categories/domain'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
-import { Datepicker } from '@/common/components/datepicker.tsx'
+import { Datepicker } from '@/common/components/datepicker'
 
 const useEditMovementMutation = () => {
 	return useMutation({

@@ -1,17 +1,17 @@
-﻿import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 
 import type { QueryClient } from '@tanstack/react-query'
 
 import appCss from '@/styles.css?url'
 
-import { getThemeServer } from '@/common/components/ui/theme-provider.tsx'
+import { getThemeServer } from '@/common/components/ui/theme-provider'
 import { CustomClerkProvider, getClerkAuth } from '@/integrations/clerk'
 
-interface MyRouterContext {
+interface RouterContext {
 	queryClient: QueryClient
 }
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
 	beforeLoad: async () => {
 		const { userId } = await getClerkAuth()
 		return { userId }

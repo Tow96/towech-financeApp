@@ -3,13 +3,13 @@ import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil, Plus } from 'luc
 
 import type { CategoryListItemDto } from '../dto.ts'
 
-import { Icon } from '@/common/components/icon.tsx'
+import { Icon } from '@/common/components/icon'
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/common/components/ui/accordion.tsx'
+} from '@/common/components/ui/accordion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 

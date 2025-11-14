@@ -6,8 +6,8 @@ import type { MovementDetailDto } from '@/features/movements/queries/detail-move
 
 import { db, schema } from '@/integrations/drizzle-db'
 import { AuthorizationMiddleware } from '@/integrations/clerk'
-import { convertAmountToCents } from '@/common/lib/utils.ts'
-import { CategoryType } from '@/features/categories/domain.ts'
+import { convertAmountToCents } from '@/common/lib/utils'
+import { CategoryType } from '@/features/categories/domain'
 
 export const editMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
