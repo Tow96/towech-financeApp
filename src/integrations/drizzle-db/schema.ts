@@ -3,6 +3,13 @@ import { relations } from 'drizzle-orm'
 
 export const MainSchema = pgSchema('main')
 
+export const Users = MainSchema.table('users', {
+	id: uuid('id').defaultRandom().primaryKey(),
+	name: varchar('name').notNull(),
+	googleId: varchar('google_id').notNull(),
+	avatarUrl: varchar('avatar_url').notNull(),
+})
+
 export const Categories = MainSchema.table('categories', {
 	id: uuid('id').defaultRandom().primaryKey(),
 	type: varchar('type').notNull(),

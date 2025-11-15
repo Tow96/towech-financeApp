@@ -11,7 +11,7 @@ import { PeriodMovementList } from '@/features/movements/queries/list-movements/
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
 
 export const Route = createFileRoute('/_authed/dashboard')({
-  component: RouteComponent,
+	component: RouteComponent,
 })
 
 function RouteComponent() {

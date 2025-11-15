@@ -5,7 +5,12 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { AppSidebar } from '@/common/components/app-sidebar'
 import { Separator } from '@/common/components/ui/separator'
-import { SidebarInset, SidebarProvider, SidebarTrigger, getSidebarState } from '@/common/components/ui/sidebar'
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+	getSidebarState,
+} from '@/common/components/ui/sidebar'
 import { capitalizeFirst } from '@/common/lib/utils'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
@@ -51,7 +56,7 @@ function AuthedComponent() {
 				<main>
 					<Outlet />
 					<TanStackDevtools
-						config={{position: 'bottom-right'}}
+						config={{ position: 'bottom-right' }}
 						plugins={[
 							{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
 							TanStackQueryDevtools,
