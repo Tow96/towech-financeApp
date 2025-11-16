@@ -4,6 +4,8 @@ import { getCookie } from '@tanstack/react-start/server'
 import { createFileRoute } from '@tanstack/react-router'
 import type { OAuth2Tokens } from 'arctic'
 
+import { generateSession, generateSessionCookie } from '@/features/sessions'
+
 import {
 	GOOGLE_CODE_VERIFIER_COOKIE,
 	GOOGLE_OAUTH_STATE_COOKIE,
@@ -67,7 +69,8 @@ export const Route = createFileRoute('/login/google/callback')({
 						headers: { Location: '/login?unregistered=true' },
 					})
 
-				// TODO Generate session
+				const session = await generateSession(user[0].id)
+				generateSessionCookie(session!.token)
 
 				return new Response(null, {
 					status: 302,

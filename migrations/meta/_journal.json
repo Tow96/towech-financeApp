@@ -29,6 +29,13 @@
 			"when": 1763240973216,
 			"tag": "0003_bouncy_hellion",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1763251852874,
+			"tag": "0004_last_firebrand",
+			"breakpoints": true
 		}
 	]
 }

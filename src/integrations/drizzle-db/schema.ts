@@ -10,6 +10,14 @@ export const Users = MainSchema.table('users', {
 	avatarUrl: varchar('avatar_url').notNull(),
 })
 
+export const Sessions = MainSchema.table('sessions', {
+	id: varchar('id').notNull(),
+	userId: uuid('user_id').notNull(),
+	secretHash: varchar('secret_hash').notNull(),
+	lastVerifiedAt: timestamp('last_verified_at').notNull(),
+	createdAt: timestamp('created_at').notNull(),
+})
+
 export const Categories = MainSchema.table('categories', {
 	id: uuid('id').defaultRandom().primaryKey(),
 	type: varchar('type').notNull(),
