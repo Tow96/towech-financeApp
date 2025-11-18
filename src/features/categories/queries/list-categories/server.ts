@@ -4,8 +4,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { GetCategoryListSchema } from './dto'
 import type { CategoryListItemDto } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
-import { AuthorizationMiddleware } from '@/integrations/clerk/authorization.middleware'
 import { db, schema } from '@/integrations/drizzle-db'
 
 export const getCategoriesByType = createServerFn({ method: 'GET' })

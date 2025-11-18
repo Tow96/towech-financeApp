@@ -9,7 +9,6 @@ import {
 	SidebarFooter,
 	SidebarHeader,
 } from '@/common/components/ui/sidebar'
-import { UserMenuButton } from '@/integrations/clerk'
 
 export const AppSidebar = (): ReactNode => {
 	return (
@@ -23,7 +22,7 @@ export const AppSidebar = (): ReactNode => {
 			</SidebarContent>
 
 			<SidebarFooter>
-				<UserMenuButton />
+				{/*<UserMenuButton />*/}
 			</SidebarFooter>
 		</Sidebar>
 	)

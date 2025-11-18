@@ -1,5 +1,4 @@
-import { SignIn } from '@clerk/tanstack-react-start'
-import { Outlet, createFileRoute, useLocation } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
@@ -14,24 +13,13 @@ import {
 import { capitalizeFirst } from '@/common/lib/utils'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
-const NOT_AUTHENTICATED_ERROR_MSG = 'Not authenticated'
-
 export const Route = createFileRoute('/_authed')({
 	beforeLoad: ({ context }) => {
-		if (!context.userId) throw new Error(NOT_AUTHENTICATED_ERROR_MSG)
+		if (!context.userId) redirect({ to: '/login', throw: true })
 	},
 	loader: async () => {
 		const sidebarInitialState = await getSidebarState()
 		return { sidebarInitialState }
-	},
-	errorComponent: ({ error }) => {
-		if (error.message !== NOT_AUTHENTICATED_ERROR_MSG) throw error
-
-		return (
-			<div className="flex items-center justify-center p-12">
-				<SignIn routing="virtual" forceRedirectUrl="/" />
-			</div>
-		)
 	},
 	component: AuthedComponent,
 })

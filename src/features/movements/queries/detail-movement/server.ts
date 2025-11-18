@@ -5,8 +5,9 @@ import { GetMovementDetailSchema } from './dto'
 import type { MovementDetailDto } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
 
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
+
 import { db, schema } from '@/integrations/drizzle-db'
-import { AuthorizationMiddleware } from '@/integrations/clerk'
 
 export const getMovementDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

@@ -1,23 +1,10 @@
 // Taken from lucia-auth
-import { getRandomValues, subtle } from 'node:crypto'
+import { getRandomValues } from 'node:crypto'
 import { createIsomorphicFn } from '@tanstack/react-start'
-import { setCookie } from '@tanstack/react-start/server'
 
 import { db, schema } from '@/integrations/drizzle-db'
 
-export const SESSION_COOKIE = 'session'
-const inactivityTimeoutSeconds = 60 * 60 * 24 * 15 // 15 days
-const activityCheckIntervalSeconds = 60 * 60 // 1 hour
-
-export const generateSessionCookie = createIsomorphicFn().server((token: string) => {
-	setCookie(SESSION_COOKIE, token, {
-		path: '/',
-		httpOnly: true,
-		secure: process.env.NODE_ENV !== 'development',
-		maxAge: inactivityTimeoutSeconds,
-		sameSite: 'lax',
-	})
-})
+import { TOKEN_SEPARATOR, hashSecret, toHexString } from '@/features/sessions/common'
 
 export const generateSession = createIsomorphicFn().server(async (userId: string) => {
 	const id = generateSecureRandomString()
@@ -28,12 +15,12 @@ export const generateSession = createIsomorphicFn().server(async (userId: string
 	await db.insert(schema.Sessions).values({
 		id,
 		userId,
-		secretHash: secretHash.join(''),
+		secretHash: toHexString(secretHash),
 		lastVerifiedAt: now,
 		createdAt: now,
 	})
 
-	const token = `${id}.${secret}`
+	const token = `${id}${TOKEN_SEPARATOR}${secret}`
 	return {
 		id,
 		secretHash,
@@ -57,14 +44,3 @@ const generateSecureRandomString = () => {
 
 	return id
 }
-
-const hashSecret = async (secret: string) => {
-	const secretBytes = new TextEncoder().encode(secret)
-	const secretHashBuffer = await subtle.digest('SHA-256', secretBytes)
-	return new Uint8Array(secretHashBuffer)
-}
-
-// const inactivityTimeoutSeconds = 60 * 60 * 24 * 15 // 15 days
-// const activityCheckIntervalSeconds = 60 * 60 // 1 hour
-//
-// export const validateSessionToken()

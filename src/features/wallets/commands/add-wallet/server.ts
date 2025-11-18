@@ -6,7 +6,8 @@ import { AddWalletSchema } from './dto'
 
 import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto'
 
-import { AuthorizationMiddleware } from '@/integrations/clerk'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
+
 import { db, schema } from '@/integrations/drizzle-db'
 
 export const addWallet = createServerFn({ method: 'POST' })
