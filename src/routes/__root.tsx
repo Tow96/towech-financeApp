@@ -1,7 +1,6 @@
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 
-
 import { getUserId } from '@/features/users/get-id'
 
 import appCss from '@/styles.css?url'

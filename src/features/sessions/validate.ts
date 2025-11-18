@@ -17,9 +17,8 @@ import {
 import { db, schema } from '@/integrations/drizzle-db'
 
 export const AuthorizationMiddleware = createMiddleware().server(async ({ next }) => {
-
 	// Checks if users are disabled for testing
-	const mockId = import.meta.env.MOCK_USER_ID
+	const mockId = import.meta.env.VITE_MOCK_USER_ID
 	if (mockId !== undefined) return next({ context: { userId: mockId.trim() } })
 
 	const token = getCookie(SESSION_COOKIE)
@@ -32,7 +31,7 @@ export const AuthorizationMiddleware = createMiddleware().server(async ({ next }
 	}
 
 	generateSessionCookie(token)
-	return next({ context: { userId: session.userId } })
+	return next({ context: { userId: session.userId, sessionId: session.id } })
 })
 
 const validateToken = async (token: string) => {

@@ -1,8 +1,6 @@
 ﻿import { DashboardButton } from './dashboard-button'
 import { AppNav } from './nav'
 
-import type { ReactNode } from 'react'
-
 import {
 	Sidebar,
 	SidebarContent,
@@ -10,7 +8,9 @@ import {
 	SidebarHeader,
 } from '@/common/components/ui/sidebar'
 
-export const AppSidebar = (): ReactNode => {
+import { UserMenuButton } from '@/features/users/display/client'
+
+export const AppSidebar = () => {
 	return (
 		<Sidebar collapsible="icon">
 			<SidebarHeader>
@@ -22,7 +22,7 @@ export const AppSidebar = (): ReactNode => {
 			</SidebarContent>
 
 			<SidebarFooter>
-				{/*<UserMenuButton />*/}
+				<UserMenuButton />
 			</SidebarFooter>
 		</Sidebar>
 	)

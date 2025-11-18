@@ -1,8 +1,8 @@
 import { subtle } from 'node:crypto'
 
 import { setCookie } from '@tanstack/react-start/server'
-import { db, schema } from '@/integrations/drizzle-db'
 import { eq } from 'drizzle-orm'
+import { db, schema } from '@/integrations/drizzle-db'
 
 export const SESSION_COOKIE = 'session'
 export const INACTIVITY_TIMEOUT_SECONDS = 60 * 60 * 24 * 15 // 15 days
@@ -59,6 +59,6 @@ export const getSessionFromDb = async (sessionId: string) => {
 	return session
 }
 
-const deleteSessionFromDb = async (sessionId: string) => {
+export const deleteSessionFromDb = async (sessionId: string) => {
 	await db.delete(schema.Sessions).where(eq(schema.Sessions.id, sessionId))
 }
