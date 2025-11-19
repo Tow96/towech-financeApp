@@ -1,5 +1,6 @@
 import { LogOut } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
+import { redirect } from '@tanstack/react-router'
 
 import { SidebarMenu, SidebarMenuButton, useSidebar } from '@/common/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar'
@@ -12,12 +13,15 @@ import {
 } from '@/common/components/ui/dropdown-menu'
 
 import { getUser } from '@/features/users/display/server'
-import { useLogoutMutation } from '@/features/sessions/logout/client'
+import { useSignOutMutation } from '@/features/sessions/sign-out'
+
+import { DEFAULT_STALE_TIME } from '@/integrations/tanstack-query/defaults'
 
 export const useUserDetail = () => {
 	return useQuery({
 		queryKey: ['user', 'detail'],
-		staleTime: 60000,
+		staleTime: DEFAULT_STALE_TIME,
+		gcTime: 1000, // If there are no watchers, it's very likely the user signed out
 		queryFn: () => getUser(),
 	})
 }
@@ -42,7 +46,13 @@ const DisabledUserButton = () => (
 const EnabledUserButton = () => {
 	const { isMobile } = useSidebar()
 	const user = useUserDetail()
-	const logout = useLogoutMutation()
+	const signOut = useSignOutMutation()
+
+	const onSignOutClick = () => {
+		signOut.mutate(undefined, {
+			onSuccess: () => redirect({ to: '/', throw: true }),
+		})
+	}
 
 	return (
 		<DropdownMenu>
@@ -51,7 +61,7 @@ const EnabledUserButton = () => {
 				<SidebarMenuButton
 					size="lg"
 					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-					<UserBadge name={user.data?.name} avatar={user.data?.avatarUrl} />
+					<UserBadge name={user.data?.name ?? ''} avatar={user.data?.avatarUrl ?? ''} />
 				</SidebarMenuButton>
 			</DropdownMenuTrigger>
 
@@ -63,7 +73,7 @@ const EnabledUserButton = () => {
 				sideOffset={4}>
 				{/* User data	*/}
 				<DropdownMenuLabel className="p-0 px-1 py-1.5 font-normal">
-					<DropdownMenuItem onClick={logout.mutate}>
+					<DropdownMenuItem onClick={onSignOutClick}>
 						<LogOut />
 						<span>Sign out</span>
 					</DropdownMenuItem>

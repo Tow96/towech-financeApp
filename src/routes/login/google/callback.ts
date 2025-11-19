@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { OAuth2Tokens } from 'arctic'
 
 import { generateSessionCookie } from '@/features/sessions/common'
-import { generateSession } from '@/features/sessions/create'
+import { generateSession } from '@/features/sessions/sign-in'
 
 import {
 	GOOGLE_CODE_VERIFIER_COOKIE,

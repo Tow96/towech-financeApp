@@ -4,6 +4,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { getUserId } from '@/features/users/get-id'
 
 import appCss from '@/styles.css?url'
+import { getThemeServer } from '@/common/components/ui/theme-provider'
 
 interface RouterContext {
 	queryClient: QueryClient
@@ -15,7 +16,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			const userId = await getUserId()
 			return { userId }
 		} catch (_) {
-			return
+			return { userId: undefined }
 		}
 	},
 	head: () => ({
@@ -27,10 +28,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		],
 		links: [{ rel: 'stylesheet', href: appCss }],
 	}),
-	// loader: async () => {
-	// 	const theme = await getThemeServer()
-	// 	return { theme }
-	// },
+	loader: async () => {
+		const theme = await getThemeServer()
+		return { theme }
+	},
 	shellComponent: RootDocument,
 })
 
@@ -38,7 +39,7 @@ function RootDocument() {
 	const data = Route.useLoaderData()
 
 	return (
-		<html lang="en">
+		<html className={data.theme} lang="en">
 			<head>
 				<HeadContent />
 			</head>

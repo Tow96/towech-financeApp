@@ -19,7 +19,8 @@ import { db, schema } from '@/integrations/drizzle-db'
 export const AuthorizationMiddleware = createMiddleware().server(async ({ next }) => {
 	// Checks if users are disabled for testing
 	const mockId = import.meta.env.VITE_MOCK_USER_ID
-	if (mockId !== undefined) return next({ context: { userId: mockId.trim() } })
+	if (mockId !== undefined)
+		return next({ context: { userId: (mockId as string).trim(), sessionId: '' } })
 
 	const token = getCookie(SESSION_COOKIE)
 	if (token === undefined) throw new Response('Unauthorized', { status: 401 })
