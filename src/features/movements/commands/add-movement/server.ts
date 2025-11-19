@@ -5,11 +5,12 @@ import { createServerFn } from '@tanstack/react-start'
 import { AddMovementSchema } from './dto'
 import type { MovementDetailDto } from '@/features/movements/queries/detail-movement/dto'
 
-import { CategoryType } from '@/features/categories/domain'
-
-import { AuthorizationMiddleware } from '@/integrations/clerk'
-import { db, schema } from '@/integrations/drizzle-db'
 import { convertAmountToCents } from '@/common/lib/utils'
+
+import { CategoryType } from '@/features/categories/domain'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
+
+import { db, schema } from '@/integrations/drizzle-db'
 
 export const addMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

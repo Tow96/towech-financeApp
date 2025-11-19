@@ -1,11 +1,10 @@
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
-
 import type { QueryClient } from '@tanstack/react-query'
 
-import appCss from '@/styles.css?url'
+import { getUserId } from '@/features/users/get-id'
 
+import appCss from '@/styles.css?url'
 import { getThemeServer } from '@/common/components/ui/theme-provider'
-import { CustomClerkProvider, getClerkAuth } from '@/integrations/clerk'
 
 interface RouterContext {
 	queryClient: QueryClient
@@ -13,8 +12,12 @@ interface RouterContext {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	beforeLoad: async () => {
-		const { userId } = await getClerkAuth()
-		return { userId }
+		try {
+			const userId = await getUserId()
+			return { userId }
+		} catch (_) {
+			return { userId: undefined }
+		}
 	},
 	head: () => ({
 		meta: [
@@ -41,9 +44,7 @@ function RootDocument() {
 				<HeadContent />
 			</head>
 			<body>
-				<CustomClerkProvider>
-					<Outlet />
-				</CustomClerkProvider>
+				<Outlet />
 				<Scripts />
 			</body>
 		</html>

@@ -4,9 +4,10 @@ import { createServerFn } from '@tanstack/react-start'
 import { GetWalletDetailSchema } from './dto'
 import type { WalletDetailDto } from './dto'
 
-import { AuthorizationMiddleware } from '@/integrations/clerk'
-import { db, schema } from '@/integrations/drizzle-db'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
+
+import { db, schema } from '@/integrations/drizzle-db'
 
 export const getWalletDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

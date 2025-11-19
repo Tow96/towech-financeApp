@@ -4,9 +4,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { EditCategorySchema } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
 import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
 import { db, schema } from '@/integrations/drizzle-db'
-import { AuthorizationMiddleware } from '@/integrations/clerk'
 
 export const editCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
@@ -20,7 +20,6 @@ export const editCategory = createServerFn({ method: 'POST' })
 		if (categories.length === 0) throw new Response('Category not found', { status: 404 })
 
 		if (data.subId === undefined) {
-
 			if (data.name) {
 				// Check if category already exists
 				const existingCategory = await db
@@ -34,9 +33,12 @@ export const editCategory = createServerFn({ method: 'POST' })
 						),
 					)
 				if (existingCategory.length > 0)
-					throw new Response(`Category ${data.name} already exists for type ${categories[0].type}`, {
-						status: 409,
-					})
+					throw new Response(
+						`Category ${data.name} already exists for type ${categories[0].type}`,
+						{
+							status: 409,
+						},
+					)
 			}
 
 			logger.info(`User: ${userId} editing category: ${data.id}`)
@@ -83,9 +85,12 @@ export const editCategory = createServerFn({ method: 'POST' })
 					),
 				)
 			if (existingSubCategory.length > 0)
-				throw new Response(`Subcategory ${data.name} already exists for parent ${categories[0].id}`, {
-					status: 409,
-				})
+				throw new Response(
+					`Subcategory ${data.name} already exists for parent ${categories[0].id}`,
+					{
+						status: 409,
+					},
+				)
 		}
 
 		const updatedSubCategory = (

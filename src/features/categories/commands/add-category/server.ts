@@ -5,9 +5,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { AddCategorySchema } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
 import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
 import { db, schema } from '@/integrations/drizzle-db'
-import { AuthorizationMiddleware } from '@/integrations/clerk'
 
 export const addCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

@@ -3,7 +3,8 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { DeleteMovementSchema } from './dto'
 
-import { AuthorizationMiddleware } from '@/integrations/clerk'
+import { AuthorizationMiddleware } from '@/features/sessions/validate'
+
 import { db, schema } from '@/integrations/drizzle-db'
 
 export const deleteMovement = createServerFn({ method: 'POST' })
