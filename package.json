@@ -1,6 +1,6 @@
 {
 	"name": "towech-financeapp",
-	"version": "4.0.0",
+	"version": "4.0.1",
 	"license": "BSD-3-Clause",
 	"private": true,
 	"type": "module",
