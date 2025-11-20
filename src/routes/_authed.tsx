@@ -43,13 +43,15 @@ function AuthedComponent() {
 				{/*	Content */}
 				<main>
 					<Outlet />
-					<TanStackDevtools
-						config={{ position: 'bottom-right' }}
-						plugins={[
-							{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-							TanStackQueryDevtools,
-						]}
-					/>
+					{import.meta.env.VITE_ENABLE_DEVTOOLS === 'true' && (
+						<TanStackDevtools
+							config={{ position: 'bottom-right' }}
+							plugins={[
+								{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
+								TanStackQueryDevtools,
+							]}
+						/>
+					)}
 				</main>
 			</SidebarInset>
 		</SidebarProvider>

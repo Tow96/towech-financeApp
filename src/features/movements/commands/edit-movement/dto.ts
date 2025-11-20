@@ -20,7 +20,7 @@ export const EditMovementSchema = z
 			.optional(),
 		amount: z
 			.string()
-			.regex(/^\d+(\.\d{1,2})?$/, 'Must be a number with up to two decimal places')
+			.regex(/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/, 'Must be a number with up to two decimal places')
 			.optional(),
 		wallet: z
 			.object({

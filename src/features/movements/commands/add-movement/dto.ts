@@ -15,7 +15,7 @@ export const AddMovementSchema = z
 			id: z.uuid().nullable(),
 			subId: z.uuid().nullable(),
 		}),
-		amount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Must be a number with up to two decimal places'),
+		amount: z.string().regex(/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/, 'Must be a number with up to two decimal places'),
 		wallet: z.object({
 			originId: z.uuid().optional(),
 			destinationId: z.uuid().optional(),
