@@ -24,7 +24,7 @@ function RouteComponent() {
 
 	return (
 		<div className="flex justify-center pt-12 px-8">
-				<div className="w-full">
+				<div className="w-full md:max-w-xl">
 					<h1 className="text-center text-xl font-semibold text-foreground">Sign in</h1>
 
 					<Button variant="outline" className="inline-flex w-full items-center justify-center space-x-2 mt-6" asChild>
