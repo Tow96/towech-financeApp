@@ -19,9 +19,9 @@ function RouteComponent() {
 		<>
 			<AddWalletDialog open={openAdd} setOpen={setOpenAdd} />
 			<Card className="m-4">
-				<CardHeader className="flex items-center">
+				<CardHeader className="flex items-center flex-col-reverse gap-4 md:flex-row">
 					<WalletsTotal />
-					<Button onClick={() => setOpenAdd(true)}>
+					<Button className="w-full md:w-auto" onClick={() => setOpenAdd(true)}>
 						<Plus />
 						Add Wallet
 					</Button>

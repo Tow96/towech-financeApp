@@ -22,7 +22,7 @@ import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/
 export const WalletsTotal = () => {
 	const { data, isPending } = useWalletsTotal()
 	return (
-		<span className="flex flex-1 items-center text-2xl">
+		<span className="flex flex-1 items-center text-2xl w-full">
 			Total:{' '}
 			{isPending ? (
 				<Skeleton className="mt-1 ml-4 h-5 w-1/3" />
