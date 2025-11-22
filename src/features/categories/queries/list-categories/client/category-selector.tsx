@@ -37,8 +37,8 @@ export const CategorySelector = (props: CategorySelectorProps) => {
 	})
 	const convertValueForSelector = (v: CategorySelectorValue) => {
 		let output = `${v.type.toString()}`
-		if (internalValue.id) output += `${VALUE_SEPARATOR}${v.id}`
-		if (internalValue.subId) output += `${VALUE_SEPARATOR}${v.subId}`
+		if (v.id) output += `${VALUE_SEPARATOR}${v.id}`
+		if (v.subId) output += `${VALUE_SEPARATOR}${v.subId}`
 		return output
 	}
 
