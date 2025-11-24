@@ -22,7 +22,7 @@ export const PeriodSummary = (props: PeriodSummaryProps) => {
 		.reduce((acc, cur) => acc + cur, 0)
 
 	return (
-		<div className="text-3xl">
+		<div className="text-2xl md:text-3xl">
 			<div className="flex justify-between">
 				<span>In:</span>
 				<span className="text-constructive">{convertCentsToCurrencyString(inMoney)}</span>

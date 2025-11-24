@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { ArrowBigRight, Ellipsis, Pencil, Trash } from 'lucide-react'
+import { ArrowBigRight, EllipsisVertical, Pencil, Trash } from 'lucide-react'
 
 import type { ListMovementItemDto } from '../dto'
 
@@ -59,12 +59,12 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 	return (
 		<div className="flex min-w-0 items-center gap-4 border-b-1 py-4 last:border-b-0">
 			{/* Icon */}
-			<CategoryIcon className="h-16 w-16 rounded-full" category={movement.category} />
+			<CategoryIcon className="h-10 w-10 md:h-16 md:w-16" category={movement.category} />
 
 			{/* Info */}
 			<div className="flex-1">
 				{/* Top row */}
-				<div className="flex justify-between text-2xl font-bold">
+				<div className="flex justify-between txt-sm md:text-2xl font-bold">
 					<CategoryName category={movement.category} />
 					<span
 						className={cn(
@@ -79,11 +79,11 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 					{/*	Origin and destination*/}
 					<div className="flex">
 						{movement.wallet.originId && (
-							<WalletIcon className="h-6 w-6" walletId={movement.wallet.originId} />
+							<WalletIcon className="h-5 w-5 md:h-6 md:w-6" walletId={movement.wallet.originId} />
 						)}
-						{movement.wallet.originId && movement.wallet.destinationId && <ArrowBigRight />}
+						{movement.wallet.originId && movement.wallet.destinationId && <ArrowBigRight className="h-5 w-5 md:h-6 md:w-6" />}
 						{movement.wallet.destinationId && (
-							<WalletIcon className="h-6 w-6" walletId={movement.wallet.destinationId} />
+							<WalletIcon className="h-5 w-5 md:h-6 md:w-6" walletId={movement.wallet.destinationId} />
 						)}
 					</div>
 
@@ -99,8 +99,8 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 			<DropDrawer>
 				{/*	Button */}
 				<DropDrawerTrigger asChild>
-					<Button variant="secondary" size="icon" className="ml-3">
-						<Ellipsis />
+					<Button variant="secondary" size="icon-sm" className="md:ml-3">
+						<EllipsisVertical />
 					</Button>
 				</DropDrawerTrigger>
 

@@ -21,21 +21,21 @@ function RouteComponent() {
 
 	return (
 		<Card className="m-4">
-			<CardHeader className="flex items-center justify-between">
+			<CardHeader className="flex flex-col-reverse md:flex-row items-center justify-between gap-4">
 				<PeriodSelector start={periodStart} setStart={setPeriodStart} />
 				<WalletSelector
-					className="w-1/2"
+					className="w-full md:w-1/2"
 					value={selectedWalletId}
 					onChange={setSelectedWalletId}
 					showMoney
 					showTotal
 				/>
-				<Button onClick={() => setOpenAdd(true)}>
+				<Button className="w-full md:w-auto" onClick={() => setOpenAdd(true)}>
 					<Plus /> Add Movement
 				</Button>
 				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
 			</CardHeader>
-			<CardContent>
+			<CardContent className="max-h-[62vh] overflow-y-auto">
 				<PeriodSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
 				<PeriodMovementList selectedWalletId={selectedWalletId} periodStart={periodStart} />
 			</CardContent>
