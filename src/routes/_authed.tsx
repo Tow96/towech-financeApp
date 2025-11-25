@@ -2,6 +2,7 @@ import { Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
+
 import { AppSidebar } from '@/common/components/app-sidebar'
 import { Separator } from '@/common/components/ui/separator'
 import {
@@ -10,8 +11,9 @@ import {
 	SidebarTrigger,
 	getSidebarState,
 } from '@/common/components/ui/sidebar'
-import { capitalizeFirst } from '@/common/lib/utils'
+import { capitalizeFirst, cn } from '@/common/lib/utils'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
+import { ThemeSelector } from '@/features/theme'
 
 export const Route = createFileRoute('/_authed')({
 	beforeLoad: ({ context }) => {
@@ -33,10 +35,11 @@ function AuthedComponent() {
 			<SidebarInset>
 				{/*	Header */}
 				<header className="flex h-16 shrink-0 items-center gap-2 border-b">
-					<div className="flex items-center gap-2 px-3">
+					<div className="flex items-center gap-2 px-3 w-full">
 						<SidebarTrigger />
 						<Separator orientation="vertical" className="mr-2 h-4" />
-						<PageTitle />
+						<PageTitle className="flex-1" />
+						<ThemeSelector />
 					</div>
 				</header>
 
@@ -58,11 +61,14 @@ function AuthedComponent() {
 	)
 }
 
-const PageTitle = () => {
+type PageTitleProps = {
+	className?: string
+}
+const PageTitle = (props: PageTitleProps) => {
 	const location = useLocation()
 
 	return (
-		<h1 className="text-lg font-bold">
+		<h1 className={cn(props.className, "text-lg font-bold")}>
 			{capitalizeFirst(location.pathname.slice(1).split('/')[0])}
 		</h1>
 	)

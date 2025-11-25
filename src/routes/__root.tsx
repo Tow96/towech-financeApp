@@ -4,7 +4,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { getUserId } from '@/features/users/get-id'
 
 import appCss from '@/styles.css?url'
-import { getThemeServer } from '@/common/components/ui/theme-provider'
+import { ThemeProvider } from '@/features/theme'
 
 interface RouterContext {
 	queryClient: QueryClient
@@ -25,36 +25,34 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
 			{ title: 'Towech Finance App' },
 			{ description: 'Keep track of your budgets and expenses' },
-            { name: 'apple-mobile-web-app-title', content: 'FInance App'}
+			{ name: 'apple-mobile-web-app-title', content: 'FInance App' },
 		],
 		links: [
-            { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' },
-            { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-            { rel: 'shortcut icon', href: '/favicon.ico' },
-            { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-            { rel: 'manifest', href: '/site.webmanifest' },
-            { rel: 'stylesheet', href: appCss }
-        ],
+			{ rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' },
+			{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+			{ rel: 'shortcut icon', href: '/favicon.ico' },
+			{ rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+			{ rel: 'manifest', href: '/site.webmanifest' },
+			{ rel: 'stylesheet', href: appCss },
+		],
 	}),
-	loader: async () => {
-		const theme = await getThemeServer()
-		return { theme }
-	},
 	shellComponent: RootDocument,
 })
 
 function RootDocument() {
-	const data = Route.useLoaderData()
-
 	return (
-		<html className={data.theme} lang="en">
+		// Hydration warning is suppressed because the theme class on the html element
+		// according to react documentation this flag only affects one level deep, so the warning will
+		// show up for the rest of the application
+		<html lang="en" suppressHydrationWarning>
 			<head>
-
 				<HeadContent />
 			</head>
 			<body>
-				<Outlet />
-				<Scripts />
+				<ThemeProvider>
+					<Outlet />
+					<Scripts />
+				</ThemeProvider>
 			</body>
 		</html>
 	)
