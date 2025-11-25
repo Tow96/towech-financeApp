@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1108)"><rect width="1000" height="1000" fill="#000000"></rect><g transform="matrix(2,0,0,2,100,100)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400"><svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!--<rect class="a" width="400" height="400" rx="50" fill="black"/>-->
+    <circle cx="200" cy="200" r="175" fill="#FDFDFD"></circle>
+    <path d="M122.907 59.0109C120.687 55.3542 121.726 50.579 125.386 48.3632C149.022 34.0514 175.678 26.0415 203.018 25.0949C232.874 24.0611 262.444 31.4887 288.63 46.5988C314.815 61.709 336.65 83.9452 351.846 110.976C365.75 135.708 373.627 163.619 374.836 192.235C375.023 196.65 371.417 200.229 366.999 200.223L212.995 200.006C210.203 200.002 207.616 198.544 206.167 196.158L122.907 59.0109Z" fill="#4E4E4E"></path>
+    <path d="M34.0246 218.471C29.6334 218.959 25.6583 215.796 25.3708 211.387C23.5068 182.803 28.6866 154.153 40.51 127.973C53.4326 99.3582 73.8154 74.7474 99.5215 56.7203C125.228 38.6933 155.31 27.914 186.615 25.5126C215.258 23.3155 243.958 28.2056 270.197 39.6961C274.245 41.4684 275.865 46.2835 273.909 50.2455L201.938 196.074C200.73 198.52 198.36 200.183 195.649 200.484L34.0246 218.471Z" fill="#D8751F"></path>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1108"><rect width="1000" height="1000" x="0" y="0" rx="250" ry="250"></rect></clipPath></defs></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(2.5,0,0,2.5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400"><svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!--<rect class="a" width="400" height="400" rx="50" fill="black"/>-->
+    <circle cx="200" cy="200" r="175" fill="#FDFDFD"></circle>
+    <path d="M122.907 59.0109C120.687 55.3542 121.726 50.579 125.386 48.3632C149.022 34.0514 175.678 26.0415 203.018 25.0949C232.874 24.0611 262.444 31.4887 288.63 46.5988C314.815 61.709 336.65 83.9452 351.846 110.976C365.75 135.708 373.627 163.619 374.836 192.235C375.023 196.65 371.417 200.229 366.999 200.223L212.995 200.006C210.203 200.002 207.616 198.544 206.167 196.158L122.907 59.0109Z" fill="#4E4E4E"></path>
+    <path d="M34.0246 218.471C29.6334 218.959 25.6583 215.796 25.3708 211.387C23.5068 182.803 28.6866 154.153 40.51 127.973C53.4326 99.3582 73.8154 74.7474 99.5215 56.7203C125.228 38.6933 155.31 27.914 186.615 25.5126C215.258 23.3155 243.958 28.2056 270.197 39.6961C274.245 41.4684 275.865 46.2835 273.909 50.2455L201.938 196.074C200.73 198.52 198.36 200.183 195.649 200.484L34.0246 218.471Z" fill="#D8751F"></path>
+</svg></svg></g></g></svg></g></svg>
