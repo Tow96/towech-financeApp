@@ -14,7 +14,7 @@ export const ThemeSelector = () => {
 
 	return (
 		<Button variant="secondary" onClick={selectNextTheme}>
-			<Sun className="light:inline light:system:inline hidden" />
+			<Sun className="light:inline system:light:inline hidden" />
 			<Moon className="dark:inline system:dark:inline hidden" />
 			<span className="system:inline hidden font-bold">Auto</span>
 		</Button>
