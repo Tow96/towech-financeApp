@@ -77,12 +77,12 @@ export const editMovement = createServerFn({ method: 'POST' })
 				)
 			if (existingWallets.length === 0) throw new Response('Wallets not found', { status: 404 })
 		}
-		const originWalletId = data.wallet
+		const originWalletId = data.wallet?.originId
 			? category.type !== CategoryType.income
 				? (data.wallet.originId ?? null)
 				: null
 			: existingMovement[0].summary[0].originWalletId
-		const destinationWalletId = data.wallet
+		const destinationWalletId = data.wallet?.destinationId
 			? category.type !== CategoryType.expense
 				? (data.wallet.destinationId ?? null)
 				: null
