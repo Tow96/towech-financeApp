@@ -11,7 +11,8 @@ export function capitalizeFirst(input: string): string {
 }
 
 export function convertAmountToCents(value: string): number {
-	const splitValue = value.split('.')
+	const cleanValue = value.replaceAll(',', '')
+	const splitValue = cleanValue.split('.')
 
 	return parseInt(`${splitValue[0]}${((splitValue[1] || '').padEnd(2, '0')).substring(0, 2)}`)
 }
