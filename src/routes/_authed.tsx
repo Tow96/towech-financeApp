@@ -1,19 +1,31 @@
-import { Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
+import { CircleDot, Layers2, Wallet } from 'lucide-react'
+
+import { Link, Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-
-import { AppSidebar } from '@/common/components/app-sidebar'
 import { Separator } from '@/common/components/ui/separator'
 import {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupLabel,
+	SidebarHeader,
 	SidebarInset,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 	SidebarProvider,
 	SidebarTrigger,
 	getSidebarState,
 } from '@/common/components/ui/sidebar'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
+
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
+
 import { ThemeSelector } from '@/features/theme'
+import { UserMenuButton } from '@/features/users/display/client'
 
 export const Route = createFileRoute('/_authed')({
 	beforeLoad: ({ context }) => {
@@ -35,7 +47,7 @@ function AuthedComponent() {
 			<SidebarInset>
 				{/*	Header */}
 				<header className="flex h-16 shrink-0 items-center gap-2 border-b">
-					<div className="flex items-center gap-2 px-3 w-full">
+					<div className="flex w-full items-center gap-2 px-3">
 						<SidebarTrigger />
 						<Separator orientation="vertical" className="mr-2 h-4" />
 						<PageTitle className="flex-1" />
@@ -68,8 +80,78 @@ const PageTitle = (props: PageTitleProps) => {
 	const location = useLocation()
 
 	return (
-		<h1 className={cn(props.className, "text-lg font-bold")}>
+		<h1 className={cn(props.className, 'text-lg font-bold')}>
 			{capitalizeFirst(location.pathname.slice(1).split('/')[0])}
 		</h1>
+	)
+}
+
+const AppSidebar = () => {
+	return (
+		<Sidebar collapsible="icon">
+			<SidebarHeader>
+				<DashboardButton />
+			</SidebarHeader>
+
+			<SidebarContent>
+				<AppNav />
+			</SidebarContent>
+
+			<SidebarFooter>
+				<UserMenuButton />
+			</SidebarFooter>
+		</Sidebar>
+	)
+}
+
+const DashboardButton = () => {
+	return (
+		<SidebarMenu>
+			<SidebarMenuItem>
+				<SidebarMenuButton size="lg" asChild>
+					<Link to="/dashboard">
+						<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+							<Layers2 className="size-4" />
+						</div>
+						<div className="flex flex-col gap-0.5 leading-none">
+							<span className="text-lg">Dashboard</span>
+						</div>
+					</Link>
+				</SidebarMenuButton>
+			</SidebarMenuItem>
+		</SidebarMenu>
+	)
+}
+
+const pages = [
+	{
+		name: 'Wallets',
+		url: '/wallets',
+		icon: Wallet,
+	},
+	{
+		name: 'Categories',
+		url: '/categories',
+		icon: CircleDot,
+	},
+]
+
+const AppNav = () => {
+	return (
+		<SidebarGroup>
+			<SidebarGroupLabel>Components</SidebarGroupLabel>
+			<SidebarMenu>
+				{pages.map(page => (
+					<SidebarMenuItem key={page.name}>
+						<SidebarMenuButton asChild tooltip={page.name}>
+							<Link to={page.url}>
+								{<page.icon />}
+								<span>{page.name}</span>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				))}
+			</SidebarMenu>
+		</SidebarGroup>
 	)
 }
