@@ -1,6 +1,6 @@
 import { z } from 'zod'
-
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
 import { LoginPage } from '@/pages/login-page'
 
 const searchParamsSchema = z.object({
