@@ -14,7 +14,7 @@ import {
 	hashSecret,
 } from '@/features/sessions/common'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const AuthorizationMiddleware = createMiddleware().server(async ({ next }) => {
 	// Checks if users are disabled for testing

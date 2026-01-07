@@ -12,7 +12,8 @@ import {
 	GOOGLE_OAUTH_STATE_COOKIE,
 	googleAuth,
 } from '@/integrations/arctic/google'
-import { db, schema } from '@/integrations/drizzle-db'
+
+import { db, schema } from '@/database'
 
 interface GoogleIdToken {
 	iss: string

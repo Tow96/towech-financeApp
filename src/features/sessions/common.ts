@@ -2,7 +2,7 @@ import { subtle } from 'node:crypto'
 
 import { setCookie } from '@tanstack/react-start/server'
 import { eq } from 'drizzle-orm'
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const SESSION_COOKIE = 'session'
 export const INACTIVITY_TIMEOUT_SECONDS = 60 * 60 * 24 * 15 // 15 days

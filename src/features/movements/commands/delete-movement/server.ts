@@ -5,7 +5,7 @@ import { DeleteMovementSchema } from './dto'
 
 import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const deleteMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

@@ -7,7 +7,7 @@ import type { ListWalletItemDto, ListWalletsDto } from './dto'
 import { AuthorizationMiddleware } from '@/features/sessions/validate'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const getWalletTotals = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

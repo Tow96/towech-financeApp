@@ -7,7 +7,7 @@ import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/d
 import { AuthorizationMiddleware } from '@/features/sessions/validate'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

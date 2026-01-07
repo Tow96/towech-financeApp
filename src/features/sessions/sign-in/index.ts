@@ -2,7 +2,7 @@
 import { getRandomValues } from 'node:crypto'
 import { createIsomorphicFn } from '@tanstack/react-start'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 import { TOKEN_SEPARATOR, hashSecret, toHexString } from '@/features/sessions/common'
 

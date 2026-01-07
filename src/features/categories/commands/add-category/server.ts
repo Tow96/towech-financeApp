@@ -7,7 +7,7 @@ import type { CategoryType } from '@/features/categories/domain'
 import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
 import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const addCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

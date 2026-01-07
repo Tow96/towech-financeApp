@@ -10,7 +10,7 @@ import { convertAmountToCents } from '@/common/lib/utils'
 import { CategoryType } from '@/features/categories/domain'
 import { AuthorizationMiddleware } from '@/features/sessions/validate'
 
-import { db, schema } from '@/integrations/drizzle-db'
+import { db, schema } from '@/database'
 
 export const addMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
