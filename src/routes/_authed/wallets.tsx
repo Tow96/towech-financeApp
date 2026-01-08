@@ -1,35 +1,7 @@
-import { useState } from 'react'
-import { Plus } from 'lucide-react'
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
-import { Button } from '@/common/components/ui/button'
-
-import { AddWalletDialog } from '@/features/wallets/commands/add-wallet/client'
-import { WalletList, WalletsTotal } from '@/features/wallets/queries/list-wallets/client'
+import { WalletPage } from '@/ui/pages'
 
 export const Route = createFileRoute('/_authed/wallets')({
-	component: RouteComponent,
+	component: WalletPage,
 })
-
-function RouteComponent() {
-	const [openAdd, setOpenAdd] = useState(false)
-
-	return (
-		<>
-			<AddWalletDialog open={openAdd} setOpen={setOpenAdd} />
-			<Card className="m-4">
-				<CardHeader className="flex items-center flex-col-reverse gap-4 md:flex-row">
-					<WalletsTotal />
-					<Button className="w-full md:w-auto" onClick={() => setOpenAdd(true)}>
-						<Plus />
-						Add Wallet
-					</Button>
-				</CardHeader>
-				<CardContent>
-					<WalletList />
-				</CardContent>
-			</Card>
-		</>
-	)
-}

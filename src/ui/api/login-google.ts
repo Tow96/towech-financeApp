@@ -1,0 +1,102 @@
+import { eq } from 'drizzle-orm'
+import { decodeIdToken, generateCodeVerifier, generateState } from 'arctic'
+import { getCookie, setCookie } from '@tanstack/react-start/server'
+
+import type { OAuth2Tokens } from 'arctic'
+import type pino from 'pino' // TODO: Move to use a "customLogger object"
+
+import { generateSession } from '@/core/functions'
+import {
+	GOOGLE_CODE_VERIFIER_COOKIE,
+	GOOGLE_OAUTH_STATE_COOKIE,
+	generateSessionCookie,
+	googleAuth,
+} from '@/core/utils'
+import { db, schema } from '@/database'
+
+export const googleLogin = (): Response => {
+	const state = generateState()
+	const codeVerifier = generateCodeVerifier()
+	const url = googleAuth.createAuthorizationURL(state, codeVerifier, ['openid', 'profile'])
+
+	setCookie(GOOGLE_OAUTH_STATE_COOKIE, state, {
+		path: '/',
+		httpOnly: true,
+		secure: process.env.NODE_ENV !== 'development',
+		maxAge: 60 * 10, // 10 minutes
+		sameSite: 'lax',
+	})
+	setCookie(GOOGLE_CODE_VERIFIER_COOKIE, codeVerifier, {
+		path: '/',
+		httpOnly: true,
+		secure: process.env.NODE_ENV !== 'development',
+		maxAge: 60 * 10, // 10 minutes
+		sameSite: 'lax',
+	})
+
+	return new Response(null, {
+		status: 302,
+		headers: { Location: url.toString() },
+	})
+}
+
+interface GoogleIdToken {
+	iss: string
+	azp: string
+	aud: string
+	sub: string
+	at_hash: string
+	picture: string
+	name: string
+	given_name: string
+	family_name: string
+	iat: Date
+	exp: Date
+}
+
+export const googleLoginCallback = async (
+	request: Request,
+	logger: pino.Logger,
+): Promise<Response> => {
+	const url = new URL(request.url)
+	const code = url.searchParams.get('code')
+	const state = url.searchParams.get('state')
+
+	const storedState = getCookie(GOOGLE_OAUTH_STATE_COOKIE)
+	const codeVerifier = getCookie(GOOGLE_CODE_VERIFIER_COOKIE)
+	if (code === null || state === null || storedState === undefined || codeVerifier === undefined)
+		return new Response(null, { status: 400 })
+
+	if (state !== storedState) return new Response(null, { status: 400 })
+
+	let tokens: OAuth2Tokens
+	try {
+		tokens = await googleAuth.validateAuthorizationCode(code, codeVerifier)
+	} catch (e) {
+		return new Response(null, { status: 400 })
+	}
+
+	const claims = decodeIdToken(tokens.idToken()) as GoogleIdToken
+	const googleUserId = claims.sub
+	const username = claims.name
+
+	logger.info(`User with id: ${googleUserId} and name ${username} attempting to log in`)
+	const user = await db
+		.select({ id: schema.Users.id })
+		.from(schema.Users)
+		.where(eq(schema.Users.googleId, googleUserId))
+	if (user.length === 0)
+		return new Response(null, {
+			status: 302,
+			headers: { Location: '/login?unregistered=true' },
+		})
+
+	const session = await generateSession(user[0].id)
+	generateSessionCookie(session!.token)
+
+	return new Response(null, {
+		status: 302,
+		headers: { Location: '/' },
+	})
+}
+

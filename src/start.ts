@@ -1,6 +1,6 @@
 import { createStart } from '@tanstack/react-start'
 
-import { loggingMiddleware } from '@/features/logging/http-log.middleware'
+import { loggingMiddleware } from '@/core/functions'
 
 export const startInstance = createStart(() => {
 	return {

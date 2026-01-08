@@ -1,18 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Card, CardContent } from '@/common/components/ui/card'
-import { AllCategoryList } from '@/features/categories/queries/list-categories/client/all-category-list.tsx'
+import { CategoryPage } from '@/ui/pages'
 
 export const Route = createFileRoute('/_authed/categories')({
-	component: RouteComponent,
+	component: CategoryPage,
 })
-
-function RouteComponent() {
-	return (
-		<Card className="m-4">
-			<CardContent>
-				<AllCategoryList />
-			</CardContent>
-		</Card>
-	)
-}
