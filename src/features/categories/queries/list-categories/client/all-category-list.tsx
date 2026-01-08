@@ -6,24 +6,25 @@ import type { CategoryListItemDto } from '@/core/contracts'
 import { useCategoryList } from '@/ui/data-access'
 import { CategoryType } from '@/core/entities'
 
-import { Icon } from '@/common/components/icon'
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/common/components/ui/accordion'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
-import { capitalizeFirst, cn } from '@/common/lib/utils'
-
-import {
+	Button,
 	DropDrawer,
 	DropDrawerContent,
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
-} from '@/common/components/ui/dropdrawer'
-import { Button } from '@/common/components/ui/button'
+	Icon,
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/ui/components'
+import { capitalizeFirst, cn } from '@/ui/utils'
+
 import { EditCategoryDialog } from '@/features/categories/commands/edit-category/client'
 import { SetCategoryStatusDialog } from '@/features/categories/commands/set-category-status/client'
 import { AddCategoryDialog } from '@/features/categories/commands/add-category/client'

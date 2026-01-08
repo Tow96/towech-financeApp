@@ -1,9 +1,10 @@
 ﻿import { CalendarIcon } from 'lucide-react'
 
-import { Button } from '@/common/components/ui/button'
-import { Calendar } from '@/common/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/common/components/ui/popover'
-import { cn } from '@/common/lib/utils'
+import { Button } from './button'
+import { Calendar } from './calendar'
+import { Popover, PopoverContent, PopoverTrigger } from './popover'
+
+import { cn } from '@/ui/utils'
 
 interface DatepickerProps {
 	className?: string

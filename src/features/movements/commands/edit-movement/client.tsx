@@ -1,24 +1,24 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
-import { EditMovementSchema } from '@/core/contracts'
-
-import { FormDialog } from '@/common/components/form-dialog'
-import { convertCentsToAmount } from '@/common/lib/utils'
-
 import {
+	Datepicker,
 	FormControl,
+	FormDialog,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/common/components/ui/form'
-import { Input } from '@/common/components/ui/input'
+	Input,
+} from '@/ui/components'
+import { convertCentsToAmount } from '@/ui/utils'
+import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
+
+import { EditMovementSchema } from '@/core/contracts'
+
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
 import { CategoryType } from '@/core/entities'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
-import { Datepicker } from '@/common/components/datepicker'
 
 interface EditMovementDialogProps {
 	id: string

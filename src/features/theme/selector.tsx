@@ -1,6 +1,6 @@
 ﻿import { Moon, Sun } from 'lucide-react'
 
-import { Button } from '@/common/components/ui/button'
+import { Button } from '@/ui/components'
 import { useTheme } from '@/features/theme/provider'
 
 export const ThemeSelector = () => {
@@ -15,7 +15,7 @@ export const ThemeSelector = () => {
 	return (
 		<Button variant="secondary" onClick={selectNextTheme}>
 			<Sun className="light:inline system:light:inline hidden" />
-			<Moon className="dark:inline system:dark:inline hidden" />
+			<Moon className="system:dark:inline hidden dark:inline" />
 			<span className="system:inline hidden font-bold">Auto</span>
 		</Button>
 	)

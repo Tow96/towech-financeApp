@@ -3,21 +3,24 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { CategoryType } from '@/core/entities'
 
-import { useCategoryDetail, useEditCategoryMutation } from '@/ui/data-access'
-import { EditCategorySchema } from '@/core/contracts'
-
-import { FormDialog } from '@/common/components/form-dialog'
-import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
-import { IconSelector } from '@/common/components/icon-selector'
 import {
+	FormControl,
+	FormDialog,
+	FormField,
+	FormItem,
+	FormLabel,
+	IconSelector,
+	Input,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/common/components/ui/select'
-import { capitalizeFirst } from '@/common/lib/utils'
-import { Input } from '@/common/components/ui/input'
+} from '@/ui/components'
+import { capitalizeFirst } from '@/ui/utils'
+import { useCategoryDetail, useEditCategoryMutation } from '@/ui/data-access'
+
+import { EditCategorySchema } from '@/core/contracts'
 
 interface EditCategoryDialogProps {
 	type: CategoryType

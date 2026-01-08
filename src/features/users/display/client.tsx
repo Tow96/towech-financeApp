@@ -1,17 +1,20 @@
 import { LogOut } from 'lucide-react'
 import { redirect } from '@tanstack/react-router'
 
-import { useUserDetail } from '@/ui/data-access'
-
-import { SidebarMenu, SidebarMenuButton, useSidebar } from '@/common/components/ui/sidebar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar'
 import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
-} from '@/common/components/ui/dropdown-menu'
+	SidebarMenu,
+	SidebarMenuButton,
+	useSidebar,
+} from '@/ui/components'
+import { useUserDetail } from '@/ui/data-access'
 
 import { useSignOutMutation } from '@/features/sessions/sign-out'
 

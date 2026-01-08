@@ -1,9 +1,5 @@
 ﻿import { useState } from 'react'
 import { useController } from 'react-hook-form'
-import { Icon } from './icon'
-
-import type { ReactNode } from 'react'
-import type { Control } from 'react-hook-form'
 
 import {
 	Dialog,
@@ -12,7 +8,11 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/common/components/ui/dialog'
+} from './dialog'
+import { Icon } from './icon'
+
+import type { ReactNode } from 'react'
+import type { Control } from 'react-hook-form'
 
 const MAX_ICON_ID = 35
 const icons: Array<ReactNode> = []

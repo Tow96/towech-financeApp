@@ -1,8 +1,8 @@
 import { useCategoryDetail } from '@/ui/data-access'
 import { CategoryType } from '@/core/entities'
 
-import { Icon } from '@/common/components/icon'
-import { capitalizeFirst } from '@/common/lib/utils'
+import { Icon } from '@/ui/components'
+import { capitalizeFirst } from '@/ui/utils'
 
 interface CategoryDetailProps {
 	className?: string

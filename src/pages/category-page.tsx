@@ -1,4 +1,5 @@
-import { Card, CardContent } from '@/common/components/ui/card'
+import { Card, CardContent } from '@/ui/components'
+
 import { AllCategoryList } from '@/features/categories/queries/list-categories/client'
 
 export const CategoryPage = () => {

@@ -5,8 +5,8 @@ import { Link, Outlet, createFileRoute, redirect, useLocation } from '@tanstack/
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-import { Separator } from '@/common/components/ui/separator'
 import {
+	Separator,
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
@@ -20,8 +20,8 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 	getSidebarState,
-} from '@/common/components/ui/sidebar'
-import { capitalizeFirst, cn } from '@/common/lib/utils'
+} from '@/ui/components'
+import { capitalizeFirst, cn } from '@/ui/utils'
 
 import { ThemeSelector } from '@/features/theme'
 import { UserMenuButton } from '@/features/users/display/client'

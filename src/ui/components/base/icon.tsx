@@ -1,4 +1,4 @@
-﻿import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar'
+﻿import { Avatar, AvatarFallback, AvatarImage } from './avatar'
 
 interface IconProps {
 	className?: string

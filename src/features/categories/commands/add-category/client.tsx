@@ -1,22 +1,24 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useAddCategoryMutation } from '@/ui/data-access'
-
-import { AddCategorySchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
-
-import { FormDialog } from '@/common/components/form-dialog'
-import { IconSelector } from '@/common/components/icon-selector'
-import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
 import {
+	FormControl,
+	FormDialog,
+	FormField,
+	FormItem,
+	FormLabel,
+	IconSelector,
+	Input,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/common/components/ui/select'
-import { Input } from '@/common/components/ui/input'
+} from '@/ui/components'
+import { useAddCategoryMutation } from '@/ui/data-access'
+
+import { AddCategorySchema } from '@/core/contracts'
+import { CategoryType } from '@/core/entities'
 
 interface AddCategoryDialogProps {
 	open: boolean

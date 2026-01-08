@@ -1,8 +1,7 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
-import { Button } from '@/common/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
+import { Button, Card, CardContent, CardHeader } from '@/ui/components'
 
 import { AddWalletDialog } from '@/features/wallets/commands/add-wallet/client'
 import { WalletList, WalletsTotal } from '@/features/wallets/queries/list-wallets/client'

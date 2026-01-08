@@ -1,9 +1,7 @@
 import { ArrowBigLeft, ArrowBigRight, CalendarIcon } from 'lucide-react'
 
-import { Button } from '@/common/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/common/components/ui/popover'
-import { cn } from '@/common/lib/utils'
-import { MonthPicker } from '@/common/components/ui/monthpicker'
+import { Button, MonthPicker, Popover, PopoverContent, PopoverTrigger } from '@/ui/components'
+import { cn } from '@/ui/utils'
 
 // TODO: Remove state drilling
 interface PeriodSelectorProps {

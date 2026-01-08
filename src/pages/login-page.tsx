@@ -2,8 +2,7 @@ import { AlertCircleIcon } from 'lucide-react'
 
 import type { JSX, SVGProps } from 'react'
 
-import { Alert, AlertDescription, AlertTitle } from '@/common/components/ui/alert'
-import { Button } from '@/common/components/ui/button'
+import { Alert, AlertDescription, AlertTitle, Button } from '@/ui/components'
 
 const GoogleIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
 	<svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -44,4 +43,3 @@ export const LoginPage = ({ unregistered }: LoginPageProps) => {
 		</div>
 	)
 }
-

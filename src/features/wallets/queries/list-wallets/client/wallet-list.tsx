@@ -3,19 +3,18 @@ import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
 import type { ListWalletItemDto } from '@/core/contracts'
 
-import { useWallets } from '@/ui/data-access'
-
-import { Button } from '@/common/components/ui/button'
 import {
+	Button,
 	DropDrawer,
 	DropDrawerContent,
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
-} from '@/common/components/ui/dropdrawer'
-import { Skeleton } from '@/common/components/ui/skeleton'
-import { Icon } from '@/common/components/icon'
-import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
+	Icon,
+	Skeleton,
+} from '@/ui/components'
+import { useWallets } from '@/ui/data-access'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/ui/utils'
 
 import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client'
 import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client'

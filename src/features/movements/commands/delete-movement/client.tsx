@@ -1,10 +1,10 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { FormDialog } from '@/ui/components'
 import { useDeleteMovementMutation } from '@/ui/data-access'
-import { DeleteMovementSchema } from '@/core/contracts'
 
-import { FormDialog } from '@/common/components/form-dialog'
+import { DeleteMovementSchema } from '@/core/contracts'
 
 interface DeleteMovementDialogProps {
 	id: string

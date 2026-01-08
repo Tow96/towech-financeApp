@@ -1,6 +1,6 @@
-import { convertCentsToCurrencyString } from '@/common/lib/utils'
-
 import { useMovements } from '@/ui/data-access'
+import { convertCentsToCurrencyString } from '@/ui/utils'
+
 import { CategoryType } from '@/core/entities'
 
 interface PeriodSummaryProps {

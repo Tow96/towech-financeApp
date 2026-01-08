@@ -1,8 +1,7 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
-import { Button } from '@/common/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/common/components/ui/card'
+import { Button, Card, CardContent, CardHeader } from '@/ui/components'
 
 import { PeriodSelector, PeriodSummary } from '@/features/movements/queries/list-movements/client'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
@@ -37,4 +36,3 @@ export const DashboardPage = () => {
 		</Card>
 	)
 }
-

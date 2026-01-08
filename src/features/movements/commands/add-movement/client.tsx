@@ -1,19 +1,19 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useAddMovementMutation } from '@/ui/data-access'
-import { AddMovementSchema } from '@/core/contracts'
-
 import {
+	Datepicker,
 	FormControl,
+	FormDialog,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/common/components/ui/form'
-import { FormDialog } from '@/common/components/form-dialog'
-import { Input } from '@/common/components/ui/input'
-import { Datepicker } from '@/common/components/datepicker'
+	Input,
+} from '@/ui/components'
+import { useAddMovementMutation } from '@/ui/data-access'
+
+import { AddMovementSchema } from '@/core/contracts'
 
 import { CategoryType } from '@/core/entities'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'

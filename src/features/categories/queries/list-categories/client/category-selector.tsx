@@ -1,17 +1,19 @@
 import { useState } from 'react'
 
-import { useCategoryList } from '@/ui/data-access'
-
 import {
+	Icon,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/common/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
-import { Icon } from '@/common/components/icon'
-import { capitalizeFirst } from '@/common/lib/utils'
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/ui/components'
+import { useCategoryList } from '@/ui/data-access'
+import { capitalizeFirst } from '@/ui/utils'
 
 import { CategoryType } from '@/core/entities'
 

@@ -3,19 +3,19 @@ import { ArrowBigRight, EllipsisVertical, Pencil, Trash } from 'lucide-react'
 
 import type { ListMovementItemDto } from '@/core/contracts'
 
-import { useMovements } from '@/ui/data-access'
-
-import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
-import { Button } from '@/common/components/ui/button'
 import {
+	Button,
 	DropDrawer,
 	DropDrawerContent,
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
-} from '@/common/components/ui/dropdrawer'
+} from '@/ui/components'
+import { useMovements } from '@/ui/data-access'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/ui/utils'
 
 import { CategoryType } from '@/core/entities'
+
 import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail-category/client'
 import { WalletIcon } from '@/features/wallets/queries/detail-wallet/client'
 import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client'

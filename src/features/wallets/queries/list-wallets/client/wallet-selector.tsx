@@ -1,16 +1,15 @@
 import { useState } from 'react'
 
-import { useWallets } from '@/ui/data-access'
-
 import {
+	Icon,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/common/components/ui/select'
-import { Icon } from '@/common/components/icon'
-import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
+} from '@/ui/components'
+import { useWallets } from '@/ui/data-access'
+import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/ui/utils'
 
 interface WalletSelectorProps {
 	className?: string

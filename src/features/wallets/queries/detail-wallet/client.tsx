@@ -1,6 +1,6 @@
 import { useWalletDetail } from '@/ui/data-access'
 
-import { Icon } from '@/common/components/icon'
+import { Icon } from '@/ui/components'
 
 interface WalletDetailProps {
 	className?: string

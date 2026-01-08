@@ -1,10 +1,10 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { FormDialog } from '@/ui/components'
 import { useSetCategoryStatusMutation } from '@/ui/data-access'
-import { SetCategoryStatusSchema } from '@/core/contracts'
 
-import { FormDialog } from '@/common/components/form-dialog'
+import { SetCategoryStatusSchema } from '@/core/contracts'
 
 interface SetCategoryStatusProps {
 	id: string

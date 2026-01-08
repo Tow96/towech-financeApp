@@ -1,14 +1,18 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import {
+	FormControl,
+	FormDialog,
+	FormField,
+	FormItem,
+	FormLabel,
+	IconSelector,
+	Input,
+} from '@/ui/components'
 import { useAddWalletMutation } from '@/ui/data-access'
 
 import { AddWalletSchema } from '@/core/contracts'
-
-import { FormDialog } from '@/common/components/form-dialog'
-import { Input } from '@/common/components/ui/input'
-import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
-import { IconSelector } from '@/common/components/icon-selector'
 
 interface AddWalletDialogProps {
 	open: boolean

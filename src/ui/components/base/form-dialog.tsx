@@ -1,10 +1,7 @@
-﻿import { Loader2Icon } from 'lucide-react'
-import { ErrorBox } from './error-box'
+﻿import { AlertCircleIcon, Loader2Icon } from 'lucide-react'
 
-import type { ReactNode } from 'react'
-import type { UseFormReturn } from 'react-hook-form'
-
-import { Button } from '@/common/components/ui/button'
+import { Alert, AlertDescription, AlertTitle } from './alert'
+import { Button } from './button'
 import {
 	Dialog,
 	DialogClose,
@@ -13,8 +10,11 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from '@/common/components/ui/dialog'
-import { Form } from '@/common/components/ui/form'
+} from './dialog'
+import { Form } from './form'
+
+import type { ReactNode } from 'react'
+import type { UseFormReturn } from 'react-hook-form'
 
 interface FormDialogProps {
 	open: boolean
@@ -61,5 +61,22 @@ export const FormDialog = (props: FormDialogProps) => {
 				</Form>
 			</DialogContent>
 		</Dialog>
+	)
+}
+
+interface ErrorBoxProps {
+	className?: string
+	title: string
+	error: Error | null
+}
+const ErrorBox = (props: ErrorBoxProps) => {
+	const message = props.error?.message || ''
+
+	return (
+		<Alert variant="destructive" className={props.className}>
+			<AlertCircleIcon />
+			<AlertTitle>{props.title}</AlertTitle>
+			<AlertDescription>{message}</AlertDescription>
+		</Alert>
 	)
 }

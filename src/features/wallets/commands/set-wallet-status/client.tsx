@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { FormDialog } from '@/ui/components'
 import { useSetWalletStatusMutation } from '@/ui/data-access'
-import { SetWalletStatusSchema } from '@/core/contracts'
 
-import { FormDialog } from '@/common/components/form-dialog'
+import { SetWalletStatusSchema } from '@/core/contracts'
 
 interface SetWalletStatusProps {
 	id: string
