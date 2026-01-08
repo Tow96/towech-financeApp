@@ -3,6 +3,8 @@ import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
 import type { ListWalletItemDto } from '@/core/contracts'
 
+import { useWallets } from '@/ui/data-access'
+
 import { Button } from '@/common/components/ui/button'
 import {
 	DropDrawer,
@@ -17,10 +19,9 @@ import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/
 
 import { SetWalletStatusDialog } from '@/features/wallets/commands/set-wallet-status/client'
 import { EditWalletDialog } from '@/features/wallets/commands/edit-wallets/client'
-import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store'
 
 export const WalletsTotal = () => {
-	const { data, isPending } = useWalletsTotal()
+	const { data, isPending } = useWallets()
 	return (
 		<span className="flex w-full flex-1 items-center text-2xl">
 			Total:{' '}
@@ -34,7 +35,7 @@ export const WalletsTotal = () => {
 }
 
 export const WalletList = () => {
-	const { data } = useWalletsTotal()
+	const { data } = useWallets()
 
 	return (
 		<div className="max-h-[70vh] overflow-y-auto">

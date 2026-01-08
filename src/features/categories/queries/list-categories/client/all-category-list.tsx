@@ -3,6 +3,9 @@ import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil, Plus } from 'luc
 
 import type { CategoryListItemDto } from '@/core/contracts'
 
+import { useCategoryList } from '@/ui/data-access'
+import { CategoryType } from '@/core/entities'
+
 import { Icon } from '@/common/components/icon'
 import {
 	Accordion,
@@ -13,8 +16,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 
-import { CategoryType } from '@/core/entities'
-import { AddCategoryDialog } from '@/features/categories/commands/add-category/client'
 import {
 	DropDrawer,
 	DropDrawerContent,
@@ -25,7 +26,7 @@ import {
 import { Button } from '@/common/components/ui/button'
 import { EditCategoryDialog } from '@/features/categories/commands/edit-category/client'
 import { SetCategoryStatusDialog } from '@/features/categories/commands/set-category-status/client'
-import { useCategoryList } from '@/features/categories/queries/list-categories/client/query-store'
+import { AddCategoryDialog } from '@/features/categories/commands/add-category/client'
 
 export const AllCategoryList = () => {
 	const [openAdd, setOpenAdd] = useState(false)

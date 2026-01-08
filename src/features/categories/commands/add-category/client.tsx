@@ -1,11 +1,11 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+
+import { useAddCategoryMutation } from '@/ui/data-access'
 
 import { AddCategorySchema } from '@/core/contracts'
-import { addCategory } from '@/core/functions'
-
 import { CategoryType } from '@/core/entities'
+
 import { FormDialog } from '@/common/components/form-dialog'
 import { IconSelector } from '@/common/components/icon-selector'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
@@ -17,17 +17,6 @@ import {
 	SelectValue,
 } from '@/common/components/ui/select'
 import { Input } from '@/common/components/ui/input'
-import { categoryKeys } from '@/features/categories/store-keys'
-
-const useAddCategoryMutation = () => {
-	return useMutation({
-		mutationFn: (data: AddCategorySchema) => addCategory({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
-			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)
-		},
-	})
-}
 
 interface AddCategoryDialogProps {
 	open: boolean

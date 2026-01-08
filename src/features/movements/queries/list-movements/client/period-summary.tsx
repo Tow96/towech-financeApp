@@ -1,7 +1,7 @@
 import { convertCentsToCurrencyString } from '@/common/lib/utils'
 
+import { useMovements } from '@/ui/data-access'
 import { CategoryType } from '@/core/entities'
-import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store'
 
 interface PeriodSummaryProps {
 	selectedWalletId: string | undefined
@@ -9,7 +9,7 @@ interface PeriodSummaryProps {
 }
 
 export const PeriodSummary = (props: PeriodSummaryProps) => {
-	const movements = usePeriodMovements(props.selectedWalletId, props.periodStart)
+	const movements = useMovements(props.selectedWalletId, props.periodStart)
 
 	// This should be converted to a tanStack selector instead
 	const inMoney = (movements.data ?? [])

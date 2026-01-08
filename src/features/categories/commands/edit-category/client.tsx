@@ -1,11 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
 import type { CategoryType } from '@/core/entities'
 
+import { useCategoryDetail, useEditCategoryMutation } from '@/ui/data-access'
 import { EditCategorySchema } from '@/core/contracts'
-import { editCategory } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
@@ -19,18 +18,6 @@ import {
 } from '@/common/components/ui/select'
 import { capitalizeFirst } from '@/common/lib/utils'
 import { Input } from '@/common/components/ui/input'
-import { categoryKeys } from '@/features/categories/store-keys'
-import { useCategoryDetail } from '@/features/categories/queries/detail-category/client'
-
-const useEditCategoryMutation = () => {
-	return useMutation({
-		mutationFn: (data: EditCategorySchema) => editCategory({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
-			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)
-		},
-	})
-}
 
 interface EditCategoryDialogProps {
 	type: CategoryType

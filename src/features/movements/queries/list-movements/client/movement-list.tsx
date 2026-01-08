@@ -3,6 +3,8 @@ import { ArrowBigRight, EllipsisVertical, Pencil, Trash } from 'lucide-react'
 
 import type { ListMovementItemDto } from '@/core/contracts'
 
+import { useMovements } from '@/ui/data-access'
+
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 import { Button } from '@/common/components/ui/button'
 import {
@@ -15,7 +17,6 @@ import {
 
 import { CategoryType } from '@/core/entities'
 import { CategoryIcon, CategoryName } from '@/features/categories/queries/detail-category/client'
-import { usePeriodMovements } from '@/features/movements/queries/list-movements/client/query-store'
 import { WalletIcon } from '@/features/wallets/queries/detail-wallet/client'
 import { DeleteMovementDialog } from '@/features/movements/commands/delete-movement/client'
 import { EditMovementDialog } from '@/features/movements/commands/edit-movement/client'
@@ -26,7 +27,7 @@ interface PeriodMovementListProps {
 }
 
 export const PeriodMovementList = (props: PeriodMovementListProps) => {
-	const movements = usePeriodMovements(props.selectedWalletId, props.periodStart)
+	const movements = useMovements(props.selectedWalletId, props.periodStart)
 
 	return (
 		<div>

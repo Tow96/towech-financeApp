@@ -1,9 +1,8 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
+import { useAddMovementMutation } from '@/ui/data-access'
 import { AddMovementSchema } from '@/core/contracts'
-import { addMovement } from '@/core/functions'
 
 import {
 	FormControl,
@@ -18,22 +17,7 @@ import { Datepicker } from '@/common/components/datepicker'
 
 import { CategoryType } from '@/core/entities'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
-import { movementKeys } from '@/features/movements/store-keys'
-import { walletKeys } from '@/features/wallets/store-keys'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
-
-const useAddMovementMutation = () => {
-	return useMutation({
-		mutationFn: async (data: AddMovementSchema) => addMovement({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await Promise.all([
-				context.client.invalidateQueries({ queryKey: walletKeys.all }),
-				context.client.invalidateQueries({ queryKey: movementKeys.lists() }),
-			])
-			context.client.setQueryData(movementKeys.detail(result.id), result)
-		},
-	})
-}
 
 interface AddMovementDialogProps {
 	open: boolean

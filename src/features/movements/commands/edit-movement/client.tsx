@@ -1,15 +1,12 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
+import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
 import { EditMovementSchema } from '@/core/contracts'
-import { editMovement } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { convertCentsToAmount } from '@/common/lib/utils'
-import { walletKeys } from '@/features/wallets/store-keys'
-import { movementKeys } from '@/features/movements/store-keys'
-import { useMovementDetail } from '@/features/movements/queries/detail-movement/client'
+
 import {
 	FormControl,
 	FormField,
@@ -22,19 +19,6 @@ import { CategorySelector } from '@/features/categories/queries/list-categories/
 import { CategoryType } from '@/core/entities'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
 import { Datepicker } from '@/common/components/datepicker'
-
-const useEditMovementMutation = () => {
-	return useMutation({
-		mutationFn: (data: EditMovementSchema) => editMovement({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await Promise.all([
-				context.client.invalidateQueries({ queryKey: walletKeys.all }),
-				context.client.invalidateQueries({ queryKey: movementKeys.all }),
-			])
-			context.client.setQueryData(movementKeys.detail(result.id), result)
-		},
-	})
-}
 
 interface EditMovementDialogProps {
 	id: string

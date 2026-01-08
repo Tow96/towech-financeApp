@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useWallets } from '@/ui/data-access'
+
 import {
 	Select,
 	SelectContent,
@@ -9,8 +11,6 @@ import {
 } from '@/common/components/ui/select'
 import { Icon } from '@/common/components/icon'
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
-
-import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/query-store'
 
 interface WalletSelectorProps {
 	className?: string
@@ -22,7 +22,7 @@ interface WalletSelectorProps {
 }
 
 export const WalletSelector = (props: WalletSelectorProps) => {
-	const wallets = useWalletsTotal()
+	const wallets = useWallets()
 	const [internalValue, setInternalValue] = useState<string | undefined>(
 		props.showTotal ? 'total' : undefined,
 	)

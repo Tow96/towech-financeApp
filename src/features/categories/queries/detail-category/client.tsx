@@ -1,19 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { useCategoryDetail } from '@/ui/data-access'
 import { CategoryType } from '@/core/entities'
-import { getCategoryDetail } from '@/core/functions'
 
 import { Icon } from '@/common/components/icon'
-import { categoryKeys } from '@/features/categories/store-keys'
 import { capitalizeFirst } from '@/common/lib/utils'
-
-export const useCategoryDetail = (type: CategoryType, id: string, subId?: string) => {
-	return useQuery({
-		queryKey: categoryKeys.detail(type, id, subId ?? null),
-		staleTime: 60000,
-		queryFn: () => getCategoryDetail({ data: { id, subId } }),
-	})
-}
 
 interface CategoryDetailProps {
 	className?: string

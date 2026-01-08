@@ -1,4 +1,5 @@
 import { CircleDot, Layers2, Wallet } from 'lucide-react'
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 
 import { Link, Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
 import { TanStackDevtools } from '@tanstack/react-devtools'
@@ -21,8 +22,6 @@ import {
 	getSidebarState,
 } from '@/common/components/ui/sidebar'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
-
-import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
 import { ThemeSelector } from '@/features/theme'
 import { UserMenuButton } from '@/features/users/display/client'
@@ -63,7 +62,7 @@ function AuthedComponent() {
 							config={{ position: 'bottom-right' }}
 							plugins={[
 								{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-								TanStackQueryDevtools,
+								{ name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
 							]}
 						/>
 					)}

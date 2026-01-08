@@ -1,8 +1,7 @@
 import { LogOut } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
 import { redirect } from '@tanstack/react-router'
 
-import { getUser } from '@/core/functions'
+import { useUserDetail } from '@/ui/data-access'
 
 import { SidebarMenu, SidebarMenuButton, useSidebar } from '@/common/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar'
@@ -15,17 +14,6 @@ import {
 } from '@/common/components/ui/dropdown-menu'
 
 import { useSignOutMutation } from '@/features/sessions/sign-out'
-
-import { DEFAULT_STALE_TIME } from '@/integrations/tanstack-query/defaults'
-
-export const useUserDetail = () => {
-	return useQuery({
-		queryKey: ['user', 'detail'],
-		staleTime: DEFAULT_STALE_TIME,
-		gcTime: 1000, // If there are no watchers, it's very likely the user signed out
-		queryFn: () => getUser(),
-	})
-}
 
 export const UserMenuButton = () => {
 	const mockId = import.meta.env.VITE_MOCK_USER_ID

@@ -1,22 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
+import { useSetWalletStatusMutation } from '@/ui/data-access'
 import { SetWalletStatusSchema } from '@/core/contracts'
-import { setWalletStatus } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
-import { walletKeys } from '@/features/wallets/store-keys'
-
-const useSetWalletStatusMutation = () => {
-	return useMutation({
-		mutationFn: (data: SetWalletStatusSchema) => setWalletStatus({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
-			context.client.setQueryData(walletKeys.detail(result.id), result)
-		},
-	})
-}
 
 interface SetWalletStatusProps {
 	id: string

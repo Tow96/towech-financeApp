@@ -1,26 +1,14 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+
+import { useEditWalletMutation, useWalletDetail } from '@/ui/data-access'
 
 import { EditWalletSchema } from '@/core/contracts'
-import { editWallet } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { IconSelector } from '@/common/components/icon-selector'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
 import { Input } from '@/common/components/ui/input'
-import { walletKeys } from '@/features/wallets/store-keys'
-import { useWalletDetail } from '@/features/wallets/queries/detail-wallet/client'
-
-const useEditWalletMutation = () => {
-	return useMutation({
-		mutationFn: (data: EditWalletSchema) => editWallet({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
-			context.client.setQueryData(walletKeys.detail(result.id), result)
-		},
-	})
-}
 
 interface EditWalletDialogProps {
 	id: string

@@ -1,22 +1,10 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
+import { useSetCategoryStatusMutation } from '@/ui/data-access'
 import { SetCategoryStatusSchema } from '@/core/contracts'
-import { setCategoryStatus } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
-import { categoryKeys } from '@/features/categories/store-keys'
-
-const useSetCategoryStatusMutation = () => {
-	return useMutation({
-		mutationFn: (data: SetCategoryStatusSchema) => setCategoryStatus({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
-			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)
-		},
-	})
-}
 
 interface SetCategoryStatusProps {
 	id: string

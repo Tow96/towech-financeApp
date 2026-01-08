@@ -1,25 +1,14 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+
+import { useAddWalletMutation } from '@/ui/data-access'
 
 import { AddWalletSchema } from '@/core/contracts'
-import { addWallet } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { Input } from '@/common/components/ui/input'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
 import { IconSelector } from '@/common/components/icon-selector'
-import { walletKeys } from '@/features/wallets/store-keys'
-
-const useAddWalletMutation = () => {
-	return useMutation({
-		mutationFn: (data: AddWalletSchema) => addWallet({ data }),
-		onSuccess: async (result, _, __, context) => {
-			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
-			context.client.setQueryData(walletKeys.detail(result.id), result)
-		},
-	})
-}
 
 interface AddWalletDialogProps {
 	open: boolean

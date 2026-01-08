@@ -1,17 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-
-import { getWalletDetail } from '@/core/functions'
+import { useWalletDetail } from '@/ui/data-access'
 
 import { Icon } from '@/common/components/icon'
-import { walletKeys } from '@/features/wallets/store-keys'
-
-export const useWalletDetail = (id: string) => {
-	return useQuery({
-		queryKey: walletKeys.detail(id),
-		staleTime: 60000,
-		queryFn: () => getWalletDetail({ data: { id } }),
-	})
-}
 
 interface WalletDetailProps {
 	className?: string

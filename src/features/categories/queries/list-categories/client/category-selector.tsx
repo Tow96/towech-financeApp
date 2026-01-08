@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useCategoryList } from '@/ui/data-access'
+
 import {
 	Select,
 	SelectContent,
@@ -12,7 +14,6 @@ import { Icon } from '@/common/components/icon'
 import { capitalizeFirst } from '@/common/lib/utils'
 
 import { CategoryType } from '@/core/entities'
-import { useCategoryList } from '@/features/categories/queries/list-categories/client/query-store'
 
 interface CategorySelectorValue {
 	type: CategoryType

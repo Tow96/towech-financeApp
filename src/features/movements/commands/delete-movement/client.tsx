@@ -1,26 +1,10 @@
 ﻿import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 
+import { useDeleteMovementMutation } from '@/ui/data-access'
 import { DeleteMovementSchema } from '@/core/contracts'
-import { deleteMovement } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
-import { movementKeys } from '@/features/movements/store-keys'
-import { walletKeys } from '@/features/wallets/store-keys'
-
-const useDeleteMovementMutation = () => {
-	return useMutation({
-		mutationFn: (data: DeleteMovementSchema) => deleteMovement({ data }),
-		onSuccess: async (_, data, __, context) => {
-			await Promise.all([
-				context.client.invalidateQueries({ queryKey: walletKeys.all }),
-				context.client.invalidateQueries({ queryKey: movementKeys.lists() }),
-				context.client.invalidateQueries({ queryKey: movementKeys.detail(data.id) }),
-			])
-		},
-	})
-}
 
 interface DeleteMovementDialogProps {
 	id: string
