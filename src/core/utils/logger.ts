@@ -1,4 +1,5 @@
-﻿import createLogger from 'pino'
+import createLogger from 'pino'
+
 import type { TransportSingleOptions } from 'pino'
 
 const PrettyTransport: TransportSingleOptions = {
@@ -23,3 +24,4 @@ export const createCustomLogger = (name: string, correlationId?: string) => {
 
 	return logger.child({ name, correlationId })
 }
+

@@ -1,4 +1,4 @@
-﻿import { createCustomLogger } from './logger'
+import { createCustomLogger } from './logger'
 
 const logger = createCustomLogger('unbound')
 
@@ -7,3 +7,4 @@ console.error = logger.error.bind(logger)
 console.info = logger.info.bind(logger)
 console.debug = logger.debug.bind(logger)
 console.warn = logger.warn.bind(logger)
+

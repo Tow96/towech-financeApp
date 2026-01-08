@@ -1,7 +1,7 @@
-﻿import { v4 as uuidV4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { createMiddleware } from '@tanstack/react-start'
 
-import { createCustomLogger } from '@/integrations/pino'
+import { createCustomLogger } from '@/core/utils'
 
 const CORRELATION_ID_HEADER = 'X-Correlation-Id'
 
@@ -20,3 +20,4 @@ export const loggingMiddleware = createMiddleware().server(async ({ next }) => {
 	result.response.headers.set(CORRELATION_ID_HEADER, corrId)
 	return result
 })
+
