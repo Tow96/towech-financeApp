@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui/tabs'
 import { capitalizeFirst, cn } from '@/common/lib/utils'
 
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 import { AddCategoryDialog } from '@/features/categories/commands/add-category/client'
 import {
 	DropDrawer,

@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 
 import type { WalletDetailDto } from '@/core/contracts'
 
-import { FetchWalletMoneySql } from '@/features/wallets/domain'
+import { FetchWalletMoneySql } from '@/core/utils'
 
 import { GetWalletDetailSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'

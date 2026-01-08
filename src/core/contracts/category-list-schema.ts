@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod'
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 
 export type CategoryListItemDto =
 	// top category

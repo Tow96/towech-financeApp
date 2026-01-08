@@ -19,7 +19,7 @@ import {
 } from '@/common/components/ui/form'
 import { Input } from '@/common/components/ui/input'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'
 import { Datepicker } from '@/common/components/datepicker'
 

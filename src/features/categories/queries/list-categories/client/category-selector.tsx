@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/common/components/ui
 import { Icon } from '@/common/components/icon'
 import { capitalizeFirst } from '@/common/lib/utils'
 
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 import { useCategoryList } from '@/features/categories/queries/list-categories/client/query-store'
 
 interface CategorySelectorValue {

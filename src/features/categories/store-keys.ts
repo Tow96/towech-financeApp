@@ -1,4 +1,4 @@
-﻿import type { CategoryType } from '@/features/categories/domain'
+﻿import type { CategoryType } from '@/core/entities'
 
 export const categoryKeys = {
 	all: ['categories'] as const,

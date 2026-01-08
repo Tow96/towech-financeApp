@@ -5,7 +5,7 @@ import type { ListWalletItemDto, ListWalletsDto } from '@/core/contracts'
 
 import { GetWalletTotalsSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
-import { FetchWalletMoneySql } from '@/features/wallets/domain'
+import { FetchWalletMoneySql } from '@/core/utils'
 
 import { db, schema } from '@/database'
 

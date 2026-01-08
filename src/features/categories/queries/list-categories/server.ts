@@ -1,7 +1,7 @@
 ﻿import { and, eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { CategoryType } from '@/features/categories/domain'
+import type { CategoryType } from '@/core/entities'
 
 import type { CategoryListItemDto } from '@/core/contracts'
 

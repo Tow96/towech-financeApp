@@ -1,6 +1,6 @@
 ﻿import { z } from 'zod'
 
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 
 export const AddMovementSchema = z
 	.object({
@@ -15,7 +15,12 @@ export const AddMovementSchema = z
 			id: z.uuid().nullable(),
 			subId: z.uuid().nullable(),
 		}),
-		amount: z.string().regex(/^(?:\d{1,3}(?:,\d{3})*(?:\.\d{0,2})?|\.\d{1,2})$/, 'Must be a number with up to two decimal places'),
+		amount: z
+			.string()
+			.regex(
+				/^(?:\d{1,3}(?:,\d{3})*(?:\.\d{0,2})?|\.\d{1,2})$/,
+				'Must be a number with up to two decimal places',
+			),
 		wallet: z.object({
 			originId: z.uuid().optional(),
 			destinationId: z.uuid().optional(),

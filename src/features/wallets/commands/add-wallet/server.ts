@@ -2,7 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto'
+import type { WalletDetailDto } from '@/core/contracts'
 
 import { AddWalletSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'

@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { editCategory } from './server'
-import type { CategoryType } from '@/features/categories/domain'
+import type { CategoryType } from '@/core/entities'
 
 import { EditCategorySchema } from '@/core/contracts'
 

@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { addCategory } from './server'
 import { AddCategorySchema } from '@/core/contracts'
 
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 import { FormDialog } from '@/common/components/form-dialog'
 import { IconSelector } from '@/common/components/icon-selector'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'

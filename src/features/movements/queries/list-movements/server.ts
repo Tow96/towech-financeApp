@@ -1,7 +1,7 @@
 import { and, desc, eq, gte, lt } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { CategoryType } from '@/features/categories/domain'
+import type { CategoryType } from '@/core/entities'
 import type { ListMovementItemDto } from '@/core/contracts'
 
 import { GetMovementListSchema } from '@/core/contracts'

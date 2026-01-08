@@ -15,7 +15,7 @@ import { FormDialog } from '@/common/components/form-dialog'
 import { Input } from '@/common/components/ui/input'
 import { Datepicker } from '@/common/components/datepicker'
 
-import { CategoryType } from '@/features/categories/domain'
+import { CategoryType } from '@/core/entities'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
 import { addMovement } from '@/features/movements/commands/add-movement/server'
 import { movementKeys } from '@/features/movements/store-keys'

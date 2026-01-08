@@ -1,8 +1,8 @@
 ﻿import { and, eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { CategoryType } from '@/features/categories/domain'
-import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
+import type { CategoryType } from '@/core/entities'
+import type { CategoryDetailDto } from '@/core/contracts'
 
 import { SetCategoryStatusSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import type { CategoryType } from '@/features/categories/domain'
+import type { CategoryType } from '@/core/entities'
 import { categoryKeys } from '@/features/categories/store-keys'
 import { getCategoriesByType } from '@/features/categories/queries/list-categories/server'
 
