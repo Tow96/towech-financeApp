@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import type { CategoryType } from '@/core/entities'
+import { getCategoriesByType } from '@/core/functions'
+
 import { categoryKeys } from '@/features/categories/store-keys'
-import { getCategoriesByType } from '@/features/categories/queries/list-categories/server'
 
 export const useCategoryList = (type: CategoryType) => {
 	return useQuery({

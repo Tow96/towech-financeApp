@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { getWalletDetail } from './server'
+import { getWalletDetail } from '@/core/functions'
 
 import { Icon } from '@/common/components/icon'
 import { walletKeys } from '@/features/wallets/store-keys'

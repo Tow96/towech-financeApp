@@ -3,10 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { EditMovementSchema } from '@/core/contracts'
+import { editMovement } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { convertCentsToAmount } from '@/common/lib/utils'
-import { editMovement } from '@/features/movements/commands/edit-movement/server'
 import { walletKeys } from '@/features/wallets/store-keys'
 import { movementKeys } from '@/features/movements/store-keys'
 import { useMovementDetail } from '@/features/movements/queries/detail-movement/client'

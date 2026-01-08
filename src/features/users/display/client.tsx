@@ -2,6 +2,8 @@ import { LogOut } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { redirect } from '@tanstack/react-router'
 
+import { getUser } from '@/core/functions'
+
 import { SidebarMenu, SidebarMenuButton, useSidebar } from '@/common/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar'
 import {
@@ -12,7 +14,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/common/components/ui/dropdown-menu'
 
-import { getUser } from '@/features/users/display/server'
 import { useSignOutMutation } from '@/features/sessions/sign-out'
 
 import { DEFAULT_STALE_TIME } from '@/integrations/tanstack-query/defaults'

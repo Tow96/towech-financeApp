@@ -1,15 +1,16 @@
 import { and, desc, eq, gte, lt } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
+import { AuthorizationMiddleware } from './session-validate'
+
 import type { CategoryType } from '@/core/entities'
 import type { ListMovementItemDto } from '@/core/contracts'
 
 import { GetMovementListSchema } from '@/core/contracts'
-import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 
-export const getPeriodMovementList = createServerFn({ method: 'GET' })
+export const getMovementList = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(GetMovementListSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {

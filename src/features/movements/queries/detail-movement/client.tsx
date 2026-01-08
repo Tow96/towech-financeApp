@@ -1,6 +1,6 @@
 ﻿import { useQuery } from '@tanstack/react-query'
 
-import { getMovementDetail } from './server'
+import { getMovementDetail } from '@/core/functions'
 
 import { movementKeys } from '@/features/movements/store-keys'
 

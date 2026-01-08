@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { AddMovementSchema } from '@/core/contracts'
+import { addMovement } from '@/core/functions'
 
 import {
 	FormControl,
@@ -17,7 +18,6 @@ import { Datepicker } from '@/common/components/datepicker'
 
 import { CategoryType } from '@/core/entities'
 import { CategorySelector } from '@/features/categories/queries/list-categories/client'
-import { addMovement } from '@/features/movements/commands/add-movement/server'
 import { movementKeys } from '@/features/movements/store-keys'
 import { walletKeys } from '@/features/wallets/store-keys'
 import { WalletSelector } from '@/features/wallets/queries/list-wallets/client'

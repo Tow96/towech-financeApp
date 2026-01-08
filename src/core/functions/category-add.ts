@@ -2,11 +2,12 @@ import { and, eq } from 'drizzle-orm'
 import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
+import { AuthorizationMiddleware } from './session-validate'
+
 import type { CategoryType } from '@/core/entities'
 import type { CategoryDetailDto } from '@/core/contracts'
 
 import { AddCategorySchema } from '@/core/contracts'
-import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

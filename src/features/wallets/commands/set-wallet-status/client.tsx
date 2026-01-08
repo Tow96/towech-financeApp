@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { setWalletStatus } from './server'
-
 import { SetWalletStatusSchema } from '@/core/contracts'
+import { setWalletStatus } from '@/core/functions'
+
 import { FormDialog } from '@/common/components/form-dialog'
 import { walletKeys } from '@/features/wallets/store-keys'
 

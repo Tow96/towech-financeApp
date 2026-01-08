@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+
+import { getWalletTotals } from '@/core/functions'
+
 import { walletKeys } from '@/features/wallets/store-keys'
-import { getWalletTotals } from '@/features/wallets/queries/list-wallets/server'
 
 export const useWalletsTotal = () => {
 	return useQuery({

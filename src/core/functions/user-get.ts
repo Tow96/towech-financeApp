@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { UserMenuDto } from '@/core/contracts'
+import { AuthorizationMiddleware } from './session-validate'
 
-import { AuthorizationMiddleware } from '@/core/functions'
+import type { UserMenuDto } from '@/core/contracts'
 
 import { db, schema } from '@/database'
 

@@ -2,9 +2,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { setCategoryStatus } from './server'
-
 import { SetCategoryStatusSchema } from '@/core/contracts'
+import { setCategoryStatus } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { categoryKeys } from '@/features/categories/store-keys'

@@ -2,10 +2,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { editCategory } from './server'
 import type { CategoryType } from '@/core/entities'
 
 import { EditCategorySchema } from '@/core/contracts'
+import { editCategory } from '@/core/functions'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'
