@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { editCategory } from './server'
-import { EditCategorySchema } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
+
+import { EditCategorySchema } from '@/core/contracts'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { FormControl, FormField, FormItem, FormLabel } from '@/common/components/ui/form'

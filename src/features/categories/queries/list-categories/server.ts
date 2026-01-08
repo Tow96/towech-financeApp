@@ -1,9 +1,11 @@
 ﻿import { and, eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { GetCategoryListSchema } from './dto'
-import type { CategoryListItemDto } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
+
+import type { CategoryListItemDto } from '@/core/contracts'
+
+import { GetCategoryListSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'

@@ -1,11 +1,12 @@
 import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { GetWalletDetailSchema } from './dto'
-import type { WalletDetailDto } from './dto'
+import type { WalletDetailDto } from '@/core/contracts'
 
-import { AuthorizationMiddleware } from '@/core/functions'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
+
+import { GetWalletDetailSchema } from '@/core/contracts'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

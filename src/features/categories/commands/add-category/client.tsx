@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { addCategory } from './server'
-import { AddCategorySchema } from './dto'
+import { AddCategorySchema } from '@/core/contracts'
 
 import { CategoryType } from '@/features/categories/domain'
 import { FormDialog } from '@/common/components/form-dialog'

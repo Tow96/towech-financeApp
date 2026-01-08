@@ -2,10 +2,10 @@ import { and, eq } from 'drizzle-orm'
 import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
-import { AddCategorySchema } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
 import type { CategoryDetailDto } from '@/features/categories/queries/detail-category/dto'
 
+import { AddCategorySchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'

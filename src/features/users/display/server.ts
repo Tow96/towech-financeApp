@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import type { UserMenuDto } from '@/features/users/display/dto'
+import type { UserMenuDto } from '@/core/contracts'
 
 import { AuthorizationMiddleware } from '@/core/functions'
 

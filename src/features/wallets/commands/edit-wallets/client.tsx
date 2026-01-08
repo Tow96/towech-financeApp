@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { EditWalletSchema } from './dto'
 import { editWallet } from './server'
+import { EditWalletSchema } from '@/core/contracts'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { IconSelector } from '@/common/components/icon-selector'

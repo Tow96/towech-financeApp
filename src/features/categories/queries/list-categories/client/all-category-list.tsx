@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react'
 import { Archive, ArchiveRestore, CirclePlus, Ellipsis, Pencil, Plus } from 'lucide-react'
 
-import type { CategoryListItemDto } from '../dto.ts'
+import type { CategoryListItemDto } from '@/core/contracts'
 
 import { Icon } from '@/common/components/icon'
 import {

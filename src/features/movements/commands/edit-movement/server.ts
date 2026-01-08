@@ -1,12 +1,13 @@
 ﻿import { and, eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { EditMovementSchema } from './dto'
 import type { MovementDetailDto } from '@/features/movements/queries/detail-movement/dto'
 
 import { convertAmountToCents } from '@/common/lib/utils'
 
 import { CategoryType } from '@/features/categories/domain'
+
+import { EditMovementSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'

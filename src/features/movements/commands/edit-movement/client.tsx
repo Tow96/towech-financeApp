@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { EditMovementSchema } from './dto'
+import { EditMovementSchema } from '@/core/contracts'
 
 import { FormDialog } from '@/common/components/form-dialog'
 import { convertCentsToAmount } from '@/common/lib/utils'
@@ -101,7 +101,8 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 			/>
 
 			{/*	Wallet(s) */}
-			{(form.watch().category?.type ?? movementDetail.data?.category.type) === CategoryType.expense && (
+			{(form.watch().category?.type ?? movementDetail.data?.category.type) ===
+				CategoryType.expense && (
 				<FormField
 					disabled={editMovementMutation.isPending}
 					control={form.control}
@@ -117,7 +118,8 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					)}
 				/>
 			)}
-			{(form.watch().category?.type ?? movementDetail.data?.category.type) === CategoryType.income && (
+			{(form.watch().category?.type ?? movementDetail.data?.category.type) ===
+				CategoryType.income && (
 				<FormField
 					disabled={editMovementMutation.isPending}
 					control={form.control}
@@ -133,7 +135,8 @@ export const EditMovementDialog = (props: EditMovementDialogProps) => {
 					)}
 				/>
 			)}
-			{(form.watch().category?.type ?? movementDetail.data?.category.type) === CategoryType.transfer && (
+			{(form.watch().category?.type ?? movementDetail.data?.category.type) ===
+				CategoryType.transfer && (
 				<div className="flex gap-2">
 					<FormField
 						disabled={editMovementMutation.isPending}

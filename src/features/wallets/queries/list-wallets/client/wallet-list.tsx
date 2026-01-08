@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Archive, ArchiveRestore, Ellipsis, Pencil } from 'lucide-react'
 
-import type { ListWalletItemDto } from '../dto.ts'
+import type { ListWalletItemDto } from '@/core/contracts'
 
 import { Button } from '@/common/components/ui/button'
 import {
@@ -22,7 +22,7 @@ import { useWalletsTotal } from '@/features/wallets/queries/list-wallets/client/
 export const WalletsTotal = () => {
 	const { data, isPending } = useWalletsTotal()
 	return (
-		<span className="flex flex-1 items-center text-2xl w-full">
+		<span className="flex w-full flex-1 items-center text-2xl">
 			Total:{' '}
 			{isPending ? (
 				<Skeleton className="mt-1 ml-4 h-5 w-1/3" />

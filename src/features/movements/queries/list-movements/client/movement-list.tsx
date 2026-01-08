@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react'
 import { ArrowBigRight, EllipsisVertical, Pencil, Trash } from 'lucide-react'
 
-import type { ListMovementItemDto } from '../dto'
+import type { ListMovementItemDto } from '@/core/contracts'
 
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/common/lib/utils'
 import { Button } from '@/common/components/ui/button'
@@ -64,7 +64,7 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 			{/* Info */}
 			<div className="flex-1">
 				{/* Top row */}
-				<div className="flex justify-between txt-sm md:text-2xl font-bold">
+				<div className="txt-sm flex justify-between font-bold md:text-2xl">
 					<CategoryName category={movement.category} />
 					<span
 						className={cn(
@@ -81,9 +81,14 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 						{movement.wallet.originId && (
 							<WalletIcon className="h-5 w-5 md:h-6 md:w-6" walletId={movement.wallet.originId} />
 						)}
-						{movement.wallet.originId && movement.wallet.destinationId && <ArrowBigRight className="h-5 w-5 md:h-6 md:w-6" />}
+						{movement.wallet.originId && movement.wallet.destinationId && (
+							<ArrowBigRight className="h-5 w-5 md:h-6 md:w-6" />
+						)}
 						{movement.wallet.destinationId && (
-							<WalletIcon className="h-5 w-5 md:h-6 md:w-6" walletId={movement.wallet.destinationId} />
+							<WalletIcon
+								className="h-5 w-5 md:h-6 md:w-6"
+								walletId={movement.wallet.destinationId}
+							/>
 						)}
 					</div>
 

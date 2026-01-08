@@ -1,8 +1,7 @@
 ﻿import { eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { DeleteMovementSchema } from './dto'
-
+import { DeleteMovementSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'

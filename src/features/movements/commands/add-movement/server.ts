@@ -2,12 +2,13 @@
 import { v4 as uuidV4 } from 'uuid'
 import { createServerFn } from '@tanstack/react-start'
 
-import { AddMovementSchema } from './dto'
 import type { MovementDetailDto } from '@/features/movements/queries/detail-movement/dto'
 
 import { convertAmountToCents } from '@/common/lib/utils'
 
 import { CategoryType } from '@/features/categories/domain'
+
+import { AddMovementSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'

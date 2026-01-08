@@ -1,9 +1,9 @@
 import { and, eq, or, sql } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
-import { GetWalletTotalsSchema } from './dto'
-import type { ListWalletItemDto, ListWalletsDto } from './dto'
+import type { ListWalletItemDto, ListWalletsDto } from '@/core/contracts'
 
+import { GetWalletTotalsSchema } from '@/core/contracts'
 import { AuthorizationMiddleware } from '@/core/functions'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
 

@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
-import { AddMovementSchema } from './dto'
+import { AddMovementSchema } from '@/core/contracts'
 
 import {
 	FormControl,
