@@ -4,7 +4,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { GetWalletTotalsSchema } from './dto'
 import type { ListWalletItemDto, ListWalletsDto } from './dto'
 
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 import { FetchWalletMoneySql } from '@/features/wallets/domain'
 
 import { db, schema } from '@/database'

@@ -6,7 +6,7 @@ import { AddWalletSchema } from './dto'
 
 import type { WalletDetailDto } from '@/features/wallets/queries/detail-wallet/dto'
 
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

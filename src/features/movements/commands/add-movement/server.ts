@@ -8,7 +8,7 @@ import type { MovementDetailDto } from '@/features/movements/queries/detail-move
 import { convertAmountToCents } from '@/common/lib/utils'
 
 import { CategoryType } from '@/features/categories/domain'
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

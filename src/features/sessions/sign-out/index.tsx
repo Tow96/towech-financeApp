@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { createServerFn } from '@tanstack/react-start'
 
 import { deleteSessionCookie, deleteSessionFromDb } from '@/features/sessions/common'
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 export const useSignOutMutation = () => {
 	return useMutation({

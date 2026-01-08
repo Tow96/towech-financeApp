@@ -1,18 +1,17 @@
 import { eq } from 'drizzle-orm'
-
 import { createMiddleware } from '@tanstack/react-start'
 import { getCookie } from '@tanstack/react-start/server'
 
 import {
-	ACTIVITY_CHECK_INTERVAL_SECONDS,
-	SESSION_COOKIE,
-	TOKEN_SEPARATOR,
+	SESSION_ACTIVITY_CHECK_INTERVAL_SECONDS,
+	SESSION_COOKIE_NAME,
+	SESSION_INACTIVIY_TIMEOUT_SECONDS,
+	SESSION_TOKEN_SEPARATOR,
 	deleteSessionCookie,
 	fromHexString,
 	generateSessionCookie,
-	getSessionFromDb,
 	hashSecret,
-} from '@/features/sessions/common'
+} from '@/core/utils'
 
 import { db, schema } from '@/database'
 
@@ -22,7 +21,7 @@ export const AuthorizationMiddleware = createMiddleware().server(async ({ next }
 	if (mockId !== undefined)
 		return next({ context: { userId: (mockId as string).trim(), sessionId: '' } })
 
-	const token = getCookie(SESSION_COOKIE)
+	const token = getCookie(SESSION_COOKIE_NAME)
 	if (token === undefined) throw new Response('Unauthorized', { status: 401 })
 
 	const session = await validateToken(token)
@@ -38,14 +37,22 @@ export const AuthorizationMiddleware = createMiddleware().server(async ({ next }
 const validateToken = async (token: string) => {
 	const now = new Date()
 
-	const tokenParts = token.split(TOKEN_SEPARATOR)
+	const tokenParts = token.split(SESSION_TOKEN_SEPARATOR)
 	if (tokenParts.length !== 2) return null
 
 	const sessionId = tokenParts[0]
 	const sessionSecret = tokenParts[1]
 
-	const session = await getSessionFromDb(sessionId)
-	if (!session) return null
+	const query = await db.select().from(schema.Sessions).where(eq(schema.Sessions.id, sessionId))
+	if (query.length !== 1) return null
+
+	const session = query[0]
+
+	// Inactivity timeout
+	if (now.getTime() - session.lastVerifiedAt.getTime() >= SESSION_INACTIVIY_TIMEOUT_SECONDS) {
+		await db.delete(schema.Sessions).where(eq(schema.Sessions.id, sessionId))
+		return null
+	}
 
 	// Validate secret
 	const tokenSecretHash = await hashSecret(sessionSecret)
@@ -53,7 +60,7 @@ const validateToken = async (token: string) => {
 	if (!validSecret) return null
 
 	// Refresh session
-	if (now.getTime() - session.lastVerifiedAt.getTime() >= ACTIVITY_CHECK_INTERVAL_SECONDS * 1000) {
+	if (now.getTime() - session.lastVerifiedAt.getTime() >= SESSION_ACTIVITY_CHECK_INTERVAL_SECONDS) {
 		session.lastVerifiedAt = now
 		await db
 			.update(schema.Sessions)
@@ -72,3 +79,4 @@ const constantTimeEqual = (a: Uint8Array, b: Uint8Array) => {
 
 	return c === 0
 }
+

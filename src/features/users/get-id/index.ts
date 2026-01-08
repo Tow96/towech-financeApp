@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 export const getUserId = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

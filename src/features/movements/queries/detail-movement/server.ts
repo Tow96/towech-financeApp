@@ -5,7 +5,7 @@ import { GetMovementDetailSchema } from './dto'
 import type { MovementDetailDto } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
 
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

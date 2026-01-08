@@ -4,7 +4,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { GetCategoryListSchema } from './dto'
 import type { CategoryListItemDto } from './dto'
 import type { CategoryType } from '@/features/categories/domain'
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 

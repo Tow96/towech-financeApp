@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 
 import type { UserMenuDto } from '@/features/users/display/dto'
 
-import { AuthorizationMiddleware } from '@/features/sessions/validate'
+import { AuthorizationMiddleware } from '@/core/functions'
 
 import { db, schema } from '@/database'
 
