@@ -25,5 +25,6 @@ export * from './sidebar'
 export * from './skeleton'
 export * from './tanstack-provider'
 export * from './tabs'
+export * from './theme-provider'
+export * from './theme-selector'
 export * from './tooltip'
-

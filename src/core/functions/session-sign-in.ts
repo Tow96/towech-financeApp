@@ -2,9 +2,9 @@
 import { getRandomValues } from 'node:crypto'
 import { createIsomorphicFn } from '@tanstack/react-start'
 
-import { db, schema } from '@/database'
+import { SESSION_TOKEN_SEPARATOR, hashSecret, toHexString } from '@/core/utils'
 
-import { TOKEN_SEPARATOR, hashSecret, toHexString } from '@/features/sessions/common'
+import { db, schema } from '@/database'
 
 export const generateSession = createIsomorphicFn().server(async (userId: string) => {
 	const id = generateSecureRandomString()
@@ -20,7 +20,7 @@ export const generateSession = createIsomorphicFn().server(async (userId: string
 		createdAt: now,
 	})
 
-	const token = `${id}${TOKEN_SEPARATOR}${secret}`
+	const token = `${id}${SESSION_TOKEN_SEPARATOR}${secret}`
 	return {
 		id,
 		secretHash,

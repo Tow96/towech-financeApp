@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { getUser } from '@/core/functions'
+import { getUser, signOutSession } from '@/core/functions'
 
 // Queries --------------------------------------
 export const useUserDetail = () => {
@@ -11,3 +11,9 @@ export const useUserDetail = () => {
 	})
 }
 
+// Mutations ------------------------------------
+export const useSignOutMutation = () => {
+	return useMutation({
+		mutationFn: () => signOutSession(),
+	})
+}

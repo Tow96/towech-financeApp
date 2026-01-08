@@ -1,10 +1,10 @@
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 
+import { ThemeProvider } from '@/ui/components'
 import { getUserId } from '@/core/functions'
 
 import appCss from '@/styles.css?url'
-import { ThemeProvider } from '@/features/theme'
 
 interface RouterContext {
 	queryClient: QueryClient

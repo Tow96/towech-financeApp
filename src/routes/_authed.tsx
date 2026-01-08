@@ -19,12 +19,11 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 	SidebarTrigger,
+	ThemeSelector,
+	UserMenuButton,
 	getSidebarState,
 } from '@/ui/components'
 import { capitalizeFirst, cn } from '@/ui/utils'
-
-import { ThemeSelector } from '@/features/theme'
-import { UserMenuButton } from '@/features/users/display/client'
 
 export const Route = createFileRoute('/_authed')({
 	beforeLoad: ({ context }) => {

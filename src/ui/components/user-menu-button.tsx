@@ -13,10 +13,9 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	useSidebar,
-} from '@/ui/components'
-import { useUserDetail } from '@/ui/data-access'
+} from './base'
 
-import { useSignOutMutation } from '@/features/sessions/sign-out'
+import { useSignOutMutation, useUserDetail } from '@/ui/data-access'
 
 export const UserMenuButton = () => {
 	const mockId = import.meta.env.VITE_MOCK_USER_ID

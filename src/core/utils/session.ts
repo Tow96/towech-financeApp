@@ -1,4 +1,5 @@
 import { subtle } from 'node:crypto'
+import { Google } from 'arctic'
 import { setCookie } from '@tanstack/react-start/server'
 
 export const SESSION_COOKIE_NAME = 'session'
@@ -38,3 +39,12 @@ export const generateSessionCookie = (token: string) => {
 	})
 }
 
+// GOOGLE OAUTH ---------------------------------
+export const GOOGLE_OAUTH_STATE_COOKIE = 'google_oauth_state'
+export const GOOGLE_CODE_VERIFIER_COOKIE = 'google_code_verifier'
+
+export const googleAuth = new Google(
+	process.env.GOOGLE_CLIENT_ID!,
+	process.env.GOOGLE_CLIENT_SECRET!,
+	`${process.env.GOOGLE_CALLBACK_DOMAIN}/login/google/callback`,
+)
