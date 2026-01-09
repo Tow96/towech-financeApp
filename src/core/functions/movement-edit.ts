@@ -1,4 +1,4 @@
-﻿import { and, eq, or } from 'drizzle-orm'
+﻿import { and, eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
@@ -10,7 +10,6 @@ import { CategoryType } from '@/core/entities'
 import { convertAmountToCents } from '@/core/utils'
 
 import { db, schema } from '@/database'
-import { id } from 'zod/v4/locales'
 
 export const editMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

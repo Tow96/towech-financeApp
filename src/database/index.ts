@@ -13,4 +13,3 @@ const getDb = createServerOnlyFn(() => {
 })
 
 export const db = getDb()
-

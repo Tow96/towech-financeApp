@@ -21,4 +21,3 @@ export function convertCentsToCurrencyString(value: number): string {
 	const prefix = value < 0 ? '-$' : '$'
 	return `${prefix}  ${convertCentsToAmount(value)}`
 }
-

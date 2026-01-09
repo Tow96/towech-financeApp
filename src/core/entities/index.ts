@@ -3,4 +3,3 @@ export enum CategoryType {
 	expense = 'EXPENSE',
 	transfer = 'TRANSFER',
 }
-

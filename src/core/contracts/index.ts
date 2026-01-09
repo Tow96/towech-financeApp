@@ -14,4 +14,3 @@ export * from './wallet-detail-schema'
 export * from './wallet-edit-schema'
 export * from './wallet-list-schema'
 export * from './wallet-set-status-schema'
-

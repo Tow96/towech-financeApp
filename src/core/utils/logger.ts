@@ -24,4 +24,3 @@ export const createCustomLogger = (name: string, correlationId?: string) => {
 
 	return logger.child({ name, correlationId })
 }
-

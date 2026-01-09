@@ -18,4 +18,3 @@ export const CategoryIcon = ({ className, category }: CategoryIconProps) => {
 	const detail = useCategoryDetail(category.type, category.id, category.subId ?? undefined)
 	return <Icon className={className} id={detail.data?.iconId ?? 0} name={detail.data?.name ?? ''} />
 }
-

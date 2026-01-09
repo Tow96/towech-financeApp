@@ -13,9 +13,9 @@ export default defineConfig({
 		cors: {
 			origin: 'https://static.cloudflareinsights.com',
 			credentials: true,
-			methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-			allowedHeaders: ["Content-Type"],
-		}
+			methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+			allowedHeaders: ['Content-Type'],
+		},
 	},
 	plugins: [
 		tsConfigPaths({

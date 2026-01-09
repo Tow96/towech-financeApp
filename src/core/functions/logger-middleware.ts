@@ -20,4 +20,3 @@ export const loggingMiddleware = createMiddleware().server(async ({ next }) => {
 	result.response.headers.set(CORRELATION_ID_HEADER, corrId)
 	return result
 })
-

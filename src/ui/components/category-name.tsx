@@ -24,4 +24,3 @@ const getUncategorizedName = (type: CategoryType) => {
 	if (type === CategoryType.income) return 'Uncategorized income'
 	return 'Uncategorized transfer'
 }
-

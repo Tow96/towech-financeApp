@@ -79,4 +79,3 @@ const constantTimeEqual = (a: Uint8Array, b: Uint8Array) => {
 
 	return c === 0
 }
-
