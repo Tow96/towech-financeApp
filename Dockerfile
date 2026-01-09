@@ -12,6 +12,7 @@ COPY . /app
 
 # Build dependency fetching -----------------------------------------------------------------------
 FROM src AS build
+ENV VITE_ENABLE_DEVTOOLS=false
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
     
