@@ -10,6 +10,7 @@ import { CategoryType } from '@/core/entities'
 import { convertAmountToCents } from '@/core/utils'
 
 import { db, schema } from '@/database'
+import { id } from 'zod/v4/locales'
 
 export const editMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
@@ -21,72 +22,96 @@ export const editMovement = createServerFn({ method: 'POST' })
 			where: eq(schema.Movements.id, data.id),
 		})
 
+		logger.info(data)
+
 		if (existingMovement.length === 0) throw new Response('Movement not found', { status: 404 })
 		if (existingMovement[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
 
 		logger.info(`User: ${userId} trying to edit movement: ${data.id}`)
 
-		// Validate category
-		const category = data.category
-			? data.category
-			: {
-					type: existingMovement[0].categoryType as CategoryType,
-					id: existingMovement[0].categoryId,
-					subId: existingMovement[0].categorySubId,
+		// Category validation
+		let category = {
+			type: existingMovement[0].categoryType as CategoryType,
+			id: existingMovement[0].categoryId,
+			subId: existingMovement[0].categorySubId,
+		}
+		if (data.category) {
+			if (data.category.id !== null) {
+				const existingCategory = await db
+					.select({ id: schema.Categories.id, userId: schema.Categories.userId })
+					.from(schema.Categories)
+					.where(
+						and(eq(schema.Categories.userId, userId), eq(schema.Categories.id, data.category.id)),
+					)
+
+				if (existingCategory.length === 0) throw new Response('Category not found', { status: 404 })
+
+				if (data.category.subId !== null) {
+					const existingSubCategory = await db
+						.select({ id: schema.SubCategories.id })
+						.from(schema.SubCategories)
+						.where(
+							and(
+								eq(schema.SubCategories.parentId, data.category.id),
+								eq(schema.SubCategories.id, data.category.subId),
+							),
+						)
+
+					if (existingSubCategory.length === 0)
+						throw new Response('Subcategory not found', { status: 404 })
 				}
-		if (data.category && data.category.id !== null) {
-			const existingCategory = await db
-				.select({ id: schema.Categories.id, userId: schema.Categories.userId })
-				.from(schema.Categories)
-				.where(eq(schema.Categories.id, data.category.id))
+			}
 
-			if (existingCategory.length === 0) throw new Response('Category not found', { status: 404 })
-			if (existingCategory[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
+			category = data.category
+		}
 
-			if (data.category.subId !== null) {
-				const existingSubCategory = await db
-					.select({ id: schema.SubCategories.id })
-					.from(schema.SubCategories)
+		// Wallet validation
+		const wallet = {
+			originId: existingMovement[0].summary[0].originWalletId,
+			destinationId: existingMovement[0].summary[0].destinationWalletId,
+		}
+		if (data.wallet && (data.wallet.originId || data.wallet.destinationId)) {
+			if (data.wallet.originId) {
+				const existingOriginWallet = await db
+					.select({ id: schema.Wallets.id })
+					.from(schema.Wallets)
+					.where(
+						and(eq(schema.Wallets.id, data.wallet.originId), eq(schema.Wallets.userId, userId)),
+					)
+
+				if (existingOriginWallet.length === 0)
+					throw new Response('Origin wallet not found', { status: 404 })
+			}
+
+			if (data.wallet.destinationId) {
+				const existingDestinationWallet = await db
+					.select({ id: schema.Wallets.id })
+					.from(schema.Wallets)
 					.where(
 						and(
-							eq(schema.SubCategories.parentId, data.category.id),
-							eq(schema.SubCategories.id, data.category.subId),
+							eq(schema.Wallets.id, data.wallet.destinationId),
+							eq(schema.Wallets.userId, userId),
 						),
 					)
 
-				if (existingSubCategory.length === 0)
-					throw new Response('SubCategory not found', { status: 404 })
+				if (existingDestinationWallet.length === 0)
+					throw new Response('Destination wallet not found', { status: 404 })
 			}
+
+			wallet.originId = data.wallet.originId ?? null
+			wallet.destinationId = data.wallet.destinationId ?? null
 		}
 
-		// Validate wallets
-		if (data.wallet) {
-			const existingWallets = await db
-				.select({ id: schema.Wallets.id, userId: schema.Wallets.userId })
-				.from(schema.Wallets)
-				.where(
-					and(
-						or(
-							data.wallet.originId ? eq(schema.Wallets.id, data.wallet.originId) : undefined,
-							data.wallet.destinationId
-								? eq(schema.Wallets.id, data.wallet.destinationId)
-								: undefined,
-						),
-						eq(schema.Wallets.userId, userId),
-					),
-				)
-			if (existingWallets.length === 0) throw new Response('Wallets not found', { status: 404 })
-		}
-		const originWalletId = data.wallet?.originId
-			? category.type !== CategoryType.income
-				? (data.wallet.originId ?? null)
-				: null
-			: existingMovement[0].summary[0].originWalletId
-		const destinationWalletId = data.wallet?.destinationId
-			? category.type !== CategoryType.expense
-				? (data.wallet.destinationId ?? null)
-				: null
-			: existingMovement[0].summary[0].destinationWalletId
+		logger.info(existingMovement[0].summary[0])
+		logger.info(wallet)
+
+		// Revalidate category/wallet relation
+		if (category.type === CategoryType.transfer && wallet.originId === wallet.destinationId)
+			throw new Response('Destination wallet must be different from origin wallet', { status: 421 })
+		if (category.type !== CategoryType.income && wallet.originId === null)
+			throw new Response('Origin wallet is required', { status: 421 })
+		if (category.type !== CategoryType.expense && wallet.destinationId === null)
+			throw new Response('Destination wallet is required', { status: 421 })
 
 		const amount = data.amount
 			? convertAmountToCents(data.amount)
@@ -108,8 +133,8 @@ export const editMovement = createServerFn({ method: 'POST' })
 			await tx.insert(schema.MovementSummary).values({
 				movementId: data.id,
 				amount,
-				originWalletId,
-				destinationWalletId,
+				originWalletId: wallet.originId,
+				destinationWalletId: wallet.destinationId,
 			})
 		})
 
@@ -120,8 +145,8 @@ export const editMovement = createServerFn({ method: 'POST' })
 			description: data.description ? data.description : existingMovement[0].description,
 			category,
 			wallet: {
-				originId: originWalletId,
-				destinationId: destinationWalletId,
+				originId: wallet.originId,
+				destinationId: wallet.destinationId,
 			},
 		}
 		return output
