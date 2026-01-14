@@ -59,7 +59,7 @@ const MovementItem = ({ movement }: MovementItemProps) => {
 	const [openDelete, setOpenDelete] = useState<boolean>(false)
 
 	return (
-		<div className="flex min-w-0 items-center gap-4 border-b-1 py-4 last:border-b-0">
+		<div className="flex min-w-0 items-center gap-4 border-b py-4 last:border-b-0">
 			{/* Icon */}
 			<CategoryIcon className="h-10 w-10 md:h-16 md:w-16" category={movement.category} />
 
