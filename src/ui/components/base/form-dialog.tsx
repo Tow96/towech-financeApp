@@ -69,7 +69,7 @@ interface ErrorBoxProps {
 	title: string
 	error: Error | null
 }
-const ErrorBox = (props: ErrorBoxProps) => {
+export const ErrorBox = (props: ErrorBoxProps) => {
 	const message = props.error?.message || ''
 
 	return (

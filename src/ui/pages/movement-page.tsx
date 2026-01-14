@@ -19,19 +19,19 @@ export const MovementPage = () => {
 
 	return (
 		<Card className="m-4 max-h-[80vh] md:max-h-[85vh]">
-			<CardHeader className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
-				<div className="flex w-full flex-col-reverse gap-4 md:w-auto md:flex-col md:gap-2">
-					<Button className="w-full" onClick={() => setOpenAdd(true)}>
-						<Plus /> Add Movement
-					</Button>
-					<PeriodSelector value={periodStart} onChange={setPeriodStart} />
-				</div>
+			<CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<WalletSelector
 					value={selectedWalletId}
 					onChange={setSelectedWalletId}
 					showMoney
 					showTotal
 				/>
+				<div className="flex w-full flex-col-reverse gap-4 md:w-auto md:flex-col md:gap-2">
+					<Button className="w-full" onClick={() => setOpenAdd(true)}>
+						<Plus /> Add Movement
+					</Button>
+					<PeriodSelector value={periodStart} onChange={setPeriodStart} />
+				</div>
 			</CardHeader>
 			<CardContent className="overflow-auto">
 				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
