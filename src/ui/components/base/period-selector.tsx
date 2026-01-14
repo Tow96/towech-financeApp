@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import { ArrowBigLeft, ArrowBigRight, CalendarIcon } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CalendarIcon } from 'lucide-react'
 
-import { Button, MonthPicker, Popover, PopoverContent, PopoverTrigger } from '@/ui/components'
+import { ButtonGroup } from './button-group'
+import { Button } from './button'
+import { MonthPicker } from './monthpicker'
+import { Popover, PopoverContent, PopoverTrigger } from './popover'
+
 import { cn } from '@/ui/utils'
 
 interface PeriodSelectorProps {
@@ -27,9 +31,13 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 
 	return (
 		<div className={props.className}>
-			<div className="flex">
-				<Button disabled={props.disabled} size="icon" onClick={() => changeMonth(-1)}>
-					<ArrowBigLeft />
+			<ButtonGroup className="flex w-full">
+				<Button
+					variant="outline"
+					disabled={props.disabled}
+					size="icon"
+					onClick={() => changeMonth(-1)}>
+					<ArrowLeft />
 				</Button>
 
 				{/* Month selector */}
@@ -49,10 +57,14 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 					</PopoverContent>
 				</Popover>
 
-				<Button disabled={props.disabled} size="icon" onClick={() => changeMonth(1)}>
-					<ArrowBigRight />
+				<Button
+					variant="outline"
+					disabled={props.disabled}
+					size="icon"
+					onClick={() => changeMonth(1)}>
+					<ArrowRight />
 				</Button>
-			</div>
+			</ButtonGroup>
 		</div>
 	)
 }
