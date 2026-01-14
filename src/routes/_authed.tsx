@@ -123,6 +123,11 @@ const DashboardButton = () => {
 
 const pages = [
 	{
+		name: 'Movements',
+		url: '/movements',
+		icon: Receipt,
+	},
+	{
 		name: 'Wallets',
 		url: '/wallets',
 		icon: Wallet,
@@ -131,11 +136,6 @@ const pages = [
 		name: 'Categories',
 		url: '/categories',
 		icon: CircleDot,
-	},
-	{
-		name: 'Movements',
-		url: '/movements',
-		icon: Receipt,
 	},
 ]
 

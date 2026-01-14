@@ -21,7 +21,7 @@ export const DashboardPage = () => {
 	return (
 		<Card className="m-4">
 			<CardHeader className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
-				<PeriodSelector start={periodStart} setStart={setPeriodStart} />
+				<PeriodSelector value={periodStart} onChange={setPeriodStart} />
 				<WalletSelector
 					className="w-full md:w-1/2"
 					value={selectedWalletId}
