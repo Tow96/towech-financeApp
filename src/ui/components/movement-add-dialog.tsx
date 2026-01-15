@@ -119,6 +119,7 @@ const AddMovementForm = (props: AddMovementFormProps) => {
 							<FormItem>
 								<FormLabel>Wallet</FormLabel>
 								<WalletSelector {...field} />
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -132,6 +133,7 @@ const AddMovementForm = (props: AddMovementFormProps) => {
 							<FormItem>
 								<FormLabel>Wallet</FormLabel>
 								<WalletSelector {...field} />
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -146,6 +148,7 @@ const AddMovementForm = (props: AddMovementFormProps) => {
 								<FormItem>
 									<FormLabel>From</FormLabel>
 									<WalletSelector {...field} />
+									<FormMessage />
 								</FormItem>
 							)}
 						/>
@@ -157,6 +160,7 @@ const AddMovementForm = (props: AddMovementFormProps) => {
 								<FormItem>
 									<FormLabel>To</FormLabel>
 									<WalletSelector {...field} />
+									<FormMessage />
 								</FormItem>
 							)}
 						/>
