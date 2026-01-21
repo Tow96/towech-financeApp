@@ -1,6 +1,6 @@
 import { Icon, Skeleton } from './base'
 
-import type { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/entities'
 
 import { useCategoryDetail } from '@/ui/data-access'
 import { cn } from '@/ui/utils'
@@ -15,7 +15,8 @@ interface CategoryIconProps {
 }
 
 export const CategoryIcon = ({ className, category }: CategoryIconProps) => {
-	if (!category.id) return <Icon className={className} id={0} name="Category" />
+	if (!category.id)
+		return <Icon className={className} id={UncategorizedIcon(category.type)} name="Category" />
 
 	const detail = useCategoryDetail(category.type, category.id, category.subId ?? undefined)
 	return detail.isPending ? (
@@ -23,4 +24,10 @@ export const CategoryIcon = ({ className, category }: CategoryIconProps) => {
 	) : (
 		<Icon className={className} id={detail.data?.iconId ?? 0} name={detail.data?.name ?? ''} />
 	)
+}
+
+const UncategorizedIcon = (type: CategoryType) => {
+	if (type === CategoryType.expense) return 4
+	if (type === CategoryType.income) return 3
+	return 36
 }

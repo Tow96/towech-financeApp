@@ -63,7 +63,7 @@ export const WalletSelector = (props: WalletSelectorProps) => {
 										/>
 									) : (
 										<Icon
-											id={0}
+											id={37}
 											name="Total"
 											className={cn(props.showMoney ? 'h-12 w-12' : 'h-8 w-8')}
 										/>
