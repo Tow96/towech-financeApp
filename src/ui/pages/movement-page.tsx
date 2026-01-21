@@ -1,5 +1,5 @@
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 import {
 	AddMovementDialog,
@@ -8,34 +8,33 @@ import {
 	CardContent,
 	CardHeader,
 	MovementList,
-	MovementSummary,
 	PeriodSelector,
 	WalletSelector,
 } from '@/ui/components'
 
-export const DashboardPage = () => {
+export const MovementPage = () => {
 	const [openAdd, setOpenAdd] = useState<boolean>(false)
 	const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>('total')
 	const [periodStart, setPeriodStart] = useState<Date>(new Date())
 
 	return (
-		<Card className="m-4">
-			<CardHeader className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
-				<PeriodSelector value={periodStart} onChange={setPeriodStart} />
+		<Card className="m-4 max-h-[80vh] md:max-h-[85vh]">
+			<CardHeader className="flex flex-col items-center justify-between gap-4 md:flex-row">
 				<WalletSelector
-					className="w-full md:w-1/2"
 					value={selectedWalletId}
 					onChange={setSelectedWalletId}
 					showMoney
 					showTotal
 				/>
-				<Button className="w-full md:w-auto" onClick={() => setOpenAdd(true)}>
-					<Plus /> Add Movement
-				</Button>
-				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
+				<div className="flex w-full flex-col-reverse gap-4 md:w-auto md:flex-col md:gap-2">
+					<Button className="w-full" onClick={() => setOpenAdd(true)}>
+						<Plus /> Add Movement
+					</Button>
+					<PeriodSelector value={periodStart} onChange={setPeriodStart} />
+				</div>
 			</CardHeader>
-			<CardContent className="max-h-[62vh] overflow-y-auto">
-				<MovementSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
+			<CardContent className="overflow-auto">
+				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
 				<MovementList selectedWalletId={selectedWalletId} periodStart={periodStart} />
 			</CardContent>
 		</Card>

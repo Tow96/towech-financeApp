@@ -18,9 +18,10 @@ export const AddMovementSchema = z
 		amount: z
 			.string()
 			.regex(
-				/^(?:\d{1,3}(?:,\d{3})*(?:\.\d{0,2})?|\.\d{1,2})$/,
+				/^(?:[\d,]*(?:\.\d{0,2})?|(?:\.\d{0,2}))$/,
 				'Must be a number with up to two decimal places',
-			),
+			)
+			.transform(v => v.trim().replaceAll(',', '')),
 		wallet: z.object({
 			originId: z.uuid().optional(),
 			destinationId: z.uuid().optional(),

@@ -1,6 +1,7 @@
-import { useWalletDetail } from '@/ui/data-access'
+import { Icon, Skeleton } from './base'
 
-import { Icon } from '@/ui/components'
+import { useWalletDetail } from '@/ui/data-access'
+import { cn } from '@/ui/utils'
 
 interface WalletIconProps {
 	className?: string
@@ -10,5 +11,9 @@ interface WalletIconProps {
 export const WalletIcon = ({ className, walletId }: WalletIconProps) => {
 	const detail = useWalletDetail(walletId)
 
-	return <Icon className={className} id={detail.data?.iconId ?? 0} name={detail.data?.name ?? ''} />
+	return detail.isPending ? (
+		<Skeleton className={cn('rounded-full', className)} />
+	) : (
+		<Icon className={className} id={detail.data?.iconId ?? 0} name={detail.data?.name ?? ''} />
+	)
 }

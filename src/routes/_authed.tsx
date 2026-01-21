@@ -1,4 +1,4 @@
-import { CircleDot, Layers2, Wallet } from 'lucide-react'
+import { CircleDot, Layers2, Receipt, Wallet } from 'lucide-react'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 
 import { Link, Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
@@ -122,6 +122,11 @@ const DashboardButton = () => {
 }
 
 const pages = [
+	{
+		name: 'Movements',
+		url: '/movements',
+		icon: Receipt,
+	},
 	{
 		name: 'Wallets',
 		url: '/wallets',
