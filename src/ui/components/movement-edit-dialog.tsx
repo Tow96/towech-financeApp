@@ -1,5 +1,6 @@
-﻿import { useForm } from 'react-hook-form'
-import { Loader2Icon } from 'lucide-react'
+﻿import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Loader2Icon, Trash } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -22,10 +23,11 @@ import {
 	Input,
 } from './base'
 import { CategorySelector } from './category-selector'
+import { DeleteMovementDialog } from './movement-delete-dialog'
 import { WalletSelector } from './wallet-selector'
 
-import { convertCentsToAmount } from '@/ui/utils'
 import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
+import { convertCentsToAmount, useIsMobile } from '@/ui/utils'
 
 import { EditMovementSchema } from '@/core/contracts'
 import { CategoryType } from '@/core/entities'
@@ -37,14 +39,25 @@ interface EditMovementDialogProps {
 }
 
 export const EditMovementDialog = (props: EditMovementDialogProps) => {
+	const isMobile = useIsMobile()
+	const [deleteModal, setDeleteModal] = useState<boolean>(false)
+
 	return (
 		<Dialog open={props.open} onOpenChange={props.setOpen}>
-			<DialogContent>
+			<DialogContent showCloseButton={false}>
 				<DialogDescription className="sr-only">Edit movement form</DialogDescription>
 				<DialogHeader>
-					<DialogTitle>Edit movement</DialogTitle>
+					<DialogTitle className="flex items-center justify-between">
+						Edit movement
+						{isMobile && (
+							<Button variant="destructive" size="icon" onClick={() => setDeleteModal(true)}>
+								<Trash />
+							</Button>
+						)}
+					</DialogTitle>
 				</DialogHeader>
 				<EditMovementForm id={props.id} onSubmitSuccess={() => props.setOpen(false)} />
+				<DeleteMovementDialog id={props.id} open={deleteModal} setOpen={setDeleteModal} />
 			</DialogContent>
 		</Dialog>
 	)
