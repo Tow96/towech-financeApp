@@ -8,6 +8,7 @@ import {
 	DropDrawerGroup,
 	DropDrawerItem,
 	DropDrawerTrigger,
+	Skeleton,
 } from './base'
 import { CategoryIcon } from './category-icon'
 import { CategoryName } from './category-name'
@@ -32,6 +33,20 @@ export const MovementList = (props: MovementListProps) => {
 
 	return (
 		<div>
+			{!movements.isPending && movements.data?.length === 0 && (
+				<div className="text-muted-foreground flex h-15 items-center justify-center md:text-2xl">
+					No movements for the selected period
+				</div>
+			)}
+
+			{movements.isPending && (
+				<>
+					<MovementItemSkeleton />
+					<MovementItemSkeleton />
+					<MovementItemSkeleton />
+				</>
+			)}
+
 			{movements.data?.map(m => (
 				<MovementItem key={m.id} movement={m} />
 			))}
@@ -52,6 +67,25 @@ const convertIsoDate = (date: Date): string => {
 	})
 
 	return formatter.format(new Date(date))
+}
+
+const MovementItemSkeleton = () => {
+	return (
+		<div className="flex items-center gap-4 border-b py-4 last:border-b-0">
+			<Skeleton className="h-10 w-10 rounded-full md:h-16 md:w-16" />
+			<div className="flex-1">
+				<div className="flex justify-between py-1">
+					<Skeleton className="h-4 w-28 md:h-6 md:w-64" />
+					<Skeleton className="h-4 w-14 md:h-6 md:w-20" />
+				</div>
+				<div className="flex justify-between py-1">
+					<Skeleton className="h-4 w-14 md:w-32" />
+					<Skeleton className="h-4 w-28" />
+				</div>
+			</div>
+			<div className="hidden w-8 md:block" />
+		</div>
+	)
 }
 
 const MovementItem = ({ movement }: MovementItemProps) => {

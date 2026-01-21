@@ -73,7 +73,7 @@ const AddMovementForm = (props: AddMovementFormProps) => {
 			onSuccess: () => {
 				const lastDate = new Date(form.watch().date)
 				form.reset(defaultValues(lastDate))
-				if (props.onSubmitSuccess) props.onSubmitSuccess
+				if (props.onSubmitSuccess) props.onSubmitSuccess()
 			},
 		})
 
