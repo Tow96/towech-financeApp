@@ -19,10 +19,10 @@ export const Datepicker = (props: DatepickerProps) => {
 			<PopoverTrigger asChild>
 				<Button
 					variant="outline"
-					className={cn(!props.value && 'text-muted-foreground')}
+					className={cn(!props.value && 'text-muted-foreground', props.className)}
 					disabled={props.disabled}>
 					{props.value ? props.value.toLocaleDateString() : <span>Pick a date</span>}
-					<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+					<CalendarIcon className="h-4 w-4 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0" align="start">
