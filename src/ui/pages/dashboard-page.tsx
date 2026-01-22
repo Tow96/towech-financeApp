@@ -1,5 +1,14 @@
+import { useState } from 'react'
+
+import type { PeriodSelectorValue } from '@/ui/components'
+
 import { PeriodSelector } from '@/ui/components'
 
 export const DashboardPage = () => {
-	return <PeriodSelector />
+	const [selectedPeriod, setSelectedPeriod] = useState<PeriodSelectorValue>({
+		start: new Date(),
+		end: new Date(),
+	})
+
+	return <PeriodSelector value={selectedPeriod} onChange={setSelectedPeriod} />
 }

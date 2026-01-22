@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from './button'
 import { ButtonGroup } from './button-group'
@@ -7,7 +7,7 @@ import { Datepicker } from './datepicker'
 
 import { cn } from '@/ui/utils'
 
-enum PeriodMode {
+export enum PeriodMode {
 	'Day',
 	'Week',
 	'Month',
@@ -15,12 +15,13 @@ enum PeriodMode {
 	'Custom',
 }
 
-interface PeriodSelectorValue {
+export interface PeriodSelectorValue {
 	start: Date
 	end: Date
 }
 
 interface PeriodSelectorProps {
+	initialMode?: PeriodMode
 	className?: string
 	value?: PeriodSelectorValue
 	onChange?: (v: PeriodSelectorValue) => void
@@ -29,7 +30,12 @@ interface PeriodSelectorProps {
 
 export const PeriodSelector = (props: PeriodSelectorProps) => {
 	const [showCustom, setShowCustom] = useState<boolean>(false)
-	const [periodMode, setPeriodMode] = useState<PeriodMode>(PeriodMode.Day)
+	const [periodMode, setPeriodMode] = useState<PeriodMode>(props.initialMode ?? PeriodMode.Day)
+
+	// Sets the initial mode
+	useEffect(() => {
+		setMode(periodMode)
+	}, [])
 
 	const [internalValue, setInternalValue] = useState<PeriodSelectorValue>(
 		props.value ?? {
@@ -97,7 +103,7 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 	}
 
 	return (
-		<div className={cn('m-10', props.className)}>
+		<div className={props.className}>
 			<ButtonGroup className={cn('w-full', showCustom && '*:rounded-b-none')}>
 				<Button
 					disabled={props.disabled}
