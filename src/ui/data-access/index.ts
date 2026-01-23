@@ -1,4 +1,5 @@
 export * from './category'
+export * from './graphs'
 export * from './movement'
 export * from './user'
 export * from './wallet'
