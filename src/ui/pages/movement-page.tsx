@@ -7,8 +7,8 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
-	MovementList,
 	MonthSelector,
+	MovementList,
 	WalletSelector,
 } from '@/ui/components'
 
