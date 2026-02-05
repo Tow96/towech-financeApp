@@ -1,6 +1,6 @@
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
-import { useBalanceChart } from '../data-access'
+import { useBalanceAnalysis } from '../data-access'
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base/chart'
 
@@ -13,8 +13,8 @@ const chartConfig = {
 	},
 } satisfies ChartConfig
 
-export function BalanceGraph() {
-	const chart = useBalanceChart()
+export function BalanceChart() {
+	const chart = useBalanceAnalysis()
 
 	return (
 		<ChartContainer config={chartConfig} className="max-h-60 w-full">

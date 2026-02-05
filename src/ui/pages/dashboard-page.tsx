@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import type { PeriodSelectorValue } from '@/ui/components'
 
-import { BalanceGraph, PeriodSelector } from '@/ui/components'
+import { BalanceChart, PeriodSelector } from '@/ui/components'
 
 export const DashboardPage = () => {
 	const [selectedPeriod, setSelectedPeriod] = useState<PeriodSelectorValue>({
@@ -13,7 +13,7 @@ export const DashboardPage = () => {
 	return (
 		<>
 			<PeriodSelector value={selectedPeriod} onChange={setSelectedPeriod} />
-			<BalanceGraph />
+			<BalanceChart />
 		</>
 	)
 }
