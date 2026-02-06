@@ -1,6 +1,6 @@
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
-import { useBalanceAnalysis } from '../data-access'
+import { useBalanceStatistic } from '../data-access'
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base/chart'
 
@@ -13,8 +13,15 @@ const chartConfig = {
 	},
 } satisfies ChartConfig
 
-export function BalanceChart() {
-	const chart = useBalanceAnalysis()
+interface BalanceChartProps {
+	period: {
+		start: Date
+		end: Date
+	}
+}
+
+export function BalanceChart(props: BalanceChartProps) {
+	const chart = useBalanceStatistic(props.period.start, props.period.end)
 
 	return (
 		<ChartContainer config={chartConfig} className="max-h-60 w-full">

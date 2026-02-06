@@ -13,7 +13,7 @@ export const DashboardPage = () => {
 	return (
 		<>
 			<PeriodSelector value={selectedPeriod} onChange={setSelectedPeriod} />
-			<BalanceChart />
+			<BalanceChart period={selectedPeriod} />
 		</>
 	)
 }

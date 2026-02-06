@@ -3,17 +3,16 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
+import { GetBalanceStatiscticSchema } from '@/core/contracts'
 import { CategoryType } from '@/core/entities'
 import { db, schema } from '@/database'
 
-export const getBalanceAnalysis = createServerFn({ method: 'GET' })
+export const getBalanceStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.handler(async ({ context: { userId, logger } }) => {
-		const from = new Date(Date.UTC(2026, 0, 1, 0, 0, 0, 0))
-		const to = new Date(Date.UTC(2026, 0, 8, 23, 59, 59, 999))
-
+	.inputValidator(GetBalanceStatiscticSchema)
+	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(
-			`User ${userId} requesting balance chart from: ${from.toISOString().substring(0, 10)} to: ${to.toISOString().substring(0, 10)}`,
+			`User ${userId} requesting balance chart from: ${data.periodStart.toISOString()} to: ${data.periodEnd.toISOString()}`,
 		)
 
 		const dailyMovements = await db
@@ -50,7 +49,7 @@ export const getBalanceAnalysis = createServerFn({ method: 'GET' })
 			.select({ pate: sql<Date>`date`.mapWith(x => new Date(x)).as('pate') })
 			.from(
 				sql.raw(
-					`(SELECT generate_series('${from.getUTCFullYear()}-${from.getUTCMonth() + 1}-${from.getUTCDate()}'::date, '${to.getUTCFullYear()}-${to.getUTCMonth() + 1}-${to.getUTCDate()}'::date, '1 day'::interval)::date AS date)`,
+					`(SELECT generate_series('${data.periodStart.getUTCFullYear()}-${data.periodStart.getUTCMonth() + 1}-${data.periodStart.getUTCDate()}'::date, '${data.periodEnd.getUTCFullYear()}-${data.periodEnd.getUTCMonth() + 1}-${data.periodEnd.getUTCDate()}'::date, '1 day'::interval)::date AS date)`,
 				),
 			)
 			.as('target_days')
@@ -91,7 +90,14 @@ export const getBalanceAnalysis = createServerFn({ method: 'GET' })
 		const result = await db
 			.select()
 			.from(dailyBalance)
-			.where(and(gte(dailyBalance.date, from), lte(dailyBalance.date, to)))
+			.where(and(gte(dailyBalance.date, data.periodStart), lte(dailyBalance.date, data.periodEnd)))
 
-		return result.map(x => ({ date: new Date(x.date), balance: x.total }))
+		logger.debug(result)
+
+		return result.map(x => ({
+			date: x.date,
+			balance: x.total,
+			totalIncome: x.income,
+			totalExpense: x.expense,
+		}))
 	})

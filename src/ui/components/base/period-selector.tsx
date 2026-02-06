@@ -8,7 +8,6 @@ import { Datepicker } from './datepicker'
 import { cn } from '@/ui/utils'
 
 export enum PeriodMode {
-	'Day',
 	'Week',
 	'Month',
 	'Year',
@@ -30,7 +29,7 @@ interface PeriodSelectorProps {
 
 export const PeriodSelector = (props: PeriodSelectorProps) => {
 	const [showCustom, setShowCustom] = useState<boolean>(false)
-	const [periodMode, setPeriodMode] = useState<PeriodMode>(props.initialMode ?? PeriodMode.Day)
+	const [periodMode, setPeriodMode] = useState<PeriodMode>(props.initialMode ?? PeriodMode.Week)
 
 	// Sets the initial mode
 	useEffect(() => {
@@ -39,8 +38,10 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 
 	const [internalValue, setInternalValue] = useState<PeriodSelectorValue>(
 		props.value ?? {
-			start: new Date(new Date().setHours(0, 0, 0, 0)),
-			end: new Date(new Date().setHours(23, 59, 59, 999)),
+			start: new Date(new Date().getDate() - new Date().getDay()), // Sunday of the week
+			end: new Date(
+				new Date(new Date().getDate() + 6 - new Date().getDay()).setHours(23, 59, 59, 999),
+			), // Saturday of the week
 		},
 	)
 
@@ -105,13 +106,6 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 	return (
 		<div className={props.className}>
 			<ButtonGroup className={cn('w-full', showCustom && '*:rounded-b-none')}>
-				<Button
-					disabled={props.disabled}
-					className="flex-1"
-					variant={PeriodMode.Day === periodMode ? 'default' : 'outline'}
-					onClick={() => setMode(PeriodMode.Day)}>
-					Today
-				</Button>
 				<Button
 					disabled={props.disabled}
 					className="flex-1"

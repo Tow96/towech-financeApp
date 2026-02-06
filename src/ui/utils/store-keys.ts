@@ -28,5 +28,11 @@ export const walletKeys = {
 
 export const graphKeys = {
 	all: ['graphs'] as const,
-	balance: () => [...graphKeys.all, 'balance'] as const,
+	balance: (start: Date, end: Date) =>
+		[
+			...graphKeys.all,
+			'balance',
+			start.toISOString().substring(0, 10),
+			end.toISOString().substring(0, 10),
+		] as const,
 }
