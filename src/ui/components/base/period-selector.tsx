@@ -104,32 +104,32 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 	}
 
 	return (
-		<div className={props.className}>
-			<ButtonGroup className={cn('w-full', showCustom && '*:rounded-b-none')}>
+		<div className={cn('flex w-full flex-col')}>
+			<ButtonGroup className={cn('flex w-full', showCustom && '*:rounded-b-none')}>
 				<Button
 					disabled={props.disabled}
-					className="flex-1"
+					className="max-w-1/4 flex-1"
 					variant={PeriodMode.Week === periodMode ? 'default' : 'outline'}
 					onClick={() => setMode(PeriodMode.Week)}>
 					This Week
 				</Button>
 				<Button
 					disabled={props.disabled}
-					className="flex-1"
+					className="max-w-1/4 flex-1"
 					variant={PeriodMode.Month === periodMode ? 'default' : 'outline'}
 					onClick={() => setMode(PeriodMode.Month)}>
 					This Month
 				</Button>
 				<Button
 					disabled={props.disabled}
-					className="flex-1"
+					className="max-w-1/4 flex-1"
 					variant={PeriodMode.Year === periodMode ? 'default' : 'outline'}
 					onClick={() => setMode(PeriodMode.Year)}>
 					This Year
 				</Button>
 				<Button
 					disabled={props.disabled}
-					className="flex-1"
+					className="max-w-1/4 flex-1"
 					variant={PeriodMode.Custom === periodMode ? 'default' : 'outline'}
 					onClick={() => setMode(PeriodMode.Custom)}>
 					Custom <ChevronDown />
@@ -137,7 +137,7 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 			</ButtonGroup>
 
 			{showCustom && (
-				<ButtonGroup className="w-full *:rounded-t-none *:border-t-0">
+				<ButtonGroup className="flex w-full *:rounded-t-none *:border-t-0">
 					<Button
 						disabled={props.disabled}
 						variant="outline"
@@ -147,7 +147,7 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 					</Button>
 					<Datepicker
 						disabled={props.disabled}
-						className="flex-1"
+						className="flex-1 text-xs md:text-sm"
 						value={internalValue.start}
 						onChange={v => setPartialValue('start', v)}
 					/>
@@ -156,7 +156,7 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 					</Button>
 					<Datepicker
 						disabled={props.disabled}
-						className="flex-1"
+						className="-px-1 flex-1 text-xs md:text-sm"
 						value={internalValue.end}
 						onChange={v => setPartialValue('end', v)}
 					/>

@@ -4,7 +4,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base/chart'
 import type { ChartConfig } from './base/chart'
 
 import { useBalanceStatistic } from '@/ui/data-access'
-import { convertCentsToCurrencyString } from '@/ui/utils'
+import { cn, convertCentsToCurrencyString } from '@/ui/utils'
 
 const chartConfig = {
 	balance: {
@@ -41,7 +41,10 @@ export function BalanceChart(props: BalanceChartProps) {
 
 	const domainWithMargins = [domain[0] - domainDelta * 0.1, domain[1] + domainDelta * 0.1]
 
-	return (
+	// TODO: Proper chart skeleton
+	return chart.isPending ? (
+		<div className={cn('flex items-center justify-center', props.className)}>Loading...</div>
+	) : (
 		<ChartContainer config={chartConfig} className={props.className}>
 			<AreaChart accessibilityLayer data={chartWithoutFutureData} margin={{ left: 12, right: 12 }}>
 				<CartesianGrid vertical={false} stroke="#c4c4c4" />
@@ -49,6 +52,7 @@ export function BalanceChart(props: BalanceChartProps) {
 					tickLine={false}
 					axisLine={false}
 					domain={domainWithMargins}
+					width={50}
 					tickCount={10}
 					tickFormatter={(v: number) => formatNumberToLetterNotation(v, domainDelta)}
 				/>
@@ -68,7 +72,6 @@ export function BalanceChart(props: BalanceChartProps) {
 				/>
 				<ChartTooltip
 					cursor={true}
-					defaultIndex={1}
 					content={
 						<ChartTooltipContent
 							hideLabel
