@@ -92,8 +92,6 @@ export const getBalanceStatistic = createServerFn({ method: 'GET' })
 			.from(dailyBalance)
 			.where(and(gte(dailyBalance.date, data.periodStart), lte(dailyBalance.date, data.periodEnd)))
 
-		logger.debug(result)
-
 		return result.map(x => ({
 			date: x.date,
 			balance: x.total,

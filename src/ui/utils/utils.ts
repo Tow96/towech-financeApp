@@ -19,5 +19,5 @@ export function convertCentsToAmount(value: number): string {
 
 export function convertCentsToCurrencyString(value: number): string {
 	const prefix = value < 0 ? '-$' : '$'
-	return `${prefix}  ${convertCentsToAmount(value)}`
+	return `${prefix}${convertCentsToAmount(value)}`
 }
