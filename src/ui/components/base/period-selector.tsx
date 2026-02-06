@@ -178,4 +178,3 @@ export const PeriodSelector = (props: PeriodSelectorProps) => {
 		</div>
 	)
 }
-

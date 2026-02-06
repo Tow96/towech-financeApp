@@ -63,7 +63,9 @@ function ChartContainer({
 }
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-	const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color)
+	const colorConfig = Object.entries(config).filter(
+		([, c_config]) => c_config.theme || c_config.color,
+	)
 
 	if (!colorConfig.length) {
 		return null
@@ -123,12 +125,10 @@ function ChartTooltipContent({
 		}
 
 		const [item] = payload
-		const key = `${labelKey || item?.dataKey || item?.name || 'value'}`
+		const key = `${labelKey || item.dataKey || item.name || 'value'}`
 		const itemConfig = getPayloadConfigFromPayload(config, item, key)
 		const value =
-			!labelKey && typeof label === 'string'
-				? config[label as keyof typeof config]?.label || label
-				: itemConfig?.label
+			!labelKey && typeof label === 'string' ? config[label].label || label : itemConfig?.label
 
 		if (labelFormatter) {
 			return (
@@ -152,7 +152,7 @@ function ChartTooltipContent({
 	return (
 		<div
 			className={cn(
-				'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+				'border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
 				className,
 			)}>
 			{!nestLabel ? tooltipLabel : null}
@@ -171,7 +171,7 @@ function ChartTooltipContent({
 									'[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5',
 									indicator === 'dot' && 'items-center',
 								)}>
-								{formatter && item?.value !== undefined && item.name ? (
+								{formatter && item.value !== undefined && item.name ? (
 									formatter(item.value, item.name, item, index, item.payload)
 								) : (
 									<>
@@ -305,7 +305,7 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 		configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string
 	}
 
-	return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config]
+	return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
 export {
@@ -316,4 +316,3 @@ export {
 	ChartLegendContent,
 	ChartStyle,
 }
-
