@@ -11,4 +11,3 @@ export const GetBalanceStatiscticSchema = z.object({
 	periodStart: z.date(),
 	periodEnd: z.date(),
 })
-
