@@ -10,9 +10,9 @@ export const useBalanceStatistic = (periodStart: Date, periodEnd: Date) => {
 	})
 }
 
-export const useCashFlowStatistic = (periodStart: Date, periodEnd: Date) => {
+export const useCashFlowStatistic = (periodStart: Date, periodEnd: Date, mode: 'day' | 'month') => {
 	return useQuery({
-		queryKey: graphKeys.cashFlow(periodStart, periodEnd),
-		queryFn: () => getCashFlowStatistic({ data: { periodStart, periodEnd } }),
+		queryKey: graphKeys.cashFlow(periodStart, periodEnd, mode),
+		queryFn: () => getCashFlowStatistic({ data: { periodStart, periodEnd, mode } }),
 	})
 }

@@ -35,11 +35,12 @@ export const graphKeys = {
 			start.toISOString().substring(0, 10),
 			end.toISOString().substring(0, 10),
 		] as const,
-	cashFlow: (start: Date, end: Date) =>
+	cashFlow: (start: Date, end: Date, mode: 'day' | 'month') =>
 		[
 			...graphKeys.all,
 			'cash-flow',
 			start.toISOString().substring(0, 10),
 			end.toISOString().substring(0, 10),
+			mode,
 		] as const,
 }

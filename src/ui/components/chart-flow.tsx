@@ -23,6 +23,7 @@ const chartConfig = {
 
 interface CashFlowChartProps {
 	className?: string
+	mode?: 'auto' | 'day' | 'month'
 	period: {
 		start: Date
 		end: Date
@@ -30,7 +31,16 @@ interface CashFlowChartProps {
 }
 
 export const CashFlowChart = (props: CashFlowChartProps) => {
-	const chart = useCashFlowStatistic(props.period.start, props.period.end)
+	const graphMode =
+		props.mode && props.mode !== 'auto'
+			? props.mode
+			: Math.floor(
+						(props.period.end.getTime() - props.period.start.getTime()) / (1000 * 60 * 60 * 24),
+				  ) > 31
+				? 'month'
+				: 'day'
+
+	const chart = useCashFlowStatistic(props.period.start, props.period.end, graphMode)
 
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
 	const chartWithoutFutureData = chart.data?.map(x =>

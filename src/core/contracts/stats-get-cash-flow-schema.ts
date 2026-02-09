@@ -10,4 +10,5 @@ export type GetCashFlowStatisticItemDto = {
 export const GetCashFlowStatisticSchema = z.object({
 	periodStart: z.date(),
 	periodEnd: z.date(),
+	mode: z.enum(['day', 'month']),
 })
