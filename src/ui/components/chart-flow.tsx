@@ -1,19 +1,27 @@
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Line, XAxis, YAxis } from 'recharts'
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base/chart'
 import type { ChartConfig } from './base/chart'
 
-import { useBalanceStatistic } from '@/ui/data-access'
+import { useCashFlowStatistic } from '@/ui/data-access'
 import { cn, convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
 
 const chartConfig = {
-	balance: {
-		label: 'Balance',
-		color: '#2563eb',
+	in: {
+		label: 'In',
+		color: 'var(--constructive)',
+	},
+	out: {
+		label: 'Out',
+		color: 'var(--destructive)',
+	},
+	net: {
+		label: 'Net',
+		color: 'var(--chart-3)',
 	},
 } satisfies ChartConfig
 
-interface BalanceChartProps {
+interface CashFlowChartProps {
 	className?: string
 	period: {
 		start: Date
@@ -21,37 +29,32 @@ interface BalanceChartProps {
 	}
 }
 
-export const BalanceChart = (props: BalanceChartProps) => {
-	const chart = useBalanceStatistic(props.period.start, props.period.end)
+export const CashFlowChart = (props: CashFlowChartProps) => {
+	const chart = useCashFlowStatistic(props.period.start, props.period.end)
 
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
 	const chartWithoutFutureData = chart.data?.map(x =>
-		x.date <= cutoffDate ? x : { date: x.date, balance: null },
+		x.date <= cutoffDate ? x : { date: x.date, in: null, out: null, net: null },
 	)
 
 	const domain = chartWithoutFutureData?.reduce(
-		(dom, curr) => [
-			Math.min(dom[0], curr.balance ?? dom[0]),
-			Math.max(dom[1], curr.balance ?? dom[1]),
-		],
-		[Infinity, 0],
+		(dom, curr) => [Math.min(dom[0], curr.out ?? dom[0]), Math.max(dom[1], curr.in ?? dom[1])],
+		[0, 0],
 	) ?? [0, 0]
 
 	const domainDelta = domain[1] - domain[0]
-
-	const domainWithMargins = [domain[0] - domainDelta * 0.1, domain[1] + domainDelta * 0.1]
 
 	// TODO: Proper chart skeleton
 	return chart.isPending ? (
 		<div className={cn('flex items-center justify-center', props.className)}>Loading...</div>
 	) : (
 		<ChartContainer config={chartConfig} className={props.className}>
-			<AreaChart accessibilityLayer data={chartWithoutFutureData} margin={{ left: 12, right: 12 }}>
-				<CartesianGrid vertical={false} stroke="#c4c4c4" />
+			<BarChart accessibilityLayer data={chartWithoutFutureData} stackOffset="sign">
+				<CartesianGrid vertical={false} />
 				<YAxis
 					tickLine={false}
 					axisLine={false}
-					domain={domainWithMargins}
+					domain={domain}
 					width={50}
 					tickCount={10}
 					tickFormatter={(v: number) => formatNumberToLetterNotation(v, domainDelta)}
@@ -59,16 +62,9 @@ export const BalanceChart = (props: BalanceChartProps) => {
 				<XAxis
 					dataKey="date"
 					tickLine={false}
+					tickMargin={10}
 					axisLine={false}
-					tickMargin={8}
 					tickFormatter={(v: Date) => v.toLocaleDateString()}
-				/>
-				<Area
-					dataKey="balance"
-					type="linear"
-					fill="var(--color-balance)"
-					fillOpacity={0.3}
-					stroke="var(--color-balance)"
 				/>
 				<ChartTooltip
 					cursor={true}
@@ -85,7 +81,6 @@ export const BalanceChart = (props: BalanceChartProps) => {
 											} as React.CSSProperties
 										}
 									/>
-
 									{chartConfig[name as keyof typeof chartConfig].label || name}
 									<div className="text-foreground ml-auto flex items-baseline gap-0 pl-1 font-mono font-medium tabular-nums">
 										{convertCentsToCurrencyString(value as number)}
@@ -95,7 +90,9 @@ export const BalanceChart = (props: BalanceChartProps) => {
 						/>
 					}
 				/>
-			</AreaChart>
+				<Bar stackId="a" dataKey="in" fill="var(--color-in)" radius={2} />
+				<Bar stackId="a" dataKey="out" fill="var(--color-out)" radius={2} />
+			</BarChart>
 		</ChartContainer>
 	)
 }
