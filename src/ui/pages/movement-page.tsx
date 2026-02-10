@@ -7,8 +7,8 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
+	MonthSelector,
 	MovementList,
-	PeriodSelector,
 	WalletSelector,
 } from '@/ui/components'
 
@@ -30,7 +30,7 @@ export const MovementPage = () => {
 					<Button className="w-full" onClick={() => setOpenAdd(true)}>
 						<Plus /> Add Movement
 					</Button>
-					<PeriodSelector value={periodStart} onChange={setPeriodStart} />
+					<MonthSelector value={periodStart} onChange={setPeriodStart} />
 				</div>
 			</CardHeader>
 			<CardContent className="overflow-auto">

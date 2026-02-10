@@ -55,7 +55,7 @@ interface AddMovementFormProps {
 const defaultValues = (date?: Date): AddMovementSchema => ({
 	amount: '',
 	description: '',
-	date: date ?? new Date(),
+	date: date ?? new Date(new Date().setHours(0, 0, 0, 0)),
 	category: { type: CategoryType.expense, id: null, subId: null },
 	wallet: { originId: undefined, destinationId: undefined },
 })

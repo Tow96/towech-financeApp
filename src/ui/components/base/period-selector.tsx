@@ -1,70 +1,174 @@
-import { useState } from 'react'
-import { ArrowLeft, ArrowRight, CalendarIcon } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { ButtonGroup } from './button-group'
 import { Button } from './button'
-import { MonthPicker } from './monthpicker'
-import { Popover, PopoverContent, PopoverTrigger } from './popover'
+import { ButtonGroup } from './button-group'
+import { Datepicker } from './datepicker'
 
 import { cn } from '@/ui/utils'
 
+export enum PeriodMode {
+	'Week',
+	'Month',
+	'Year',
+	'Custom',
+}
+
+export interface PeriodSelectorValue {
+	start: Date
+	end: Date
+}
+
 interface PeriodSelectorProps {
+	initialMode?: PeriodMode
 	className?: string
-	value?: Date
-	onChange?: (v: Date) => void
+	value?: PeriodSelectorValue
+	onChange?: (v: PeriodSelectorValue) => void
 	disabled?: boolean
 }
 
 export const PeriodSelector = (props: PeriodSelectorProps) => {
-	const [internalValue, setInternalValue] = useState<Date>(props.value ?? new Date())
+	const [showCustom, setShowCustom] = useState<boolean>(false)
+	const [periodMode, setPeriodMode] = useState<PeriodMode>(props.initialMode ?? PeriodMode.Week)
 
-	const handleValueChange = (v: Date) => {
+	// Sets the initial mode
+	useEffect(() => {
+		setMode(periodMode)
+	}, [])
+
+	const [internalValue, setInternalValue] = useState<PeriodSelectorValue>(
+		props.value ?? {
+			start: new Date(new Date().getDate() - new Date().getDay()), // Sunday of the week
+			end: new Date(
+				new Date(new Date().getDate() + 6 - new Date().getDay()).setHours(23, 59, 59, 999),
+			), // Saturday of the week
+		},
+	)
+
+	const handleValueChange = (v: PeriodSelectorValue) => {
 		setInternalValue(v)
 		if (props.onChange) props.onChange(v)
 	}
 
-	const changeMonth = (delta: number) => {
-		const currDate = new Date(internalValue)
-		currDate.setMonth(currDate.getMonth() + delta)
-		handleValueChange(currDate)
+	const setMode = (period: PeriodMode) => {
+		setPeriodMode(period)
+		setShowCustom(period === PeriodMode.Custom)
+
+		const newValue: PeriodSelectorValue = {
+			start: new Date(),
+			end: new Date(),
+		}
+
+		switch (period) {
+			case PeriodMode.Week:
+				newValue.start.setDate(newValue.start.getDate() - newValue.start.getDay())
+				newValue.end.setDate(newValue.end.getDate() + 6 - newValue.end.getDay())
+				break
+			case PeriodMode.Month:
+				newValue.start.setDate(1)
+				newValue.end.setMonth(newValue.end.getMonth() + 1)
+				newValue.end.setDate(0)
+				break
+			case PeriodMode.Year:
+				newValue.start.setMonth(0)
+				newValue.start.setDate(1)
+				newValue.end.setMonth(11)
+				newValue.end.setDate(31)
+				break
+			case PeriodMode.Custom:
+				newValue.start = internalValue.start
+				newValue.end = internalValue.end
+				break
+		}
+
+		newValue.start.setHours(0, 0, 0, 0)
+		newValue.end.setHours(23, 59, 59, 999)
+		handleValueChange(newValue)
+	}
+
+	const changePeriod = (dir: number) => {
+		const delta = internalValue.end.getTime() - internalValue.start.getTime() + 1
+		const newValue: PeriodSelectorValue = {
+			start: new Date(internalValue.start.setTime(internalValue.start.getTime() + dir * delta)),
+			end: new Date(internalValue.end.setTime(internalValue.end.getTime() + dir * delta)),
+		}
+		handleValueChange(newValue)
+	}
+
+	const setPartialValue = (s: 'start' | 'end', v: Date) => {
+		const newValue: PeriodSelectorValue = {
+			start: s === 'start' ? v : internalValue.start,
+			end: s === 'end' ? v : internalValue.end,
+		}
+		handleValueChange(newValue)
 	}
 
 	return (
-		<div className={props.className}>
-			<ButtonGroup className="flex w-full">
+		<div className={cn('flex w-full flex-col')}>
+			<ButtonGroup className={cn('flex w-full', showCustom && '*:rounded-b-none')}>
 				<Button
-					variant="outline"
 					disabled={props.disabled}
-					size="icon"
-					onClick={() => changeMonth(-1)}>
-					<ArrowLeft />
+					className="max-w-1/4 flex-1"
+					variant={PeriodMode.Week === periodMode ? 'default' : 'outline'}
+					onClick={() => setMode(PeriodMode.Week)}>
+					This Week
 				</Button>
-
-				{/* Month selector */}
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button
-							disabled={props.disabled}
-							variant={'outline'}
-							className={cn('flex-1 font-normal')}>
-							{(internalValue.getMonth() + 1).toString().padStart(2, '0')} /{' '}
-							{internalValue.getFullYear()}
-							<CalendarIcon className="mr-2 h-4 w-4" />
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent className="w-auto p-0">
-						<MonthPicker onMonthSelect={handleValueChange} selectedMonth={internalValue} />
-					</PopoverContent>
-				</Popover>
-
 				<Button
-					variant="outline"
 					disabled={props.disabled}
-					size="icon"
-					onClick={() => changeMonth(1)}>
-					<ArrowRight />
+					className="max-w-1/4 flex-1"
+					variant={PeriodMode.Month === periodMode ? 'default' : 'outline'}
+					onClick={() => setMode(PeriodMode.Month)}>
+					This Month
+				</Button>
+				<Button
+					disabled={props.disabled}
+					className="max-w-1/4 flex-1"
+					variant={PeriodMode.Year === periodMode ? 'default' : 'outline'}
+					onClick={() => setMode(PeriodMode.Year)}>
+					This Year
+				</Button>
+				<Button
+					disabled={props.disabled}
+					className="max-w-1/4 flex-1"
+					variant={PeriodMode.Custom === periodMode ? 'default' : 'outline'}
+					onClick={() => setMode(PeriodMode.Custom)}>
+					Custom <ChevronDown />
 				</Button>
 			</ButtonGroup>
+
+			{showCustom && (
+				<ButtonGroup className="flex w-full *:rounded-t-none *:border-t-0">
+					<Button
+						disabled={props.disabled}
+						variant="outline"
+						size="icon"
+						onClick={() => changePeriod(-1)}>
+						<ArrowLeft />
+					</Button>
+					<Datepicker
+						disabled={props.disabled}
+						className="flex-1 text-xs md:text-sm"
+						value={internalValue.start}
+						onChange={v => setPartialValue('start', v)}
+					/>
+					<Button disabled={props.disabled} variant="outline">
+						-
+					</Button>
+					<Datepicker
+						disabled={props.disabled}
+						className="-px-1 flex-1 text-xs md:text-sm"
+						value={internalValue.end}
+						onChange={v => setPartialValue('end', v)}
+					/>
+					<Button
+						disabled={props.disabled}
+						variant="outline"
+						size="icon"
+						onClick={() => changePeriod(1)}>
+						<ArrowRight />
+					</Button>
+				</ButtonGroup>
+			)}
 		</div>
 	)
 }

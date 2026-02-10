@@ -25,3 +25,22 @@ export const walletKeys = {
 	list: () => [...walletKeys.all, 'list'] as const,
 	detail: (id: string) => [...walletKeys.all, 'detail', id] as const,
 }
+
+export const graphKeys = {
+	all: ['graphs'] as const,
+	balance: (start: Date, end: Date) =>
+		[
+			...graphKeys.all,
+			'balance',
+			start.toISOString().substring(0, 10),
+			end.toISOString().substring(0, 10),
+		] as const,
+	cashFlow: (start: Date, end: Date, mode: 'day' | 'month') =>
+		[
+			...graphKeys.all,
+			'cash-flow',
+			start.toISOString().substring(0, 10),
+			end.toISOString().substring(0, 10),
+			mode,
+		] as const,
+}

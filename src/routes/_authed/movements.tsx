@@ -5,4 +5,3 @@ import { MovementPage } from '@/ui/pages'
 export const Route = createFileRoute('/_authed/movements')({
 	component: MovementPage,
 })
-

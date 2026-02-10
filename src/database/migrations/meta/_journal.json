@@ -36,6 +36,13 @@
 			"when": 1763251852874,
 			"tag": "0004_last_firebrand",
 			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1770387342814,
+			"tag": "0005_slimy_moira_mactaggert",
+			"breakpoints": true
 		}
 	]
 }

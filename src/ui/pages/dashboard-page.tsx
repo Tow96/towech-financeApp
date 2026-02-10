@@ -1,43 +1,48 @@
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
+import type { PeriodSelectorValue } from '@/ui/components'
+
 import {
-	AddMovementDialog,
-	Button,
+	BalanceChart,
 	Card,
 	CardContent,
+	CardFooter,
 	CardHeader,
-	MovementList,
-	MovementSummary,
+	CashFlowChart,
 	PeriodSelector,
-	WalletSelector,
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
 } from '@/ui/components'
 
 export const DashboardPage = () => {
-	const [openAdd, setOpenAdd] = useState<boolean>(false)
-	const [selectedWalletId, setSelectedWalletId] = useState<string | undefined>('total')
-	const [periodStart, setPeriodStart] = useState<Date>(new Date())
+	const [selectedPeriod, setSelectedPeriod] = useState<PeriodSelectorValue>({
+		start: new Date(),
+		end: new Date(),
+	})
 
 	return (
-		<Card className="m-4">
-			<CardHeader className="flex flex-col-reverse items-center justify-between gap-4 md:flex-row">
-				<PeriodSelector value={periodStart} onChange={setPeriodStart} />
-				<WalletSelector
-					className="w-full md:w-1/2"
-					value={selectedWalletId}
-					onChange={setSelectedWalletId}
-					showMoney
-					showTotal
-				/>
-				<Button className="w-full md:w-auto" onClick={() => setOpenAdd(true)}>
-					<Plus /> Add Movement
-				</Button>
-				<AddMovementDialog open={openAdd} setOpen={setOpenAdd} />
-			</CardHeader>
-			<CardContent className="max-h-[62vh] overflow-y-auto">
-				<MovementSummary selectedWalletId={selectedWalletId} periodStart={periodStart} />
-				<MovementList selectedWalletId={selectedWalletId} periodStart={periodStart} />
-			</CardContent>
-		</Card>
+		<Tabs defaultValue="cash-flow">
+			<Card className="m-4">
+				<CardHeader>
+					<TabsList className="w-full">
+						<TabsTrigger value="balance">Balance</TabsTrigger>
+						<TabsTrigger value="cash-flow">Cash flow</TabsTrigger>
+					</TabsList>
+				</CardHeader>
+				<CardContent className="flex-1">
+					<TabsContent value="balance">
+						<BalanceChart className="h-[20vh] w-full md:h-[30vh]" period={selectedPeriod} />
+					</TabsContent>
+					<TabsContent value="cash-flow">
+						<CashFlowChart className="h-[20vh] w-full md:h-[30vh]" period={selectedPeriod} />
+					</TabsContent>
+				</CardContent>
+				<CardFooter>
+					<PeriodSelector value={selectedPeriod} onChange={setSelectedPeriod} />
+				</CardFooter>
+			</Card>
+		</Tabs>
 	)
 }

@@ -14,7 +14,7 @@ import { Icon } from './icon'
 import type { ReactNode } from 'react'
 import type { Control } from 'react-hook-form'
 
-const MAX_ICON_ID = 35
+const MAX_ICON_ID = 37
 const icons: Array<ReactNode> = []
 for (let i = 0; i < MAX_ICON_ID; i++) {
 	icons.push(<Icon className="h-18 w-18 rounded-full" id={i} name="C" />)
