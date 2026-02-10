@@ -9,6 +9,7 @@ import {
 	editMovement,
 	getMovementDetail,
 	getMovementList,
+	getRecentMovementList,
 } from '@/core/functions'
 
 // Queries --------------------------------------
@@ -25,6 +26,13 @@ export const useMovements = (walletId: string | undefined, start: Date) => {
 		queryKey: movementKeys.list(walletId, start),
 		staleTime: 60000,
 		queryFn: () => getMovementList({ data: { walletId, periodStart: start } }),
+	})
+}
+
+export const useRecentMovements = () => {
+	return useQuery({
+		queryKey: movementKeys.recentList(),
+		queryFn: () => getRecentMovementList(),
 	})
 }
 

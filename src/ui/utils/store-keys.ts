@@ -17,6 +17,7 @@ export const movementKeys = {
 			walletId ?? 'total',
 			`${start.getFullYear()}-${start.getMonth() + 1}`,
 		] as const,
+	recentList: () => [...movementKeys.lists(), 'recent'] as const,
 	detail: (id: string) => [...movementKeys.all, 'detail', id] as const,
 }
 

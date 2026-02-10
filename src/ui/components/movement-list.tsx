@@ -18,7 +18,7 @@ import { WalletIcon } from './wallet-icon'
 
 import type { ListMovementItemDto } from '@/core/contracts'
 
-import { useMovements } from '@/ui/data-access'
+import { useMovements, useRecentMovements } from '@/ui/data-access'
 import { capitalizeFirst, cn, convertCentsToCurrencyString, useIsMobile } from '@/ui/utils'
 
 import { CategoryType } from '@/core/entities'
@@ -47,6 +47,30 @@ export const MovementList = (props: MovementListProps) => {
 				</>
 			)}
 
+			{movements.data?.map(m => (
+				<MovementItem key={m.id} movement={m} />
+			))}
+		</div>
+	)
+}
+
+export const RecentMovementList = () => {
+	const movements = useRecentMovements()
+
+	return (
+		<div>
+			{!movements.isPending && movements.data?.length === 0 && (
+				<div className="text-muted-foreground flex h-15 items-center justify-center md:text-2xl">
+					No recent movements
+				</div>
+			)}
+			{movements.isPending && (
+				<>
+					<MovementItemSkeleton />
+					<MovementItemSkeleton />
+					<MovementItemSkeleton />
+				</>
+			)}
 			{movements.data?.map(m => (
 				<MovementItem key={m.id} movement={m} />
 			))}
