@@ -23,7 +23,7 @@ export default defineConfig({
 		}),
 		tailwindcss(),
 		tanstackStart(),
-		nitro(),
+		nitro({ externals: { inline: ['decimal.js-light'] } }),
 		viteReact(),
 	],
 })

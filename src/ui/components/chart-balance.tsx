@@ -74,6 +74,12 @@ export const BalanceChart = (props: BalanceChartProps) => {
 					cursor={true}
 					content={
 						<ChartTooltipContent
+							label={undefined}
+							payload={[]}
+							coordinate={undefined}
+							active
+							accessibilityLayer
+							activeIndex={undefined}
 							hideLabel
 							formatter={(value, name) => (
 								<div className="text-muted-foreground flex min-w-32 items-center text-xs">
