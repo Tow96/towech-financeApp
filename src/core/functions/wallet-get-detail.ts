@@ -5,14 +5,14 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import type { WalletDetailDto } from '@/core/dto'
 
-import { GetWalletDetailSchema } from '@/core/dto'
+import { GetWalletDetailRequest } from '@/core/dto'
 import { FetchWalletMoneySql } from '@/core/utils'
 
 import { db, schema } from '@/database/utils'
 
 export const getWalletDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetWalletDetailSchema)
+	.inputValidator(GetWalletDetailRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(`User ${userId} requesting detail for wallet ${data.id}`)
 

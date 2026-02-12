@@ -13,7 +13,7 @@ import {
 
 import { useAddWalletMutation } from '@/ui/data-access'
 
-import { AddWalletSchema } from '@/core/dto'
+import { AddWalletRequest } from '@/core/dto'
 
 interface AddWalletDialogProps {
 	open: boolean
@@ -23,15 +23,15 @@ interface AddWalletDialogProps {
 export const AddWalletDialog = (props: AddWalletDialogProps) => {
 	const addWalletMutation = useAddWalletMutation()
 
-	const form = useForm<AddWalletSchema>({
-		resolver: zodResolver(AddWalletSchema),
+	const form = useForm<AddWalletRequest>({
+		resolver: zodResolver(AddWalletRequest),
 		defaultValues: {
 			name: '',
 			iconId: 0,
 		},
 	})
 
-	const onSubmit = (values: AddWalletSchema) =>
+	const onSubmit = (values: AddWalletRequest) =>
 		addWalletMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()

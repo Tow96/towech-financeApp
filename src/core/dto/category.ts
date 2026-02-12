@@ -71,7 +71,6 @@ export const GetCategoryListRequest = z.object({
 export type GetCategoryListRequest = z.infer<typeof GetCategoryListRequest>
 
 // Edit -----------------------------------------------------------------------
-
 export const EditCategoryRequest = z.object({
 	type: z.enum(CategoryType),
 	id: z.uuid(),

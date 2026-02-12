@@ -5,14 +5,14 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import type { WalletDetailDto } from '@/core/dto'
 
-import { SetWalletStatusSchema } from '@/core/dto'
+import { SetWalletStatusRequest } from '@/core/dto'
 import { FetchWalletMoneySql } from '@/core/utils'
 
 import { db, schema } from '@/database/utils'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetWalletStatusSchema)
+	.inputValidator(SetWalletStatusRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		// Checks that wallet exist
 		const existingWallet = await db

@@ -6,13 +6,13 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import type { WalletDetailDto } from '@/core/dto'
 
-import { AddWalletSchema } from '@/core/dto'
+import { AddWalletRequest } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 
 export const addWallet = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(AddWalletSchema)
+	.inputValidator(AddWalletRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(`User: ${userId} trying to add wallet ${data.name}`)
 
