@@ -3,10 +3,10 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { CategoryType } from '@/core/entities'
-import type { MovementDetailDto } from '@/core/contracts'
+import type { CategoryType } from '@/core/domain'
+import type { MovementDetailDto } from '@/core/dto'
 
-import { GetMovementDetailSchema } from '@/core/contracts'
+import { GetMovementDetailSchema } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 

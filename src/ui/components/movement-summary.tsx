@@ -1,7 +1,7 @@
 import { useMovements } from '@/ui/data-access'
 import { convertCentsToCurrencyString } from '@/ui/utils'
 
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 interface MovementSummaryProps {
 	selectedWalletId: string | undefined

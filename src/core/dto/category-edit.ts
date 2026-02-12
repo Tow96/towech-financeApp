@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
-export const EditCategorySchema = z.object({
+export const EditCategoryRequest = z.object({
 	type: z.enum(CategoryType),
 	id: z.uuid(),
 	subId: z.uuid().optional(),
@@ -13,4 +13,4 @@ export const EditCategorySchema = z.object({
 		.optional(),
 	iconId: z.number().optional(),
 })
-export type EditCategorySchema = z.infer<typeof EditCategorySchema>
+export type EditCategoryRequest = z.infer<typeof EditCategoryRequest>

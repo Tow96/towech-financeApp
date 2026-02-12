@@ -13,7 +13,7 @@ import {
 
 import { useAddWalletMutation } from '@/ui/data-access'
 
-import { AddWalletSchema } from '@/core/contracts'
+import { AddWalletSchema } from '@/core/dto'
 
 interface AddWalletDialogProps {
 	open: boolean

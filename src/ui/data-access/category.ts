@@ -1,11 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type {
-	AddCategorySchema,
-	EditCategorySchema,
-	SetCategoryStatusSchema,
-} from '@/core/contracts'
-import type { CategoryType } from '@/core/entities'
+import type { AddCategoryRequest, EditCategoryRequest, SetCategoryStatusRequest } from '@/core/dto'
+import type { CategoryType } from '@/core/domain'
 
 import { categoryKeys } from '@/ui/utils'
 import {
@@ -36,7 +32,7 @@ export const useCategoryList = (type: CategoryType) => {
 // Mutations ------------------------------------
 export const useAddCategoryMutation = () => {
 	return useMutation({
-		mutationFn: (data: AddCategorySchema) => addCategory({ data }),
+		mutationFn: (data: AddCategoryRequest) => addCategory({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
 			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)
@@ -46,7 +42,7 @@ export const useAddCategoryMutation = () => {
 
 export const useEditCategoryMutation = () => {
 	return useMutation({
-		mutationFn: (data: EditCategorySchema) => editCategory({ data }),
+		mutationFn: (data: EditCategoryRequest) => editCategory({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
 			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)
@@ -56,7 +52,7 @@ export const useEditCategoryMutation = () => {
 
 export const useSetCategoryStatusMutation = () => {
 	return useMutation({
-		mutationFn: (data: SetCategoryStatusSchema) => setCategoryStatus({ data }),
+		mutationFn: (data: SetCategoryStatusRequest) => setCategoryStatus({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: categoryKeys.list(result.type) })
 			context.client.setQueryData(categoryKeys.detail(result.type, result.id, result.subId), result)

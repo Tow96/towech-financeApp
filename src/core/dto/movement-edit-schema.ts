@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 export const EditMovementSchema = z.object({
 	id: z.uuid(),

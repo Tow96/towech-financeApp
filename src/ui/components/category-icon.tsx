@@ -1,6 +1,6 @@
 import { Icon, Skeleton } from './base'
 
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 import { useCategoryDetail } from '@/ui/data-access'
 import { cn } from '@/ui/utils'

@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { AddMovementSchema, DeleteMovementSchema, EditMovementSchema } from '@/core/contracts'
+import type { AddMovementSchema, DeleteMovementSchema, EditMovementSchema } from '@/core/dto'
 
 import { movementKeys, walletKeys } from '@/ui/utils'
 import {

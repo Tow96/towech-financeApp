@@ -5,7 +5,7 @@ import { FormDialog } from './base'
 
 import { useSetWalletStatusMutation } from '@/ui/data-access'
 
-import { SetWalletStatusSchema } from '@/core/contracts'
+import { SetWalletStatusSchema } from '@/core/dto'
 
 interface SetWalletStatusProps {
 	id: string

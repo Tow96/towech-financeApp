@@ -13,7 +13,7 @@ import {
 
 import { useEditWalletMutation, useWalletDetail } from '@/ui/data-access'
 
-import { EditWalletSchema } from '@/core/contracts'
+import { EditWalletSchema } from '@/core/dto'
 
 interface EditWalletDialogProps {
 	id: string

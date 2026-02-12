@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 export type CategoryListItemDto =
 	// top category
@@ -23,6 +23,7 @@ export type CategoryListItemDto =
 			archived: boolean
 	  }
 
-export const GetCategoryListSchema = z.object({
+export const GetCategoryListRequest = z.object({
 	type: z.enum(CategoryType),
 })
+export type GetCategoryListRequest = z.infer<typeof GetCategoryListRequest>

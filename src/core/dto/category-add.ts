@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
-export const AddCategorySchema = z.object({
+export const AddCategoryRequest = z.object({
 	name: z
 		.string()
 		.min(2, { message: 'Name must be at least 2 characters long.' })
@@ -11,4 +11,4 @@ export const AddCategorySchema = z.object({
 	iconId: z.number(),
 	id: z.uuid().optional(), // Used for subcategories
 })
-export type AddCategorySchema = z.infer<typeof AddCategorySchema>
+export type AddCategoryRequest = z.infer<typeof AddCategoryRequest>

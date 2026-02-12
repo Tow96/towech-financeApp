@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import { DeleteMovementSchema } from '@/core/contracts'
+import { DeleteMovementSchema } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 

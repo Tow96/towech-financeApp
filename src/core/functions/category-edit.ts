@@ -2,15 +2,15 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { Category } from '@/core/entities'
+import type { Category } from '@/core/domain'
 
-import { EditCategorySchema, mapEntityToCategoryDetail } from '@/core/contracts'
+import { EditCategoryRequest, mapEntityToCategoryDetail } from '@/core/dto'
 
 import { CategoryRepository } from '@/database/repositories'
 
 export const editCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(EditCategorySchema)
+	.inputValidator(EditCategoryRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 

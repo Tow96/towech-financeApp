@@ -2,14 +2,14 @@
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { Category } from '@/core/entities'
-import { SetCategoryStatusSchema, mapEntityToCategoryDetail } from '@/core/contracts'
+import type { Category } from '@/core/domain'
+import { SetCategoryStatusRequest, mapEntityToCategoryDetail } from '@/core/dto'
 
 import { CategoryRepository } from '@/database/repositories'
 
 export const setCategoryStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetCategoryStatusSchema)
+	.inputValidator(SetCategoryStatusRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 

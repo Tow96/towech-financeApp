@@ -26,8 +26,8 @@ import { WalletSelector } from './wallet-selector'
 
 import { useAddMovementMutation } from '@/ui/data-access'
 
-import { AddMovementSchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
+import { AddMovementSchema } from '@/core/dto'
+import { CategoryType } from '@/core/domain'
 
 interface AddMovementDialogProps {
 	open: boolean

@@ -3,8 +3,8 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import { GetBalanceStatiscticSchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
+import { GetBalanceStatiscticSchema } from '@/core/dto'
+import { CategoryType } from '@/core/domain'
 import { db, schema } from '@/database/utils'
 
 export const getBalanceStatistic = createServerFn({ method: 'GET' })

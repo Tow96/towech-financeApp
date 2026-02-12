@@ -16,12 +16,12 @@ import {
 	SelectValue,
 } from './base'
 
-import type { CategoryType } from '@/core/entities'
+import type { CategoryType } from '@/core/domain'
 
 import { capitalizeFirst } from '@/ui/utils'
 import { useCategoryDetail, useEditCategoryMutation } from '@/ui/data-access'
 
-import { EditCategorySchema } from '@/core/contracts'
+import { EditCategoryRequest } from '@/core/dto'
 
 interface EditCategoryDialogProps {
 	type: CategoryType
@@ -35,12 +35,12 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 	const categoryDetail = useCategoryDetail(props.type, props.id, props.subId)
 	const editCategoryMutation = useEditCategoryMutation()
 
-	const form = useForm<EditCategorySchema>({
-		resolver: zodResolver(EditCategorySchema),
+	const form = useForm<EditCategoryRequest>({
+		resolver: zodResolver(EditCategoryRequest),
 		defaultValues: { type: props.type, id: props.id, subId: props.subId },
 	})
 
-	const onSubmit = (values: EditCategorySchema) =>
+	const onSubmit = (values: EditCategoryRequest) =>
 		editCategoryMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()

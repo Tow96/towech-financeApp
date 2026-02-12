@@ -16,7 +16,7 @@ import {
 import { useCategoryList } from '@/ui/data-access'
 import { capitalizeFirst } from '@/ui/utils'
 
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 interface CategorySelectorValue {
 	type: CategoryType

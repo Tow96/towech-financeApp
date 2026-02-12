@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { AddWalletSchema, EditWalletSchema, SetWalletStatusSchema } from '@/core/contracts'
+import type { AddWalletSchema, EditWalletSchema, SetWalletStatusSchema } from '@/core/dto'
 
 import { walletKeys } from '@/ui/utils'
 import {

@@ -2,10 +2,10 @@ import { and, eq, gte, lte, sql, sum } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
-import type { GetCashFlowStatisticItemDto } from '@/core/contracts'
+import type { GetCashFlowStatisticItemDto } from '@/core/dto'
 
-import { GetCashFlowStatisticSchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
+import { GetCashFlowStatisticSchema } from '@/core/dto'
+import { CategoryType } from '@/core/domain'
 
 import { db, schema } from '@/database/utils'
 

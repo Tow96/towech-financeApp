@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod'
-import type { CategoryType } from '@/core/entities'
+import type { CategoryType } from '@/core/domain'
 
 export type MovementDetailDto = {
 	id: string

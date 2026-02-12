@@ -22,10 +22,10 @@ import { AddCategoryDialog } from './category-add-dialog'
 import { EditCategoryDialog } from './category-edit-dialog'
 import { SetCategoryStatusDialog } from './category-set-status-dialog'
 
-import type { CategoryListItemDto } from '@/core/contracts'
+import type { CategoryListItemDto } from '@/core/dto'
 
 import { useCategoryList } from '@/ui/data-access'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 import { capitalizeFirst, cn } from '@/ui/utils'
 

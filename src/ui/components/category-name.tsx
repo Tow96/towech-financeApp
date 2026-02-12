@@ -1,7 +1,7 @@
 import { Skeleton } from './base'
 
 import { useCategoryDetail } from '@/ui/data-access'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 import { capitalizeFirst, cn } from '@/ui/utils'
 

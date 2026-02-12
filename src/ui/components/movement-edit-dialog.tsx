@@ -29,8 +29,8 @@ import { WalletSelector } from './wallet-selector'
 import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
 import { convertCentsToAmount, useIsMobile } from '@/ui/utils'
 
-import { EditMovementSchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
+import { EditMovementSchema } from '@/core/dto'
+import { CategoryType } from '@/core/domain'
 
 interface EditMovementDialogProps {
 	id: string

@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormDialog } from '@/ui/components'
 import { useDeleteMovementMutation } from '@/ui/data-access'
 
-import { DeleteMovementSchema } from '@/core/contracts'
+import { DeleteMovementSchema } from '@/core/dto'
 
 interface DeleteMovementDialogProps {
 	id: string

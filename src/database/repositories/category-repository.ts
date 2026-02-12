@@ -1,6 +1,7 @@
 import { and, eq, getTableColumns } from 'drizzle-orm'
 
-import type { Category, CategoryType } from '@/core/entities'
+import type { CategoryListItemDto } from '@/core/dto'
+import type { Category, CategoryType } from '@/core/domain'
 
 import { db, schema } from '@/database/utils'
 
@@ -137,8 +138,8 @@ export class CategoryRepository {
 			)
 	}
 	// Queries --------------------------------------------------------
-	public async queryListByType(userId: string, type: string) {
-		return await db
+	public async queryListByType(userId: string, type: string): Promise<Array<CategoryListItemDto>> {
+		const result = await db
 			.select({
 				iconId: schema.Categories.iconId,
 				subIconId: schema.SubCategories.iconId,
@@ -154,6 +155,38 @@ export class CategoryRepository {
 			.leftJoin(schema.SubCategories, eq(schema.Categories.id, schema.SubCategories.parentId))
 			.where(and(eq(schema.Categories.userId, userId), eq(schema.Categories.type, type)))
 			.orderBy(schema.Categories.name)
+
+		const output: Array<CategoryListItemDto> = []
+		for (const item of result) {
+			let catIndex = output.findIndex(c => c.id === item.id)
+
+			if (catIndex === -1) {
+				output.push({
+					iconId: item.iconId,
+					type: item.type as CategoryType,
+					id: item.id,
+					subId: null,
+					name: item.name,
+					subCategories: [],
+					archived: item.archived !== null,
+				})
+				catIndex = output.findIndex(c => c.id === item.id)
+			}
+
+			if (item.subId !== null) {
+				output[catIndex].subCategories!.push({
+					iconId: item.subIconId!,
+					type: item.type as CategoryType,
+					id: item.id,
+					subId: item.subId,
+					name: item.subName!,
+					subCategories: null,
+					archived: item.subArchived !== null,
+				})
+			}
+		}
+
+		return output
 	}
 }
 
