@@ -1,4 +1,3 @@
-import { and, eq } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
@@ -8,53 +7,36 @@ import type { CategoryDetailDto } from '@/core/contracts'
 
 import { EditCategorySchema } from '@/core/contracts'
 
-import { db, schema } from '@/database/utils/utils/utils'
+import { CategoryRepository } from '@/database/repositories'
 
 export const editCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(EditCategorySchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		// The "parent" category has the data regarding the owner, so we fetch it first
-		const categories = await db
-			.select()
-			.from(schema.Categories)
-			.where(and(eq(schema.Categories.userId, userId), eq(schema.Categories.id, data.id)))
-		if (categories.length === 0) throw new Response('Category not found', { status: 404 })
+		const repository = new CategoryRepository()
 
+		// The "parent" category has the data regarding the owner, so we fetch it first
+		const parentCategory = await repository.getCategory(data.id)
+		if (!parentCategory || parentCategory.userId !== userId)
+			throw new Response('Category not found', { status: 404 })
+
+		// Editing a parent category
 		if (data.subId === undefined) {
+			// Check if category with same name already exists
 			if (data.name) {
-				// Check if category already exists
-				const existingCategory = await db
-					.select({ id: schema.Categories.id })
-					.from(schema.Categories)
-					.where(
-						and(
-							eq(schema.Categories.userId, userId),
-							eq(schema.Categories.type, categories[0].type),
-							eq(schema.Categories.name, data.name),
-						),
-					)
-				if (existingCategory.length > 0)
+				if (await repository.categoryExistsByName(userId, data.name, parentCategory.type))
 					throw new Response(
-						`Category ${data.name} already exists for type ${categories[0].type}`,
-						{
-							status: 409,
-						},
+						`Category ${data.name} already exists for type ${parentCategory.type}`,
+						{ status: 409 },
 					)
 			}
 
 			logger.info(`User: ${userId} editing category: ${data.id}`)
-			const updatedCategory = (
-				await db
-					.update(schema.Categories)
-					.set({
-						name: data.name ?? categories[0].name,
-						iconId: data.iconId ?? categories[0].iconId,
-						updatedAt: new Date(),
-					})
-					.where(eq(schema.Categories.id, data.id))
-					.returning()
-			)[0]
+			const updatedCategory = await repository.updateCategory(
+				data.id,
+				data.name || parentCategory.name,
+				data.iconId || parentCategory.iconId,
+			)
 
 			const output: CategoryDetailDto = {
 				iconId: updatedCategory.iconId,
@@ -67,51 +49,32 @@ export const editCategory = createServerFn({ method: 'POST' })
 			return output
 		}
 
-		const subCategories = await db
-			.select()
-			.from(schema.SubCategories)
-			.where(
-				and(eq(schema.SubCategories.parentId, data.id), eq(schema.SubCategories.id, data.subId)),
-			)
-		if (subCategories.length === 0) throw new Response('Subcategory not found', { status: 404 })
+		// Editing a subcategory ----
 
+		// Check if subcategory exists
+		const subCategory = await repository.getSubCategory(data.id, data.subId)
+		if (!subCategory) throw new Response('Subcategory not found', { status: 404 })
 		logger.info(`User: ${userId} editing subcategory: ${data.subId}`)
+
+		// Check if subCategory with same name already exists
 		if (data.name) {
-			const existingSubCategory = await db
-				.select({ id: schema.SubCategories.id })
-				.from(schema.SubCategories)
-				.where(
-					and(
-						eq(schema.SubCategories.parentId, categories[0].id || ''),
-						eq(schema.SubCategories.name, data.name),
-					),
-				)
-			if (existingSubCategory.length > 0)
+			if (await repository.subCategoryExistsByName(parentCategory.id, data.name))
 				throw new Response(
-					`Subcategory ${data.name} already exists for parent ${categories[0].id}`,
-					{
-						status: 409,
-					},
+					`Subcategory ${data.name} already exists for parent ${parentCategory.id}`,
+					{ status: 409 },
 				)
 		}
 
-		const updatedSubCategory = (
-			await db
-				.update(schema.SubCategories)
-				.set({
-					name: data.name ?? subCategories[0].name,
-					iconId: data.iconId ?? subCategories[0].iconId,
-					updatedAt: new Date(),
-				})
-				.where(
-					and(eq(schema.SubCategories.parentId, data.id), eq(schema.SubCategories.id, data.subId)),
-				)
-				.returning()
-		)[0]
+		const updatedSubCategory = await repository.updateSubCategory(
+			data.id,
+			data.subId,
+			data.name ?? subCategory.name,
+			data.iconId ?? subCategory.iconId,
+		)
 
 		const subOutput: CategoryDetailDto = {
 			iconId: updatedSubCategory.iconId,
-			type: categories[0].type as CategoryType,
+			type: parentCategory.type as CategoryType,
 			id: updatedSubCategory.parentId,
 			subId: updatedSubCategory.id,
 			name: updatedSubCategory.name,

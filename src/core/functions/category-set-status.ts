@@ -1,5 +1,4 @@
-﻿import { and, eq } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
+﻿import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
@@ -8,38 +7,33 @@ import type { CategoryDetailDto } from '@/core/contracts'
 
 import { SetCategoryStatusSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database/utils'
+import { CategoryRepository } from '@/database/repositories'
 
 export const setCategoryStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(SetCategoryStatusSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		// The "parent" category has the data regarding the owner, so we fetch it first
-		const categories = await db
-			.select()
-			.from(schema.Categories)
-			.where(eq(schema.Categories.id, data.id))
+		const repository = new CategoryRepository()
 
-		if (categories.length === 0) throw new Response('Category not found', { status: 404 })
-		if (categories[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
+		// The "parent" category has the data regarding the owner, so we fetch it first
+		const parentCategory = await repository.getCategory(data.id)
+		if (!parentCategory || parentCategory.userId !== userId)
+			throw new Response('Category not found', { status: 404 })
 
 		if (data.subId === undefined) {
 			logger.info(`User: ${userId} setting status for parent category: ${data.id}`)
-			return setParentCategoryStatus(data)
+			return setParentCategoryStatus(repository, data)
 		}
 
 		logger.info(`User: ${userId} setting status for sub category: ${data.subId}`)
-		return setSubCategoryStatus(data, categories[0].type as CategoryType)
+		return setSubCategoryStatus(repository, data, parentCategory.type as CategoryType)
 	})
 
-const setParentCategoryStatus = async (category: SetCategoryStatusSchema) => {
-	const updatedCategory = (
-		await db
-			.update(schema.Categories)
-			.set({ archivedAt: category.archived ? new Date() : null })
-			.where(eq(schema.Categories.id, category.id))
-			.returning()
-	)[0]
+const setParentCategoryStatus = async (
+	repository: CategoryRepository,
+	category: SetCategoryStatusSchema,
+) => {
+	const updatedCategory = await repository.setCategoryArchive(category.id, category.archived)
 
 	const output: CategoryDetailDto = {
 		iconId: updatedCategory.iconId,
@@ -52,33 +46,19 @@ const setParentCategoryStatus = async (category: SetCategoryStatusSchema) => {
 	return output
 }
 
-const setSubCategoryStatus = async (category: SetCategoryStatusSchema, type: CategoryType) => {
-	if (category.subId === undefined) throw new Response(`Sub category not given`, { status: 422 })
+const setSubCategoryStatus = async (
+	repository: CategoryRepository,
+	category: SetCategoryStatusSchema,
+	type: CategoryType,
+) => {
+	const existingSubCategory = await repository.getSubCategory(category.id, category.subId!)
+	if (!existingSubCategory) throw new Response(`Sub category not found`, { status: 404 })
 
-	const existingSubCategory = await db
-		.select({ id: schema.SubCategories.id })
-		.from(schema.SubCategories)
-		.where(
-			and(
-				eq(schema.SubCategories.parentId, category.id),
-				eq(schema.SubCategories.id, category.subId),
-			),
-		)
-	if (existingSubCategory.length === 0)
-		throw new Response(`Sub category not found`, { status: 404 })
-
-	const updatedSubCategory = (
-		await db
-			.update(schema.SubCategories)
-			.set({ archivedAt: category.archived ? new Date() : null })
-			.where(
-				and(
-					eq(schema.SubCategories.parentId, category.id),
-					eq(schema.SubCategories.id, category.subId),
-				),
-			)
-			.returning()
-	)[0]
+	const updatedSubCategory = await repository.setSubCategoryArchive(
+		category.id,
+		category.subId!,
+		category.archived,
+	)
 
 	const output: CategoryDetailDto = {
 		iconId: updatedSubCategory.iconId,

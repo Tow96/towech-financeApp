@@ -1,5 +1,4 @@
-﻿import { and, eq } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
+﻿import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
@@ -8,30 +7,16 @@ import type { CategoryListItemDto } from '@/core/contracts'
 
 import { GetCategoryListSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database/utils'
+import { CategoryRepository } from '@/database/repositories'
 
 export const getCategoriesByType = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(GetCategoryListSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
+		const repository = new CategoryRepository()
 		logger.info(`Fetching categories of type ${data.type} for user: ${userId}`)
 
-		const query = await db
-			.select({
-				iconId: schema.Categories.iconId,
-				subIconId: schema.SubCategories.iconId,
-				type: schema.Categories.type,
-				id: schema.Categories.id,
-				subId: schema.SubCategories.id,
-				name: schema.Categories.name,
-				subName: schema.SubCategories.name,
-				archived: schema.Categories.archivedAt,
-				subArchived: schema.SubCategories.archivedAt,
-			})
-			.from(schema.Categories)
-			.leftJoin(schema.SubCategories, eq(schema.Categories.id, schema.SubCategories.parentId))
-			.where(and(eq(schema.Categories.userId, userId), eq(schema.Categories.type, data.type)))
-			.orderBy(schema.Categories.name)
+		const query = await repository.queryListByType(userId, data.type)
 
 		const response: Array<CategoryListItemDto> = []
 		for (const item of query) {
