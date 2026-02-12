@@ -9,7 +9,7 @@ import { EditMovementSchema } from '@/core/contracts'
 import { CategoryType } from '@/core/entities'
 import { convertAmountToCents } from '@/core/utils'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const editMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

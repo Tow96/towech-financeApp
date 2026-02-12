@@ -7,7 +7,7 @@ import type { GetCashFlowStatisticItemDto } from '@/core/contracts'
 import { GetCashFlowStatisticSchema } from '@/core/contracts'
 import { CategoryType } from '@/core/entities'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getCashFlowStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

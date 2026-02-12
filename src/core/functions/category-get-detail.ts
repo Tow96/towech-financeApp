@@ -8,7 +8,7 @@ import type { CategoryType } from '@/core/entities'
 
 import { GetCategoryDetailSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils/utils/utils'
 
 export const getCategoryDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

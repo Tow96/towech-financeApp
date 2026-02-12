@@ -6,7 +6,7 @@ import { AuthorizationMiddleware } from './session-validate'
 import type { CategoryType } from '@/core/entities'
 import type { ListMovementItemDto } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getRecentMovementList = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
@@ -38,4 +38,3 @@ export const getRecentMovementList = createServerFn({ method: 'GET' })
 
 		return output
 	})
-

@@ -8,7 +8,7 @@ import type { MovementDetailDto } from '@/core/contracts'
 
 import { GetMovementDetailSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getMovementDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

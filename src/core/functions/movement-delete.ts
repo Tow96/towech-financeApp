@@ -5,7 +5,7 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import { DeleteMovementSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const deleteMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

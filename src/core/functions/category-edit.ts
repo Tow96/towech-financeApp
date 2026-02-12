@@ -8,7 +8,7 @@ import type { CategoryDetailDto } from '@/core/contracts'
 
 import { EditCategorySchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils/utils/utils'
 
 export const editCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

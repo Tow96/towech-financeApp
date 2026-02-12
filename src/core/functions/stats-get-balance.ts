@@ -5,7 +5,7 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import { GetBalanceStatiscticSchema } from '@/core/contracts'
 import { CategoryType } from '@/core/entities'
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getBalanceStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

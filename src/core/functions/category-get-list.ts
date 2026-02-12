@@ -8,7 +8,7 @@ import type { CategoryListItemDto } from '@/core/contracts'
 
 import { GetCategoryListSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getCategoriesByType = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

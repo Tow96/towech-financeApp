@@ -9,7 +9,7 @@ import type { CategoryDetailDto } from '@/core/contracts'
 
 import { AddCategorySchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils/utils/utils/utils/utils/utils'
 
 export const addCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

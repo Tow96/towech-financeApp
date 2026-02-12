@@ -8,7 +8,7 @@ import type { ListMovementItemDto } from '@/core/contracts'
 
 import { GetMovementListSchema } from '@/core/contracts'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getMovementList = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

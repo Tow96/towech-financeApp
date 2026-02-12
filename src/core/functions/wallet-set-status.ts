@@ -8,7 +8,7 @@ import type { WalletDetailDto } from '@/core/contracts'
 import { SetWalletStatusSchema } from '@/core/contracts'
 import { FetchWalletMoneySql } from '@/core/utils'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])

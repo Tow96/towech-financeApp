@@ -8,7 +8,7 @@ import type { WalletDetailDto } from '@/core/contracts'
 import { GetWalletDetailSchema } from '@/core/contracts'
 import { FetchWalletMoneySql } from '@/core/utils'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getWalletDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])

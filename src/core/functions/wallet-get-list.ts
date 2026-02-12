@@ -8,7 +8,7 @@ import type { ListWalletItemDto, ListWalletsDto } from '@/core/contracts'
 import { GetWalletTotalsSchema } from '@/core/contracts'
 import { FetchWalletMoneySql } from '@/core/utils'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const getWalletTotals = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
