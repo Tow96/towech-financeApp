@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import type { Wallet } from '@/core/domain'
+
 // Add ------------------------------------------------------------------------
 export const AddWalletRequest = z.object({
 	name: z
@@ -19,6 +21,14 @@ export type WalletDetailDto = {
 	money: number
 	archived: boolean
 }
+
+export const mapEntityToWalletDetailDto = (wallet: Wallet): WalletDetailDto => ({
+	id: wallet.id,
+	iconId: wallet.iconId,
+	name: wallet.name,
+	money: wallet.money,
+	archived: wallet.archived,
+})
 
 export const GetWalletDetailRequest = z.object({
 	id: z.uuid(),

@@ -4,4 +4,6 @@ export type Wallet = {
 	iconId: number
 	name: string
 	archived: boolean
+	money: number
 }
+

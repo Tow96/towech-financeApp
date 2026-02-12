@@ -66,6 +66,7 @@ export class CategoryRepository {
 			.from(schema.SubCategories)
 			.leftJoin(schema.Categories, eq(schema.SubCategories.parentId, schema.Categories.id))
 			.where(and(eq(schema.SubCategories.parentId, id), eq(schema.SubCategories.id, subId)))
+		if (result.length === 0) return null
 
 		return {
 			archived: result[0].archivedAt !== null,

@@ -13,7 +13,6 @@ export const addCategory = createServerFn({ method: 'POST' })
 	.inputValidator(AddCategoryRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
-
 		logger.info(
 			`User: ${userId} trying to add category ${data.type}${data.id && `:${data.id}`}_${data.name}`,
 		)

@@ -1,61 +1,33 @@
-import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { WalletDetailDto } from '@/core/dto'
+import type { Wallet } from '@/core/domain'
 
-import { EditWalletRequest } from '@/core/dto'
-import { FetchWalletMoneySql } from '@/core/utils'
+import { EditWalletRequest, mapEntityToWalletDetailDto } from '@/core/dto'
 
-import { db, schema } from '@/database/utils'
+import { WalletRepository } from '@/database/repositories'
 
 export const editWallet = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(EditWalletRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		// Checks that wallet exist
-		const existingWallet = await db
-			.select({
-				id: schema.Wallets.id,
-				money: FetchWalletMoneySql,
-				userId: schema.Wallets.userId,
-				name: schema.Wallets.name,
-				iconId: schema.Wallets.iconId,
-			})
-			.from(schema.Wallets)
-			.leftJoin(
-				schema.MovementSummary,
-				or(
-					eq(schema.MovementSummary.originWalletId, schema.Wallets.id),
-					eq(schema.MovementSummary.destinationWalletId, schema.Wallets.id),
-				),
-			)
-			.where(eq(schema.Wallets.id, data.id))
-			.groupBy(schema.Wallets.id)
+		const walletRepo = new WalletRepository()
 
-		if (existingWallet.length === 0) throw new Response('Wallet not found', { status: 404 })
-		if (existingWallet[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
+		logger.info(`User: ${userId} trying to edit wallet: ${data.id}`)
+		const wallet = await walletRepo.get(data.id)
+		if (!wallet || wallet.userId !== userId) throw new Response('Wallet not found', { status: 404 })
 
-		logger.info(`User: ${userId} editing wallet: ${data.id}`)
-		const updatedWallet = (
-			await db
-				.update(schema.Wallets)
-				.set({
-					name: data.name ?? existingWallet[0].name,
-					iconId: data.iconId ?? existingWallet[0].iconId,
-					updatedAt: new Date(),
-				})
-				.where(eq(schema.Wallets.id, data.id))
-				.returning()
-		)[0]
+		if (data.name && (await walletRepo.existsByName(userId, data.name)))
+			throw new Response(`Wallet ${data.name} already exists.`, { status: 409 })
 
-		const output: WalletDetailDto = {
-			id: updatedWallet.id,
-			iconId: updatedWallet.iconId,
-			name: updatedWallet.name,
-			money: parseInt(existingWallet[0].money),
-			archived: updatedWallet.archivedAt !== null,
+		const updatedWallet: Wallet = {
+			...wallet,
+			name: data.name ?? wallet.name,
+			iconId: data.iconId ?? wallet.iconId,
 		}
-		return output
+		await walletRepo.update(updatedWallet)
+
+		return mapEntityToWalletDetailDto(updatedWallet)
 	})
+// 62

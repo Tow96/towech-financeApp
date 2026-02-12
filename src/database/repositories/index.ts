@@ -1,2 +1,3 @@
-export * from './category-repository'
+export * from './category'
+export * from './wallet'
 
