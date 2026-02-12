@@ -37,7 +37,7 @@ export const EditCategoryDialog = (props: EditCategoryDialogProps) => {
 
 	const form = useForm<EditCategorySchema>({
 		resolver: zodResolver(EditCategorySchema),
-		defaultValues: { id: props.id, subId: props.subId },
+		defaultValues: { type: props.type, id: props.id, subId: props.subId },
 	})
 
 	const onSubmit = (values: EditCategorySchema) =>

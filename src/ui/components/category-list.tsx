@@ -151,6 +151,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 					setOpen={setOpenAddSub}
 				/>
 				<SetCategoryStatusDialog
+					type={category.type}
 					id={category.id}
 					archive={!category.archived}
 					open={openStatus}
@@ -197,6 +198,7 @@ const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
 				</span>
 			</div>
 			<SetCategoryStatusDialog
+				type={subCategory.type}
 				id={subCategory.id}
 				subId={subCategory.subId!}
 				archive={!subCategory.archived}

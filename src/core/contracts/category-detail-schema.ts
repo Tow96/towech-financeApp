@@ -1,5 +1,7 @@
 import { z } from 'zod'
-import type { CategoryType } from '@/core/entities'
+
+import type { Category } from '@/core/entities'
+import { CategoryType } from '@/core/entities'
 
 export type CategoryDetailDto = {
 	iconId: number
@@ -10,7 +12,17 @@ export type CategoryDetailDto = {
 	archived: boolean
 }
 
+export const mapEntityToCategoryDetail = (category: Category): CategoryDetailDto => ({
+	type: category.type,
+	id: category.id,
+	subId: category.subId,
+	iconId: category.iconId,
+	name: category.name,
+	archived: category.archived,
+})
+
 export const GetCategoryDetailSchema = z.object({
+	type: z.enum(CategoryType),
 	id: z.uuid(),
 	subId: z.uuid().optional(),
 })

@@ -1,127 +1,141 @@
-import { and, eq } from 'drizzle-orm'
+import { and, eq, getTableColumns } from 'drizzle-orm'
+
+import type { Category, CategoryType } from '@/core/entities'
 
 import { db, schema } from '@/database/utils'
 
 export class CategoryRepository {
 	// Commands -------------------------------------------------------
-	public async categoryExistsByName(userId: string, name: string, type: string): Promise<boolean> {
-		const result = await db
-			.select({ id: schema.Categories.id })
-			.from(schema.Categories)
-			.where(
-				and(
-					eq(schema.Categories.userId, userId),
-					eq(schema.Categories.type, type),
-					eq(schema.Categories.name, name),
-				),
-			)
-
-		return result.length > 0
-	}
-
-	public async getCategory(id: string) {
-		const result = await db.select().from(schema.Categories).where(eq(schema.Categories.id, id))
-
-		return result.length > 0 ? result[0] : null
-	}
-
-	public async getSubCategory(parentId: string, id: string) {
-		const result = await db
-			.select()
-			.from(schema.SubCategories)
-			.where(and(eq(schema.SubCategories.parentId, parentId), eq(schema.SubCategories.id, id)))
-
-		return result.length > 0 ? result[0] : null
-	}
-
-	public async insertCategory(
+	public async existsByName(
 		userId: string,
-		type: string,
-		id: string,
+		type: CategoryType,
+		id: string | null,
 		name: string,
-		iconId: number,
-	) {
-		const result = await db
-			.insert(schema.Categories)
-			.values({
-				userId,
-				type,
-				id,
-				name,
-				iconId,
-				createdAt: new Date(),
-				updatedAt: new Date(0),
-			})
-			.returning()
+	): Promise<boolean> {
+		// Main category ----------------------------
+		if (id === null) {
+			const result = await db
+				.select({ id: schema.Categories.id })
+				.from(schema.Categories)
+				.where(
+					and(
+						eq(schema.Categories.userId, userId),
+						eq(schema.Categories.type, type),
+						eq(schema.Categories.name, name),
+					),
+				)
 
-		return result[0]
-	}
+			return result.length > 0
+		}
 
-	public async insertSubCategory(parentId: string, id: string, name: string, iconId: number) {
-		const result = await db
-			.insert(schema.SubCategories)
-			.values({
-				parentId,
-				id,
-				name,
-				iconId,
-				createdAt: new Date(),
-				updatedAt: new Date(0),
-			})
-			.returning()
-
-		return result[0]
-	}
-
-	public async subCategoryExistsByName(parentId: string, name: string): Promise<boolean> {
+		// Subcategory ------------------------------
 		const result = await db
 			.select({ id: schema.SubCategories.id })
 			.from(schema.SubCategories)
-			.where(and(eq(schema.SubCategories.parentId, parentId), eq(schema.SubCategories.name, name)))
+			.where(and(eq(schema.SubCategories.parentId, id), eq(schema.SubCategories.name, name)))
 
 		return result.length > 0
 	}
 
-	public async setCategoryArchive(id: string, archiveStatus: boolean) {
-		const result = await db
-			.update(schema.Categories)
-			.set({ updatedAt: new Date(), archivedAt: archiveStatus ? new Date() : null })
-			.where(eq(schema.Categories.id, id))
-			.returning()
+	public async get(type: CategoryType, id: string, subId: string | null): Promise<Category | null> {
+		if (subId === null) {
+			const result = await db
+				.select()
+				.from(schema.Categories)
+				.where(and(eq(schema.Categories.type, type), eq(schema.Categories.id, id)))
+			if (result.length === 0) return null
+			return {
+				archived: result[0].archivedAt !== null,
+				iconId: result[0].iconId,
+				id: result[0].id,
+				name: result[0].name,
+				subId: null,
+				type: result[0].type as CategoryType,
+				userId: result[0].userId,
+			}
+		}
 
-		return result[0]
+		const result = await db
+			.select({
+				...getTableColumns(schema.SubCategories),
+				type: schema.Categories.type,
+				userId: schema.Categories.userId,
+				parentId: schema.Categories.id,
+			})
+			.from(schema.SubCategories)
+			.leftJoin(schema.Categories, eq(schema.SubCategories.parentId, schema.Categories.id))
+			.where(and(eq(schema.SubCategories.parentId, id), eq(schema.SubCategories.id, subId)))
+
+		return {
+			archived: result[0].archivedAt !== null,
+			iconId: result[0].iconId,
+			id: result[0].parentId!,
+			name: result[0].name,
+			subId: result[0].id,
+			type: result[0].type as CategoryType,
+			userId: result[0].userId!,
+		}
 	}
 
-	public async setSubCategoryArchive(parentId: string, id: string, archiveStatus: boolean) {
-		const result = await db
+	public async insert(category: Category) {
+		// Main category
+		if (!category.subId) {
+			await db.insert(schema.Categories).values({
+				...category,
+				createdAt: new Date(),
+				updatedAt: new Date(0),
+				archivedAt: category.archived ? new Date() : null,
+			})
+
+			return
+		}
+
+		// Sub category
+		await db.insert(schema.SubCategories).values({
+			parentId: category.id,
+			id: category.subId,
+			iconId: category.iconId,
+			name: category.name,
+			archivedAt: category.archived ? new Date() : null,
+			createdAt: new Date(),
+			updatedAt: new Date(0),
+		})
+	}
+
+	public async update(category: Category) {
+		// Main category
+		if (!category.subId) {
+			await db
+				.update(schema.Categories)
+				.set({
+					...category,
+					archivedAt: category.archived ? new Date() : null,
+					updatedAt: new Date(),
+				})
+				.where(
+					and(eq(schema.Categories.type, category.type), eq(schema.Categories.id, category.id)),
+				)
+			return
+		}
+
+		// Sub category
+		await db
 			.update(schema.SubCategories)
-			.set({ updatedAt: new Date(), archivedAt: archiveStatus ? new Date() : null })
-			.where(and(eq(schema.SubCategories.parentId, parentId), eq(schema.SubCategories.id, id)))
-			.returning()
-
-		return result[0]
+			.set({
+				parentId: category.id,
+				id: category.subId,
+				iconId: category.iconId,
+				name: category.name,
+				archivedAt: category.archived ? new Date() : null,
+				updatedAt: new Date(),
+			})
+			.where(
+				and(
+					eq(schema.SubCategories.parentId, category.id),
+					eq(schema.SubCategories.id, category.subId),
+				),
+			)
 	}
-
-	public async updateCategory(id: string, name: string, iconId: number) {
-		const result = await db
-			.update(schema.Categories)
-			.set({ name, iconId, updatedAt: new Date() })
-			.where(eq(schema.Categories.id, id))
-			.returning()
-
-		return result[0]
-	}
-
-	public async updateSubCategory(parentId: string, id: string, name: string, iconId: number) {
-		const result = await db
-			.update(schema.SubCategories)
-			.set({ name, iconId, updatedAt: new Date() })
-			.where(and(eq(schema.SubCategories.parentId, parentId), eq(schema.SubCategories.id, id)))
-			.returning()
-
-		return result[0]
-	}
-
 	// Queries --------------------------------------------------------
 	public async queryListByType(userId: string, type: string) {
 		return await db

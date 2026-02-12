@@ -2,10 +2,8 @@
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { CategoryType } from '@/core/entities'
-import type { CategoryDetailDto } from '@/core/contracts'
-
-import { SetCategoryStatusSchema } from '@/core/contracts'
+import type { Category } from '@/core/entities'
+import { SetCategoryStatusSchema, mapEntityToCategoryDetail } from '@/core/contracts'
 
 import { CategoryRepository } from '@/database/repositories'
 
@@ -13,60 +11,24 @@ export const setCategoryStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(SetCategoryStatusSchema)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		const repository = new CategoryRepository()
+		const categoryRepo = new CategoryRepository()
 
-		// The "parent" category has the data regarding the owner, so we fetch it first
-		const parentCategory = await repository.getCategory(data.id)
-		if (!parentCategory || parentCategory.userId !== userId)
-			throw new Response('Category not found', { status: 404 })
+		logger.info(
+			`User: ${userId} trying to set status of category: ${data.type}:${data.id}${data.subId && `:${data.subId}`}`,
+		)
 
-		if (data.subId === undefined) {
-			logger.info(`User: ${userId} setting status for parent category: ${data.id}`)
-			return setParentCategoryStatus(repository, data)
+		const category = await categoryRepo.get(data.type, data.id, data.subId ?? null)
+		if (!category || category.userId !== userId)
+			throw new Response(`Category not found`, { status: 404 })
+
+		const updatedCategory: Category = {
+			...category,
+			archived: data.archived,
 		}
+		await categoryRepo.update(updatedCategory)
+		logger.info(
+			`User: ${userId} set status of category: ${data.type}:${data.id}${data.subId && `:${data.subId}`} to ${updatedCategory.archived}`,
+		)
 
-		logger.info(`User: ${userId} setting status for sub category: ${data.subId}`)
-		return setSubCategoryStatus(repository, data, parentCategory.type as CategoryType)
+		return mapEntityToCategoryDetail(updatedCategory)
 	})
-
-const setParentCategoryStatus = async (
-	repository: CategoryRepository,
-	category: SetCategoryStatusSchema,
-) => {
-	const updatedCategory = await repository.setCategoryArchive(category.id, category.archived)
-
-	const output: CategoryDetailDto = {
-		iconId: updatedCategory.iconId,
-		type: updatedCategory.type as CategoryType,
-		id: updatedCategory.id,
-		subId: null,
-		name: updatedCategory.name,
-		archived: updatedCategory.archivedAt !== null,
-	}
-	return output
-}
-
-const setSubCategoryStatus = async (
-	repository: CategoryRepository,
-	category: SetCategoryStatusSchema,
-	type: CategoryType,
-) => {
-	const existingSubCategory = await repository.getSubCategory(category.id, category.subId!)
-	if (!existingSubCategory) throw new Response(`Sub category not found`, { status: 404 })
-
-	const updatedSubCategory = await repository.setSubCategoryArchive(
-		category.id,
-		category.subId!,
-		category.archived,
-	)
-
-	const output: CategoryDetailDto = {
-		iconId: updatedSubCategory.iconId,
-		type,
-		id: category.id,
-		subId: updatedSubCategory.id,
-		name: updatedSubCategory.name,
-		archived: updatedSubCategory.archivedAt !== null,
-	}
-	return output
-}

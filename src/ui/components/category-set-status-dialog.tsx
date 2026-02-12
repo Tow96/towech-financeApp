@@ -2,11 +2,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { FormDialog } from './base'
+
+import type { CategoryType } from '@/core/entities'
+
 import { useSetCategoryStatusMutation } from '@/ui/data-access'
 
 import { SetCategoryStatusSchema } from '@/core/contracts'
 
 interface SetCategoryStatusProps {
+	type: CategoryType
 	id: string
 	subId?: string
 	archive: boolean
@@ -19,7 +23,7 @@ export const SetCategoryStatusDialog = (props: SetCategoryStatusProps) => {
 
 	const form = useForm<SetCategoryStatusSchema>({
 		resolver: zodResolver(SetCategoryStatusSchema),
-		defaultValues: { id: props.id, subId: props.subId, archived: props.archive },
+		defaultValues: { type: props.type, id: props.id, subId: props.subId, archived: props.archive },
 	})
 
 	const onSubmit = (values: SetCategoryStatusSchema) =>

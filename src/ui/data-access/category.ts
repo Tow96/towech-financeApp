@@ -21,7 +21,7 @@ export const useCategoryDetail = (type: CategoryType, id: string, subId?: string
 	return useQuery({
 		queryKey: categoryKeys.detail(type, id, subId ?? null),
 		staleTime: 60000,
-		queryFn: () => getCategoryDetail({ data: { id, subId } }),
+		queryFn: () => getCategoryDetail({ data: { type, id, subId } }),
 	})
 }
 
