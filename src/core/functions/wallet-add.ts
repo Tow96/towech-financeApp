@@ -3,7 +3,6 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { WalletDetailDto } from '@/core/dto'
 import type { Wallet } from '@/core/domain'
 import { AddWalletRequest, mapEntityToWalletDetailDto } from '@/core/dto'
 
@@ -32,4 +31,3 @@ export const addWallet = createServerFn({ method: 'POST' })
 
 		return mapEntityToWalletDetailDto(newWallet)
 	})
-// 51

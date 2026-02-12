@@ -1,10 +1,21 @@
 import { and, eq, getTableColumns, or, sql, sum } from 'drizzle-orm'
 
+import type { ListWalletItemDto, ListWalletsDto } from '@/core/dto'
 import type { Wallet } from '@/core/domain'
 
 import { db, schema } from '@/database/utils'
 
 export class WalletRepository {
+	private FetchMoneySql = sum(
+		sql`CASE
+            WHEN ${schema.MovementSummary.destinationWalletId}=${schema.Wallets.id} THEN ${schema.MovementSummary.amount}
+            WHEN ${schema.MovementSummary.originWalletId}=${schema.Wallets.id} THEN -${schema.MovementSummary.amount}
+            ELSE 0
+          END`,
+	)
+		.mapWith(Number)
+		.as('money')
+
 	// Commands -------------------------------------------------------
 	public async existsByName(userId: string, name: string): Promise<boolean> {
 		const result = await db
@@ -15,19 +26,10 @@ export class WalletRepository {
 	}
 
 	public async get(id: string): Promise<Wallet | null> {
-		// TODO: Improve money sql call
 		const result = await db
 			.select({
 				...getTableColumns(schema.Wallets),
-				money: sum(
-					sql`CASE
-            WHEN ${schema.MovementSummary.destinationWalletId}=${schema.Wallets.id} THEN ${schema.MovementSummary.amount}
-            WHEN ${schema.MovementSummary.originWalletId}=${schema.Wallets.id} THEN -${schema.MovementSummary.amount}
-            ELSE 0
-          END`,
-				)
-					.mapWith(Number)
-					.as('money'),
+				money: this.FetchMoneySql,
 			})
 			.from(schema.Wallets)
 			.leftJoin(
@@ -70,5 +72,39 @@ export class WalletRepository {
 			})
 			.where(eq(schema.Wallets.id, wallet.id))
 	}
-}
 
+	// Queries --------------------------------------------------------
+	public async queryGetAllWallets(userId: string): Promise<ListWalletsDto> {
+		const query = await db
+			.select({
+				...getTableColumns(schema.Wallets),
+				money: this.FetchMoneySql,
+			})
+			.from(schema.Wallets)
+			.leftJoin(
+				schema.MovementSummary,
+				or(
+					eq(schema.MovementSummary.originWalletId, schema.Wallets.id),
+					eq(schema.MovementSummary.destinationWalletId, schema.Wallets.id),
+				),
+			)
+			.where(and(eq(schema.Wallets.userId, userId)))
+			.groupBy(schema.Wallets.id)
+			.orderBy(schema.Wallets.name)
+
+		let total = 0
+		const wallets: Array<ListWalletItemDto> = []
+		for (const wallet of query) {
+			total += wallet.money
+			wallets.push({
+				id: wallet.id,
+				iconId: wallet.iconId,
+				money: wallet.money,
+				name: wallet.name,
+				archived: wallet.archivedAt !== null,
+			})
+		}
+
+		return { total, wallets }
+	}
+}

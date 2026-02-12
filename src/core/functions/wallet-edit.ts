@@ -3,7 +3,6 @@ import { createServerFn } from '@tanstack/react-start'
 import { AuthorizationMiddleware } from './session-validate'
 
 import type { Wallet } from '@/core/domain'
-
 import { EditWalletRequest, mapEntityToWalletDetailDto } from '@/core/dto'
 
 import { WalletRepository } from '@/database/repositories'
@@ -27,7 +26,7 @@ export const editWallet = createServerFn({ method: 'POST' })
 			iconId: data.iconId ?? wallet.iconId,
 		}
 		await walletRepo.update(updatedWallet)
+		logger.info(`User: ${userId} updated wallet: ${data.id}`)
 
 		return mapEntityToWalletDetailDto(updatedWallet)
 	})
-// 62

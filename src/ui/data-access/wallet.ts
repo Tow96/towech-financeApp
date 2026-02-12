@@ -7,7 +7,7 @@ import {
 	addWallet,
 	editWallet,
 	getWalletDetail,
-	getWalletTotals,
+	getWalletList,
 	setWalletStatus,
 } from '@/core/functions'
 
@@ -24,7 +24,7 @@ export const useWallets = () => {
 	return useQuery({
 		queryKey: walletKeys.list(),
 		staleTime: 60000,
-		queryFn: () => getWalletTotals({ data: {} }),
+		queryFn: () => getWalletList({ data: {} }),
 	})
 }
 
