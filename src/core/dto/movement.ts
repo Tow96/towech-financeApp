@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import type { Movement } from '@/core/domain'
 import { CategoryType } from '@/core/domain'
 
 // TODO: Refine zod requests
@@ -72,6 +73,15 @@ export type MovementDetailDto = {
 		destinationId: string | null
 	}
 }
+
+export const mapEntityToMovementDetailDto = (movement: Movement): MovementDetailDto => ({
+	id: movement.id,
+	date: movement.date,
+	amount: movement.amount,
+	description: movement.description,
+	category: movement.category,
+	wallet: movement.wallet,
+})
 
 export const GetMovementDetailRequest = z.object({
 	id: z.uuid(),
