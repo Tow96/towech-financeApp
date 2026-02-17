@@ -13,7 +13,7 @@ import {
 
 import { useEditWalletMutation, useWalletDetail } from '@/ui/data-access'
 
-import { EditWalletSchema } from '@/core/contracts'
+import { EditWalletRequest } from '@/core/dto'
 
 interface EditWalletDialogProps {
 	id: string
@@ -25,12 +25,12 @@ export const EditWalletDialog = (props: EditWalletDialogProps) => {
 	const walletDetail = useWalletDetail(props.id)
 	const editWalletMutation = useEditWalletMutation()
 
-	const form = useForm<EditWalletSchema>({
-		resolver: zodResolver(EditWalletSchema),
+	const form = useForm<EditWalletRequest>({
+		resolver: zodResolver(EditWalletRequest),
 		defaultValues: { id: props.id },
 	})
 
-	const onSubmit = (values: EditWalletSchema) =>
+	const onSubmit = (values: EditWalletRequest) =>
 		editWalletMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()

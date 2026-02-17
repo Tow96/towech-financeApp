@@ -1,13 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { AddWalletSchema, EditWalletSchema, SetWalletStatusSchema } from '@/core/contracts'
+import type { AddWalletRequest, EditWalletRequest, SetWalletStatusRequest } from '@/core/dto'
 
 import { walletKeys } from '@/ui/utils'
 import {
 	addWallet,
 	editWallet,
 	getWalletDetail,
-	getWalletTotals,
+	getWalletList,
 	setWalletStatus,
 } from '@/core/functions'
 
@@ -24,14 +24,14 @@ export const useWallets = () => {
 	return useQuery({
 		queryKey: walletKeys.list(),
 		staleTime: 60000,
-		queryFn: () => getWalletTotals({ data: {} }),
+		queryFn: () => getWalletList({ data: {} }),
 	})
 }
 
 // Mutations ------------------------------------
 export const useAddWalletMutation = () => {
 	return useMutation({
-		mutationFn: (data: AddWalletSchema) => addWallet({ data }),
+		mutationFn: (data: AddWalletRequest) => addWallet({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
 			context.client.setQueryData(walletKeys.detail(result.id), result)
@@ -41,7 +41,7 @@ export const useAddWalletMutation = () => {
 
 export const useEditWalletMutation = () => {
 	return useMutation({
-		mutationFn: (data: EditWalletSchema) => editWallet({ data }),
+		mutationFn: (data: EditWalletRequest) => editWallet({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
 			context.client.setQueryData(walletKeys.detail(result.id), result)
@@ -51,7 +51,7 @@ export const useEditWalletMutation = () => {
 
 export const useSetWalletStatusMutation = () => {
 	return useMutation({
-		mutationFn: (data: SetWalletStatusSchema) => setWalletStatus({ data }),
+		mutationFn: (data: SetWalletStatusRequest) => setWalletStatus({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await context.client.invalidateQueries({ queryKey: walletKeys.list() })
 			context.client.setQueryData(walletKeys.detail(result.id), result)

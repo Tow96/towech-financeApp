@@ -1,6 +1,5 @@
 export * from './logger'
 export * from './session'
-export * from './wallet'
 
 export function convertAmountToCents(value: string): number {
 	const cleanValue = value.replaceAll(',', '')

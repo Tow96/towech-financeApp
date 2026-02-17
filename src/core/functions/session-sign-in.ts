@@ -4,7 +4,7 @@ import { createIsomorphicFn } from '@tanstack/react-start'
 
 import { SESSION_TOKEN_SEPARATOR, hashSecret, toHexString } from '@/core/utils'
 
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const generateSession = createIsomorphicFn().server(async (userId: string) => {
 	const id = generateSecureRandomString()

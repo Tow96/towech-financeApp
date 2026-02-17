@@ -1,59 +1,28 @@
-import { eq, or } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { WalletDetailDto } from '@/core/contracts'
+import type { Wallet } from '@/core/domain'
+import { SetWalletStatusRequest, mapEntityToWalletDetailDto } from '@/core/dto'
 
-import { SetWalletStatusSchema } from '@/core/contracts'
-import { FetchWalletMoneySql } from '@/core/utils'
-
-import { db, schema } from '@/database'
+import { WalletRepository } from '@/database/repositories'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetWalletStatusSchema)
+	.inputValidator(SetWalletStatusRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
-		// Checks that wallet exist
-		const existingWallet = await db
-			.select({
-				id: schema.Wallets.id,
-				money: FetchWalletMoneySql,
-				userId: schema.Wallets.userId,
-			})
-			.from(schema.Wallets)
-			.leftJoin(
-				schema.MovementSummary,
-				or(
-					eq(schema.MovementSummary.originWalletId, schema.Wallets.id),
-					eq(schema.MovementSummary.destinationWalletId, schema.Wallets.id),
-				),
-			)
-			.where(eq(schema.Wallets.id, data.id))
-			.groupBy(schema.Wallets.id)
-		if (existingWallet.length === 0) throw new Response('Wallet not found', { status: 404 })
-		if (existingWallet[0].userId !== userId) throw new Response('Unauthorized', { status: 403 })
+		const walletRepo = new WalletRepository()
+		logger.info(`User: ${userId} trying to set status of wallet: ${data.id}`)
 
-		// Wallet can't be archived unless it has zero money (movements not necessarily 0)
-		if (existingWallet[0].money !== '0' && data.archived)
-			throw new Response('Wallet needs to have 0 money to be archived', { status: 422 })
+		const wallet = await walletRepo.get(data.id)
+		if (!wallet || wallet.userId !== userId) throw new Response(`Wallet not found`, { status: 404 })
 
-		logger.info(`User: ${userId} setting status for wallet: ${data.id}`)
-
-		const updatedWallet = (
-			await db
-				.update(schema.Wallets)
-				.set({ archivedAt: data.archived ? new Date() : null })
-				.where(eq(schema.Wallets.id, data.id))
-				.returning()
-		)[0]
-
-		const output: WalletDetailDto = {
-			id: updatedWallet.id,
-			iconId: updatedWallet.iconId,
-			name: updatedWallet.name,
-			money: parseInt(existingWallet[0].money),
-			archived: updatedWallet.archivedAt !== null,
+		const updatedWallet: Wallet = {
+			...wallet,
+			archived: data.archived,
 		}
-		return output
+		await walletRepo.update(updatedWallet)
+		logger.info(`User: ${userId} set status of wallet: ${data.id} to: ${data.archived}`)
+
+		return mapEntityToWalletDetailDto(updatedWallet)
 	})

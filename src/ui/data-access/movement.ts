@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { AddMovementSchema, DeleteMovementSchema, EditMovementSchema } from '@/core/contracts'
+import type { AddMovementRequest, DeleteMovementRequest, EditMovementRequest } from '@/core/dto'
 
 import { movementKeys, walletKeys } from '@/ui/utils'
 import {
@@ -39,7 +39,7 @@ export const useRecentMovements = () => {
 // Mutations ------------------------------------
 export const useAddMovementMutation = () => {
 	return useMutation({
-		mutationFn: async (data: AddMovementSchema) => addMovement({ data }),
+		mutationFn: async (data: AddMovementRequest) => addMovement({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await Promise.all([
 				context.client.invalidateQueries({ queryKey: walletKeys.all }),
@@ -52,7 +52,7 @@ export const useAddMovementMutation = () => {
 
 export const useDeleteMovementMutation = () => {
 	return useMutation({
-		mutationFn: (data: DeleteMovementSchema) => deleteMovement({ data }),
+		mutationFn: (data: DeleteMovementRequest) => deleteMovement({ data }),
 		onSuccess: async (_, data, __, context) => {
 			await Promise.all([
 				context.client.invalidateQueries({ queryKey: walletKeys.all }),
@@ -65,7 +65,7 @@ export const useDeleteMovementMutation = () => {
 
 export const useEditMovementMutation = () => {
 	return useMutation({
-		mutationFn: (data: EditMovementSchema) => editMovement({ data }),
+		mutationFn: (data: EditMovementRequest) => editMovement({ data }),
 		onSuccess: async (result, _, __, context) => {
 			await Promise.all([
 				context.client.invalidateQueries({ queryKey: walletKeys.all }),

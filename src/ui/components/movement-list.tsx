@@ -16,12 +16,12 @@ import { DeleteMovementDialog } from './movement-delete-dialog'
 import { EditMovementDialog } from './movement-edit-dialog'
 import { WalletIcon } from './wallet-icon'
 
-import type { ListMovementItemDto } from '@/core/contracts'
+import type { ListMovementItemDto } from '@/core/dto'
 
 import { useMovements, useRecentMovements } from '@/ui/data-access'
 import { capitalizeFirst, cn, convertCentsToCurrencyString, useIsMobile } from '@/ui/utils'
 
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 interface MovementListProps {
 	selectedWalletId: string | undefined

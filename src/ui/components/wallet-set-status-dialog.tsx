@@ -5,7 +5,7 @@ import { FormDialog } from './base'
 
 import { useSetWalletStatusMutation } from '@/ui/data-access'
 
-import { SetWalletStatusSchema } from '@/core/contracts'
+import { SetWalletStatusRequest } from '@/core/dto'
 
 interface SetWalletStatusProps {
 	id: string
@@ -17,12 +17,12 @@ interface SetWalletStatusProps {
 export const SetWalletStatusDialog = (props: SetWalletStatusProps) => {
 	const setWalletStatusMutation = useSetWalletStatusMutation()
 
-	const form = useForm<SetWalletStatusSchema>({
-		resolver: zodResolver(SetWalletStatusSchema),
+	const form = useForm<SetWalletStatusRequest>({
+		resolver: zodResolver(SetWalletStatusRequest),
 		defaultValues: { id: props.id, archived: props.archive },
 	})
 
-	const onSubmit = (values: SetWalletStatusSchema) =>
+	const onSubmit = (values: SetWalletStatusRequest) =>
 		setWalletStatusMutation.mutate(values, { onSettled: () => props.setOpen(false) })
 
 	return (

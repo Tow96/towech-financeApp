@@ -14,7 +14,7 @@ import {
 import { EditWalletDialog } from './wallet-edit-dialog'
 import { SetWalletStatusDialog } from './wallet-set-status-dialog'
 
-import type { ListWalletItemDto } from '@/core/contracts'
+import type { ListWalletItemDto } from '@/core/dto'
 
 import { useWallets } from '@/ui/data-access'
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/ui/utils'

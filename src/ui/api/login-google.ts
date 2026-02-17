@@ -12,7 +12,7 @@ import {
 	generateSessionCookie,
 	googleAuth,
 } from '@/core/utils'
-import { db, schema } from '@/database'
+import { db, schema } from '@/database/utils'
 
 export const googleLogin = (): Response => {
 	const state = generateState()

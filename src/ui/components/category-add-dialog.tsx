@@ -18,8 +18,8 @@ import {
 
 import { useAddCategoryMutation } from '@/ui/data-access'
 
-import { AddCategorySchema } from '@/core/contracts'
-import { CategoryType } from '@/core/entities'
+import { AddCategoryRequest } from '@/core/dto'
+import { CategoryType } from '@/core/domain'
 
 interface AddCategoryDialogProps {
 	open: boolean
@@ -31,8 +31,8 @@ interface AddCategoryDialogProps {
 export const AddCategoryDialog = (props: AddCategoryDialogProps) => {
 	const addCategoryMutation = useAddCategoryMutation()
 
-	const form = useForm<AddCategorySchema>({
-		resolver: zodResolver(AddCategorySchema),
+	const form = useForm<AddCategoryRequest>({
+		resolver: zodResolver(AddCategoryRequest),
 		defaultValues: {
 			name: '',
 			iconId: 0,
@@ -41,7 +41,7 @@ export const AddCategoryDialog = (props: AddCategoryDialogProps) => {
 		},
 	})
 
-	const onSubmit = (values: AddCategorySchema) => {
+	const onSubmit = (values: AddCategoryRequest) => {
 		addCategoryMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()

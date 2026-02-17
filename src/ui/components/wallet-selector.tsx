@@ -10,7 +10,7 @@ import {
 	Skeleton,
 } from './base'
 
-import type { ListWalletItemDto } from '@/core/contracts'
+import type { ListWalletItemDto } from '@/core/dto'
 
 import { useWallets } from '@/ui/data-access'
 import { capitalizeFirst, cn, convertCentsToCurrencyString } from '@/ui/utils'

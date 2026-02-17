@@ -22,10 +22,10 @@ import { AddCategoryDialog } from './category-add-dialog'
 import { EditCategoryDialog } from './category-edit-dialog'
 import { SetCategoryStatusDialog } from './category-set-status-dialog'
 
-import type { CategoryListItemDto } from '@/core/contracts'
+import type { CategoryListItemDto } from '@/core/dto'
 
 import { useCategoryList } from '@/ui/data-access'
-import { CategoryType } from '@/core/entities'
+import { CategoryType } from '@/core/domain'
 
 import { capitalizeFirst, cn } from '@/ui/utils'
 
@@ -151,6 +151,7 @@ const CategoryListItem = ({ category }: CategoryListItemProps) => {
 					setOpen={setOpenAddSub}
 				/>
 				<SetCategoryStatusDialog
+					type={category.type}
 					id={category.id}
 					archive={!category.archived}
 					open={openStatus}
@@ -197,6 +198,7 @@ const SubCategoryListItem = ({ subCategory }: SubCategoryListItemProps) => {
 				</span>
 			</div>
 			<SetCategoryStatusDialog
+				type={subCategory.type}
 				id={subCategory.id}
 				subId={subCategory.subId!}
 				archive={!subCategory.archived}
