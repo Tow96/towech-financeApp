@@ -46,7 +46,7 @@ export const editMovement = createServerFn({ method: 'POST' })
 		}
 
 		// Wallet validation
-		if (data.wallet) {
+		if (data.wallet && (data.wallet.originId || data.wallet.destinationId)) {
 			if (data.wallet.originId) {
 				const originWallet = await walletRepo.get(data.wallet.originId)
 				if (!originWallet || originWallet.userId !== userId)
