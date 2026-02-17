@@ -26,7 +26,7 @@ import { WalletSelector } from './wallet-selector'
 
 import { useAddMovementMutation } from '@/ui/data-access'
 
-import { AddMovementSchema } from '@/core/dto'
+import { AddMovementRequest } from '@/core/dto'
 import { CategoryType } from '@/core/domain'
 
 interface AddMovementDialogProps {
@@ -52,7 +52,7 @@ interface AddMovementFormProps {
 	onSubmitSuccess?: () => void
 }
 
-const defaultValues = (date?: Date): AddMovementSchema => ({
+const defaultValues = (date?: Date): AddMovementRequest => ({
 	amount: '',
 	description: '',
 	date: date ?? new Date(new Date().setHours(0, 0, 0, 0)),
@@ -63,12 +63,12 @@ const defaultValues = (date?: Date): AddMovementSchema => ({
 const AddMovementForm = (props: AddMovementFormProps) => {
 	const addMovementMutation = useAddMovementMutation()
 
-	const form = useForm<AddMovementSchema>({
-		resolver: zodResolver(AddMovementSchema),
+	const form = useForm<AddMovementRequest>({
+		resolver: zodResolver(AddMovementRequest),
 		defaultValues: defaultValues(),
 	})
 
-	const onSubmit = (v: AddMovementSchema) =>
+	const onSubmit = (v: AddMovementRequest) =>
 		addMovementMutation.mutate(v, {
 			onSuccess: () => {
 				const lastDate = new Date(form.watch().date)

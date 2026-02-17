@@ -29,7 +29,7 @@ import { WalletSelector } from './wallet-selector'
 import { useEditMovementMutation, useMovementDetail } from '@/ui/data-access'
 import { convertCentsToAmount, useIsMobile } from '@/ui/utils'
 
-import { EditMovementSchema } from '@/core/dto'
+import { EditMovementRequest } from '@/core/dto'
 import { CategoryType } from '@/core/domain'
 
 interface EditMovementDialogProps {
@@ -72,12 +72,12 @@ const EditMovementForm = (props: EditMovementFormProps) => {
 	const movementDetail = useMovementDetail(props.id)
 	const editMovementMutation = useEditMovementMutation()
 
-	const form = useForm<EditMovementSchema>({
-		resolver: zodResolver(EditMovementSchema),
+	const form = useForm<EditMovementRequest>({
+		resolver: zodResolver(EditMovementRequest),
 		defaultValues: { id: props.id },
 	})
 
-	const onSubmit = (values: EditMovementSchema) =>
+	const onSubmit = (values: EditMovementRequest) =>
 		editMovementMutation.mutate(values, {
 			onSuccess: () => {
 				form.reset()

@@ -6,13 +6,13 @@ import { AuthorizationMiddleware } from './session-validate'
 import type { CategoryType } from '@/core/domain'
 import type { MovementDetailDto } from '@/core/dto'
 
-import { GetMovementDetailSchema } from '@/core/dto'
+import { GetMovementDetailRequest } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 
 export const getMovementDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetMovementDetailSchema)
+	.inputValidator(GetMovementDetailRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(`User ${userId} requesting detail for movement ${data.id}`)
 

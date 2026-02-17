@@ -3,13 +3,13 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import { DeleteMovementSchema } from '@/core/dto'
+import { DeleteMovementRequest } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 
 export const deleteMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(DeleteMovementSchema)
+	.inputValidator(DeleteMovementRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		// Checks movement exists
 		const existingMovement = await db

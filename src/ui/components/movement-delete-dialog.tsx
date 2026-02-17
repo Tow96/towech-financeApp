@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormDialog } from '@/ui/components'
 import { useDeleteMovementMutation } from '@/ui/data-access'
 
-import { DeleteMovementSchema } from '@/core/dto'
+import { DeleteMovementRequest } from '@/core/dto'
 
 interface DeleteMovementDialogProps {
 	id: string
@@ -15,12 +15,12 @@ interface DeleteMovementDialogProps {
 export const DeleteMovementDialog = (props: DeleteMovementDialogProps) => {
 	const deleteMovementMutation = useDeleteMovementMutation()
 
-	const form = useForm<DeleteMovementSchema>({
-		resolver: zodResolver(DeleteMovementSchema),
+	const form = useForm<DeleteMovementRequest>({
+		resolver: zodResolver(DeleteMovementRequest),
 		defaultValues: { id: props.id },
 	})
 
-	const onSubmit = (values: DeleteMovementSchema) =>
+	const onSubmit = (values: DeleteMovementRequest) =>
 		deleteMovementMutation.mutate(values, { onSettled: () => props.setOpen(false) })
 
 	return (

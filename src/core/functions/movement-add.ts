@@ -6,7 +6,7 @@ import { AuthorizationMiddleware } from './session-validate'
 
 import type { MovementDetailDto } from '@/core/dto'
 
-import { AddMovementSchema } from '@/core/dto'
+import { AddMovementRequest } from '@/core/dto'
 import { CategoryType } from '@/core/domain'
 import { convertAmountToCents } from '@/core/utils'
 
@@ -14,7 +14,7 @@ import { db, schema } from '@/database/utils'
 
 export const addMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(AddMovementSchema)
+	.inputValidator(AddMovementRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		// Category validation
 		if (data.category.id !== null) {

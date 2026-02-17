@@ -6,13 +6,13 @@ import { AuthorizationMiddleware } from './session-validate'
 import type { CategoryType } from '@/core/domain'
 import type { ListMovementItemDto } from '@/core/dto'
 
-import { GetMovementListSchema } from '@/core/dto'
+import { GetMovementListRequest } from '@/core/dto'
 
 import { db, schema } from '@/database/utils'
 
 export const getMovementList = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetMovementListSchema)
+	.inputValidator(GetMovementListRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(
 			`user: ${userId} requesting movements for ${data.periodStart.getFullYear()}-${data.periodStart.getMonth() + 1}`,
