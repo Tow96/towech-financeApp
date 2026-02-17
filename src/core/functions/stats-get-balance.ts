@@ -3,13 +3,13 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import { GetBalanceStatiscticSchema } from '@/core/dto'
+import { GetBalanceStatiscticRequest } from '@/core/dto'
 import { CategoryType } from '@/core/domain'
 import { db, schema } from '@/database/utils'
 
 export const getBalanceStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetBalanceStatiscticSchema)
+	.inputValidator(GetBalanceStatiscticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		logger.info(
 			`User ${userId} requesting balance chart from: ${data.periodStart.toISOString()} to: ${data.periodEnd.toISOString()}`,

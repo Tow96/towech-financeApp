@@ -1,6 +1,5 @@
 export * from './category'
 export * from './movement'
-export * from './stats-get-balance'
-export * from './stats-get-cash-flow-schema'
+export * from './statistics'
 export * from './user-menu-schema'
 export * from './wallet'

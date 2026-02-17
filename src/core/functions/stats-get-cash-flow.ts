@@ -4,14 +4,14 @@ import { createServerFn } from '@tanstack/react-start'
 import { AuthorizationMiddleware } from './session-validate'
 import type { GetCashFlowStatisticItemDto } from '@/core/dto'
 
-import { GetCashFlowStatisticSchema } from '@/core/dto'
+import { GetCashFlowStatisticRequest } from '@/core/dto'
 import { CategoryType } from '@/core/domain'
 
 import { db, schema } from '@/database/utils'
 
 export const getCashFlowStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCashFlowStatisticSchema)
+	.inputValidator(GetCashFlowStatisticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		try {
 			logger.info(
