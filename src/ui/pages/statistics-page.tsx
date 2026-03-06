@@ -1,9 +1,26 @@
-import { PeriodSelector, Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/components'
+import { useState } from 'react'
+
+import type { PeriodSelectorValue } from '@/ui/components'
+
+import {
+	BalancePerWalletStatistic,
+	BalanceTrendStatistic,
+	PeriodSelector,
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@/ui/components'
 
 export const StatisticsPage = () => {
+	const [selectedPeriod, setSelectedPeriod] = useState<PeriodSelectorValue>({
+		start: new Date(),
+		end: new Date(),
+	})
+
 	return (
 		<Tabs defaultValue="balance" className="flex h-[90vh] flex-col px-4 py-6">
-			<PeriodSelector />
+			<PeriodSelector value={selectedPeriod} onChange={setSelectedPeriod} />
 
 			{/* Tab Selector */}
 			<TabsList className="mt-4 w-full">
@@ -15,7 +32,10 @@ export const StatisticsPage = () => {
 
 			<div className="flex-1 overflow-auto">
 				{/* Balance Tab */}
-				<TabsContent value="balance">Balance charts here</TabsContent>
+				<TabsContent value="balance">
+					<BalanceTrendStatistic period={selectedPeriod} />
+					<BalancePerWalletStatistic className="mt-4" period={selectedPeriod} />
+				</TabsContent>
 
 				{/* Cash-flow Tab */}
 				<TabsContent value="cash-flow">Cash flow charts here</TabsContent>

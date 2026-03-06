@@ -1,6 +1,10 @@
-import { and, eq, gte, lte, sql, sum } from 'drizzle-orm'
+import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
 
-import type { BalanceStatisicItemDto, CashFlowStatisticItemDto } from '@/core/dto'
+import type {
+	BalancePerWalletStatisticDto,
+	BalanceStatisicItemDto,
+	CashFlowStatisticItemDto,
+} from '@/core/dto'
 
 import { CategoryType } from '@/core/domain'
 
@@ -98,6 +102,47 @@ export class StatisticsRepository {
 		}))
 	}
 
+	public async queryGenerateBalancePerWallet(
+		userId: string,
+		periodEnd: Date,
+	): Promise<Array<BalancePerWalletStatisticDto>> {
+		const result = await db
+			.select({
+				walletId: schema.Wallets.id,
+				income: sum(
+					sql`CASE WHEN ${schema.MovementSummary.destinationWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				expense: sum(
+					sql`CASE WHEN ${schema.MovementSummary.originWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				total: sum(
+					sql`CASE
+						WHEN ${schema.MovementSummary.destinationWalletId} = ${schema.Wallets.id} THEN ${schema.MovementSummary.amount}
+						WHEN ${schema.MovementSummary.originWalletId} = ${schema.Wallets.id} THEN -${schema.MovementSummary.amount}
+						ELSE 0
+					END`,
+				).mapWith(Number),
+			})
+			.from(schema.Wallets)
+			.leftJoin(
+				schema.MovementSummary,
+				or(
+					eq(schema.Wallets.id, schema.MovementSummary.destinationWalletId),
+					eq(schema.Wallets.id, schema.MovementSummary.originWalletId),
+				),
+			)
+			.leftJoin(schema.Movements, eq(schema.MovementSummary.movementId, schema.Movements.id))
+			.where(and(eq(schema.Wallets.userId, userId), lte(schema.Movements.date, periodEnd)))
+			.groupBy(schema.Wallets.id)
+
+		return result.map(x => ({
+			walletId: x.walletId,
+			income: x.income,
+			expense: x.expense,
+			total: x.total,
+		}))
+	}
+
 	public async queryGenerateCashFlow(
 		userId: string,
 		mode: 'day' | 'month',
@@ -182,4 +227,3 @@ export class StatisticsRepository {
 		}))
 	}
 }
-

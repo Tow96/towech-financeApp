@@ -1,12 +1,23 @@
 import { useQuery } from '@tanstack/react-query'
 import { graphKeys } from '../utils'
-import { getBalanceStatistic, getCashFlowStatistic } from '@/core/functions'
+import {
+	getBalancePerWalletStatistic,
+	getBalanceStatistic,
+	getCashFlowStatistic,
+} from '@/core/functions'
 
 // Queries --------------------------------------
 export const useBalanceStatistic = (periodStart: Date, periodEnd: Date) => {
 	return useQuery({
-		queryKey: graphKeys.balance(periodStart, periodEnd),
+		queryKey: graphKeys.balanceTrend(periodStart, periodEnd),
 		queryFn: () => getBalanceStatistic({ data: { periodStart, periodEnd } }),
+	})
+}
+
+export const useBalancePerWalletStatistic = (periodEnd: Date) => {
+	return useQuery({
+		queryKey: graphKeys.balanceWallet(periodEnd),
+		queryFn: () => getBalancePerWalletStatistic({ data: { periodEnd } }),
 	})
 }
 
