@@ -1,14 +1,5 @@
 import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from './base'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base'
 
 import type { ChartConfig } from './base'
 import type { CashFlowTrendStatisticItemDto } from '@/core/dto'
@@ -16,7 +7,6 @@ import type { CashFlowTrendStatisticItemDto } from '@/core/dto'
 import { convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
 
 interface CashFlowStatisticProps {
-	className?: string
 	period: { start: Date; end: Date }
 }
 
@@ -30,7 +20,7 @@ const data: Array<CashFlowTrendStatisticItemDto> = [
 	{ date: new Date(2026, 1, 14), in: 0, out: 3000, net: -3000 },
 ]
 
-export const CashFlowTrendStatistic = ({ className, period }: CashFlowStatisticProps) => {
+export const CashFlowTrendStatistic = ({ period }: CashFlowStatisticProps) => {
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
 
 	// This assumes that the values are sorted by date already
@@ -47,33 +37,27 @@ export const CashFlowTrendStatistic = ({ className, period }: CashFlowStatisticP
 	const domainDelta = domain[1] - domain[0]
 
 	return (
-		<Card className={className}>
-			<CardHeader>
-				<CardTitle>Cash Flow</CardTitle>
-				<CardDescription>Am I spending more than I make?</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<ChartContainer config={chartConfig} className="h-[25vh] w-full">
-					<ComposedChart accessibilityLayer data={dataWithCutoff} stackOffset="sign">
-						<CartesianGrid vertical={false} />
-						<YAxis
-							tickLine={false}
-							tickFormatter={(v: number) => formatNumberToLetterNotation(v, domainDelta)}
-						/>
-						<XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
-						<Bar stackId="a" dataKey="in" fill="var(--color-in)" radius={2} />
-						<Bar stackId="a" dataKey="out" fill="var(--color-out)" radius={2} />
-						<Line type="monotone" dataKey="net" stroke="var(--color-net)" strokeWidth="2" />
-						<ChartTooltip
-							cursor={true}
-							content={a => (
-								<ChartTooltipContent {...a} valueFormatter={v => convertCentsToCurrencyString(v)} />
-							)}
-						/>
-					</ComposedChart>
-				</ChartContainer>
-			</CardContent>
-		</Card>
+		<>
+			<ChartContainer config={chartConfig} className="h-[25vh] w-full">
+				<ComposedChart accessibilityLayer data={dataWithCutoff} stackOffset="sign">
+					<CartesianGrid vertical={false} />
+					<YAxis
+						tickLine={false}
+						tickFormatter={(v: number) => formatNumberToLetterNotation(v, domainDelta)}
+					/>
+					<XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
+					<Bar stackId="a" dataKey="in" fill="var(--color-in)" radius={2} />
+					<Bar stackId="a" dataKey="out" fill="var(--color-out)" radius={2} />
+					<Line type="monotone" dataKey="net" stroke="var(--color-net)" strokeWidth="2" />
+					<ChartTooltip
+						cursor={true}
+						content={a => (
+							<ChartTooltipContent {...a} valueFormatter={v => convertCentsToCurrencyString(v)} />
+						)}
+					/>
+				</ComposedChart>
+			</ChartContainer>
+		</>
 	)
 }
 

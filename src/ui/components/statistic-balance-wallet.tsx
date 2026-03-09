@@ -1,4 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './base'
 import { WalletIcon } from './wallet-icon'
 import { WalletName } from './wallet-name'
 
@@ -8,14 +7,10 @@ import { useBalancePerWalletStatistic } from '@/ui/data-access'
 import { cn, convertCentsToCurrencyString } from '@/ui/utils'
 
 interface BalancePerWalletStatisticProps {
-	className?: string
 	period: { start: Date; end: Date }
 }
 
-export const BalancePerWalletStatistic = ({
-	className,
-	period,
-}: BalancePerWalletStatisticProps) => {
+export const BalancePerWalletStatistic = ({ period }: BalancePerWalletStatisticProps) => {
 	const periodEnd = new Date().getTime() < period.end.getTime() ? new Date() : period.end
 	const query = useBalancePerWalletStatistic(periodEnd)
 
@@ -31,26 +26,20 @@ export const BalancePerWalletStatistic = ({
 		.sort((a, b) => a.total - b.total)
 
 	return (
-		<Card className={className}>
-			<CardHeader>
-				<CardTitle>Balance per wallet</CardTitle>
-				<CardDescription>Where is most of my money located?</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<span className="text-lg">Total: {convertCentsToCurrencyString(total)}</span>
-				{positiveBalance.map(x => (
-					<WalletBalanceBar key={x.walletId} data={x} highest={highest} />
-				))}
-				{negativeBalance.length > 0 && (
-					<>
-						<div className="pt-4 text-lg">Negative balance</div>
-						{negativeBalance.map(x => (
-							<WalletBalanceBar key={x.walletId} data={x} highest={highest} negative />
-						))}
-					</>
-				)}
-			</CardContent>
-		</Card>
+		<>
+			<span className="text-lg">Total: {convertCentsToCurrencyString(total)}</span>
+			{positiveBalance.map(x => (
+				<WalletBalanceBar key={x.walletId} data={x} highest={highest} />
+			))}
+			{negativeBalance.length > 0 && (
+				<>
+					<div className="pt-4 text-lg">Negative balance</div>
+					{negativeBalance.map(x => (
+						<WalletBalanceBar key={x.walletId} data={x} highest={highest} negative />
+					))}
+				</>
+			)}
+		</>
 	)
 }
 

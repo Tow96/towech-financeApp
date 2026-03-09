@@ -5,6 +5,11 @@ import type { PeriodSelectorValue } from '@/ui/components'
 import {
 	BalancePerWalletStatistic,
 	BalanceTrendStatistic,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 	CashFlowTrendStatistic,
 	PeriodSelector,
 	Tabs,
@@ -34,13 +39,40 @@ export const StatisticsPage = () => {
 			<div className="flex-1 overflow-auto">
 				{/* Balance Tab */}
 				<TabsContent value="balance">
-					<BalanceTrendStatistic period={selectedPeriod} />
-					<BalancePerWalletStatistic className="mt-4" period={selectedPeriod} />
+					{/* Balance Trend */}
+					<Card>
+						<CardHeader>
+							<CardTitle>Balance trend</CardTitle>
+							<CardDescription>Do I have more money than before?</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<BalanceTrendStatistic period={selectedPeriod} />
+						</CardContent>
+					</Card>
+					{/* Balance per wallet */}
+					<Card className="mt-4">
+						<CardHeader>
+							<CardTitle>Balance per wallet</CardTitle>
+							<CardDescription>Where is most of my money located?</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<BalancePerWalletStatistic period={selectedPeriod} />
+						</CardContent>
+					</Card>
 				</TabsContent>
 
 				{/* Cash-flow Tab */}
 				<TabsContent value="cash-flow">
-					<CashFlowTrendStatistic period={selectedPeriod} />
+					{/* Cash-flow trend */}
+					<Card>
+						<CardHeader>
+							<CardTitle>Cash Flow Trend</CardTitle>
+							<CardDescription>Am I spending more than I make?</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<CashFlowTrendStatistic period={selectedPeriod} />
+						</CardContent>
+					</Card>
 				</TabsContent>
 
 				{/* Expenses tab */}
