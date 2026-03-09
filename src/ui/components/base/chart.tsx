@@ -123,6 +123,7 @@ export type CustomTooltipProps = TooltipContentProps<ValueType, NameType> & {
 		index: number,
 		payload: ReadonlyArray<Payload<number | string, string>>,
 	) => React.ReactNode
+	valueFormatter?: (x: any) => string
 	labelClassName?: string
 	color?: string
 }
@@ -141,22 +142,21 @@ function ChartTooltipContent({
 	color,
 	nameKey,
 	labelKey,
+	valueFormatter,
 }: CustomTooltipProps) {
 	const { config } = useChart()
 
 	const tooltipLabel = React.useMemo(() => {
-		if (hideLabel || !payload?.length) {
-			return null
-		}
+		if (hideLabel || !payload.length) return null
 
 		const [item] = payload
 		const key = `${labelKey || item?.dataKey || item?.name || 'value'}`
 		const itemConfig = getPayloadConfigFromPayload(config, item, key)
+
 		const value = (() => {
-			const v =
-				!labelKey && typeof label === 'string'
-					? (config[label as keyof typeof config]?.label ?? label)
-					: itemConfig?.label
+			const v = !labelKey
+				? (config[label as keyof typeof config]?.label ?? label)
+				: itemConfig?.label
 
 			return typeof v === 'string' || typeof v === 'number' ? v : undefined
 		})()
@@ -240,8 +240,8 @@ function ChartTooltipContent({
 											</span>
 										</div>
 										{item.value && (
-											<span className="text-foreground font-mono font-medium tabular-nums">
-												{item.value.toLocaleString()}
+											<span className="text-foreground pl-3 font-mono font-medium tabular-nums">
+												{valueFormatter ? valueFormatter(item.value) : item.value.toLocaleString()}
 											</span>
 										)}
 									</div>
@@ -307,28 +307,25 @@ function ChartLegendContent({
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
-	if (typeof payload !== 'object' || payload === null) {
-		return undefined
-	}
+	if (typeof payload !== 'object' || payload === null) return undefined
 
-	const payloadPayload =
+	const payloadContent =
 		'payload' in payload && typeof payload.payload === 'object' && payload.payload !== null
 			? payload.payload
 			: undefined
 
-	let configLabelKey: string = key
-
+	let configLabelKey = key
 	if (key in payload && typeof payload[key as keyof typeof payload] === 'string') {
 		configLabelKey = payload[key as keyof typeof payload] as string
 	} else if (
-		payloadPayload &&
-		key in payloadPayload &&
-		typeof payloadPayload[key as keyof typeof payloadPayload] === 'string'
+		payloadContent &&
+		key in payloadContent &&
+		typeof payloadContent[key as keyof typeof payloadContent] === 'string'
 	) {
-		configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string
+		configLabelKey = payloadContent[key as keyof typeof payloadContent] as string
 	}
 
-	return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config]
+	return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
 export {

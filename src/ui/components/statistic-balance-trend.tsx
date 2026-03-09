@@ -13,7 +13,7 @@ import {
 import type { ChartConfig } from './base'
 
 import { useBalanceStatistic } from '@/ui/data-access'
-import { formatNumberToLetterNotation } from '@/ui/utils'
+import { convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
 // import { ChartTooltipContent } from './base/chart-legacy'
 
 interface BalanceTrendStatisticProps {
@@ -25,7 +25,12 @@ export const BalanceTrendStatistic = ({ className, period }: BalanceTrendStatist
 	const query = useBalanceStatistic(period.start, period.end)
 
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
-	const dataWithCutoff = query.data?.map(x => (x.date <= cutoffDate ? x : { ...x, balance: null }))
+
+	const dataWithCutoff = query.data?.map(x =>
+		x.date <= cutoffDate
+			? { ...x, date: x.date.toLocaleDateString() }
+			: { ...x, balance: null, date: x.date.toLocaleDateString() },
+	)
 
 	const domain = dataWithCutoff?.reduce(
 		(dom, curr) => [
@@ -55,13 +60,7 @@ export const BalanceTrendStatistic = ({ className, period }: BalanceTrendStatist
 							tickCount={10}
 							tickFormatter={(v: number) => formatNumberToLetterNotation(v, domainDelta)}
 						/>
-						<XAxis
-							dataKey="date"
-							tickLine={false}
-							axisLine={false}
-							tickMargin={8}
-							tickFormatter={(v: Date) => v.toLocaleDateString()}
-						/>
+						<XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
 						<Area
 							dataKey="balance"
 							type="linear"
@@ -69,38 +68,15 @@ export const BalanceTrendStatistic = ({ className, period }: BalanceTrendStatist
 							fillOpacity={0.3}
 							stroke="var(--color-balance)"
 						/>
-						<ChartTooltip cursor={true} content={a => <ChartTooltipContent {...a} />} />
-						{/* <ChartTooltip
+						<ChartTooltip
 							cursor={true}
-							content={
+							content={a => (
 								<ChartTooltipContent
-									label={undefined}
-									payload={[]}
-									coordinate={undefined}
-									active
-									accessibilityLayer
-									activeIndex={undefined}
-									hideLabel
-									formatter={(value, name) => (
-										<div className="text-muted-foreground flex min-w-32 items-center text-xs">
-											<div
-												className="mr-1 h-2.5 w-1.5 shrink-0 rounded-[2px] bg-(--color-bg)"
-												style={
-													{
-														'--color-bg': `var(--color-${name})`,
-													} as React.CSSProperties
-												}
-											/>
-
-											{chartConfig[name as keyof typeof chartConfig].label || name}
-											<div className="text-foreground ml-auto flex items-baseline gap-0 pl-1 font-mono font-medium tabular-nums">
-												{convertCentsToCurrencyString(value as number)}
-											</div>
-										</div>
-									)}
+									{...a}
+									valueFormatter={value => convertCentsToCurrencyString(value)}
 								/>
-							}
-						/> */}
+							)}
+						/>
 					</AreaChart>
 				</ChartContainer>
 			</CardContent>
@@ -114,4 +90,3 @@ const chartConfig = {
 		color: 'var(--chart-6)',
 	},
 } satisfies ChartConfig
-

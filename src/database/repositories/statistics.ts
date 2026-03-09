@@ -12,87 +12,42 @@ import { db, schema } from '@/database/utils'
 
 export class StatisticsRepository {
 	// Queries --------------------------------------------------------
-	public async queryGenerateBalance(
+	public async queryGenerateBalanceTrend(
 		userId: string,
-		periodStart: Date,
-		periodEnd: Date,
+		dates: Array<Date>,
 	): Promise<Array<BalanceStatisicItemDto>> {
-		const dailyMovements = db
-			.select({
-				date: schema.Movements.date,
-				income: sum(
-					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
-				)
-					.mapWith(Number)
-					.as('income'),
-				expense: sum(
-					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
-				)
-					.mapWith(Number)
-					.as('expense'),
-				total: sum(
-					sql`CASE
-                WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount}
-                WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN -${schema.MovementSummary.amount}
-                ELSE 0
-              END`,
-				)
-					.mapWith(Number)
-					.as('total'),
-			})
-			.from(schema.Movements)
-			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
-			.where(eq(schema.Movements.userId, userId))
-			.groupBy(schema.Movements.date)
-			.orderBy(schema.Movements.date)
-			.as('daily_movements')
-
 		const targetDays = db
-			.select({ pate: sql<Date>`date`.mapWith(x => new Date(x)).as('pate') })
+			.select({ pate: sql<Date>`date`.mapWith(x => new Date(x + 'Z')).as('pate') })
 			.from(
 				sql.raw(
-					`(SELECT generate_series('${periodStart.getUTCFullYear()}-${periodStart.getUTCMonth() + 1}-${periodStart.getUTCDate()}'::date, '${periodEnd.getUTCFullYear()}-${periodEnd.getUTCMonth() + 1}-${periodEnd.getUTCDate()}'::date, '1 day'::interval)::date AS date)`,
+					`(VALUES ${dates.map(x => `('${x.toISOString()}'::timestamp)`).join(',')}) AS timestamps(date)`,
 				),
 			)
-			.as('target_days')
-
-		const highResDailyMovements = db
-			.select({
-				date: sql<Date>`COALESCE(${dailyMovements.date}, ${targetDays.pate})`
-					.mapWith(x => new Date(x))
-					.as('date'),
-				income: sql<number>`COALESCE(${dailyMovements.income}, 0)`.as('income'),
-				expense: sql<number>`COALESCE(${dailyMovements.expense},0)`.as('expense'),
-				total: sql<number>`COALESCE(${dailyMovements.total}, 0)`.as('total'),
-			})
-			.from(dailyMovements)
-			.fullJoin(targetDays, eq(dailyMovements.date, targetDays.pate))
-			.as('highResDailyMovements')
-
-		const dailyBalance = db
-			.select({
-				date: highResDailyMovements.date,
-				income:
-					sql<number>`SUM(${highResDailyMovements.income}) OVER(ORDER BY ${highResDailyMovements.date})`.as(
-						'income',
-					),
-				expense:
-					sql<number>`SUM(${highResDailyMovements.expense}) OVER(ORDER BY ${highResDailyMovements.date})`.as(
-						'expense',
-					),
-				total:
-					sql<number>`SUM(${highResDailyMovements.total}) OVER(ORDER BY ${highResDailyMovements.date})`.as(
-						'total',
-					),
-			})
-			.from(highResDailyMovements)
-			.orderBy(highResDailyMovements.date)
-			.as('dailyBalance')
+			.as('danger_days')
 
 		const result = await db
-			.select()
-			.from(dailyBalance)
-			.where(and(gte(dailyBalance.date, periodStart), lte(dailyBalance.date, periodEnd)))
+			.select({
+				date: targetDays.pate,
+				income: sum(
+					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				expense: sum(
+					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				total: sum(
+					sql`CASE
+							WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount}
+							WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN -${schema.MovementSummary.amount}
+							ELSE 0
+						END`,
+				).mapWith(Number),
+			})
+			.from(targetDays)
+			.leftJoin(schema.Movements, lte(schema.Movements.date, targetDays.pate))
+			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
+			.where(eq(schema.Movements.userId, userId))
+			.groupBy(targetDays.pate)
+			.orderBy(targetDays.pate)
 
 		return result.map(x => ({
 			date: x.date,
