@@ -33,14 +33,12 @@ export const graphKeys = {
 	balanceWallet: (end: Date) =>
 		[...graphKeys.balance(), 'perWallet', end.toISOString().substring(0, 10)] as const,
 	balanceTrend: (start: Date, end: Date) =>
-		[
-			...graphKeys.balance(),
-			'trend',
-			start.toISOString().substring(0, 10),
-			end.toISOString().substring(0, 10),
-		] as const,
+		[...graphKeys.balance(), 'trend', start.toISOString(), end.toISOString()] as const,
+	cashFlow: () => [...graphKeys.all, 'cash-flow'] as const,
+	cashFlowTrend: (start: Date, end: Date) =>
+		[...graphKeys.cashFlow(), 'trend', start.toISOString(), end.toISOString()] as const,
 
-	cashFlow: (start: Date, end: Date, mode: 'day' | 'month') =>
+	cashFlowTrendLegacy: (start: Date, end: Date, mode: 'day' | 'month') =>
 		[
 			...graphKeys.all,
 			'cash-flow',

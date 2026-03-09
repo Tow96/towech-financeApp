@@ -2,38 +2,30 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts'
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './base'
 
 import type { ChartConfig } from './base'
-import type { CashFlowTrendStatisticItemDto } from '@/core/dto'
 
+import { useCashFlowTrendStatistic } from '@/ui/data-access'
 import { convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
 
 interface CashFlowStatisticProps {
 	period: { start: Date; end: Date }
 }
 
-const data: Array<CashFlowTrendStatisticItemDto> = [
-	{ date: new Date(2026, 1, 8), in: 5000, out: 8000, net: -3000 },
-	{ date: new Date(2026, 1, 9), in: 2000, out: 3000, net: -1000 },
-	{ date: new Date(2026, 1, 10), in: 9000, out: 2000, net: 7000 },
-	{ date: new Date(2026, 1, 11), in: 10000, out: 0, net: 10000 },
-	{ date: new Date(2026, 1, 12), in: 0, out: 0, net: 0 },
-	{ date: new Date(2026, 1, 13), in: 0, out: 0, net: 0 },
-	{ date: new Date(2026, 1, 14), in: 0, out: 3000, net: -3000 },
-]
-
 export const CashFlowTrendStatistic = ({ period }: CashFlowStatisticProps) => {
+	const query = useCashFlowTrendStatistic(period.start, period.end)
+
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
 
 	// This assumes that the values are sorted by date already
-	const dataWithCutoff = data.map(x =>
+	const dataWithCutoff = query.data?.map(x =>
 		x.date <= cutoffDate
 			? { ...x, out: -1 * x.out, date: x.date.toLocaleDateString() }
 			: { ...x, net: null, in: null, out: null, date: x.date.toLocaleDateString() },
 	)
 
-	const domain = dataWithCutoff.reduce(
+	const domain = dataWithCutoff?.reduce(
 		(dom, curr) => [Math.min(dom[0], curr.out ?? dom[0]), Math.max(dom[1], curr.in ?? dom[1])],
 		[0, 0],
-	)
+	) ?? [0, 0]
 	const domainDelta = domain[1] - domain[0]
 
 	return (
