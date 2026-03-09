@@ -3,6 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { AuthorizationMiddleware } from './session-validate'
 
 import { GetBalanceStatiscticTrendRequest } from '@/core/dto'
+import { getDaysBetweenDates } from '@/core/utils'
 
 import { StatisticsRepository } from '@/database/repositories'
 
@@ -30,8 +31,3 @@ export const getBalanceTrendStatistic = createServerFn({ method: 'GET' })
 
 		return await statisticRepo.queryGenerateBalanceTrend(userId, dates)
 	})
-
-const getDaysBetweenDates = (date1: Date, date2: Date) => {
-	const delta = Math.abs(date2.getTime() - date1.getTime())
-	return Math.floor(delta / (1000 * 60 * 60 * 24))
-}

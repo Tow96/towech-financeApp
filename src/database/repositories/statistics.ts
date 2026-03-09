@@ -4,6 +4,7 @@ import type {
 	BalancePerWalletStatisticDto,
 	BalanceStatisticTrendDto,
 	CashFlowStatisticTrendLegacyItemDto,
+	CashFlowTrendStatisticItemDto,
 } from '@/core/dto'
 
 import { CategoryType } from '@/core/domain'
@@ -111,86 +112,56 @@ export class StatisticsRepository {
 		}))
 	}
 
-	public async queryGenerateCashFlow(
+	public async queryGenerateCashFlowTrend(
 		userId: string,
-		mode: 'day' | 'month',
-		periodStart: Date,
-		periodEnd: Date,
-	): Promise<Array<CashFlowStatisticTrendLegacyItemDto>> {
-		const dailyMovements = db
+		dates: Array<Array<Date>>,
+	): Promise<Array<CashFlowTrendStatisticItemDto>> {
+		const targetDays = db
 			.select({
-				date:
-					mode === 'day'
-						? schema.Movements.date
-						: sql<Date>`DATE_TRUNC('month', ${schema.Movements.date} AT TIME ZONE 'America/Mexico_City')`
-								.mapWith(x => new Date(x))
-								.as('date'),
-				income: sum(
-					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
-				)
-					.mapWith(Number)
-					.as('income'),
-				expense: sum(
-					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
-				)
-					.mapWith(Number)
-					.as('expense'),
-				total: sum(
-					sql`CASE
-									WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount}
-									WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN -${schema.MovementSummary.amount}
-									ELSE 0
-								END`,
-				)
-					.mapWith(Number)
-					.as('total'),
+				startDate: sql<Date>`startDate`.mapWith(x => new Date(x + 'Z')).as('startDate'),
+				endDate: sql<Date>`endDate`.mapWith(x => new Date(x + 'Z')).as('endDate'),
 			})
-			.from(schema.Movements)
-			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
-			.where(
-				and(
-					eq(schema.Movements.userId, userId),
-					gte(schema.Movements.date, periodStart),
-					lte(schema.Movements.date, periodEnd),
-				),
-			)
-			.groupBy(
-				mode === 'day'
-					? schema.Movements.date
-					: sql<Date>`DATE_TRUNC('month', ${schema.Movements.date} AT TIME ZONE 'America/Mexico_City')`,
-			)
-			.orderBy(
-				mode === 'day'
-					? schema.Movements.date
-					: sql<Date>`DATE_TRUNC('month', ${schema.Movements.date} AT TIME ZONE 'America/Mexico_City')`,
-			)
-			.as('daily_movements')
-
-		const targetDays = await db
-			.select({ pate: sql<Date>`date`.mapWith(x => new Date(x)).as('pate') })
 			.from(
 				sql.raw(
-					`(SELECT generate_series('${periodStart.getUTCFullYear()}-${periodStart.getUTCMonth() + 1}-${periodStart.getUTCDate()}'::date, '${periodEnd.getUTCFullYear()}-${periodEnd.getUTCMonth() + 1}-${periodEnd.getUTCDate()}'::date, '1 ${mode}'::interval)::date AS date)`,
+					`(VALUES ${dates.map(x => `('${x[0].toISOString()}'::timestamp, '${x[1].toISOString()}'::timestamp)`).join(',')}) AS timestamps(startDate, endDate)`,
 				),
 			)
-			.as('target_days')
+			.as('danger_days')
 
 		const result = await db
 			.select({
-				date: sql<Date>`COALESCE(${dailyMovements.date}, ${targetDays.pate})`
-					.mapWith(x => new Date(x))
-					.as('date'),
-				income: sql<number>`COALESCE(${dailyMovements.income}, 0)`.as('income'),
-				expense: sql<number>`COALESCE(${dailyMovements.expense},0)`.as('expense'),
-				total: sql<number>`COALESCE(${dailyMovements.total}, 0)`.as('total'),
+				date: targetDays.endDate,
+				income: sum(
+					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				expense: sum(
+					sql`CASE WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				total: sum(
+					sql`CASE
+							WHEN ${schema.Movements.categoryType}=${CategoryType.income} THEN ${schema.MovementSummary.amount}
+							WHEN ${schema.Movements.categoryType}=${CategoryType.expense} THEN -${schema.MovementSummary.amount}
+							ELSE 0
+						END`,
+				).mapWith(Number),
 			})
-			.from(dailyMovements)
-			.fullJoin(targetDays, eq(dailyMovements.date, targetDays.pate))
+			.from(targetDays)
+			.leftJoin(
+				schema.Movements,
+				and(
+					gte(schema.Movements.date, targetDays.startDate),
+					lte(schema.Movements.date, targetDays.endDate),
+					eq(schema.Movements.userId, userId),
+				),
+			)
+			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
+			.groupBy(targetDays.endDate)
+			.orderBy(targetDays.endDate)
 
 		return result.map(x => ({
 			date: x.date,
 			in: x.income,
-			out: -1 * x.expense,
+			out: x.expense,
 			net: x.total,
 		}))
 	}

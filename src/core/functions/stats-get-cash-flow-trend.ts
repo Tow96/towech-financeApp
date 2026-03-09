@@ -2,8 +2,8 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import type { CashFlowTrendStatisticItemDto } from '@/core/dto'
 import { GetCashFlowTrendStatisticRequest } from '@/core/dto'
+import { getDaysBetweenDates } from '@/core/utils'
 
 import { StatisticsRepository } from '@/database/repositories'
 
@@ -16,16 +16,22 @@ export const getCashFlowStatisticTrend = createServerFn({ method: 'GET' })
 			`User ${userId} requesting cash flow trend statistic from: ${data.periodStart.toISOString()} to: ${data.periodEnd.toISOString()}`,
 		)
 
-		const result: Array<CashFlowTrendStatisticItemDto> = [
-			{ date: new Date(2026, 1, 8), in: 5000, out: 8000, net: -3000 },
-			{ date: new Date(2026, 1, 9), in: 2000, out: 3000, net: -1000 },
-			{ date: new Date(2026, 1, 10), in: 9000, out: 2000, net: 7000 },
-			{ date: new Date(2026, 1, 11), in: 10000, out: 0, net: 10000 },
-			{ date: new Date(2026, 1, 12), in: 0, out: 0, net: 0 },
-			{ date: new Date(2026, 1, 13), in: 0, out: 0, net: 0 },
-			{ date: new Date(2026, 1, 14), in: 0, out: 3000, net: -3000 },
-		]
+		let mode: 'day' | 'month' = 'day'
+		if (getDaysBetweenDates(data.periodStart, data.periodEnd) > 90) mode = 'month'
 
-		return result
+		const startDate = new Date(data.periodStart)
+		const dates: Array<Array<Date>> = []
+		while (startDate.getTime() < data.periodEnd.getTime()) {
+			const endDate = new Date(startDate)
+			if (mode === 'month') endDate.setMonth(endDate.getMonth() + 1)
+			else endDate.setDate(endDate.getDate() + 1)
+
+			endDate.setTime(endDate.getTime() - 1)
+			dates.push([new Date(startDate), endDate])
+
+			if (mode === 'month') startDate.setMonth(startDate.getMonth() + 1)
+			else startDate.setDate(startDate.getDate() + 1)
+		}
+
+		return await statisticsRepo.queryGenerateCashFlowTrend(userId, dates)
 	})
-

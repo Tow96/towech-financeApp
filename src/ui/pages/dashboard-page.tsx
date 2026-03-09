@@ -11,7 +11,7 @@ import {
 	CardContent,
 	CardFooter,
 	CardHeader,
-	CashFlowChart,
+	CashFlowTrendStatistic,
 	PeriodSelector,
 	RecentMovementList,
 	Tabs,
@@ -40,13 +40,10 @@ export const DashboardPage = () => {
 					</CardHeader>
 					<CardContent className="flex-1">
 						<TabsContent value="balance">
-							<BalanceTrendStatistic
-								className="h-[15vh] w-full md:h-[20vh]"
-								period={selectedPeriod}
-							/>
+							<BalanceTrendStatistic period={selectedPeriod} />
 						</TabsContent>
 						<TabsContent value="cash-flow">
-							<CashFlowChart className="h-[15vh] w-full md:h-[20vh]" period={selectedPeriod} />
+							<CashFlowTrendStatistic period={selectedPeriod} />
 						</TabsContent>
 					</CardContent>
 					<CardFooter>

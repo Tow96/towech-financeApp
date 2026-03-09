@@ -42,19 +42,3 @@ export const GetCashFlowTrendStatisticRequest = z.object({
 	periodEnd: z.date(),
 })
 export type GetCashFlowTrendStatisticRequest = z.infer<typeof GetCashFlowTrendStatisticRequest>
-
-// ----------------------------------------------
-export type CashFlowStatisticTrendLegacyItemDto = {
-	date: Date
-	in: number
-	out: number
-	net: number
-}
-export const GetCashFlowStatisticTrendLegacyRequest = z.object({
-	periodStart: z.date(),
-	periodEnd: z.date(),
-	mode: z.enum(['day', 'month']),
-})
-export type GetCashFlowStatisticTrendLegacyRequest = z.infer<
-	typeof GetCashFlowStatisticTrendLegacyRequest
->
