@@ -67,4 +67,3 @@ const WalletBalanceBar = ({ data, highest, negative }: walletBalanceBar) => {
 		</div>
 	)
 }
-

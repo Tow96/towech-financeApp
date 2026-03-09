@@ -16,4 +16,3 @@ export const WalletName = ({ className, walletId }: WalletNameProps) => {
 		<span className={className}>{capitalizeFirst(detail.data?.name ?? '')}</span>
 	)
 }
-

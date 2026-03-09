@@ -16,4 +16,3 @@ export type Movement = {
 		destinationId: string | null
 	}
 }
-

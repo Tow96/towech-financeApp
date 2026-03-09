@@ -13,4 +13,3 @@ export type Category = {
 	iconId: number
 	archived: boolean
 }
-

@@ -67,4 +67,3 @@ const chartConfig = {
 		color: 'var(--chart-6)',
 	},
 } satisfies ChartConfig
-

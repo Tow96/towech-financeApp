@@ -9,4 +9,3 @@ const pool = new Pool({ connectionString })
 
 const getDb = createServerOnlyFn(() => drizzle(pool, { schema }))
 export const db = getDb()
-

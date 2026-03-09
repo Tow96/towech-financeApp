@@ -3,7 +3,6 @@ import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
 import type {
 	BalancePerWalletStatisticDto,
 	BalanceStatisticTrendDto,
-	CashFlowStatisticTrendLegacyItemDto,
 	CashFlowTrendStatisticItemDto,
 } from '@/core/dto'
 

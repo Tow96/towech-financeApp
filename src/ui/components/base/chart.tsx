@@ -155,7 +155,7 @@ function ChartTooltipContent({
 
 		const value = (() => {
 			const v = !labelKey
-				? (config[label as keyof typeof config]?.label ?? label)
+				? (config[label as keyof typeof config]?.label ?? label) // eslint-disable-line
 				: itemConfig?.label
 
 			return typeof v === 'string' || typeof v === 'number' ? v : undefined
@@ -174,6 +174,7 @@ function ChartTooltipContent({
 		return <div className={cn('font-medium', labelClassName)}>{value}</div>
 	}, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey])
 
+	// eslint-disable-next-line
 	if (!active || !payload?.length) {
 		return null
 	}
@@ -183,7 +184,7 @@ function ChartTooltipContent({
 	return (
 		<div
 			className={cn(
-				'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+				'border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
 				className,
 			)}>
 			{!nestLabel ? tooltipLabel : null}

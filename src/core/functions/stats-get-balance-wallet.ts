@@ -16,4 +16,3 @@ export const getBalancePerWalletStatistic = createServerFn({ method: 'GET' })
 
 		return await statisticRepo.queryGenerateBalancePerWallet(userId, data.periodEnd)
 	})
-

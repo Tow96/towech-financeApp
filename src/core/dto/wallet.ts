@@ -71,4 +71,3 @@ export const SetWalletStatusRequest = z.object({
 	archived: z.boolean(),
 })
 export type SetWalletStatusRequest = z.infer<typeof SetWalletStatusRequest>
-

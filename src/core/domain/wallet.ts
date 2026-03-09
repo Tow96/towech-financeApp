@@ -6,4 +6,3 @@ export type Wallet = {
 	archived: boolean
 	money: number
 }
-

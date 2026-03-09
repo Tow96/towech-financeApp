@@ -5,4 +5,3 @@ import { StatisticsPage } from '@/ui/pages'
 export const Route = createFileRoute('/_authed/statistics')({
 	component: StatisticsPage,
 })
-
