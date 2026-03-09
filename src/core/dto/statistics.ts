@@ -6,6 +6,11 @@ export type BalanceStatisicItemDto = {
 	totalIncome: number
 	totalExpense: number
 }
+export type BalanceStatisticDto = {
+	previousPeriodEnd: BalanceStatisicItemDto
+	items: Array<BalanceStatisicItemDto>
+}
+
 export const GetBalanceStatiscticRequest = z.object({
 	periodStart: z.date(),
 	periodEnd: z.date(),

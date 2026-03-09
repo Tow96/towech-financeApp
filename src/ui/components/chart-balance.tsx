@@ -25,7 +25,7 @@ export const BalanceChart = (props: BalanceChartProps) => {
 	const chart = useBalanceStatistic(props.period.start, props.period.end)
 
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
-	const chartWithoutFutureData = chart.data?.map(x =>
+	const chartWithoutFutureData = chart.data?.items.map(x =>
 		x.date <= cutoffDate ? x : { date: x.date, balance: null },
 	)
 

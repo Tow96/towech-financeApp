@@ -2,7 +2,7 @@ import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
 
 import type {
 	BalancePerWalletStatisticDto,
-	BalanceStatisicItemDto,
+	BalanceStatisticDto,
 	CashFlowStatisticItemDto,
 } from '@/core/dto'
 
@@ -15,12 +15,17 @@ export class StatisticsRepository {
 	public async queryGenerateBalanceTrend(
 		userId: string,
 		dates: Array<Date>,
-	): Promise<Array<BalanceStatisicItemDto>> {
+	): Promise<BalanceStatisticDto> {
+		const previousPeriodEnd = new Date(dates[0])
+		previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1)
+
+		const queryDates = [previousPeriodEnd, ...dates]
+
 		const targetDays = db
 			.select({ pate: sql<Date>`date`.mapWith(x => new Date(x + 'Z')).as('pate') })
 			.from(
 				sql.raw(
-					`(VALUES ${dates.map(x => `('${x.toISOString()}'::timestamp)`).join(',')}) AS timestamps(date)`,
+					`(VALUES ${queryDates.map(x => `('${x.toISOString()}'::timestamp)`).join(',')}) AS timestamps(date)`,
 				),
 			)
 			.as('danger_days')
@@ -49,12 +54,20 @@ export class StatisticsRepository {
 			.groupBy(targetDays.pate)
 			.orderBy(targetDays.pate)
 
-		return result.map(x => ({
-			date: x.date,
-			balance: x.total,
-			totalIncome: x.income,
-			totalExpense: x.expense,
-		}))
+		return {
+			previousPeriodEnd: {
+				date: result[0].date,
+				balance: result[0].total,
+				totalIncome: result[0].income,
+				totalExpense: result[0].expense,
+			},
+			items: result.slice(1).map(x => ({
+				date: x.date,
+				balance: x.total,
+				totalIncome: x.income,
+				totalExpense: x.expense,
+			})),
+		}
 	}
 
 	public async queryGenerateBalancePerWallet(

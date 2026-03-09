@@ -13,8 +13,7 @@ import {
 import type { ChartConfig } from './base'
 
 import { useBalanceStatistic } from '@/ui/data-access'
-import { convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
-// import { ChartTooltipContent } from './base/chart-legacy'
+import { cn, convertCentsToCurrencyString, formatNumberToLetterNotation } from '@/ui/utils'
 
 interface BalanceTrendStatisticProps {
 	className?: string
@@ -25,12 +24,21 @@ export const BalanceTrendStatistic = ({ className, period }: BalanceTrendStatist
 	const query = useBalanceStatistic(period.start, period.end)
 
 	const cutoffDate = new Date(new Date().setHours(23, 59, 59, 999))
+	let cutoffBalance = 0
+	let previousPeriodComp: number | null = null
 
-	const dataWithCutoff = query.data?.map(x =>
-		x.date <= cutoffDate
-			? { ...x, date: x.date.toLocaleDateString() }
-			: { ...x, balance: null, date: x.date.toLocaleDateString() },
-	)
+	// This assumes that the values are sorted by date already
+	const dataWithCutoff = query.data?.items.map(x => {
+		if (x.date <= cutoffDate) {
+			const previousBalance = query.data.previousPeriodEnd.balance
+			if (previousBalance !== 0)
+				previousPeriodComp = ((x.balance - previousBalance) / previousBalance) * 100
+
+			cutoffBalance = x.balance
+			return { ...x, date: x.date.toLocaleDateString() }
+		}
+		return { ...x, balance: null, date: x.date.toLocaleDateString() }
+	})
 
 	const domain = dataWithCutoff?.reduce(
 		(dom, curr) => [
@@ -49,7 +57,28 @@ export const BalanceTrendStatistic = ({ className, period }: BalanceTrendStatist
 				<CardDescription>Do I have more money than before?</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<ChartContainer config={chartConfig} className="h-[20vh] w-full">
+				<div className="-mt-3 mb-3">
+					<div className="text-muted-foreground flex justify-between text-xs">
+						<span>Balance at end</span>
+						<span>vs previous period</span>
+					</div>
+					<div className="flex justify-between">
+						<span>{convertCentsToCurrencyString(cutoffBalance)}</span>
+						<span
+							className={cn(
+								previousPeriodComp === null || previousPeriodComp === 0 // eslint-disable-line
+									? 'text-foreground'
+									: previousPeriodComp > 0
+										? 'text-constructive'
+										: 'text-destructive',
+							)}>
+							{previousPeriodComp === null // eslint-disable-line
+								? '- %'
+								: `${Math.round(previousPeriodComp * 100) / 100} %`}
+						</span>
+					</div>
+				</div>
+				<ChartContainer config={chartConfig} className="h-[25vh] w-full">
 					<AreaChart accessibilityLayer data={dataWithCutoff} margin={{ left: -10, right: 12 }}>
 						<CartesianGrid vertical={false} stroke="#c4c4c4" />
 						<YAxis
