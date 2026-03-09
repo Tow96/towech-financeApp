@@ -2,8 +2,8 @@ import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
 
 import type {
 	BalancePerWalletStatisticDto,
-	BalanceStatisticDto,
-	CashFlowStatisticItemDto,
+	BalanceStatisticTrendDto,
+	CashFlowStatisticTrendLegacyItemDto,
 } from '@/core/dto'
 
 import { CategoryType } from '@/core/domain'
@@ -15,7 +15,7 @@ export class StatisticsRepository {
 	public async queryGenerateBalanceTrend(
 		userId: string,
 		dates: Array<Date>,
-	): Promise<BalanceStatisticDto> {
+	): Promise<BalanceStatisticTrendDto> {
 		const previousPeriodEnd = new Date(dates[0])
 		previousPeriodEnd.setDate(previousPeriodEnd.getDate() - 1)
 
@@ -116,7 +116,7 @@ export class StatisticsRepository {
 		mode: 'day' | 'month',
 		periodStart: Date,
 		periodEnd: Date,
-	): Promise<Array<CashFlowStatisticItemDto>> {
+	): Promise<Array<CashFlowStatisticTrendLegacyItemDto>> {
 		const dailyMovements = db
 			.select({
 				date:

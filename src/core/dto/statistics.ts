@@ -1,21 +1,21 @@
 import { z } from 'zod'
 
-export type BalanceStatisicItemDto = {
+export type BalanceStatisicTrendItemDto = {
 	date: Date
 	balance: number
 	totalIncome: number
 	totalExpense: number
 }
-export type BalanceStatisticDto = {
-	previousPeriodEnd: BalanceStatisicItemDto
-	items: Array<BalanceStatisicItemDto>
+export type BalanceStatisticTrendDto = {
+	previousPeriodEnd: BalanceStatisicTrendItemDto
+	items: Array<BalanceStatisicTrendItemDto>
 }
 
-export const GetBalanceStatiscticRequest = z.object({
+export const GetBalanceStatiscticTrendRequest = z.object({
 	periodStart: z.date(),
 	periodEnd: z.date(),
 })
-export type GetBalanceStatiscticRequest = z.infer<typeof GetBalanceStatiscticRequest>
+export type GetBalanceStatiscticTrendRequest = z.infer<typeof GetBalanceStatiscticTrendRequest>
 
 // ----------------------------------------------
 export type BalancePerWalletStatisticDto = {
@@ -30,15 +30,31 @@ export type GetBalancePerWalletStatisticRequest = z.infer<
 >
 
 // ----------------------------------------------
-export type CashFlowStatisticItemDto = {
+export type CashFlowTrendStatisticItemDto = {
 	date: Date
 	in: number
 	out: number
 	net: number
 }
-export const GetCashFlowStatisticRequest = z.object({
+
+export const GetCashFlowTrendStatisticRequest = z.object({
+	periodStart: z.date(),
+	periodEnd: z.date(),
+})
+export type GetCashFlowTrendStatisticRequest = z.infer<typeof GetCashFlowTrendStatisticRequest>
+
+// ----------------------------------------------
+export type CashFlowStatisticTrendLegacyItemDto = {
+	date: Date
+	in: number
+	out: number
+	net: number
+}
+export const GetCashFlowStatisticTrendLegacyRequest = z.object({
 	periodStart: z.date(),
 	periodEnd: z.date(),
 	mode: z.enum(['day', 'month']),
 })
-export type GetCashFlowStatisticRequest = z.infer<typeof GetCashFlowStatisticRequest>
+export type GetCashFlowStatisticTrendLegacyRequest = z.infer<
+	typeof GetCashFlowStatisticTrendLegacyRequest
+>

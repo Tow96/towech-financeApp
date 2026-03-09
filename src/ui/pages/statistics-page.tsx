@@ -5,6 +5,7 @@ import type { PeriodSelectorValue } from '@/ui/components'
 import {
 	BalancePerWalletStatistic,
 	BalanceTrendStatistic,
+	CashFlowTrendStatistic,
 	PeriodSelector,
 	Tabs,
 	TabsContent,
@@ -38,7 +39,9 @@ export const StatisticsPage = () => {
 				</TabsContent>
 
 				{/* Cash-flow Tab */}
-				<TabsContent value="cash-flow">Cash flow charts here</TabsContent>
+				<TabsContent value="cash-flow">
+					<CashFlowTrendStatistic period={selectedPeriod} />
+				</TabsContent>
 
 				{/* Expenses tab */}
 				<TabsContent value="expenses">Expenses charts here</TabsContent>

@@ -2,13 +2,13 @@ import { createServerFn } from '@tanstack/react-start'
 
 import { AuthorizationMiddleware } from './session-validate'
 
-import { GetCashFlowStatisticRequest } from '@/core/dto'
+import { GetCashFlowStatisticTrendLegacyRequest } from '@/core/dto'
 
 import { StatisticsRepository } from '@/database/repositories'
 
 export const getCashFlowStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCashFlowStatisticRequest)
+	.inputValidator(GetCashFlowStatisticTrendLegacyRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const statisticsRepo = new StatisticsRepository()
 		logger.info(
