@@ -6,7 +6,7 @@ import { GetBalanceStatiscticTrendRequest } from '@/core/dto'
 
 import { StatisticsRepository } from '@/database/repositories'
 
-export const getBalanceStatistic = createServerFn({ method: 'GET' })
+export const getBalanceTrendStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(GetBalanceStatiscticTrendRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
