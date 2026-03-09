@@ -16,7 +16,8 @@ export const BalancePerWalletStatistic = ({
 	className,
 	period,
 }: BalancePerWalletStatisticProps) => {
-	const query = useBalancePerWalletStatistic(period.end)
+	const periodEnd = new Date().getTime() < period.end.getTime() ? new Date() : period.end
+	const query = useBalancePerWalletStatistic(periodEnd)
 
 	const total = (query.data ?? []).reduce((prev, curr) => prev + curr.total, 0)
 	const highest = Math.max(...(query.data ?? []).map(x => Math.abs(x.total)))
