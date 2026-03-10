@@ -6,6 +6,7 @@ import type {
 	CashFlowTrendStatisticItemDto,
 	CategoryReportStatisticDto,
 	CategoryStatisticItemDto,
+	SubCategoryStatisticItemDto,
 } from '@/core/dto'
 
 import { CategoryType } from '@/core/domain'
@@ -172,10 +173,12 @@ export class StatisticsRepository {
 		userId: string,
 		startDate: Date,
 		endDate: Date,
-	): Promise<Array<CategoryReportStatisticDto>> {
-		const periodDays = getDaysBetweenDates(startDate, endDate)
+	): Promise<CategoryReportStatisticDto> {
+		const periodDays = getDaysBetweenDates(startDate, endDate) + 1
 		const previousPeriodStart = new Date(startDate.getTime() - periodDays * 24 * 60 * 60 * 1000)
 		const previousPeriodEnd = new Date(startDate.getTime() - 1)
+
+		console.log(`${previousPeriodStart.toISOString()}, ${previousPeriodEnd.toISOString()}`)
 
 		const result = await db
 			.select({
@@ -203,38 +206,29 @@ export class StatisticsRepository {
 				schema.Movements.categorySubId,
 			)
 
-		const output: Array<CategoryReportStatisticDto> = []
+		const output: CategoryReportStatisticDto = {
+			income: {
+				categories: [],
+				currentAmount: 0,
+				previousAmount: 0,
+			},
+			expense: {
+				categories: [],
+				currentAmount: 0,
+				previousAmount: 0,
+			},
+		}
 		for (const entry of result) {
-			const typeIndex = output.findIndex(x => x.type === (entry.type as CategoryType))
-			if (typeIndex === -1) {
-				output.push({
-					type: entry.type as CategoryType,
-					previousAmount: entry.prevAmount,
-					currentAmount: entry.currAmount,
-					categories: [
-						{
-							id: entry.id,
-							previousAmount: entry.prevAmount,
-							currentAmount: entry.currAmount,
-							subCategories: [
-								{
-									subId: entry.subId,
-									previousAmount: entry.prevAmount,
-									currentAmount: entry.currAmount,
-								},
-							],
-						},
-					],
-				})
-				continue
-			}
+			if (entry.prevAmount === 0 && entry.currAmount === 0) continue
 
-			output[typeIndex].previousAmount += entry.prevAmount
-			output[typeIndex].currentAmount += entry.currAmount
+			const type = entry.type.toString().toLowerCase() as keyof CategoryReportStatisticDto
 
-			const idIndex = output[typeIndex].categories.findIndex(x => x.id === entry.id)
+			output[type].previousAmount += entry.prevAmount
+			output[type].currentAmount += entry.currAmount
+
+			const idIndex = output[type].categories.findIndex(x => x.id === entry.id)
 			if (idIndex === -1) {
-				output[typeIndex].categories.push({
+				output[type].categories.push({
 					id: entry.id,
 					previousAmount: entry.prevAmount,
 					currentAmount: entry.currAmount,
@@ -249,17 +243,32 @@ export class StatisticsRepository {
 				continue
 			}
 
-			output[typeIndex].categories[idIndex].previousAmount += entry.prevAmount
-			output[typeIndex].categories[idIndex].currentAmount += entry.currAmount
+			output[type].categories[idIndex].previousAmount += entry.prevAmount
+			output[type].categories[idIndex].currentAmount += entry.currAmount
 
 			// This trusts that theres only one entry per category
-			output[typeIndex].categories[idIndex].subCategories.push({
+			output[type].categories[idIndex].subCategories.push({
 				subId: entry.subId,
 				previousAmount: entry.prevAmount,
 				currentAmount: entry.currAmount,
 			})
 		}
 
+		// for (const entry of output.income.categories) {
+		// 	entry.subCategories.sort(sortBySubId)
+		// }
+		for (const entry of output.expense.categories) {
+			entry.subCategories.sort(sortBySubId)
+		}
+
 		return output
 	}
+}
+
+function sortBySubId(a: SubCategoryStatisticItemDto, b: SubCategoryStatisticItemDto) {
+	if (a.subId === null && b.subId === null) return 0
+	if (a.subId === null) return -1
+	if (b.subId === null) return 1
+
+	return a.subId.localeCompare(b.subId)
 }

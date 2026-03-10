@@ -69,10 +69,16 @@ export type CategoryStatisticItemDto = {
 	subCategories: Array<SubCategoryStatisticItemDto>
 }
 export type CategoryReportStatisticDto = {
-	type: CategoryType
-	previousAmount: number
-	currentAmount: number
-	categories: Array<CategoryStatisticItemDto>
+	income: {
+		previousAmount: number
+		currentAmount: number
+		categories: Array<CategoryStatisticItemDto>
+	}
+	expense: {
+		previousAmount: number
+		currentAmount: number
+		categories: Array<CategoryStatisticItemDto>
+	}
 }
 
 export const GetCategoryStatisticRequest = z.object({
