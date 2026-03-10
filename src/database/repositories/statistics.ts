@@ -3,11 +3,12 @@ import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
 import type {
 	BalancePerWalletStatisticDto,
 	BalanceStatisticTrendDto,
-	CashFlowStatisticDto,
 	CashFlowTrendStatisticItemDto,
+	CategoryStatisticItemDto,
 } from '@/core/dto'
 
 import { CategoryType } from '@/core/domain'
+import { getDaysBetweenDates } from '@/core/utils'
 
 import { db, schema } from '@/database/utils'
 
@@ -163,6 +164,45 @@ export class StatisticsRepository {
 			in: x.income,
 			out: x.expense,
 			net: x.total,
+		}))
+	}
+
+	public async queryGenerateCategoryReport(
+		userId: string,
+		startDate: Date,
+		endDate: Date,
+	): Promise<Array<CategoryStatisticItemDto>> {
+		const periodDays = getDaysBetweenDates(startDate, endDate)
+		const previousPeriodStart = new Date(startDate.getTime() - periodDays * 24 * 60 * 60 * 1000)
+		const previousPeriodEnd = new Date(startDate.getTime() - 1)
+
+		const result = await db
+			.select({
+				type: schema.Movements.categoryType,
+				id: schema.Movements.categoryId,
+				subId: schema.Movements.categorySubId,
+				prevAmount: sum(
+					sql`CASE WHEN ${schema.Movements.date} >= ${previousPeriodStart} AND ${schema.Movements.date} <= ${previousPeriodEnd} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+				currAmount: sum(
+					sql`CASE WHEN ${schema.Movements.date} >= ${startDate} AND ${schema.Movements.date} <= ${endDate} THEN ${schema.MovementSummary.amount} ELSE 0 END`,
+				).mapWith(Number),
+			})
+			.from(schema.Movements)
+			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
+			.where(eq(schema.Movements.userId, userId))
+			.groupBy(
+				schema.Movements.categoryType,
+				schema.Movements.categoryId,
+				schema.Movements.categorySubId,
+			)
+
+		return result.map(x => ({
+			type: x.type as CategoryType,
+			id: x.id,
+			subId: x.subId,
+			previousAmount: x.prevAmount,
+			currentAmount: x.currAmount,
 		}))
 	}
 }

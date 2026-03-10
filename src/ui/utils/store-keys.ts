@@ -39,4 +39,7 @@ export const graphKeys = {
 		[...graphKeys.cashFlow(), start.toISOString(), end.toISOString()] as const,
 	cashFlowTrend: (start: Date, end: Date) =>
 		[...graphKeys.cashFlow(), 'trend', start.toISOString(), end.toISOString()] as const,
+	category: () => [...graphKeys.all, 'category'] as const,
+	categoryReport: (start: Date, end: Date) =>
+		[...graphKeys.category(), start.toISOString(), end.toISOString()] as const,
 }

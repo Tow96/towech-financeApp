@@ -5,6 +5,7 @@ import {
 	getBalanceTrendStatistic,
 	getCashFlowStatistic,
 	getCashFlowTrendStatistic,
+	getCategoryStatistic,
 } from '@/core/functions'
 
 // Queries --------------------------------------
@@ -33,5 +34,12 @@ export const useCashFlowTrendStatistic = (periodStart: Date, periodEnd: Date) =>
 	return useQuery({
 		queryKey: graphKeys.cashFlowTrend(periodStart, periodEnd),
 		queryFn: () => getCashFlowTrendStatistic({ data: { periodStart, periodEnd } }),
+	})
+}
+
+export const useCategoryReportStatistic = (periodStart: Date, periodEnd: Date) => {
+	return useQuery({
+		queryKey: graphKeys.categoryReport(periodStart, periodEnd),
+		queryFn: () => getCategoryStatistic({ data: { periodStart, periodEnd } }),
 	})
 }

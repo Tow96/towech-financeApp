@@ -12,6 +12,7 @@ import {
 	CardTitle,
 	CashFlowStatistic,
 	CashFlowTrendStatistic,
+	CategoryReportStatistic,
 	PeriodSelector,
 	Tabs,
 	TabsContent,
@@ -33,7 +34,7 @@ export const StatisticsPage = () => {
 			<TabsList className="mt-4 w-full">
 				<TabsTrigger value="balance">Balance</TabsTrigger>
 				<TabsTrigger value="cash-flow">Cash flow</TabsTrigger>
-				<TabsTrigger value="expenses">Expenses</TabsTrigger>
+				{/* <TabsTrigger value="expenses">Expenses</TabsTrigger> */}
 				<TabsTrigger value="reports">Reports</TabsTrigger>
 			</TabsList>
 
@@ -90,7 +91,18 @@ export const StatisticsPage = () => {
 				<TabsContent value="expenses">Expenses charts here</TabsContent>
 
 				{/* Reports tab */}
-				<TabsContent value="reports">Reports here</TabsContent>
+				<TabsContent value="reports">
+					{/* Category report */}
+					<Card>
+						<CardHeader>
+							<CardTitle>Category report</CardTitle>
+							<CardDescription>Where does my money go?</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<CategoryReportStatistic period={selectedPeriod} />
+						</CardContent>
+					</Card>
+				</TabsContent>
 			</div>
 		</Tabs>
 	)

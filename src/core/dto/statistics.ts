@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import type { CategoryType } from '@/core/domain'
+
 export type BalanceStatisicTrendItemDto = {
 	date: Date
 	balance: number
@@ -53,3 +55,18 @@ export const GetCashFlowTrendStatisticRequest = z.object({
 	periodEnd: z.date(),
 })
 export type GetCashFlowTrendStatisticRequest = z.infer<typeof GetCashFlowTrendStatisticRequest>
+
+// ----------------------------------------------
+export type CategoryStatisticItemDto = {
+	type: CategoryType
+	id: string | null
+	subId: string | null
+	previousAmount: number
+	currentAmount: number
+}
+
+export const GetCategoryStatisticRequest = z.object({
+	periodStart: z.date(),
+	periodEnd: z.date(),
+})
+export type GetCategoryStatisticRequest = z.infer<typeof GetCategoryStatisticRequest>
