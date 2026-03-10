@@ -59,7 +59,7 @@ export const BalanceTrendStatistic = ({ period }: BalanceTrendStatisticProps) =>
 						)}>
 						{previousPeriodComp === null // eslint-disable-line
 							? '- %'
-							: `${Math.round(previousPeriodComp * 100) / 100} %`}
+							: `${Math.round(previousPeriodComp * 100) / 100}%`}
 					</span>
 				</div>
 			</div>

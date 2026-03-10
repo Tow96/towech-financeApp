@@ -7,7 +7,7 @@ import { getDaysBetweenDates } from '@/core/utils'
 
 import { StatisticsRepository } from '@/database/repositories'
 
-export const getCashFlowStatisticTrend = createServerFn({ method: 'GET' })
+export const getCashFlowTrendStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
 	.inputValidator(GetCashFlowTrendStatisticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {

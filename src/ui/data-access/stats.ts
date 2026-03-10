@@ -3,7 +3,8 @@ import { graphKeys } from '../utils'
 import {
 	getBalancePerWalletStatistic,
 	getBalanceTrendStatistic,
-	getCashFlowStatisticTrend,
+	getCashFlowStatistic,
+	getCashFlowTrendStatistic,
 } from '@/core/functions'
 
 // Queries --------------------------------------
@@ -21,9 +22,16 @@ export const useBalancePerWalletStatistic = (periodEnd: Date) => {
 	})
 }
 
+export const useCashFlowStatistic = (periodStart: Date, periodEnd: Date) => {
+	return useQuery({
+		queryKey: graphKeys.cashFlowPeriod(periodStart, periodEnd),
+		queryFn: () => getCashFlowStatistic({ data: { periodStart, periodEnd } }),
+	})
+}
+
 export const useCashFlowTrendStatistic = (periodStart: Date, periodEnd: Date) => {
 	return useQuery({
 		queryKey: graphKeys.cashFlowTrend(periodStart, periodEnd),
-		queryFn: () => getCashFlowStatisticTrend({ data: { periodStart, periodEnd } }),
+		queryFn: () => getCashFlowTrendStatistic({ data: { periodStart, periodEnd } }),
 	})
 }

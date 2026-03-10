@@ -24,10 +24,21 @@ export type BalancePerWalletStatisticDto = {
 	expense: number
 	total: number
 }
+
 export const GetBalancePerWalletStatisticRequest = z.object({ periodEnd: z.date() })
 export type GetBalancePerWalletStatisticRequest = z.infer<
 	typeof GetBalancePerWalletStatisticRequest
 >
+// ----------------------------------------------
+export type CashFlowStatisticDto = {
+	previousPeriodEnd: number
+	in: number
+	out: number
+	net: number
+}
+
+export const GetCashFlowStatisticRequest = z.object({ periodStart: z.date(), periodEnd: z.date() })
+export type GetCashFlowStatisticRequest = z.infer<typeof GetCashFlowStatisticRequest>
 
 // ----------------------------------------------
 export type CashFlowTrendStatisticItemDto = {

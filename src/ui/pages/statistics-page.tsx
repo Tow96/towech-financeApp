@@ -10,6 +10,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	CashFlowStatistic,
 	CashFlowTrendStatistic,
 	PeriodSelector,
 	Tabs,
@@ -63,11 +64,21 @@ export const StatisticsPage = () => {
 
 				{/* Cash-flow Tab */}
 				<TabsContent value="cash-flow">
-					{/* Cash-flow trend */}
+					{/* Cash-flow */}
 					<Card>
 						<CardHeader>
+							<CardTitle>Cash Flow</CardTitle>
+							<CardDescription>Am I spending less than I make?</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<CashFlowStatistic period={selectedPeriod} />
+						</CardContent>
+					</Card>
+					{/* Cash-flow trend */}
+					<Card className="mt-4">
+						<CardHeader>
 							<CardTitle>Cash Flow Trend</CardTitle>
-							<CardDescription>Am I spending more than I make?</CardDescription>
+							<CardDescription>In which periods was I saving more or less money?</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<CashFlowTrendStatistic period={selectedPeriod} />

@@ -35,15 +35,8 @@ export const graphKeys = {
 	balanceTrend: (start: Date, end: Date) =>
 		[...graphKeys.balance(), 'trend', start.toISOString(), end.toISOString()] as const,
 	cashFlow: () => [...graphKeys.all, 'cash-flow'] as const,
+	cashFlowPeriod: (start: Date, end: Date) =>
+		[...graphKeys.cashFlow(), start.toISOString(), end.toISOString()] as const,
 	cashFlowTrend: (start: Date, end: Date) =>
 		[...graphKeys.cashFlow(), 'trend', start.toISOString(), end.toISOString()] as const,
-
-	cashFlowTrendLegacy: (start: Date, end: Date, mode: 'day' | 'month') =>
-		[
-			...graphKeys.all,
-			'cash-flow',
-			start.toISOString().substring(0, 10),
-			end.toISOString().substring(0, 10),
-			mode,
-		] as const,
 }
