@@ -57,12 +57,22 @@ export const GetCashFlowTrendStatisticRequest = z.object({
 export type GetCashFlowTrendStatisticRequest = z.infer<typeof GetCashFlowTrendStatisticRequest>
 
 // ----------------------------------------------
-export type CategoryStatisticItemDto = {
-	type: CategoryType
-	id: string | null
+export type SubCategoryStatisticItemDto = {
 	subId: string | null
 	previousAmount: number
 	currentAmount: number
+}
+export type CategoryStatisticItemDto = {
+	id: string | null
+	previousAmount: number
+	currentAmount: number
+	subCategories: Array<SubCategoryStatisticItemDto>
+}
+export type CategoryReportStatisticDto = {
+	type: CategoryType
+	previousAmount: number
+	currentAmount: number
+	categories: Array<CategoryStatisticItemDto>
 }
 
 export const GetCategoryStatisticRequest = z.object({

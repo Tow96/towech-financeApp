@@ -1,9 +1,10 @@
-import { and, eq, gte, lte, or, sql, sum } from 'drizzle-orm'
+import { and, eq, gte, lte, ne, or, sql, sum } from 'drizzle-orm'
 
 import type {
 	BalancePerWalletStatisticDto,
 	BalanceStatisticTrendDto,
 	CashFlowTrendStatisticItemDto,
+	CategoryReportStatisticDto,
 	CategoryStatisticItemDto,
 } from '@/core/dto'
 
@@ -171,7 +172,7 @@ export class StatisticsRepository {
 		userId: string,
 		startDate: Date,
 		endDate: Date,
-	): Promise<Array<CategoryStatisticItemDto>> {
+	): Promise<Array<CategoryReportStatisticDto>> {
 		const periodDays = getDaysBetweenDates(startDate, endDate)
 		const previousPeriodStart = new Date(startDate.getTime() - periodDays * 24 * 60 * 60 * 1000)
 		const previousPeriodEnd = new Date(startDate.getTime() - 1)
@@ -190,19 +191,75 @@ export class StatisticsRepository {
 			})
 			.from(schema.Movements)
 			.leftJoin(schema.MovementSummary, eq(schema.Movements.id, schema.MovementSummary.movementId))
-			.where(eq(schema.Movements.userId, userId))
+			.where(
+				and(
+					eq(schema.Movements.userId, userId),
+					ne(schema.Movements.categoryType, CategoryType.transfer),
+				),
+			)
 			.groupBy(
 				schema.Movements.categoryType,
 				schema.Movements.categoryId,
 				schema.Movements.categorySubId,
 			)
 
-		return result.map(x => ({
-			type: x.type as CategoryType,
-			id: x.id,
-			subId: x.subId,
-			previousAmount: x.prevAmount,
-			currentAmount: x.currAmount,
-		}))
+		const output: Array<CategoryReportStatisticDto> = []
+		for (const entry of result) {
+			const typeIndex = output.findIndex(x => x.type === (entry.type as CategoryType))
+			if (typeIndex === -1) {
+				output.push({
+					type: entry.type as CategoryType,
+					previousAmount: entry.prevAmount,
+					currentAmount: entry.currAmount,
+					categories: [
+						{
+							id: entry.id,
+							previousAmount: entry.prevAmount,
+							currentAmount: entry.currAmount,
+							subCategories: [
+								{
+									subId: entry.subId,
+									previousAmount: entry.prevAmount,
+									currentAmount: entry.currAmount,
+								},
+							],
+						},
+					],
+				})
+				continue
+			}
+
+			output[typeIndex].previousAmount += entry.prevAmount
+			output[typeIndex].currentAmount += entry.currAmount
+
+			const idIndex = output[typeIndex].categories.findIndex(x => x.id === entry.id)
+			if (idIndex === -1) {
+				output[typeIndex].categories.push({
+					id: entry.id,
+					previousAmount: entry.prevAmount,
+					currentAmount: entry.currAmount,
+					subCategories: [
+						{
+							subId: entry.subId,
+							previousAmount: entry.prevAmount,
+							currentAmount: entry.currAmount,
+						},
+					],
+				})
+				continue
+			}
+
+			output[typeIndex].categories[idIndex].previousAmount += entry.prevAmount
+			output[typeIndex].categories[idIndex].currentAmount += entry.currAmount
+
+			// This trusts that theres only one entry per category
+			output[typeIndex].categories[idIndex].subCategories.push({
+				subId: entry.subId,
+				previousAmount: entry.prevAmount,
+				currentAmount: entry.currAmount,
+			})
+		}
+
+		return output
 	}
 }
