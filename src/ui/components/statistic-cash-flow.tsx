@@ -66,4 +66,3 @@ const CashFlowBar = ({ name, value, highest, negative }: CashFlowBarProps) => {
 		</div>
 	)
 }
-

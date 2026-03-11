@@ -37,4 +37,3 @@ export const getCashFlowStatistic = createServerFn({ method: 'GET' })
 		}
 		return output
 	})
-
