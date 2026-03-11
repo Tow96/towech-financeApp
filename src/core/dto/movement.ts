@@ -149,4 +149,3 @@ export const DeleteMovementRequest = z.object({
 	id: z.uuid(),
 })
 export type DeleteMovementRequest = z.infer<typeof DeleteMovementRequest>
-

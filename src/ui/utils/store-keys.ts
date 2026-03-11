@@ -29,19 +29,17 @@ export const walletKeys = {
 
 export const graphKeys = {
 	all: ['graphs'] as const,
-	balance: (start: Date, end: Date) =>
-		[
-			...graphKeys.all,
-			'balance',
-			start.toISOString().substring(0, 10),
-			end.toISOString().substring(0, 10),
-		] as const,
-	cashFlow: (start: Date, end: Date, mode: 'day' | 'month') =>
-		[
-			...graphKeys.all,
-			'cash-flow',
-			start.toISOString().substring(0, 10),
-			end.toISOString().substring(0, 10),
-			mode,
-		] as const,
+	balance: () => [...graphKeys.all, 'balance'] as const,
+	balanceWallet: (end: Date) =>
+		[...graphKeys.balance(), 'perWallet', end.toISOString().substring(0, 10)] as const,
+	balanceTrend: (start: Date, end: Date) =>
+		[...graphKeys.balance(), 'trend', start.toISOString(), end.toISOString()] as const,
+	cashFlow: () => [...graphKeys.all, 'cash-flow'] as const,
+	cashFlowPeriod: (start: Date, end: Date) =>
+		[...graphKeys.cashFlow(), start.toISOString(), end.toISOString()] as const,
+	cashFlowTrend: (start: Date, end: Date) =>
+		[...graphKeys.cashFlow(), 'trend', start.toISOString(), end.toISOString()] as const,
+	category: () => [...graphKeys.all, 'category'] as const,
+	categoryReport: (start: Date, end: Date) =>
+		[...graphKeys.category(), start.toISOString(), end.toISOString()] as const,
 }

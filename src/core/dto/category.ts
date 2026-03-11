@@ -93,4 +93,3 @@ export const SetCategoryStatusRequest = z.object({
 	archived: z.boolean(),
 })
 export type SetCategoryStatusRequest = z.infer<typeof SetCategoryStatusRequest>
-

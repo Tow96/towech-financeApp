@@ -5,13 +5,13 @@ import type { PeriodSelectorValue } from '@/ui/components'
 
 import {
 	AddMovementDialog,
-	BalanceChart,
+	BalanceTrendStatistic,
 	Button,
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
-	CashFlowChart,
+	CashFlowTrendStatistic,
 	PeriodSelector,
 	RecentMovementList,
 	Tabs,
@@ -40,10 +40,10 @@ export const DashboardPage = () => {
 					</CardHeader>
 					<CardContent className="flex-1">
 						<TabsContent value="balance">
-							<BalanceChart className="h-[15vh] w-full md:h-[20vh]" period={selectedPeriod} />
+							<BalanceTrendStatistic period={selectedPeriod} />
 						</TabsContent>
 						<TabsContent value="cash-flow">
-							<CashFlowChart className="h-[15vh] w-full md:h-[20vh]" period={selectedPeriod} />
+							<CashFlowTrendStatistic period={selectedPeriod} />
 						</TabsContent>
 					</CardContent>
 					<CardFooter>
