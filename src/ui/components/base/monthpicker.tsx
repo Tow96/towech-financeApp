@@ -54,14 +54,7 @@ type MonthCalProps = {
 }
 
 type ButtonVariant =
-	| 'default'
-	| 'outline'
-	| 'ghost'
-	| 'link'
-	| 'destructive'
-	| 'secondary'
-	| null
-	| undefined
+	'default' | 'outline' | 'ghost' | 'link' | 'destructive' | 'secondary' | null | undefined
 
 function MonthPicker({
 	onMonthSelect,

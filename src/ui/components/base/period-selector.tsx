@@ -8,10 +8,10 @@ import { Datepicker } from './datepicker'
 import { cn } from '@/ui/utils'
 
 export enum PeriodMode {
-	'Week',
-	'Month',
-	'Year',
-	'Custom',
+	Week,
+	Month,
+	Year,
+	Custom,
 }
 
 export interface PeriodSelectorValue {
