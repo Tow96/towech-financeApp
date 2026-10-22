@@ -7,7 +7,7 @@ import { StatisticsRepository } from '@/database/repositories'
 
 export const getBalancePerWalletStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetBalancePerWalletStatisticRequest)
+	.validator(GetBalancePerWalletStatisticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const statisticRepo = new StatisticsRepository()
 		logger.info(

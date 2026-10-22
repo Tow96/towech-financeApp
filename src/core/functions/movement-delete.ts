@@ -8,7 +8,7 @@ import { MovementRepository } from '@/database/repositories'
 
 export const deleteMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(DeleteMovementRequest)
+	.validator(DeleteMovementRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const movementRepo = new MovementRepository()
 

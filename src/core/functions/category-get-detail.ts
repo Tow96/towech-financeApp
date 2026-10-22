@@ -8,7 +8,7 @@ import { CategoryRepository } from '@/database/repositories'
 
 export const getCategoryDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCategoryDetailRequest)
+	.validator(GetCategoryDetailRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 		logger.info(

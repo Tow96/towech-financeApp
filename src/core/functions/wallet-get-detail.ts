@@ -8,7 +8,7 @@ import { WalletRepository } from '@/database/repositories'
 
 export const getWalletDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetWalletDetailRequest)
+	.validator(GetWalletDetailRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const walletRepo = new WalletRepository()
 		logger.info(`User ${userId} requesting detail for wallet ${data.id}`)

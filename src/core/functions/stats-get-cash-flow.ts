@@ -11,7 +11,7 @@ import { StatisticsRepository } from '@/database/repositories'
 
 export const getCashFlowStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCashFlowStatisticRequest)
+	.validator(GetCashFlowStatisticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const statisticsRepo = new StatisticsRepository()
 		logger.info(

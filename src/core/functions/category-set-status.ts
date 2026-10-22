@@ -9,7 +9,7 @@ import { CategoryRepository } from '@/database/repositories'
 
 export const setCategoryStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetCategoryStatusRequest)
+	.validator(SetCategoryStatusRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 

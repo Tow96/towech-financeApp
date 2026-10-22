@@ -10,7 +10,7 @@ import { CategoryRepository } from '@/database/repositories'
 
 export const addCategory = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(AddCategoryRequest)
+	.validator(AddCategoryRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 		logger.info(

@@ -12,7 +12,7 @@ import { CategoryRepository, MovementRepository, WalletRepository } from '@/data
 
 export const editMovement = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(EditMovementRequest)
+	.validator(EditMovementRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const categoryRepo = new CategoryRepository()
 		const movementRepo = new MovementRepository()

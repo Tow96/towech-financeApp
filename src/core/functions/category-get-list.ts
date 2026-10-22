@@ -8,7 +8,7 @@ import { CategoryRepository } from '@/database/repositories'
 
 export const getCategoriesByType = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCategoryListRequest)
+	.validator(GetCategoryListRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const repository = new CategoryRepository()
 		logger.info(`Fetching categories of type ${data.type} for user: ${userId}`)

@@ -8,7 +8,7 @@ import { MovementRepository } from '@/database/repositories'
 
 export const getMovementDetail = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetMovementDetailRequest)
+	.validator(GetMovementDetailRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const movementRepo = new MovementRepository()
 

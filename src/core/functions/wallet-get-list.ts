@@ -8,7 +8,7 @@ import { WalletRepository } from '@/database/repositories'
 
 export const getWalletList = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(ListWalletsRequest)
+	.validator(ListWalletsRequest)
 	.handler(async ({ context: { userId, logger } }) => {
 		const walletRepo = new WalletRepository()
 		logger.info(`Fetching all wallets for user ${userId}`)

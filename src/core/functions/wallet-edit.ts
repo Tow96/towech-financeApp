@@ -9,7 +9,7 @@ import { WalletRepository } from '@/database/repositories'
 
 export const editWallet = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(EditWalletRequest)
+	.validator(EditWalletRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const walletRepo = new WalletRepository()
 

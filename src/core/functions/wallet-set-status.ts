@@ -9,7 +9,7 @@ import { WalletRepository } from '@/database/repositories'
 
 export const setWalletStatus = createServerFn({ method: 'POST' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(SetWalletStatusRequest)
+	.validator(SetWalletStatusRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const walletRepo = new WalletRepository()
 		logger.info(`User: ${userId} trying to set status of wallet: ${data.id}`)

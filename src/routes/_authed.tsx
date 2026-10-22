@@ -1,7 +1,14 @@
 import { ChartNoAxesCombined, CircleDot, Layers2, Receipt, Wallet } from 'lucide-react'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 
-import { Link, Outlet, createFileRoute, redirect, useLocation } from '@tanstack/react-router'
+import {
+	ClientOnly,
+	Link,
+	Outlet,
+	createFileRoute,
+	redirect,
+	useLocation,
+} from '@tanstack/react-router'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
@@ -57,13 +64,15 @@ function AuthedComponent() {
 				<main>
 					<Outlet />
 					{import.meta.env.VITE_ENABLE_DEVTOOLS === 'true' && (
-						<TanStackDevtools
-							config={{ position: 'bottom-right' }}
-							plugins={[
-								{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-								{ name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
-							]}
-						/>
+						<ClientOnly>
+							<TanStackDevtools
+								config={{ position: 'bottom-right' }}
+								plugins={[
+									{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
+									{ name: 'Tanstack Query', render: <ReactQueryDevtoolsPanel /> },
+								]}
+							/>
+						</ClientOnly>
 					)}
 				</main>
 			</SidebarInset>

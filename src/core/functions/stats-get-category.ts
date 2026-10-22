@@ -8,7 +8,7 @@ import { StatisticsRepository } from '@/database/repositories'
 
 export const getCategoryStatistic = createServerFn({ method: 'GET' })
 	.middleware([AuthorizationMiddleware])
-	.inputValidator(GetCategoryStatisticRequest)
+	.validator(GetCategoryStatisticRequest)
 	.handler(async ({ data, context: { userId, logger } }) => {
 		const statisticRepo = new StatisticsRepository()
 		logger.info(

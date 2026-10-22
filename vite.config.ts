@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import { nitro } from 'nitro/vite'
-import tsConfigPaths from 'vite-tsconfig-paths'
 
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -17,13 +16,6 @@ export default defineConfig({
 			allowedHeaders: ['Content-Type'],
 		},
 	},
-	plugins: [
-		tsConfigPaths({
-			projects: ['./tsconfig.json'],
-		}),
-		tailwindcss(),
-		tanstackStart(),
-		nitro({ externals: { inline: ['decimal.js-light'] } }),
-		viteReact(),
-	],
+	plugins: [tailwindcss(), tanstackStart(), nitro(), viteReact()],
+	resolve: { tsconfigPaths: true },
 })
